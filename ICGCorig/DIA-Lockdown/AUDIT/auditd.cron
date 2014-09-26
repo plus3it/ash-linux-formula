@@ -1,0 +1,36 @@
+#!/bin/sh
+
+##########
+# This script can be installed to get a daily log rotation
+# based on a cron job.
+# - Provided by auditd RPM, modified by Joe Steorts 
+##########
+
+/sbin/service auditd rotate
+EXITVALUE=$?
+if [ $EXITVALUE != 0 ]; then
+    /usr/bin/logger -t auditd "ALERT exited abnormally with [$EXITVALUE]"
+fi
+
+AUDIT_DIR=/var/log/audit
+ARCHIVE_DIR=/var/log/audit/archive
+#DATE=`date +%F`
+DATE=`date +%F-%H%M%S`
+
+mkdir -p $ARCHIVE_DIR
+chmod 700 $ARCHIVE_DIR
+
+cd /var/log/audit
+for file in `ls -1 audit.log.*`; do
+   mv $file $ARCHIVE_DIR/$file.$DATE
+done
+
+cd /var/log/audit/archive
+for file in `ls -1 audit.log.* | grep -v ".bz2$"`; do
+   /usr/bin/bzip2 --compress --quiet $file
+done
+
+chmod 600 $ARCHIVE_DIR/*.bz2
+
+exit 0
+
