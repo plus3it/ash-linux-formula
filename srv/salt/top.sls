@@ -1,4 +1,5 @@
 base:
   '*':
-    - audit
-    - fix_perms
+#   - audit
+#   - fix_perms
+    - STIGbyID/cat1

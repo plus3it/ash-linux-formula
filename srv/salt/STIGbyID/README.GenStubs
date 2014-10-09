@@ -1,0 +1,25 @@
+Use the "GenStubs.sh" script to generate stub STIG scripts from a CSV with 
+semi-colon delimeters. Generate the CSV file by copying the 
+Vulnerabilities ID table hosted at 
+
+   http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11
+
+Select an appropriate profile from which to generate the list
+
+Stub-files will be created of the format:
+
+   #!/bin/sh
+   #
+   # STIG URL: <Finding_ID_URL>
+   # Finding ID:		<FINDING_ID>
+   # Version:
+   # Finding Level:	<FINDING_LEVEL>
+   #
+   #     <FINDING_TEXT>
+   #     <FINDING_TEXT>
+   #     <FINDING_TEXT>
+   #     <FINDING_TEXT>
+   #
+   ############################################################
+  
+Construct functional scripts from these stubs
