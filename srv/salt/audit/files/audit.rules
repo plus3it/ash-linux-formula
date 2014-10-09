@@ -1,0 +1,327 @@
+# This file contains the auditctl rules that are loaded
+# whenever the audit daemon is started via the initscripts.
+# The rules are simply the parameters that would be passed
+# to auditctl.
+
+# First rule - delete all
+-D
+
+# Increase the buffers to survive stress events.
+# Make this bigger for busy systems
+-b 16394
+
+# Feel free to add below this line. See auditctl man page
+
+#  L1.16 Set failure mode to panic
+# Default: 2
+-f 2
+
+## Get rid of all anonymous and daemon junk.  It clogs up the logs and doesn't
+# do anyone # any good.
+-a exit,never -F auid>2147483645
+-a exit,never -F auid!=0 -F auid<500
+
+##########
+# This section contains system calls that will be audited
+##########
+
+## Things that could affect time
+-a always,exit -F arch=b64 -S adjtimex -S clock_settime -S settimeofday -k SYS_time-change
+-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change
+-a always,exit -F arch=b64 -S clock_settime -k time-change
+-w /etc/localtime -p wa -k time-change
+
+## Things that could affect system locale
+-a exit,always -F arch=b64 -S sethostname -k SYS_system-locale
+
+## unsuccessful creation
+-a exit,always -F arch=b64 -S creat -S mkdir -S mknod -S link -S symlink -F exit=-EACCES -k SYS_creation
+-a exit,always -F arch=b64 -S mkdirat -S mknodat -S linkat -S symlinkat -F exit=-EACCES -k SYS_creation
+
+## unsuccessful open - open and openat may be combined on support arches
+-a exit,always -F arch=b64 -S openat -F exit=-EACCES -k SYS_open
+-a exit,always -F arch=b64 -S open -F exit=-EACCES -k SYS_open
+-a exit,always -F arch=b64 -S openat -F exit=-EPERM -k SYS_open
+-a exit,always -F arch=b64 -S open -F exit=-EPERM -k SYS_open
+
+## unsuccessful close
+-a exit,always -F arch=b64 -S close -F exit=-EACCES -k SYS_close
+
+## unsuccessful modifications - renameat may be combined on supported arches
+-a exit,always -F arch=b64 -S rename -S truncate -S ftruncate -F exit=-EACCES -k SYS_mods
+-a exit,always -F arch=b64 -S renameat -F exit=-EACCES -k SYS_mods
+-a exit,always -F perm=a -F exit=-EACCES -k SYS_mods
+-a exit,always -F perm=a -F exit=-EPERM -k SYS_mods
+
+## unsuccessful deletion - unlinkat may be combined on supported arches
+-a exit,always -F arch=b64 -S rmdir -S unlink -F exit=-EACCES -k SYS_delete
+-a exit,always -F arch=b64 -S unlinkat -F exit=-EACCES -k SYS_delete
+
+# Mount options.
+-a exit,always -F arch=b64 -S mount -S umount2 -k SYS_mount
+
+# Permissions auditing
+
+-a exit,always -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=500 -k SYS_perm_mod
+-a exit,always -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=500 -k SYS_perm_mod
+-a exit,always -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=500 -k perm_mod
+
+# audit umask changes.
+# This is uselessly noisy.
+# -a entry,always -S umask -k umask
+
+# Audit *everything* useful someone does when su'ing to root
+# Had to add an entry for getting rid of anonymous records.  They are only
+# moderately useful but have *way* too much noise since this covers things like
+# cron as well.
+
+# The following rule is more complete but uselessly noisy.
+
+#-a exit,always -F arch=b64 -F auid!=0 -F uid=0 -S write -S capset -S chown -S chroot -S creat -S execve -S fork -S vfork -S link -S mkdir -S mknod -S pivot_root -S quotactl -S reboot -S rmdir -S setdomainname -S sethostname -S setsid -S settimeofday -S setuid  -S swapoff -S swapon -S symlink -k su-root-activity
+
+-a exit,always -F arch=b64 -F auid!=0 -F uid=0 -S capset -S mknod -S pivot_root -S quotactl -S setdomainname -S sethostname -S setsid -S settimeofday -S setuid -S swapoff -S swapon -k su-root-activity
+
+# Nobody should be reading from here, or writing to here.
+# Ideally, this file won't even exist.
+-w /proc/kcore -p rw -k kcore
+-a exit,always -F arch=b64 -S ptrace -k SYS_paranoid
+-a exit,always -F arch=b64 -S personality -k SYS_paranoid
+
+# Networking
+-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale
+
+##########
+# This section contains watching security policy relevant files that will be audited
+#
+# NOTE: The following should not create any log entries unless "there is a problem" (in other words: write or append to policy files)
+##########
+
+# Access control - local control files
+-w /etc/group -p wa -k LOCAL_auth
+-w /etc/group- -p wa -k LOCAL_auth
+-w /etc/passwd -p wa -k LOCAL_auth
+-w /etc/passwd- -p wa -k LOCAL_auth
+-w /etc/gshadow -p wa -k LOCAL_auth
+-w /etc/shadow -p wa -k LOCAL_auth
+-w /etc/shadow- -p wa -k LOCAL_auth
+
+-w /etc/group -p wa -k identity
+-w /etc/passwd -p wa -k identity
+-w /etc/gshadow -p wa -k identity
+-w /etc/shadow -p wa -k identity
+-w /etc/security/opasswd -p wa -k identity
+
+# Local login
+-w /etc/login.defs -p wa -k CFG_sys
+-w /etc/securetty -p wa -k CFG_sys
+
+-w /etc/shells -p wa -k CFG_shell
+-w /etc/profile -p wa -k CFG_shell
+-w /etc/bashrc -p wa -k CFG_shell
+-w /etc/csh.cshrc -p wa -k CFG_shell
+-w /etc/csh.login -p wa -k CFG_shell
+
+# Generally good things to audit.
+-w /var/spool/at -p wa -k CFG_sys
+-w /etc/at.deny -p wa -k CFG_sys
+
+# "Cron" related
+-w /etc/cron.deny -p wa -k CFG_cron
+-w /etc/cron.d -p wa -k CFG_cron
+-w /etc/cron.daily -p wa -k CFG_cron
+-w /etc/cron.hourly -p wa -k CFG_cron
+-w /etc/cron.monthly -p wa -k CFG_cron
+-w /etc/cron.weekly -p wa -k CFG_cron
+-w /etc/crontab -p wa -k CFG_cron
+-w /etc/anacrontab -p wa -k CFG_cron
+
+-w /var/log/faillog -p wa -k faillog
+-w /var/log/lastlog -p wa -k lastlog
+-w /var/log/faillog -p wa -k logins
+-w /var/log/lastlog -p wa -k logins
+
+# Sudo related
+-w /etc/sudoers -p wa -k CFG_sudoers
+
+# System startup/boot-related files
+-w /etc/grub.conf -p wa -k CFG_boot
+-w /etc/sysconfig -p wa -k CFG_boot
+-w /etc/inittab -p wa -k CFG_boot
+-w /etc/rc.d/init.d -p wa -k CFG_boot
+-w /etc/rc.local -p wa -k CFG_boot
+-w /etc/rc.sysinit -p wa -k CFG_boot
+-w /etc/xinetd.d -p wa -k CFG_boot
+
+# System service configuration files
+-w /etc/services -p wa -k CFG_sys
+-w /etc/sysctl.conf -p wa -k CFG_sys
+-w /etc/modprobe.conf -p wa -k CFG_sys
+-w /etc/modprobe.conf.d -p wa -k CFG_sys
+
+# Watch configuration files in /etc/security
+-w /etc/security/access.conf -p wa -k CFG_security
+-w /etc/security/chroot.conf -p wa -k CFG_security
+-w /etc/security/console.perms -p wa -k CFG_security
+-w /etc/security/group.conf -p wa -k CFG_security
+-w /etc/security/limits.conf -p wa -k CFG_security
+-w /etc/security/pam_env.conf -p wa -k CFG_security
+-w /etc/security/time.conf -p wa -k CFG_security
+
+# Watch xinetd related files
+-w /etc/xinted.conf -p wa -k CFG_xinted
+-w /etc/xinetd.d/chargen-dgram -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/chargen-stream -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/daytime-dgram -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/daytime-stream -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/echo-dgram -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/echo-stream -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/rsync -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/time-dgram -p wa -k CFG_xinted.d
+-w /etc/xinetd.d/time-stream -p wa -k CFG_xinted.d
+
+# Watch for changes to NTP files
+-w /etc/ntp.conf -p wa -k CFG_ntp
+-w /etc/ntp/keys -p wa -k CFG_ntp
+
+# Watch for changes to remote access related files
+-w /etc/hosts.allow -p wa -k CFG_remote
+-w /etc/hosts.deny -p wa -k CFG_remote
+-w /etc/issue -p wa -k CFG_remote
+-w /etc/issue.net -p wa -k CFG_remote
+-w /etc/resolv.conf -p wa -k CFG_remote
+-w /etc/host.conf -p wa -k CFG_remote
+# not found -w /etc/snmp/snmpd.conf -p wa -k CFG_remote
+
+# watch for changes to SSH related files
+-w /etc/ssh/sshd_config -p wa -k CFG_ssh
+-w /etc/ssh/ssh_config -p wa -k CFG_ssh
+-w /etc/ssh/ssh_host_dsa_key -p wa -k CFG_ssh_key
+-w /etc/ssh/ssh_host_dsa_key.pub -p wa -k CFG_ssh_key
+-w /etc/ssh/ssh_host_key -p wa -k CFG_ssh_key
+-w /etc/ssh/ssh_host_key.pub -p wa -k CFG_ssh_key
+-w /etc/ssh/ssh_host_rsa_key -p wa -k CFG_ssh_key
+-w /etc/ssh/ssh_host_rsa_key.pub -p wa -k CFG_ssh_key
+-w /etc/ssh/auth_keys -p wa -k CFG_ssh_key
+-w /etc/ssh/local_key -p wa -k CFG_ssh_key
+-w /etc/ssh/moduli -p wa -k CFG_ssh_key
+
+# Watch miscellaneous system files
+-w /etc/aliases -p wa -k CFG_sys
+-w /etc/krb5.conf -p wa -k CFG_sys
+-w /etc/initlog.conf -p wa -k CFG_sys
+# Error sending add rule data request (No such file or directory)
+# -w /etc/firmware/microcode.dat -p wa -k CFG_sys
+
+# Watch file system configuration files
+-w /etc/fstab -p wa -k CFG_file_sys
+-w /etc/exports -p wa -k CFG_file_sys
+-w /etc/default -p wa -k CFG_file_sys
+
+# Watch network related files
+-w /etc/hosts -p wa -k CFG_net_sys
+-w /etc/nsswitch.conf -p wa -k CFG_net_sys
+-w /etc/default/nss -p wa -k CFG_net_sys
+-w /etc/issue -p wa -k system-locale
+-w /etc/issue.net -p wa -k system-locale
+-w /etc/hosts -p wa -k system-locale
+-w /etc/sysconfig/network -p wa -k system-locale
+
+# Watch MAC
+-w /etc/selinux/ -p wa -k MAC-policy
+
+# Watch audit related files
+-w /etc/rc.d/init.d/auditd -p wa -k CFG_audit
+-w /etc/audit/auditd.conf -p wa -k CFG_audit
+-w /etc/rsyslog.conf -p wa -k CFG-audit
+-w /etc/rsyslog.d/remote.conf -p wa -k CFG_audit
+-w /etc/logrotate.conf -p wa -k CFG_audit
+-w /etc/logrotate.d/ -p wa -k CFG_audit
+
+# Watch ldap related files
+-w /etc/ldap.conf -p wa -k CFG_etc_ldap
+-w /etc/ld.so.conf -p wa -k CFG_etc_ldap
+-w /etc/ld.so.conf.d -p wa -k CFG_etc_ldap
+
+# PAM related
+-w /etc/pam.d -p wa -k CFG_pam
+-w /etc/pam_smb.conf -p wa -k CFG_pam
+
+# Watch for changes to system PKI files
+-w /etc/pki/private -p wa -k PKI
+-w /etc/pki/public -p wa -k PKI
+-w /etc/pki/cacerts -p wa -k PKI
+# Error sending add rule data request (No such file or directory)
+# -w /etc/pki/private/$HOSTNAME.pem -p wa -k PKI
+# -w /etc/pki/public/$HOSTNAME.pub -p wa -k PKI
+
+##########
+# This section contains auditing the execution of commands
+#
+##########
+
+-w /bin/vi -p wx -k EXEC_command
+-w /sbin/shutdown -p wx -k EXEC_command
+-w /sbin/reboot -p wx -k EXEC_command
+-w /sbin/halt -p wx -k EXEC_command
+-w /sbin/service -p wx -k EXEC_command
+-w /bin/rm -p wx -k EXEC_command
+
+#########
+# OTHER RULES from SECSCN
+#
+#########
+# L1.22 Ensure the system is configured to record process and session information.
+-w /var/run/utmp -p wa -k session
+-w /var/log/btmp -p wa -k session
+-w /var/log/wtmp -p wa -k session
+
+-w /etc/sudoers -p wa -k actions
+
+-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=500 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access
+
+#########
+# L1.25 Ensure the system is configured to record execution of privileged commands.
+-a always,exit -F path=/lib64/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/sbin/pam_timestamp_check -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/sbin/netreport -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/sbin/unix_chkpwd -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/postdrop -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/postqueue -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/at -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/wall -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/ssh-agent -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/write -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/pt_chown -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/bin/su -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/bin/ping6 -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/bin/mount -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/bin/umount -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/bin/ping -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
+
+-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export
+-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete
+
+# SRG-OS-000064 V-38580 - loading and unloading dynamic kernel modules
+-w /sbin/insmod -p x -k modules
+-w /sbin/rmmod -p x -k modules
+-w /sbin/modprobe -p x -k modules
+-a always,exit -F arch=b64 -S init_module -S delete_module -k modules
+
+#########
+# L1.15 Make the configuration immutable - reboot is required to change rules.
+-e 2
