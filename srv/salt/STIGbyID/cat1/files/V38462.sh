@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38668
+# STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38462
 # Finding ID:	V-38462
 # Version:	RHEL-06-000514
 #
