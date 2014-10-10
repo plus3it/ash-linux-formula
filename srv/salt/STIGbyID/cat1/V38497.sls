@@ -19,18 +19,24 @@ script_V38497:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38497.sh
 
-cmd_V38497-lnk:
-  cmd.run:
-  - name: 'test -L /etc/pam.d/system-auth'
-
-cmd_V38497-sysauth:
-  cmd.run:
-  - name: 'sed -i -e "s/ nullok//" /etc/pam.d/system-auth'
-  - onlyif: cmd_V38497-lnk
-
 file_V38497-sysauth_ac:
   file.replace:
   - name: /etc/pam.d/system-auth-ac
   - pattern: " nullok"
   - repl: ""
 
+# Make sure /etc/pam.d/system-auth exists in some form or another
+file_V38497-sysauth:
+  file.exists:
+  - name: /etc/pam.d/system-auth
+
+# See if /etc/pam.d/system-auth is a sym-link
+cmd_V38497lnk:
+  cmd.run:
+  - name: 'test -L /etc/pam.d/system-auth'
+  - unless: file_V38497-sysauth
+
+cmd_V38497-sysauth:
+  cmd.run:
+  - name: 'sed -i -e "s/ nullok//" /etc/pam.d/system-auth'
+  - onlyif: cmd_V38497-lnk
