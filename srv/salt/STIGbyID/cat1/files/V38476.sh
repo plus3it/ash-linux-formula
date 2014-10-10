@@ -11,3 +11,14 @@
 #
 ############################################################
 
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38476"
+diag_out "  Ensure vendor-provided RPM"
+diag_out "  signing-keys are installed"
+diag_out "----------------------------------"
+

@@ -9,6 +9,10 @@
 #
 ############################################################
 
+script_V38476-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat1/files/V38476.sh
+
 cmd_V38476:
   cmd.run:
   {% if grains['os'] == 'RedHat' %}
