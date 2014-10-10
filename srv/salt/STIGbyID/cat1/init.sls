@@ -1,6 +1,7 @@
 include:
-- STIGbyID/cat1/V38701
 - STIGbyID/cat1/V38668
+- STIGbyID/cat1/V38677
+- STIGbyID/cat1/V38701
 
 
 # (Following are being re-worked and are commented out, for now)
