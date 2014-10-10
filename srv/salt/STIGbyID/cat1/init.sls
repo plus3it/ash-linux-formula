@@ -1,6 +1,7 @@
 include:
 - STIGbyID/cat1/V38476
 - STIGbyID/cat1/V38491
+- STIGbyID/cat1/V38497
 - STIGbyID/cat1/V38668
 - STIGbyID/cat1/V38677
 - STIGbyID/cat1/V38701
@@ -23,8 +24,4 @@ include:
 ## script_GEN001640:
 ##   cmd.script:
 ##   - source: salt://STIGbyID/cat1/files/gen001640.sh
-## 
-## script_V38497:
-##   cmd.script:
-##   - source: salt://STIGbyID/cat1/files/V38497.sh
-## 
+
