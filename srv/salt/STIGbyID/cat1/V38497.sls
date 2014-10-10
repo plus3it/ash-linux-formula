@@ -15,14 +15,22 @@
 #
 ##########################################################################
 
-# Standard outputter function
-diag_out() {
-   echo "${1}"
-}
+script_V38497:
+  cmd.script:
+  - source: salt://STIGbyID/cat1/files/V38497.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38497"
-diag_out "  Ensure null passwords are not"
-diag_out "  usable for logins"
-diag_out "----------------------------------"
+cmd_V38497-lnk:
+  cmd.run:
+  - name: 'test -L /etc/pam.d/system-auth'
+
+cmd_V38497-sysauth:
+  cmd.run:
+  - name: 'sed -i -e "s/ nullok//" /etc/pam.d/system-auth'
+  - onlyif: cmd_V38497-lnk
+
+file_V38497-sysauth_ac:
+  file.replace:
+  - name: /etc/pam.d/system-auth-ac
+  - pattern: " nullok"
+  - repl: ""
 
