@@ -3,6 +3,7 @@ include:
 - STIGbyID/cat1/V38491
 - STIGbyID/cat1/V38497
 - STIGbyID/cat1/V38587
+- STIGbyID/cat1/V38589
 - STIGbyID/cat1/V38668
 - STIGbyID/cat1/V38677
 - STIGbyID/cat1/V38701
