@@ -1,8 +1,8 @@
 #!/bin/bash
 # 
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38497
-# Finding ID: V-38497
-# Version: RHEL-06-000030
+# Finding ID:	V-38497
+# Version:	RHEL-06-000030
 #
 #     If an account has an empty password, anyone could log in and run 
 #     commands with the privileges of that account. Accounts with empty 

@@ -1,6 +1,6 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38677
 # Finding ID:	V-38677
-# Version:	
+# Version:	RHEL-06-000309
 # Finding Level:	High
 #
 #     The NFS server must not have the insecure file locking option 
