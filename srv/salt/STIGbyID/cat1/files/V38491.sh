@@ -2,7 +2,7 @@
 #
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38491
 # Finding ID:	V-38491
-# Version:	
+# Version:	RHEL-06-000019
 # Finding Level:	High
 #
 #     There must be no .rhosts or hosts.equiv files on the system. Trust 
