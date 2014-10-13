@@ -1,5 +1,6 @@
 include:
 - STIGbyID/cat1/V770
+- STIGbyID/cat1/V38462
 - STIGbyID/cat1/V38668
 - STIGbyID/cat1/V38701
 - STIGbyID/cat1/V38476
