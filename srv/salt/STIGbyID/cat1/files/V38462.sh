@@ -9,5 +9,13 @@
 #      protects against malicious tampering. 
 #
 ###########################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
 
-echo "Not Implemented"
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38462"
+diag_out "  Ensure that rpm utilities verify"
+diag_out "  all package signatures' validity"
+diag_out "----------------------------------"
