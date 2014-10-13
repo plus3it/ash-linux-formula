@@ -1,7 +1,10 @@
 include:
 - STIGbyID/cat1/V770
+- STIGbyID/cat1/V38668
+- STIGbyID/cat1/V38701
 - STIGbyID/cat1/V38476
 - STIGbyID/cat1/V38491
+- STIGbyID/cat1/V38677
 - STIGbyID/cat1/V38497
 - STIGbyID/cat1/V38587
 - STIGbyID/cat1/V38589
@@ -11,9 +14,8 @@ include:
 - STIGbyID/cat1/V38602
 - STIGbyID/cat1/V38607
 - STIGbyID/cat1/V38614
-- STIGbyID/cat1/V38668
-- STIGbyID/cat1/V38677
-- STIGbyID/cat1/V38701
+- STIGbyID/cat1/V38666
+- STIGbyID/cat1/V38653
 
 # (Following are being re-worked and are commented out, for now)
 ## file_GEN001400_shadow:
