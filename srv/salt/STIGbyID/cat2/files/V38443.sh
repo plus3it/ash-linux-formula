@@ -17,6 +17,6 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38439"
+diag_out "STIG Finding ID: V-38443"
 diag_out "  Ensure gshadow is owned by root"
 diag_out "----------------------------------"
