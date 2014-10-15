@@ -17,7 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38448"
+diag_out "STIG Finding ID: V-38449"
 diag_out "  Ensure gshadow is set mode 0000"
 diag_out "----------------------------------"
 

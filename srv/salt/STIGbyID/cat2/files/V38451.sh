@@ -17,7 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38450"
+diag_out "STIG Finding ID: V-38451"
 diag_out "  Ensure passwd file is owned as"
 diag_out "  the root group"
 diag_out "----------------------------------"
