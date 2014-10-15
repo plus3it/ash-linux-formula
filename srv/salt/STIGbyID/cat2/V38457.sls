@@ -17,4 +17,4 @@ script_V38457-describe:
 file_38457:
   file.managed:
   - name: /etc/passwd
-  - mode: 0644
+  - mode: '0644'

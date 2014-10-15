@@ -16,4 +16,4 @@ script_V38449-describe:
 file_38449:
   file.managed:
   - name: /etc/gshadow
-  - mode: 0000
+  - mode: '0000'

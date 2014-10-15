@@ -18,4 +18,4 @@ file_38443:
   - name: /etc/gshadow
   - user: root
   - group: root
-  - mode: 0000
+  - mode: '0000'

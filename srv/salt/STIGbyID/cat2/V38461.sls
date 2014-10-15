@@ -17,4 +17,4 @@ script_V38461-describe:
 file_V38461:
   file.managed:
   - name: /etc/group
-  - mode: 0644
+  - mode: '0644'
