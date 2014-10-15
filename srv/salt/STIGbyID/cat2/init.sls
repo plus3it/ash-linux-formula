@@ -8,3 +8,8 @@ include:
 - STIGbyID/cat2/V38449
 - STIGbyID/cat2/V38450
 - STIGbyID/cat2/V38451
+- STIGbyID/cat2/V38457
+- STIGbyID/cat2/V38458
+- STIGbyID/cat2/V38459
+- STIGbyID/cat2/V38461
+- STIGbyID/cat2/V38464
