@@ -41,3 +41,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+#===============
+#Personal git ignore settings
+#===============
+
+#pycharm dirs
+.idea
