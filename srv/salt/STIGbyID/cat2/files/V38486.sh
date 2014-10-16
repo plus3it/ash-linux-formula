@@ -21,6 +21,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38486"
 diag_out "  Ascertain if system is protected"
 diag_out "  through backups of both config"
 diag_out "  and other operating system data"

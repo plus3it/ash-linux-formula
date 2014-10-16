@@ -19,6 +19,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38475"
 diag_out "  Set minimum password length to"
 diag_out "  Fourteen characters"
 diag_out "----------------------------------"

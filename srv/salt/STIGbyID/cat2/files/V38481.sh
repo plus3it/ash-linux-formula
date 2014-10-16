@@ -17,6 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38481"
 diag_out "  Ensure that system is connected"
 diag_out "  to an update-server and that all"
 diag_out "  managed-packages are up to date"

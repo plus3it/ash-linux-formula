@@ -18,6 +18,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38472"
 diag_out "  Ensure that all system binaries"
 diag_out "  executables in:"
 diag_out "  * /bin"

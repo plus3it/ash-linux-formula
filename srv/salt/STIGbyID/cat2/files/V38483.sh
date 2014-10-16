@@ -19,6 +19,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38483"
 diag_out "  Ensure that GPG-checking is"
 diag_out "  enabled in all yum configuration"
 diag_out "  files (esp. /etc/yum.conf and)"

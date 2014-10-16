@@ -19,6 +19,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38484"
 diag_out "  System must display last logon"
 diag_out "  or access via ssh"
 diag_out "----------------------------------"

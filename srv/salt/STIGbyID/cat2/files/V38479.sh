@@ -18,6 +18,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38479"
 diag_out "  Set local users' maximum"
 diag_out "  password-age to sixty days"
 diag_out "----------------------------------"

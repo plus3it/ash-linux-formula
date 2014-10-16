@@ -18,6 +18,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38477"
 diag_out "  Set minimum password change-"
 diag_out "  frequency to 24 hours"
 diag_out "----------------------------------"
