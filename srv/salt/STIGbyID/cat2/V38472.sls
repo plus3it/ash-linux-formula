@@ -16,7 +16,44 @@ cript_V38472-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38472.sh
 
-cmd_NotImplemented:
-  cmd.run:
-  - name: 'echo NOT IMPLEMENTED'
+file_V38466-bin:
+  file.directory:
+  - name: /bin
+  - user: root
+  - recurse:
+    - user
 
+file_V38466-ubin:
+  file.directory:
+  - name: /usr/bin
+  - user: root
+  - recurse:
+    - user
+
+file_V38466-lbin:
+  file.directory:
+  - name: /usr/local/bin
+  - user: root
+  - recurse:
+    - user
+
+file_V38466-sbin:
+  file.directory:
+  - name: /sbin
+  - user: root
+  - recurse:
+    - user
+
+file_V38466-usbin:
+  file.directory:
+  - name: /usr/sbin
+  - user: root
+  - recurse:
+    - user
+
+file_V38466-lsbin:
+  file.directory:
+  - name: /usr/local/sbin
+  - user: root
+  - recurse:
+    - user
