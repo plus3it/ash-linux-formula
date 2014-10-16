@@ -14,6 +14,6 @@ script_V38469-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38469.sh
 
-cmd_NotImplemented:
+cmd_V38469-NotImplemented:
   cmd.run:
   - name: 'echo NOT IMPLEMENTED'
