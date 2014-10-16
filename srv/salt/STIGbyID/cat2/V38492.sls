@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38492
 # Finding ID:	V-38492
 # Version:	RHEL-06-000027
@@ -12,13 +10,13 @@
 #
 ############################################################
 
-# Standard outputter function
-diag_out() {
-   echo "${1}"
-}
+script_V38492-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38492.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38492"
-diag_out "  Prevent the root user from"
-diag_out "  logging in via virtual consoles"
-diag_out "----------------------------------"
+file_V38492-repl:
+  file.replace:
+  - name: /etc/securetty
+  - pattern: "^vc/"
+  - repl: "# vc/"
+
