@@ -23,5 +23,5 @@ diag_out() {
 diag_out "----------------------------------"
 diag_out "  Ascertain if system is protected"
 diag_out "  through backups of both config"
-diag_out "  and application data"
+diag_out "  and other operating system data"
 diag_out "----------------------------------"
