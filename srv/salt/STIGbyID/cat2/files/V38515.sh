@@ -17,7 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38514"
+diag_out "STIG Finding ID: V-38515"
 diag_out "  The Stream Control Transmission"
 diag_out "  Protocol (SCTP) must be disabled"
 diag_out "----------------------------------"
