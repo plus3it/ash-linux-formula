@@ -10,11 +10,11 @@
 #
 ############################################################
 
-script_V38492-describe:
+script_V38495-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38492.sh
+  - source: salt://STIGbyID/cat2/files/V38495.sh
 
-directory_V38493:
+directory_V38495:
   file.directory:
   - name: /var/log/audit
   - user: root
