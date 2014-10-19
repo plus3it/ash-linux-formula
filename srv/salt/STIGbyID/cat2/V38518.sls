@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38518
 # Finding ID:	V-38518
 # Version:	RHEL-06-000133
@@ -12,12 +10,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38518-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38518.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38518"
-diag_out "  All rsyslog-generated log files"
-diag_out "  must be owned by the root user"
-diag_out "----------------------------------"
+cmd_V38518-NotImplemented:
+  cmd.run:
+  - name: 'echo NOT IMPLEMENTED'
+
