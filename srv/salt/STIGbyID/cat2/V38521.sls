@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38521
 # Finding ID:	V-38521
 # Version:	
@@ -14,13 +12,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38521-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38521.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38521"
-diag_out "  All rsyslog must be configured"
-diag_out "  send copies of log entires to a"
-diag_out "  remote collection-node"
-diag_out "----------------------------------"
+cmd_V38521-NotImplemented:
+  cmd.run:
+  - name: 'echo NOT IMPLEMENTED'
+
