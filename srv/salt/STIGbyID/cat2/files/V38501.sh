@@ -12,3 +12,14 @@
 #
 ############################################################
 
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38501"
+diag_out "  authentication-failure check-"
+diag_out "  interval should be set to 15"
+diag_out "  minutes or less"
+diag_out "----------------------------------"
