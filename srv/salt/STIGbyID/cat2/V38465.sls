@@ -14,4 +14,6 @@ script_V38465-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38465.sh
 
-# Salt-friendly remediation-method being researched
+cmd_NotImplemented:
+  cmd.run:
+  - name: 'echo NOT IMPLEMENTED'

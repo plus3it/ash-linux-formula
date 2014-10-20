@@ -1,0 +1,18 @@
+# STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38499
+# Finding ID:	V-38499
+# Version:	RHEL-06-000031
+# Finding Level:	Medium
+#
+#     The /etc/passwd file must not contain password hashes. The hashes for 
+#     all user account passwords should be stored in the file "/etc/shadow" 
+#     and never in "/etc/passwd", which is readable by all users.
+#
+############################################################
+
+script_V38499-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38499.sh
+
+cmd_V38499:
+  cmd.run:
+  - name: '/usr/sbin/pwconv'

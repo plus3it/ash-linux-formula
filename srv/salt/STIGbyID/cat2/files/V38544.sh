@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38544
+# Finding ID:	V-38544
+# Version:	
+# Finding Level:	Medium
+#
+#     The system must use a reverse-path filter for IPv4 network traffic 
+#     when possible by default. Enabling reverse path filtering drops 
+#     packets with source addresses that should not have been able to be 
+#     received on the interface they were received on. It should not be 
+#     used on systems which are ...
+#
+############################################################
+
