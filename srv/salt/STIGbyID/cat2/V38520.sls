@@ -14,13 +14,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38520-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38520.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38520"
-diag_out "  All rsyslog must be configured"
-diag_out "  send copies of log entires to a"
-diag_out "  remote collection-node"
-diag_out "----------------------------------"
+cmd_V38520-NotImplemented:
+  cmd.run:
+  - name: 'echo NOT IMPLEMENTED'
+
