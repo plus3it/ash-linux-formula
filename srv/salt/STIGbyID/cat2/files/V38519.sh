@@ -17,7 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38518"
+diag_out "STIG Finding ID: V-38519"
 diag_out "  All rsyslog-generated log files"
 diag_out "  must be group-owned by root"
 diag_out "----------------------------------"
