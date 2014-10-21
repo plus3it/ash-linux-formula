@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38546
 # Finding ID:	V-38546
 # Version:	RHEL-06-000098
@@ -11,12 +9,18 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38546-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38546.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38546"
-diag_out "  Disable all un-needed network"
-diag_out "  stacks (e.g. IPv6)"
-diag_out "----------------------------------"
+{% if not salt['file.file_exists']('/etc/modprobe.d/disabled.conf') %}
+file-V38546-touchRules:
+  file.touch:
+  - name: '/etc/modprobe.d/disabled.conf'
+{% endif %}
+
+file_V38546-appendBlacklist:
+  file.append:
+  - name: /etc/modprobe.d/disabled.conf
+  - text: 'options ipv6 disable=1'
+
