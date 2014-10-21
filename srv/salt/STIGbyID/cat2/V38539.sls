@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38539
 # Finding ID:	V-38539
 # Version:	RHEL-06-000095
@@ -16,11 +14,11 @@ script_V38539-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38539.sh
 
-{% if salt['file.search']('/etc/sysctl.conf', 'sysctl net.ipv4.conf.default.secure_redirects') %}
+{% if salt['file.search']('/etc/sysctl.conf', 'sysctl net.ipv4.tcp_syncookies') %}
 file_V38539-repl:
   file.replace:
   - name: '/etc/sysctl.conf'
-  - pattern: '^sysctl net.ipv4.conf.default.secure_redirects.*$'
+  - pattern: '^sysctl net.ipv4.tcp_syncookies.*$'
   - repl: 'net.ipv4.tcp_syncookies = 1'
 {% else %}
 file_V38539-append:
