@@ -12,3 +12,14 @@
 #
 ############################################################
 
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38500"
+diag_out "  Only the root user may have the"
+diag_out "  uid '0'"
+diag_out "----------------------------------"
+
