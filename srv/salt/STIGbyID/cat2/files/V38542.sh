@@ -18,7 +18,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38532"
+diag_out "STIG Finding ID: V-38542"
 diag_out "  IPv4 reverse-path filtering must"
 diag_out "  be enabled for all interfaces"
 diag_out "----------------------------------"
