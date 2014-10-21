@@ -17,7 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38532"
+diag_out "STIG Finding ID: V-38539"
 diag_out "  System must be configured to use"
 diag_out "  TCP syn-cookies to help prevent"
 diag_out "  DoS via syn-flood attacks"
