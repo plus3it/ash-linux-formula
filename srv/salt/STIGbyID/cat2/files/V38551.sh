@@ -18,8 +18,8 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38549"
+diag_out "STIG Finding ID: V-38551"
 diag_out "  The system must connect to other"
 diag_out "  IPv6-networked hosts only via"
-diag_out "   firewall-protected interfaces"
+diag_out "  firewall-protected interfaces"
 diag_out "----------------------------------"
