@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38574
 # Finding ID:	V-38574
 # Version:	RHEL-06-000062
@@ -12,14 +10,12 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38574-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38574.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38574"
-diag_out "  The system must be configured to"
-diag_out "  use the SHA512 encryption"
-diag_out "  algorithm for locally-managed"
-diag_out "  user accounts"
-diag_out "----------------------------------"
+file_V38574-repl:
+  file.replace:
+  - name: /etc/sysconfig/authconfig
+  - pattern: '^PASSWDALGORITHM.*$'
+  - repl: 'PASSWDALGORITHM=sha512'
