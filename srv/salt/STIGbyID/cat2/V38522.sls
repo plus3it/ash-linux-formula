@@ -19,7 +19,7 @@ file_V38522-appendTimechk:
   file.append:
   - name: /etc/audit/audit.rules
   - text: 
-    - '## Things that could affect time'
+    - '## STIG-ID V-38522 (RHEL-06-000167) - audit all events that change system time'
     - '-a always,exit -F arch=b64 -S adjtimex -S clock_settime -S settimeofday -k SYS_time-change'
     - '-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change'
     - '-a always,exit -F arch=b64 -S clock_settime -k time-change'
