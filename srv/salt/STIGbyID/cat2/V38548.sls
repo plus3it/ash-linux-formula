@@ -12,11 +12,11 @@ script_V38548-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38548.sh
 
-{% if salt['file.search']('/etc/sysctl.conf', 'sysctl net.ipv6.conf.default.accept_redirects') %}
+{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv6.conf.default.accept_redirects') %}
 file_V38548-repl:
   file.replace:
   - name: '/etc/sysctl.conf'
-  - pattern: '^sysctl net.ipv6.conf.default.accept_redirects.*$'
+  - pattern: '^net.ipv6.conf.default.accept_redirects.*$'
   - repl: 'net.ipv6.conf.default.accept_redirects = 0'
 {% else %}
 file_V38548-append:
@@ -25,5 +25,5 @@ file_V38548-append:
   - text:
     - ' '
     - '# Enable TCP SYN-cookies'
-    - 'sysctl net.ipv6.conf.default.accept_redirects = 0'
+    - 'net.ipv6.conf.default.accept_redirects = 0'
 {% endif %}
