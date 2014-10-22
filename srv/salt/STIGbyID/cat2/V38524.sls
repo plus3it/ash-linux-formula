@@ -13,12 +13,12 @@ script_V38524-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38524.sh
 
-{% if salt['file.search']('/etc/sysctl.conf', 'sysctl net.ipv4.conf.all.accept_redirects') %}
+{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.accept_redirects') %}
 file_V38524-repl:
   file.replace:
   - name: '/etc/sysctl.conf'
-  - pattern: '^sysctl net.ipv4.conf.all.accept_redirects.*$'
-  - repl: 'sysctl net.ipv4.conf.all.accept_redirects = 0'
+  - pattern: '^net.ipv4.conf.all.accept_redirects.*$'
+  - repl: 'net.ipv4.conf.all.accept_redirects = 0'
 {% else %}
 file_V38524-append:
   file.append:
@@ -26,5 +26,5 @@ file_V38524-append:
   - text:
     - ' '
     - '# Disable ICMPv4 redirect packtes'
-    - 'sysctl net.ipv4.conf.all.accept_redirects = 0'
+    - 'net.ipv4.conf.all.accept_redirects = 0'
 {% endif %}
