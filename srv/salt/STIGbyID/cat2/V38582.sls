@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38582
 # Finding ID:	V-38582
 # Version:	RHEL-06-000203
@@ -14,12 +12,12 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38582-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38582.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38582"
-diag_out "  Disale xinetd unless its use is"
-diag_out "  specifically required"
-diag_out "----------------------------------"
+{% if salt['pkg.version']('xinetd') %}
+svc_V38582-xinetd:
+  service.disabled:
+  - name: 'xinetd'
+{% endif %}
