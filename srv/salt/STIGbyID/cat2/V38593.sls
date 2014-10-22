@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38593
 # Finding ID:	V-38593
 # Version:	RHEL-06-000073
@@ -12,13 +10,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38593-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38593.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38593"
-diag_out "  Security warning banners must be"
-diag_out "  presented for all interactive"
-diag_out "  login attempts"
-diag_out "----------------------------------"
+file_V38593-etcIssue:
+  file.managed:
+  - name: '/etc/issue'
+  - source: salt://STIGbyID/cat2/files/issue.txt
