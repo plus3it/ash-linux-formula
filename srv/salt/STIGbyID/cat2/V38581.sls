@@ -18,7 +18,6 @@ file_V38581-bootGrubGrub:
   file.managed:
   - name: '/boot/grub/grub.conf'
   - group: root
-  - mode: '0600'
 
 file_V38581-etcGrub:
   file.symlink:
