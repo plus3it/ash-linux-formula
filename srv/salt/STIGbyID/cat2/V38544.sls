@@ -15,11 +15,11 @@ script_V38544-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38544.sh
 
-{% if salt['file.search']('/etc/sysctl.conf', 'sysctl net.ipv4.conf.default.rp_filter') %}
+{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.rp_filter') %}
 file_V38544-repl:
   file.replace:
   - name: '/etc/sysctl.conf'
-  - pattern: '^sysctl net.ipv4.conf.default.rp_filter.*$'
+  - pattern: '^net.ipv4.conf.default.rp_filter.*$'
   - repl: 'net.ipv4.conf.default.rp_filter = 1'
 {% else %}
 file_V38544-append:
@@ -28,5 +28,5 @@ file_V38544-append:
   - text:
     - ' '
     - '# Enable TCP SYN-cookies'
-    - 'sysctl net.ipv4.conf.default.rp_filter = 1'
+    - 'net.ipv4.conf.default.rp_filter = 1'
 {% endif %}
