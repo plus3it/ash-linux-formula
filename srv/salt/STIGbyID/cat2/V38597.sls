@@ -19,7 +19,7 @@ script_V38597-describe:
 file_V38597-repl:
   file.replace:
   - name: '/etc/sysctl.conf'
-  - pattern: '^sysctl kernel.exec-shield.*$'
+  - pattern: '^kernel.exec-shield.*$'
   - repl: 'kernel.exec-shield = 1'
 {% else %}
 file_V38597-append:
@@ -28,5 +28,5 @@ file_V38597-append:
   - text:
     - ' '
     - '# Enable TCP SYN-cookies'
-    - 'sysctl kernel.exec-shield = 1'
+    - 'kernel.exec-shield = 1'
 {% endif %}
