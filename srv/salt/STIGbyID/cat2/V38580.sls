@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38580
 # Finding ID:	V-38580
 # Version:	RHEL-06-000202
@@ -12,14 +10,20 @@
 #     important to have an audit trail of modules ...
 #
 ############################################################
+script_V38580-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38580.sh
 
-diag_out() {
-   echo "${1}"
-}
+{% if grains['cpuarch'] == 'x86_64' %}
+file_V38580-appendModchk:
+  file.append:
+  - name: /etc/audit/audit.rules
+  - text:
+    - ' '
+    - '# STIG-ID V-38580 (RHEL-06-000202) - monitor dynamic kernel module (un)load'
+    - '-w /sbin/insmod -p x -k modules'
+    - '-w /sbin/rmmod -p x -k modules'
+    - '-w /sbin/modprobe -p x -k modules'
+    - '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules'
+{% endif %}
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38580"
-diag_out "  Configure the audit system to"
-diag_out "  track kernel module insertions"
-diag_out "  and deletions"
-diag_out "----------------------------------"
