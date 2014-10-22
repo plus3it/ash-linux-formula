@@ -31,15 +31,11 @@ file_V38599-repl:
   - pattern: '^DisplayConnect.*$'
   - repl: 'DisplayConnect	/etc/issue'
 {% elif salt['pkg.version']('proftpd') and not salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
-cmd_V38599-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
-
-## file_V38599-repl:
-##   file.replace:
-##   - name: '/etc/proftpd.conf'
-##   - pattern: '^ServerIdent.*$'
-##   - repl: '&DisplayConnect	/etc/issue'
+file_V38599-repl:
+  file.replace:
+  - name: '/etc/proftpd.conf'
+  - pattern: '^(?P<srctok>ServerIdent.*$)'
+  - repl: '\g<srctok>\nDisplayConnect\t\t\t/etc/issue'
 {% endif %}
 ###################################
 
