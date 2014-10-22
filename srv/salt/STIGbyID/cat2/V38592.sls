@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38592
 # Finding ID:	V-38592
 # Version:	RHEL-06-000356
@@ -13,13 +11,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38592-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38592.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38592"
-diag_out "  User accounts must be locked if"
-diag_out "  three consecutive authentication"
-diag_out "  failures occur"
-diag_out "----------------------------------"
+cmd_V38592-NotImplemented:
+  cmd.run:
+  - name: 'echo NOT IMPLEMENTED'
+
