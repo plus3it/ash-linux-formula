@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38585
 # Finding ID:	V-38585
 # Version:	RHEL-06-000068
@@ -12,13 +10,15 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38585-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38585.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38585"
-diag_out "  System boot-loader must require"
-diag_out "  a SHA512-encrypted password to"
-diag_out "  alter boot-time settings"
-diag_out "----------------------------------"
+# Conditional replace or append
+{% if not salt['file.search']('/boot/grub/grub.conf', '^password --encrypted "$6') %}
+cmd_V38585-notice:
+  cmd.run:
+  - name: 'echo "GRUB not password-protected with SHA512 password: manual remediation required"'
+{% endif %}
+
+
