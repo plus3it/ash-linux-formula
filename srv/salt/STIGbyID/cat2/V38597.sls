@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38597
 # Finding ID:	V-38597
 # Version:	RHEL-06-000079
@@ -13,13 +11,22 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38597-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38597.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38597"
-diag_out "  Enable the kernel exec-shield to"
-diag_out "  prevent certain types of memory-"
-diag_out "  based system attacks"
-diag_out "----------------------------------"
+{% if salt['file.search']('/etc/sysctl.conf', 'kernel.exec-shield') %}
+file_V38597-repl:
+  file.replace:
+  - name: '/etc/sysctl.conf'
+  - pattern: '^sysctl kernel.exec-shield.*$'
+  - repl: 'kernel.exec-shield = 1'
+{% else %}
+file_V38597-append:
+  file.append:
+  - name: '/etc/sysctl.conf'
+  - text:
+    - ' '
+    - '# Enable TCP SYN-cookies'
+    - 'sysctl kernel.exec-shield = 1'
+{% endif %}
