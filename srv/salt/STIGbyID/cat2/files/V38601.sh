@@ -2,7 +2,7 @@
 #
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38601
 # Finding ID:	V-38601
-# Version:	
+# Version:	RHEL-06-000081
 # Finding Level:	Medium
 #
 #     The system must not send ICMPv4 redirects from any interface. Sending 
@@ -12,3 +12,12 @@
 #
 ############################################################
 
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38601"
+diag_out "  Prevent host from sending ICMP"
+diag_out "  redirect packets"
+diag_out "----------------------------------"
