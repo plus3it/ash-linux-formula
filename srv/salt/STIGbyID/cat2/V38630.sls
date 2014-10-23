@@ -14,15 +14,17 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38630-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38630.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38630"
-diag_out "  Graphical desktop environments"
-diag_out "  must lock the screen if there"
-diag_out "  has been no user activity for 15"
-diag_out "  minutes and must re-authenticate"
-diag_out "  to unlock"
-diag_out "----------------------------------"
+{% if salt['pkg.version']('gdm') %}
+cmd_V38630-idleConfig:
+  cmd.run:
+  - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/idle_activation_enabled true'
+{% else %}
+notify_V38630:
+  cmd.run:
+  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
+{% endif %}
+
