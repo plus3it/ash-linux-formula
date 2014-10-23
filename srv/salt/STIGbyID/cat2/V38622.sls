@@ -27,4 +27,8 @@ file_V38622-append:
     - ' '
     - '# SMTP service must not allow relaying (per STIG V-38622)'
     - 'inet_interfaces = localhost'
+{% elif salt['pkg.version']('sendmail') %}
+cmd_V38622-NotImplemented:
+  cmd.run:
+  - name: 'echo "Sendmail auto-remediation not supported: manual intervention may be required"'
 {% endif %}
