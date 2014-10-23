@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38609
 # Finding ID:	V-38609
 # Version:	RHEL-06-000223
@@ -11,12 +9,16 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38609-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38609.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38606"
-diag_out "  The tftp service must not be"
-diag_out "  running"
-diag_out "----------------------------------"
+{% if salt['pkg.version']('tftp-server') %}
+svc_V38609-tfptd:
+  service.disabled:
+  - name: 'tftp-server'
+{% endif %}
+
+cmd_V38609-tfptd:
+  cmd.run:
+  - name: 'echo "TFTP service not installed"'
