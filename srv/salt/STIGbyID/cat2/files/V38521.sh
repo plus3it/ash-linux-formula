@@ -2,7 +2,7 @@
 #
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38521
 # Finding ID:	V-38521
-# Version:	
+# Version:	RHEL-06-000137
 # Finding Level:	Medium
 #
 #     The operating system must support the requirement to centrally manage 
