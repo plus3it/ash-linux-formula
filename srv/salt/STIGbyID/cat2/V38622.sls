@@ -31,4 +31,8 @@ file_V38622-append:
 cmd_V38622-NotImplemented:
   cmd.run:
   - name: 'echo "Sendmail auto-remediation not supported: manual intervention may be required"'
+{% elif salt['pkg.version']('exim') %}
+cmd_V38622-NotImplemented:
+  cmd.run:
+  - name: 'echo "Exim auto-remediation not supported: manual intervention may be required"'
 {% endif %}
