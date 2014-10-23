@@ -13,14 +13,21 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38632-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38632.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38632"
-diag_out "  System must produce audit"
-diag_out "  records containing sufficient"
-diag_out "  information to establish what"
-diag_out "  type of events occurred"
-diag_out "----------------------------------"
+{% if not salt['pkg.version']('auditd') %}
+pkg_V38632-audit:
+  pkg.installed:
+  - name: 'audit'
+{% endif %}
+
+svc_V38632-auditEnabled:
+  service.enabled:
+  - name: 'auditd'
+
+svc_V38632-auditRunning:
+  service.running:
+  - name: 'auditd'
+
