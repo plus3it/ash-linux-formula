@@ -11,3 +11,12 @@
 #
 ############################################################
 
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38622"
+diag_out "  SMTP service must be configured"
+diag_out "  to prohibit relaying"
+diag_out "----------------------------------"
