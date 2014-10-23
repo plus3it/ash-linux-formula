@@ -12,7 +12,12 @@ script_V38605-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38605.sh
 
-{% if salt['pkg.version']('cronie') %}
+{% if not salt['pkg.version']('cronie') %}
+pkg_V38605-cronie:
+  pkg.installed:
+  - name: 'cronie'
+{% endif %}
+
 svc_V38605-crondEnabled:
   service.enabled:
   - name: 'crond'
@@ -20,9 +25,3 @@ svc_V38605-crondEnabled:
 svc_V38605-crondRunning:
   service.running:
   - name: 'crond'
-{% else %}
-alert_V38605-crond:
-  cmd.run:
-  - name: 'echo "WARNING: Cron service not installed!"'
-{% endif %}
-
