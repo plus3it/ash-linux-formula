@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38633
 # Finding ID:	V-38633
 # Version:	RHEL-06-000160
@@ -11,4 +9,12 @@
 #     size and the number of logs retained.
 #
 ############################################################
+
+script_V38633-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38633.sh
+
+cmd_V38633-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
