@@ -11,12 +11,13 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38513-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38513.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38603"
-diag_out "  NIS-related packages must be"
-diag_out "  removed from the system"
-diag_out "----------------------------------"
+pkg_V38513:
+  pkg.purged:
+  - pkgs: 
+    - yp-tools
+    - ypbind
+    - ypserv
