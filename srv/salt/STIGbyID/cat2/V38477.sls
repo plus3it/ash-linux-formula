@@ -1,6 +1,6 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38477
 # Finding ID:	V-38477
-# Version:	
+# Version:	RHEL-06-000051
 # Finding Level:	Medium
 #
 #     Users must not be able to change passwords more than once every 24 
