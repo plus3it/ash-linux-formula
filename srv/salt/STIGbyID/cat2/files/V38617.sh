@@ -2,7 +2,7 @@
 #
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38617
 # Finding ID:	V-38617
-# Version:	
+# Version:	SSH daemon must use FIPS 140-2 approved ciphers
 # Finding Level:	Medium
 #
 #     The SSH daemon must be configured to use only FIPS 140-2 approved 
@@ -11,3 +11,13 @@
 #
 ############################################################
 
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38617"
+diag_out "  SSH daemon must be configured to"
+diag_out "  use only FIPS 140-2 approved"
+diag_out "  ciphers"
+diag_out "----------------------------------"
