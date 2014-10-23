@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38621
 # Finding ID:	V-38621
 # Version:	RHEL-06-000248
@@ -12,13 +10,16 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38621-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38621.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38621"
-diag_out "  The system clock must be"
-diag_out "  synchronized to an authoritative"
-diag_out "  DoD time-source"
-diag_out "----------------------------------"
+{% if not salt['pkg.version']('ntp') %}
+pkg_V38621-ntp:
+  pkg.installed:
+  - name: 'ntp'
+{% endif %}
+
+cmd_V38621-notice:
+  cmd.run:
+  - name: 'echo "Manual remediation required"'
