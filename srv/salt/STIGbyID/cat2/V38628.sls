@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38628
 # Finding ID:	V-38628
 # Version:	RHEL-06-000145
@@ -13,13 +11,21 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38628-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38628.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38628"
-diag_out "  Audit records must establish"
-diag_out "  identity of user/subject associ-"
-diag_out "  ated with events"
-diag_out "----------------------------------"
+{% if not salt['pkg.version']('auditd') %}
+pkg_V38628-audit:
+  pkg.installed:
+  - name: 'audit'
+{% endif %}
+
+svc_V38628-auditEnabled:
+  service.enabled:
+  - name: 'auditd'
+
+svc_V38628-auditRunning:
+  service.running:
+  - name: 'auditd'
+
