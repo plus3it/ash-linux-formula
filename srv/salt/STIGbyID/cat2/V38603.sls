@@ -9,11 +9,11 @@
 #
 ############################################################
 
-script_V38513-describe:
+script_V38603-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38513.sh
+  - source: salt://STIGbyID/cat2/files/V38603.sh
 
-pkg_V38513:
+pkg_V38603:
   pkg.purged:
   - pkgs: 
     - yp-tools
