@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38619
 # Finding ID:	V-38619
 # Version:	RHEL-06-000347
@@ -12,12 +10,10 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38619-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38619.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38619"
-diag_out "  there must be not .netrc files"
-diag_out "  on the system"
-diag_out "----------------------------------"
+cmd_V38619-NotImplemented:
+  cmd.run:
+  - name: 'echo NOT YET IMPLEMENTED'
