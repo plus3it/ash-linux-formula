@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38623
 # Finding ID:	V-38623
 # Version:	RHEL-06-000135
@@ -13,13 +11,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38623-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38623.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38623"
-diag_out "  syslog-generated log files must"
-diag_out "  be set to mode 0600 or less"
-diag_out "  permissive"
-diag_out "----------------------------------"
+cmd_V38623-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
+
