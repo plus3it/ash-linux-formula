@@ -27,7 +27,7 @@ file_V38600-append:
   - name: '/etc/sysctl.conf'
   - text:
     - ' '
-    - '# Enable TCP SYN-cookies'
+    - '# Disable sending ICMP redirects (per STIG V-38600)'
     - 'net.ipv4.conf.default.send_redirects = 0'
 {% endif %}
 
