@@ -28,7 +28,7 @@ file_V38601-append:
   - name: '/etc/sysctl.conf'
   - text:
     - ' '
-    - '# Enable TCP SYN-cookies'
+    - '# Disable sedning ICMP redirects (per STIG V-38601)'
     - 'net.ipv4.conf.all.send_redirects = 0'
 {% endif %}
 
