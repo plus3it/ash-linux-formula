@@ -13,13 +13,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38637-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38637.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38637"
-diag_out "  system must retain enough"
-diag_out "  rotated audit logs to cover the"
-diag_out "  required log retention period"
-diag_out "----------------------------------"
+script_V38637-tamperCheck:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38637-helper.sh
+
