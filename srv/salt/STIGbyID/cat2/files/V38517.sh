@@ -2,7 +2,7 @@
 #
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38517
 # Finding ID:	V-38517
-# Version:	
+# Version:	RHEL-06-000127
 # Finding Level:	Medium
 #
 #     The Transparent Inter-Process Communication (TIPC) protocol must be 
