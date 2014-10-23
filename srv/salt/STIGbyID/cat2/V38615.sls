@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38615
 # Finding ID:	V-38615
 # Version:	RHEL-06-000240
@@ -13,12 +11,24 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38615-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38615.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38615"
-diag_out "  SSH daemon must be configured to"
-diag_out "  present DoD login banner"
-diag_out "----------------------------------"
+{% if salt['file.search']('/etc/ssh/sshd_config', '^Banner')
+ %}
+file_V38615-repl:
+  file.replace:
+  - name: '/etc/ssh/sshd_config'
+  - pattern: '^Banner.*$'
+  - repl: 'Banner /etc/issue'
+{% else %}
+file_V38615-append:
+  file.append:
+  - name: '/etc/ssh/sshd_config'
+  - text:
+    - ' '
+    - '# SSH service must present DoD login banners (per STIG V-38615)'
+    - 'Banner /etc/issue'
+{% endif %}
+
