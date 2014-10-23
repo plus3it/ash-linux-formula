@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38620
 # Finding ID:	V-38620
 # Version:	RHEL-06-000247
@@ -15,13 +13,20 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38620-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38620.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38620"
-diag_out "  The system clock must be"
-diag_out "  synchronized on a continual (or"
-diag_out "  at least daily) basis"
-diag_out "----------------------------------"
+{% if not salt['pkg.version']('ntp') %}
+pkg_V38620-ntp:
+  pkg.installed:
+  - name: 'ntp'
+{% endif %}
+
+svc_V38620-ntpEnabled:
+  service.enabled:
+  - name: 'ntpd'
+
+svc_V38620-ntpRunning:
+  service.running:
+  - name: 'ntpd'
