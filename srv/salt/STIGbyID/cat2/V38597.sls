@@ -27,6 +27,6 @@ file_V38597-append:
   - name: '/etc/sysctl.conf'
   - text:
     - ' '
-    - '# Enable TCP SYN-cookies'
+    - '# Enable exec-shield (per STIG V-38597)'
     - 'kernel.exec-shield = 1'
 {% endif %}
