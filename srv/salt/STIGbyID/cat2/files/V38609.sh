@@ -16,7 +16,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38606"
+diag_out "STIG Finding ID: V-38609"
 diag_out "  The tftp service must not be"
 diag_out "  running"
 diag_out "----------------------------------"
