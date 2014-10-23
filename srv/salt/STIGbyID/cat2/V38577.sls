@@ -10,19 +10,19 @@
 #
 ############################################################
 
-script_V38576-describe:
+script_V38577-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38576.sh
+  - source: salt://STIGbyID/cat2/files/V38577.sh
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/libuser.conf', '^crypt_style') %}
-file_V38576-repl:
+file_V38577-repl:
   file.replace:
   - name: /etc/libuser.conf
   - pattern: '^crypt_style.*$'
   - repl: 'crypt_style = sha512'
 {% else %}
-file_V38576-append:
+file_V38577-append:
   file.append:
   - name: /etc/libuser.conf
   - text:
