@@ -27,6 +27,6 @@ file_V38542-append:
   - name: '/etc/sysctl.conf'
   - text:
     - ' '
-    - '# Enable TCP SYN-cookies'
+    - '# Enable reverse-path filtering (per STIG V-38542)'
     - 'net.ipv4.conf.all.rp_filter = 1'
 {% endif %}
