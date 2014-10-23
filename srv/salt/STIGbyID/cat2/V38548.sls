@@ -24,6 +24,6 @@ file_V38548-append:
   - name: '/etc/sysctl.conf'
   - text:
     - ' '
-    - '# Enable TCP SYN-cookies'
+    - '# Disable ICMPv6 redirects (per STIG V-38548)'
     - 'net.ipv6.conf.default.accept_redirects = 0'
 {% endif %}
