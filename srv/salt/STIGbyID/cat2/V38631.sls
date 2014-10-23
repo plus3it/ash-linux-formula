@@ -13,14 +13,21 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38631-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38631.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38631"
-diag_out "  system must employ automated"
-diag_out "  mechanisms to facilitate the"
-diag_out "  monitoring and control of"
-diag_out "  remote access methods"
-diag_out "----------------------------------"
+{% if not salt['pkg.version']('auditd') %}
+pkg_V38631-audit:
+  pkg.installed:
+  - name: 'audit'
+{% endif %}
+
+svc_V38631-auditEnabled:
+  service.enabled:
+  - name: 'auditd'
+
+svc_V38631-auditRunning:
+  service.running:
+  - name: 'auditd'
+
