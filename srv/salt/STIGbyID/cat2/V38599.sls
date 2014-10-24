@@ -18,7 +18,7 @@ script_V38599-describe:
 {% if salt['pkg.version']('nordugrid-arc-gridftpd') %}
 cmd_V38599-NotImplemented:
   cmd.run:
-  - name: 'echo NOT YET IMPLEMENTED'
+  - name: 'echo "NOT YET IMPLEMENTED"'
 {% endif %}
 
 ###################################
