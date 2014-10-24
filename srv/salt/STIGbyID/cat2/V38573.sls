@@ -15,5 +15,5 @@ script_V38573-describe:
 
 cmd_V38573-NotImplemented:
   cmd.run:
-  - name: 'echo NOT IMPLEMENTED'
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
