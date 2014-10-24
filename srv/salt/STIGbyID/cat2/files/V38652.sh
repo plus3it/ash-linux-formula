@@ -16,6 +16,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38652"
 diag_out "  Remote file systems must be"
 diag_out "  mounted with the nodev option"
 diag_out "----------------------------------"
