@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38663
 # Finding ID:	V-38663
 # Version:	RHEL-06-000278
@@ -13,15 +11,12 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38663-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38663.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38663"
-diag_out "  Verify that the permissions set"
-diag_out "  within the audit RPM are still"
-diag_out "  the permissions in place on the"
-diag_out "  running system"
-diag_out "----------------------------------"
+# NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
+cmd_V38663-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
