@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38667
 # Finding ID:	V-38667
 # Version:	RHEL-06-000285
@@ -14,13 +12,16 @@
 #
 ############################################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38667-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38667.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38667"
-diag_out "  Verify that intrusion-detection"
-diag_out "  tools are installed and active"
-diag_out "----------------------------------"
+# Not functional in current Salt verion (err: "State selinux.mode found is unavailable")
+## enforcing:
+##   selinux.mode
+######################################################################
+
+cmd_V38667-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
