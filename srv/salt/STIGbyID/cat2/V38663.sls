@@ -17,6 +17,6 @@ script_V38663-describe:
 
 # NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
-cmd_V38663-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+script_V38663-helper:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38663-helper.sh
