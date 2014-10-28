@@ -13,15 +13,13 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38665-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38665.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38665"
-diag_out "  Verify that the group ownerships
-diag_out "  set within the audit RPM are"
-diag_out "  the group ownerships in place on"
-diag_out "  the running system"
-diag_out "----------------------------------"
+# NEED TO INVESTIGATE USE OF pkg.verify MODULE
+
+script_V38665-helper:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38665-helper.sh
 
