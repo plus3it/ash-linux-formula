@@ -14,7 +14,7 @@ script_V38511-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38511.sh
 
-file_V38492-repl:
+file_V38511-repl:
   file.replace:
   - name: /etc/sysctl.conf
   - pattern: '^net.ipv4.ip_forward =.*$'

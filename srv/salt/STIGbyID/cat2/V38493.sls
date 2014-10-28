@@ -9,9 +9,9 @@
 #
 ############################################################
 
-script_V38492-describe:
+script_V38493-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38492.sh
+  - source: salt://STIGbyID/cat2/files/V38493.sh
 
 directory_V38493:
   file.directory:
