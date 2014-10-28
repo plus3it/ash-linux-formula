@@ -16,12 +16,34 @@ script_V38667-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38667.sh
 
-# Not functional in current Salt verion (err: "State selinux.mode found is unavailable")
-## enforcing:
-##   selinux.mode
-######################################################################
+# Alter the running system-state
+{% if salt['pkg.version']('policycoreutils-python') %}
+sel_V38667:
+  selinux:
+  - mode
+  - name: 'Enforcing'
+{% endif %}
 
-cmd_V38667-NotImplemented:
+# Verify that the reboot system-state is acceptable
+{% if salt['file.search']('/etc/sysconfig/selinux', '^SELINUX=disabled') %}
+file_V38667-enableSEL:
+  file.replace:
+  - name: '/etc/sysconfig/selinux'
+  - pattern: '^SELINUX=disabled'
+  - repl: '^SELINUX=permissive'
+
+status_v38667:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+  - name: 'echo "NOTICE: SELinux found disabled. Changing to \"Permissive\". Reboot required to take effect"'
+
+{% else %}
+status_v38667:
+  cmd.run:
+  - name: 'echo "Info: SELinux already enabled at at least a level of Permissive"'
+
+{% endif %}
+
+## pkg_V38667-aide:
+##   pkg.installed:
+##   - name: aide
 
