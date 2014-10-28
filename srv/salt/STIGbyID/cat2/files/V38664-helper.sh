@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+# HELPER-script
+#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38664
 # Finding ID:	V-38664
 # Version:	RHEL-06-000279
@@ -13,3 +15,13 @@
 #
 ############################################################
 
+CHECKRPM=`rpm -V audit | grep '^.....U'`
+
+if [ "${CHECKRPM}" == "" ]
+then
+   echo "Info: 'audit' RPM passes ownership verification"
+   exit 0
+else
+   echo "WARN: 'audit' RPM FAILS ownership verification - manual intervention required"
+   exit 1
+fi

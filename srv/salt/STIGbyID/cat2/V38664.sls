@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38664
 # Finding ID:	V-38664
 # Version:	RHEL-06-000279
@@ -12,4 +10,14 @@
 #     ownership set by the vendor should be ...
 #
 ############################################################
+
+script_V38664-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38664.sh
+
+# NEED TO INVESTIGATE USE OF pkg.verify MODULE
+
+script_V38664-helper:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38664-helper.sh
 
