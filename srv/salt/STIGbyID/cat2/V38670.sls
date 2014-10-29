@@ -24,12 +24,18 @@ msg_V38670-etcCrontab:
   - name: 'echo "Info: AIDE found in /etc/crontab"'
 {% endif %}
 
-{% if not salt['file.search']('/var/spool/cron/root', '/usr/sbin/aide') %}
-msg_V38670-etcCrontab:
+{% if salt['file.file_exists']('/var/spool/cron/root') %}
+  {% if not salt['file.search']('/var/spool/cron/root', '/usr/sbin/aide') %}
+msg_V38670-rootCrontab:
   cmd.run:
-  - name: 'echo "Info: AIDE not found in root user's crontab (/var/spool/cron/root)"'
+  - name: 'echo "Info: AIDE not found in root users crontab (/var/spool/cron/root)"'
+  {% else %}
+msg_V38670-rootCrontab:
+  cmd.run:
+  - name: 'echo "Info: AIDE found in root users crontab (/var/spool/cron/root)"'
+  {% endif %}
 {% else %}
-msg_V38670-etcCrontab:
+msg_V38670-rootCrontab:
   cmd.run:
-  - name: 'echo "Info: AIDE found in root user's crontab (/var/spool/cron/root)"'
+  - name: 'echo "Info: root user has no crontab (/var/spool/cron/root)"'
 {% endif %}
