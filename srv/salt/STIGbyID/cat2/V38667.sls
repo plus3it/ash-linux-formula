@@ -39,7 +39,7 @@ status_v38667:
 {% else %}
 status_v38667:
   cmd.run:
-  - name: 'echo "Info: SELinux already enabled at at least a level of Permissive"'
+  - name: 'echo "Info: SELinux already enabled to at least a level of Permissive"'
 
 {% endif %}
 
@@ -47,3 +47,25 @@ status_v38667:
 ##   pkg.installed:
 ##   - name: aide
 
+# Ensure audit service is enabled and running
+svc_V38667-auditEnabled:
+  service.enabled:
+  - name: 'auditd'
+
+svc_V38667-auditRunning:
+  service.running:
+  - name: 'auditd'
+
+{% if salt['file.search']('/boot/grub/grub.conf', 'kernel') and not salt['file.search']('/boot/grub/grub.conf', 'kernel.*audit=1') %}
+
+file_V38667-repl:
+  file.replace:
+  - name: '/boot/grub/grub.conf'
+  - pattern: '(?P<srctok>kernel.*$)'
+  - repl: '\g<srctok> audit=1'
+
+{% else %}
+status_V38667:
+  cmd.run:
+  - name: 'echo "Auditing already enabled at boot"'
+{% endif %}
