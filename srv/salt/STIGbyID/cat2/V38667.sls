@@ -43,9 +43,10 @@ status_v38667:
 
 {% endif %}
 
-## pkg_V38667-aide:
-##   pkg.installed:
-##   - name: aide
+# Make sure AIDE is installed
+pkg_V38667-aide:
+  pkg.installed:
+  - name: aide
 
 # Ensure audit service is enabled and running
 svc_V38667-auditEnabled:
@@ -56,6 +57,8 @@ svc_V38667-auditRunning:
   service.running:
   - name: 'auditd'
 
+#############################
+# Enable audit at kernel load
 {% if salt['file.search']('/boot/grub/grub.conf', 'kernel') and not salt['file.search']('/boot/grub/grub.conf', 'kernel.*audit=1') %}
 
 file_V38667-repl:
@@ -69,3 +72,4 @@ status_V38667:
   cmd.run:
   - name: 'echo "Auditing already enabled at boot"'
 {% endif %}
+
