@@ -14,10 +14,6 @@ script_V38680-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38680.sh
 
-cmd_V38680-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
-
 {% if salt['file.file_exists']('/etc/audit/auditd.conf') %}
 file_V38680-repl:
   file.replace:
