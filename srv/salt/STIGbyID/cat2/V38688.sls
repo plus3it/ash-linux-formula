@@ -19,21 +19,8 @@ script_V38688-describe:
 cmd_V38688-enableBanner:
   cmd.run:
   - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/banner_message_enable true'
-
-# Make sure the /etc/issue file contents exist and set GDM banner
-  {% if salt['file.file_exists']('/etc/issue') %}
-cmd_V38688-setBanner:
-  cmd.run:
-  - name: '/usr/bin/gconftool-2 --direct --config-source=xml:readwrite:$HOME/.gconf --type string --set /apps/gdm/simple-greeter/banner_message_text "$(cat /etc/issue)"'
-  {% else %}
-
-cmd_V38688-setBanner:
-  cmd.run:
-  - name: 'echo "WARNING: Could not find /etc/banner file: GDM login banner not set!"'
-  {% endif %}
 {% else %}
 notify_V38688:
   cmd.run:
   - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {% endif %}
-
