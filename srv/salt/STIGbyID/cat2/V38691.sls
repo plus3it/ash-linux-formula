@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38691
 # Finding ID:	V-38691
 # Version:	RHEL-06-000331
@@ -12,12 +10,21 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38691-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38691.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38691"
-diag_out "  Disable the BlueTooth service"
-diag_out "----------------------------------"
+{% if salt['file.file_exists']('/etc/init.d/bluetooth') %}
+# Ensure bluetooth service is disabled and stopped
+svc_V38691-bluetoothEnabled:
+  service.disabled:
+  - name: 'bluetooth'
 
+svc_V38691-bluetoothRunning:
+ service.dead:
+  - name: 'bluetooth'
+{% else %}
+notice_V38691-noBTservice:
+  cmd.run:
+  - name: 'echo "Info: BlueTooth service not present."'
+{% endif %}
