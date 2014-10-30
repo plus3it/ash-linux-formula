@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38678
 # Finding ID:	V-38678
 # Version:	RHEL-06-000311
@@ -13,14 +11,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38678-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38678.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38678"
-diag_out "  audit system sends an alert when"
-diag_out "  policy-defined storage-capacity"
-diag_out "  threshold is reached"
-diag_out "----------------------------------"
+cmd_V38678-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
