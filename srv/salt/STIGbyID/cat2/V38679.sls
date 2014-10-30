@@ -12,13 +12,11 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38679-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38679.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38679"
-diag_out "  DHCP client must be disabled if"
-diag_out "  not needed"
-diag_out "----------------------------------"
+cmd_V38679-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
