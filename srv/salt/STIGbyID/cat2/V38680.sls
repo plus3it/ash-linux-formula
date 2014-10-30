@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38680
 # Finding ID:	V-38680
 # Version:	RHEL-06-000313
@@ -12,14 +10,22 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+script_V38680-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38680.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38680"
-diag_out "  Audit system must send email"
-diag_out "  notifications about storage"
-diag_out "  capacity to admin group"
-diag_out "----------------------------------"
+cmd_V38680-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
+{% if salt['file.file_exists']('/etc/audit/auditd.conf') %}
+file_V38680-repl:
+  file.replace:
+  - name: '/etc/audit/auditd.conf'
+  - pattern: '^action_mail_acct.*$'
+  - repl: 'action_mail_acct = root'
+{% else %}
+warn_V38680:
+  cmd.run:
+  - name: 'echo "The audit config file (/etc/audit/auditd.conf) does not exist"'
+{% endif %}
