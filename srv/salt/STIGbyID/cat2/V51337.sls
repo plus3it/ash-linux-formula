@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-51337
 # Finding ID:	V-51337
 # Version:	RHEL-06-000017
@@ -17,14 +15,23 @@
 #
 #############################################################################
 
-# Standard outputter function
-diag_out() {
-   echo "${1}"
-}
+script_V51337-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V51337.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-51337"
-diag_out "  SELinux must be active"
-diag_out "  throughout boot process and OS"
-diag_out "  epoch"
-diag_out "----------------------------------"
+#########################################
+# Ensure SELinux is active at kernel load
+{% if salt['file.search']('/boot/grub/grub.conf', 'kernel.*selinux=0') %}
+
+file_V51337-repl:
+  file.replace:
+  - name: '/boot/grub/grub.conf'
+  - pattern: ' selinux=0'
+  - repl: ''
+
+{% else %}
+status_V51337:
+  cmd.run:
+  - name: 'echo "SELinux not disabled in GRUB"'
+{% endif %}
+
