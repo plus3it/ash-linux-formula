@@ -14,14 +14,15 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
+CHKMOD=`rpm -qVf /etc/rsyslog.conf | grep '^..5'`
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38520"
-diag_out "  The rsyslog service must be"
-diag_out "  configured send copies of log"
-diag_out "  entires to a remote"
-diag_out "  collection-node"
-diag_out "----------------------------------"
+
+if [ "${CHKMOD}" == "" ]
+then
+   echo "WARN: rsyslog has not been configured"
+   exit 1
+else
+   echo "Info:  /etc/rsyslog.conf modified - rsyslog may have been configured"
+   exit 0
+fi
+

@@ -16,7 +16,7 @@ script_V38520-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38520.sh
 
-cmd_V38520-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+script_V38520-helper:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38520-helper.sh
 
