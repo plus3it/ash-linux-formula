@@ -1,10 +1,10 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38481
-# Finding ID:	V-38481
-# Version:	RHEL-06-000011
-# Finding Level:	Medium
+# Finding ID:   V-38481
+# Version:      RHEL-06-000011
+# Finding Level:        Medium
 #
-#     System security patches and updates must be installed and up-to-date. 
-#     Installing software updates is a fundamental mitigation against the 
+#     System security patches and updates must be installed and up-to-date.
+#     Installing software updates is a fundamental mitigation against the
 #     exploitation of publicly-known vulnerabilities.
 #
 ############################################################
@@ -23,12 +23,7 @@ cmd_V38481-lastUpdate:
   - name: "printf 'System last updated: ' ; rpm -q `rpm -qa -last | awk 'END {print $1}'` --qf '%{installtime:date}\n'"
   - unless: 'yum repolist | grep "repolist: 0"'
 
-# Replace with pkg.uptodate state when available
-cmd_V38481-chkUpdated:
-  cmd.run:
-  - name: 'echo "System is up to date"'
-  - onlyif: 'yum check-update'
+pkg_V38481-upgrades:
+  module.run:
+  - name: pkg.list_upgrades
 
-# pkg__V38481-chkUpdated:
-#   pkg.uptodate:
-#   - name: 'Update Check'

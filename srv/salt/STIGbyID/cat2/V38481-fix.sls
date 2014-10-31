@@ -12,7 +12,12 @@
 include:
 - STIGbyID/cat2/V38481
 
-cmd_38481-remediate:
-  cmd.run:
-  - name: 'yum update -y'
-  - unless: 'yum repolist | grep "repolist: 0"'
+{% set updatePairs = salt['pkg.list_upgrades']('name') %}
+
+{% for pkgName in updatePairs %}
+remediate_V38481-{{ pkgName }}:
+  pkg:
+  - name: {{ pkgName }}
+  - latest
+{% endfor %}
+
