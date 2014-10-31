@@ -14,6 +14,10 @@ script_V38673-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38673.sh
 
+notice_V38673:
+  cmd.run:
+  - name: 'echo "Implementation is system- and tenant-specific. This test will look for scheduled service in typical scheduler file locations. However, this tool cannot verify outside those locations or any frequencies discovered within those locations. **MANUAL VERIFICAION WILL BE REQUIRED.**"'
+
 {% if not salt['file.search']('/etc/crontab', '/usr/sbin/aide') %}
 msg_V38673-etcCrontab:
   cmd.run:
