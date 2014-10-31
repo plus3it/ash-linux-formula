@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-43150
 # Finding ID:	V-43150
 # Version:	RHEL-06-000527
@@ -16,13 +14,17 @@
 #
 ############################################################
 
-diag_out() {
-   echo "${1}"
-}
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-43150"
-diag_out "  Graphical login manager must not"
-diag_out "  display list of user accounts"
-diag_out "----------------------------------"
+script_V43150-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V43150.sh
 
+{% if salt['pkg.version']('gdm') %}
+cmd_V43150-setNoUserlist:
+  cmd.run:
+  - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/disable_user_list true'
+{% else %}
+notify_V43150:
+  cmd.run:
+  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
+{% endif %}
