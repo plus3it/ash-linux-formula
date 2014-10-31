@@ -14,6 +14,6 @@
 
 file_V38668_managed:
   file.managed:
-  - name: /etc/init/control-alt-delete.conf.override
+  - name: /etc/init/control-alt-delete.override
   - source: salt://STIGbyID/cat1/files/V38668.txt
   - force: True
