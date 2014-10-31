@@ -20,6 +20,12 @@ notice_V38696:
   cmd.run:
   - name: 'echo "Implementation is system- and tenant-specific. This test will look for scheduled service in typical scheduler file locations. However, this tool cannot verify outside those locations or any frequencies discovered within those locations. **MANUAL VERIFICAION WILL BE REQUIRED.**"'
 
+{% if not salt['pkg.verify']('aide') %}
+warn_V38696-aideConf:
+   cmd.run:
+   - name: 'echo "Package unmodified (AIDE has not been configured)"'
+{% endif %}
+
 {% if not salt['file.search']('/etc/crontab', '/usr/sbin/aide') %}
 msg_V38696-etcCrontab:
   cmd.run:
