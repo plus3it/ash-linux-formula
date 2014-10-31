@@ -14,3 +14,14 @@
 #
 ############################################################
 
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38698"
+diag_out "  OS must be configured to detect"
+diag_out "  additon of unauthorized"
+diag_out "  software"
+diag_out "----------------------------------"
+
