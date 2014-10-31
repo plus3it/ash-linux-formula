@@ -9,6 +9,11 @@
 #     periodic execution. Periodically running AIDE may reveal unexpected 
 #     changes in installed files.
 #
+#  CCI: CCI-001263
+#  NIST SP 800-53 :: SI-4 (5)
+#  NIST SP 800-53A :: SI-4 (5).1 (ii)
+#
+#
 ############################################################
 
 script_V38700-describe:
