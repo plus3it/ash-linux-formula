@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-51391
 # Finding ID:	V-51391
 # Version:	RHEL-06-000018
@@ -17,14 +15,11 @@
 #
 ############################################################
 
-# Standard outputter function
-diag_out() {
-   echo "${1}"
-}
+script_V51391-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V51391.sh
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-51391"
-diag_out "  An AIDE database must be"
-diag_out "  available for system file"
-diag_out "  verification"
-diag_out "----------------------------------"
+cmd_V51391-NotImplemented:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED"'
+
