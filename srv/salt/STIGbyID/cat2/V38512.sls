@@ -9,6 +9,10 @@
 #     "iptables" service provides the system's host-based firewalling 
 #     capability for IPv4 and ICMP.
 #
+#  CCI: CCI-001100
+#  NIST SP 800-53 :: SC-7 (2)
+#  NIST SP 800-53A :: SC-7 (2).1 (ii)
+#
 ############################################################
 
 script_V38512-describe:
