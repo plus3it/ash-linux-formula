@@ -12,6 +12,11 @@
 #     process requiring administrators to manually address account 
 #     management functions adds risk of potential oversight. 
 #
+#  CCI: CCI-000015
+#  NIST SP 800-53 :: AC-2 (1)
+#  NIST SP 800-53A :: AC-2 (1).1
+#  NIST SP 800-53 Revision 4 :: AC-2 (1)
+#
 ############################################################
 
 # Standard outputter function
