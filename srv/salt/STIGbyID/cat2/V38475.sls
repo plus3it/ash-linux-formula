@@ -9,6 +9,11 @@
 #     However, any security benefit from an onerous requirement must be 
 #     carefully ...
 #
+#  CCI: CCI-000205
+#  NIST SP 800-53 :: IA-5 (1) (a)
+#  NIST SP 800-53A :: IA-5 (1).1 (i)
+#  NIST SP 800-53 Revision 4 :: IA-5 (1) (a)
+#
 ############################################################
 
 script_V38475-describe:

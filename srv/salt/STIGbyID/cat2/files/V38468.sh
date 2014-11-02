@@ -9,6 +9,11 @@
 #     volume is full. Taking appropriate action in case of a filled audit 
 #     storage volume will minimize the possibility of losing audit records.
 #
+#  CCI: CCI-000140
+#  NIST SP 800-53 :: AU-5 b
+#  NIST SP 800-53A :: AU-5.1 (iv)
+#  NIST SP 800-53 Revision 4 :: AU-5 b
+#
 ############################################################
 
 # Standard outputter function

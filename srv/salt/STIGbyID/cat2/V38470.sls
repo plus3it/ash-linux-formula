@@ -8,6 +8,10 @@
 #     impending disk space problem may allow them to take corrective action 
 #     prior to any disruption.
 #
+#  CCI: CCI-000138
+#  NIST SP 800-53 :: AU-4
+#  NIST SP 800-53A :: AU-4.1 (ii)
+#
 ############################################################
 
 script_V38470-describe:
