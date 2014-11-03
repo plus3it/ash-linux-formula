@@ -5,13 +5,16 @@
 # Version:	RHEL-06-000505
 # Finding Level:	Medium
 #
-#     The operating system must conduct backups of system-level information 
-#     contained in the information system per organization defined 
-#     frequency to conduct backups that are consistent with recovery time 
-#     and recovery point objectives. Operating system backup is a critical 
-#     step in maintaining data assurance and availability. System-level 
-#     information includes system-state information, operating system and 
-#     application software, and ...
+#     Operating system backup is a critical step in maintaining data
+#     assurance and availability. System-level information includes
+#     system-state information, operating system and application software,
+#     and licenses. Backups must be consistent with organizational recovery
+#     time and recovery point objectives.
+#
+#  CCI: CCI-000537
+#  NIST SP 800-53 :: CP-9 (b)
+#  NIST SP 800-53A :: CP-9.1 (v)
+#  NIST SP 800-53 Revision 4 :: CP-9 (b)
 #
 ############################################################
 

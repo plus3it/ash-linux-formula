@@ -7,7 +7,14 @@
 #     the date and time of the last logon or access via ssh. Users need to 
 #     be aware of activity that occurs regarding their account. Providing 
 #     users with information regarding the date and time of their last 
-#     successful login allows the user to determine if any ...
+#     successful login allows the user to determine if any unauthorized
+#     activity has occurred and gives them an opportunity to notify
+#     administrators.
+#
+#  CCI: CCI-000052
+#  NIST SP 800-53 :: AC-9
+#  NIST SP 800-53A :: AC-9.1
+#  NIST SP 800-53 Revision 4 :: AC-9
 #
 ############################################################
 
