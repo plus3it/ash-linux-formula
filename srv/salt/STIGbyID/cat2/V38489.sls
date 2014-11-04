@@ -6,6 +6,10 @@
 #     A file integrity tool must be installed. The AIDE package must be 
 #     installed if it is to be available for integrity checking.
 #
+#  CCI: CCI-000663
+#  NIST SP 800-53 :: SA-7
+#  NIST SP 800-53A :: SA-7.1 (ii)
+#
 ############################################################
 
 script_V38489-describe:

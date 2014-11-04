@@ -10,6 +10,11 @@
 #     helps ensure accountability for actions taken on the system using the 
 #     root account.
 #
+#  CCI: CCI-000770
+#  NIST SP 800-53 :: IA-2 (5) (b)
+#  NIST SP 800-53A :: IA-2 (5).2 (ii)
+#  NIST SP 800-53 Revision 4 :: IA-2 (5)
+#
 ############################################################
 
 # Standard outputter function
