@@ -6,6 +6,11 @@
 #     Audit log files must be owned by root. If non-privileged users can 
 #     write to audit logs, audit trails can be modified or destroyed.
 #
+#  CCI: CCI-000162
+#  NIST SP 800-53 :: AU-9
+#  NIST SP 800-53A :: AU-9.1
+#  NIST SP 800-53 Revision 4 :: AU-9
+#
 ############################################################
 
 script_V38495-describe:
