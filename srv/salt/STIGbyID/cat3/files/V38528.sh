@@ -18,6 +18,10 @@
 #
 ############################################################
 
+diag_out() {
+   echo "${1}"
+}
+
 diag_out "-----------------------------------"
 diag_out "STIG Finding ID: V-38528"
 diag_out "  System must log Martian packets"
