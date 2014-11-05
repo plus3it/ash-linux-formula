@@ -9,6 +9,10 @@
 #     Allowing users to execute binaries from removable media such as USB 
 #     keys exposes the system to potential compromise.
 #
+#  CCI: CCI-000087
+#  NIST SP 800-53 :: AC-19 e
+#  NIST SP 800-53A :: AC-19.1 (v)
+#
 ############################################################
 
 diag_out() {

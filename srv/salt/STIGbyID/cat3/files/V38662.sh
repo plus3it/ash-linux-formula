@@ -12,6 +12,10 @@
 #     data at risk of compromise. Encrypting this data mitigates the risk 
 #     of its loss if the system is lost.
 #
+#  CCI: CCI-001200
+#  NIST SP 800-53 :: SC-28 (1)
+#  NIST SP 800-53A :: SC-28 (1).1 (i)
+#
 ############################################################
 
 diag_out() {

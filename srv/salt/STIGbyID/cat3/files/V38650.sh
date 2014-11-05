@@ -11,6 +11,11 @@
 #     special-purpose systems often use DHCP (instead of IRDP) to retrieve 
 #     dynamic network configuration information. 
 #
+#  CCI: CCI-000382
+#  NIST SP 800-53 :: CM-7
+#  NIST SP 800-53A :: CM-7.1 (iii)
+#  NIST SP 800-53 Revision 4 :: CM-7 b
+#
 ############################################################
 
 diag_out() {

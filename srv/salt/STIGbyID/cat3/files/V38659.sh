@@ -11,6 +11,10 @@
 #     of compromise. Encrypting this data mitigates the risk of its loss if 
 #     the system is lost.
 #
+#  CCI: CCI-001019
+#  NIST SP 800-53 :: MP-4 (1)
+#  NIST SP 800-53A :: MP-4 (1).1
+#
 ############################################################
 
 diag_out() {
