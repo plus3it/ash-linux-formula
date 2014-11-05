@@ -25,7 +25,7 @@
 
 script_V38437-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38437.sh
+  - source: salt://STIGbyID/cat3/files/V38437.sh
 
 {% if  salt['pkg.version']('autofs') $}
 svc_V38437-autofsEnabled:
