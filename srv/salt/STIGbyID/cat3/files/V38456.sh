@@ -23,7 +23,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38455"
+diag_out "STIG Finding ID: V-38456"
 diag_out "  The /var directory should be on"
 diag_out "  its own device"
 diag_out "----------------------------------"

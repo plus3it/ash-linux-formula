@@ -24,7 +24,7 @@ diag_out() {
 }
 
 diag_out "-----------------------------------"
-diag_out "STIG Finding ID: V-38554"
+diag_out "STIG Finding ID: V-38556"
 diag_out "  audit system must log all DAC"
 diag_out "  permission modifications using"
 diag_out "  fremovexattr"
