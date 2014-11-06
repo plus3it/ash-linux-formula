@@ -19,7 +19,7 @@ script_V38453-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38453.sh
 
-# Need to replace this with custom module...
+# Probably need to replace this with custom module...
 script_V38453-Verfiy:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38453-helper.sh
