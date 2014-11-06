@@ -23,6 +23,7 @@ include:
 - STIGbyID/cat2/V38477
 - STIGbyID/cat2/V38479
 - STIGbyID/cat2/V38481
+- STIGbyID/cat2/V38481-fix
 - STIGbyID/cat2/V38483
 - STIGbyID/cat2/V38484
 - STIGbyID/cat2/V38486
@@ -134,3 +135,8 @@ include:
 - STIGbyID/cat2/V38695
 - STIGbyID/cat2/V38696
 - STIGbyID/cat2/V38698
+- STIGbyID/cat2/V38700
+- STIGbyID/cat2/V43150
+- STIGbyID/cat2/V51337
+- STIGbyID/cat2/V51363
+- STIGbyID/cat2/V51391
