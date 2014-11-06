@@ -21,7 +21,7 @@ RPMFILES=`rpm -Va | awk '$1 ~ /'^......G'/ && $2 != "c"' | sed 's/^.*[ 	]\//\//'
 
 if [ "${RPMFILES}" == "" ]
 then
-   echo "Info: all RPM-owned files have expected mode-settings"
+   echo "Info: all RPM-owned files have expected group-ownerships"
    exit 0
 else
    for FILE in ${RPMFILES}
