@@ -1,0 +1,5 @@
+include:
+- STIGbyID/cat3/V38437
+- STIGbyID/cat3/V38438
+- STIGbyID/cat3/V38447
+- STIGbyID/cat3/V38452
