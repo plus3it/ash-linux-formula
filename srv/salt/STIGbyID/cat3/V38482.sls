@@ -22,24 +22,21 @@ cmd-linkSysauth:
 {% if salt['file.search']('/etc/pam.d/system-auth-ac', ' pam_cracklib.so ') %}
   {% if salt['file.search']('/etc/pam.d/system-auth-ac', ' dcredit=[0-9][0-9]*[ ]*') %}
 # Change existing dcredit with positive integer value to minus-1
-dcredit_V38482-minusOneA:
+dcredit_V38482-minusOne:
   file.replace:
   - name: /etc/pam.d/system-auth-ac
   - pattern: 'dcredit=[0-9][0-9]*'
   - repl: 'dcredit=-1'
   {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' dcredit=-[0-9][0-9]*[ ]*') %}
-dcredit_V38482-minusOneB:
+dcredit_V38482-minusOne:
   cmd.run:
   - name: 'echo "Passwords already require at least one digit"'
   {% else %}
 # Tack on decredit of minus-1 if necessary
-################################
-## THIS ONE ISN'T WORKING YET ##
-################################
-dcredit_V38482-minusOneC:
+dcredit_V38482-minusOne:
   file.replace:
   - name: '/etc/pam.d/system-auth-ac'
-  - pattern: '^(?P<srctok>password[ 	]requisite[ 	]pam_cracklib.so.*$)'
+  - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
   - repl: '\g<srctok> dcredit=-1'
   {% endif %}
 {% endif %}
