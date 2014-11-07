@@ -17,10 +17,19 @@ script_V38516-describe:
 file-V38516-touchRules:
   file.touch:
   - name: '/etc/modprobe.d/rds.conf'
-{% endif %}
 
 file_V38516-appendBlacklist:
   file.append:
   - name: /etc/modprobe.d/rds.conf
   - text: 'install rds /bin/false'
-
+{% elif salt['file.search']('/etc/modprobe.d/rds.conf', '^install rds /bin/false') %}
+file_V38516-appendBlacklist:
+   cmd.run:
+   - name: 'echo "RDS already blacklisted in /etc/modprobe.d/rds.conf"'
+{% elif salt['file.file_exists']('/etc/modprobe.d/rds.conf') %}
+file_V38516-appendBlacklist:
+  file.replace:
+  - name: /etc/modprobe.d/rds.conf
+  - pattern: '^.*install[ 	]rds.*$'
+  - repl: 'install rds /bin/false'
+{% endif %}
