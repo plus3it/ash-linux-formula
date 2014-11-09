@@ -38,6 +38,7 @@ file_V38531-auditRules_group:
   - text:
     - '# Monitor /etc/group for changes (per STIG-ID V-38531)'
     - '-w /etc/group -p wa -k audit_account_changes'
+{% endif %}
 
 # Monitoring of /etc/passwd file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/passwd -p wa -k audit_account_changes') %}
@@ -57,6 +58,7 @@ file_V38531-auditRules_passwd:
   - text:
     - '# Monitor /etc/passwd for changes (per STIG-ID V-38531)'
     - '-w /etc/passwd -p wa -k audit_account_changes'
+{% endif %}
 
 # Monitoring of /etc/gshadow file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/gshadow -p wa -k audit_account_changes') %}
@@ -76,6 +78,7 @@ file_V38531-auditRules_gshadow:
   - text:
     - '# Monitor /etc/gshadow for changes (per STIG-ID V-38531)'
     - '-w /etc/gshadow -p wa -k audit_account_changes'
+{% endif %}
 
 # Monitoring of /etc/shadow file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/shadow -p wa -k audit_account_changes') %}
@@ -95,6 +98,7 @@ file_V38531-auditRules_shadow:
   - text:
     - '# Monitor /etc/shadow for changes (per STIG-ID V-38531)'
     - '-w /etc/shadow -p wa -k audit_account_changes'
+{% endif %}
 
 # Monitoring of /etc/security/opasswd file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/security/opasswd -p wa -k audit_account_changes') %}
@@ -114,3 +118,4 @@ file_V38531-auditRules_opasswd:
   - text:
     - '# Monitor /etc/security/opasswd for changes (per STIG-ID V-38531)'
     - '-w /etc/security/opasswd -p wa -k audit_account_changes'
+{% endif %}
