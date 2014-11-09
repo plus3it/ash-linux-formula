@@ -38,3 +38,4 @@ file_auditRules:
   - text:
     - '# Monitor /etc/localtime for changes (per STIG-ID V-38530)'
     - '-w /etc/localtime -p wa -k audit_time_rules'
+{% endif %}
