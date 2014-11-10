@@ -14,6 +14,30 @@ script_V38540-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38540.sh
 
+######################################################################
+# Will probably want to look at method to do all the edits in one pass:
+# Current method limits rollback capability
+######################################################################
+
+{% if grains['cpuarch'] == 'x86_64' %}
+  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications') %}
+file_V38522-settimeofday:
+  cmd.run:
+  - name: 'echo "Appropriate audit-rule already present"'
+  {% else %}
+file_V38522-settimeofday:
+  file.append:
+  - name: '/etc/audit/audit.rules'
+  - text:
+    - '# Audit all network configuration modifications (per STIG-ID V-38540)'
+    - '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications'
+  {% endif %}
+{% else %}
+file_V38522-settimeofday:
+  cmd.run:
+  - name: 'echo "Architecture not supported: no changes made"'
+{% endif %}
+
 # Monitoring of /etc/issue file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/issue -p wa -k audit_network_modifications') %}
 file_V38540-auditRules_issue:
@@ -94,21 +118,24 @@ file_V38540-auditRules_sysconfigNetwork:
     - '-w /etc/sysconfig/network -p wa -k audit_network_modifications'
 {% endif %}
 
-{% if grains['cpuarch'] == 'x86_64' %}
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications') %}
-file_V38522-settimeofday:
+
+# Monitoring of /etc/sysconfig/network-scripts/ directory
+{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/sysconfig/network-scripts/ -p wa -k audit_network_modifications') %}
+file_V38540-auditRules_sysconfigNetworkScripts:
   cmd.run:
-  - name: 'echo "Appropriate audit-rule already present"'
-  {% else %}
-file_V38522-settimeofday:
+  - name: 'echo "Appropriate audit rule already in place"'
+{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/sysconfig/network-scripts/') %}
+file_V38540-auditRules_sysconfigNetworkScripts:
+  file.replace:
+  - name: '/etc/audit/audit.rules'
+  - pattern: '^.*/etc/sysconfig/network-scripts/.*$'
+  - repl: '-w /etc/sysconfig/network-scripts/ -p wa -k audit_network_modifications'
+{% else %}
+file_V38540-auditRules_sysconfigNetworkScripts:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
-    - '# Audit all network configuration modifications (per STIG-ID V-38540)'
-    - '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications'
-  {% endif %}
-{% else %}
-file_V38522-settimeofday:
-  cmd.run:
-  - name: 'echo "Architecture not supported: no changes made"'
+    - '# Monitor /etc/sysconfig/network-scripts/ for changes (per STIG-ID V-38540)'
+    - '-w /etc/sysconfig/network-scripts/ -p wa -k audit_network_modifications'
 {% endif %}
+
