@@ -32,6 +32,6 @@ file_V38541-auditRules_selMAC:
   - name: '/etc/audit/audit.rules'
   - text:
     - '# Monitor /etc/selinux/ for changes (per STIG-ID V-38541)'
-    - '-w /etc/selinux/ -p wa -k audit_network_modifications'
+    - '-w /etc/selinux/ -p wa -k MAC-policy'
 {% endif %}
 
