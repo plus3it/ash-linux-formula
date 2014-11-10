@@ -36,17 +36,17 @@ file_V38540-auditRules_issue:
 
 # Monitoring of /etc/issue.net file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/issue.net -p wa -k audit_network_modifications') %}
-file_V38540-auditRules_hosts:
+file_V38540-auditRules_issueNet:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search']('/etc/audit/audit.rules', '/etc/issue.net') %}
-file_V38540-auditRules_hosts:
+file_V38540-auditRules_issueNet:
   file.replace:
   - name: '/etc/audit/audit.rules'
   - pattern: '^.*/etc/issue.net.*$'
   - repl: '-w /etc/issue.net -p wa -k audit_network_modifications'
 {% else %}
-file_V38540-auditRules_hosts:
+file_V38540-auditRules_issueNet:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
