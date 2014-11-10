@@ -28,3 +28,4 @@ include:
 - STIGbyID/cat3/V38534
 - STIGbyID/cat3/V38535
 - STIGbyID/cat3/V38536
+- STIGbyID/cat3/V38537
