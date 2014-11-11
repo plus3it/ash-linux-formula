@@ -23,11 +23,11 @@ script_V38547-describe:
 file_V38547-auditRules_selDACusers:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmod ') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmod -F auid>=500 ') %}
 file_V38547-auditRules_selDACusers:
   file.replace:
   - name: '/etc/audit/audit.rules'
-  - pattern: '^.* fchmod .*$'
+  - pattern: '^.* fchmod -F auid>=500 .*$'
   - repl: '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod'
   {% else %}
 file_V38547-auditRules_selDACusers:
