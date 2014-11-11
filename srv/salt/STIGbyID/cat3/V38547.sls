@@ -18,23 +18,44 @@ script_V38547-describe:
 
 # Monitoring of SELinux DAC config
 {% if grains['cpuarch'] == 'x86_64' %}
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod') %}
-file_V38547-auditRules_selDAC:
+# ...for unprivileged users
+  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod') %}
+file_V38547-auditRules_selDACusers:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
   {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmod ') %}
-file_V38547-auditRules_selDAC:
+file_V38547-auditRules_selDACusers:
   file.replace:
   - name: '/etc/audit/audit.rules'
   - pattern: '^.* fchmod .*$'
-  - repl: '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod'
+  - repl: '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod'
   {% else %}
-file_V38547-auditRules_selDAC:
+file_V38547-auditRules_selDACusers:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
     - '# Monitor for SELinux DAC changes (per STIG-ID V-38547)'
-    - '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod'
+    - '-a always,exit -F arch=b64 -S fchmod -F auid>=500 -F auid!=4294967295 -k perm_mod'
+  {% endif %}
+
+# ...for root user
+  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod') %}
+file_V38547-auditRules_selDACroot:
+  cmd.run:
+  - name: 'echo "Appropriate audit rule already in place"'
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmod .*auid=0 ') %}
+file_V38547-auditRules_selDACroot:
+  file.replace:
+  - name: '/etc/audit/audit.rules'
+  - pattern: '^.* fchmod .*auid=0 .*$'
+  - repl: '-a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod'
+  {% else %}
+file_V38547-auditRules_selDACroot:
+  file.append:
+  - name: '/etc/audit/audit.rules'
+  - text:
+    - '# Monitor for SELinux DAC changes (per STIG-ID V-38547)'
+    - '-a always,exit -F arch=b64 -S fchmod -F auid=0 -k perm_mod'
   {% endif %}
 {% else %}
 file_V38547-auditRules_selDAC:
