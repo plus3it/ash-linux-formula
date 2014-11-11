@@ -37,3 +37,4 @@ include:
 - STIGbyID/cat3/V38547
 - STIGbyID/cat3/V38550
 - STIGbyID/cat3/V38552
+- STIGbyID/cat3/V38554
