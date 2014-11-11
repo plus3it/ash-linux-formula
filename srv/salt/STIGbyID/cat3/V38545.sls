@@ -22,11 +22,11 @@ script_V38545-describe:
 file_V38545-auditRules_selDAC:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', '/etc/selinux/') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' chown ') %}
 file_V38545-auditRules_selDAC:
   file.replace:
   - name: '/etc/audit/audit.rules'
-  - pattern: '^.*/etc/selinux/.*$'
+  - pattern: '^.* chown .*$'
   - repl: '-a always,exit -F arch=b64 -S chown -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S chown -F auid=0 -k perm_mod'
   {% else %}
 file_V38545-auditRules_selDAC:
