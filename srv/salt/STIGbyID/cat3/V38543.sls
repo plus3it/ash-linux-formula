@@ -17,22 +17,28 @@ script_V38543-describe:
   - source: salt://STIGbyID/cat3/files/V38543.sh
 
 # Monitoring of SELinux DAC config
-{% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S chmod -F auid=0 -k perm_mod') %}
+{% if grains['cpuarch'] == 'x86_64' %}
+  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S chmod -F auid=0 -k perm_mod') %}
 file_V38543-auditRules_selDAC:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/selinux/') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', '/etc/selinux/') %}
 file_V38543-auditRules_selDAC:
   file.replace:
   - name: '/etc/audit/audit.rules'
   - pattern: '^.*/etc/selinux/.*$'
   - repl: '-a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S chmod -F auid=0 -k perm_mod'
-{% else %}
+  {% else %}
 file_V38543-auditRules_selDAC:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
     - '# Monitor /etc/selinux/ for changes (per STIG-ID V-38543)'
     - '-a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S chmod -F auid=0 -k perm_mod'
+  {% endif %}
+{% else %}
+file_V38543-auditRules_selDAC:
+  cmd.run:
+  - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}
 
