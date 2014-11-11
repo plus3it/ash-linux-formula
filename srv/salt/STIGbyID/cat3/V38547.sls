@@ -22,7 +22,7 @@ script_V38547-describe:
 file_V38547-auditRules_selDAC:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', '/etc/selinux/') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmod ') %}
 file_V38547-auditRules_selDAC:
   file.replace:
   - name: '/etc/audit/audit.rules'
