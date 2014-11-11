@@ -21,11 +21,11 @@ script_V38540-describe:
 
 {% if grains['cpuarch'] == 'x86_64' %}
   {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications') %}
-file_V38522-settimeofday:
+file_V38540-settimeofday:
   cmd.run:
   - name: 'echo "Appropriate audit-rule already present"'
   {% else %}
-file_V38522-settimeofday:
+file_V38540-settimeofday:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
@@ -33,7 +33,7 @@ file_V38522-settimeofday:
     - '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications'
   {% endif %}
 {% else %}
-file_V38522-settimeofday:
+file_V38540-settimeofday:
   cmd.run:
   - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}
