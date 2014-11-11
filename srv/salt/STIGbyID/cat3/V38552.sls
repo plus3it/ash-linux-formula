@@ -38,7 +38,7 @@ file_V38552-auditRules_selDAC:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
-    - '# Monitor /etc/selinux/ for changes (per STIG-ID V-38552)'
+    - '# Monitor for SELinux DAC changes (per STIG-ID V-38552)'
     - '-a always,exit -F arch=b64 -S fchown -F auid>=500 -F auid!=4294967295 -k perm_mod -a always,exit -F arch=b64 -S fchown -F auid=0 -k perm_mod'
   {% endif %}
 {% else %}
