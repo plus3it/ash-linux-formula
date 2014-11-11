@@ -45,3 +45,6 @@ include:
 - STIGbyID/cat3/V38561
 - STIGbyID/cat3/V38563
 - STIGbyID/cat3/V38565
+- STIGbyID/cat3/V38566
+- STIGbyID/cat3/V38567
+- STIGbyID/cat3/V38568
