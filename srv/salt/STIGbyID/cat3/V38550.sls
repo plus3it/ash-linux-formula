@@ -27,7 +27,7 @@ script_V38550-describe:
 file_V38550-auditRules_selDAC:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', 'fchmodat') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmodat ') %}
 file_V38550-auditRules_selDAC:
   file.replace:
   - name: '/etc/audit/audit.rules'
