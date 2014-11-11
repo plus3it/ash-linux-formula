@@ -9,7 +9,7 @@
 #     access to information that would otherwise be disallowed. Auditing 
 #     DAC modifications can facilitate the identification of patterns of 
 #     abuse among both authorized and unauthorized users.
-#
+# 
 #  CCI: CCI-000172
 #  NIST SP 800-53 :: AU-12 c
 #  NIST SP 800-53A :: AU-12.1 (iv)
