@@ -23,11 +23,11 @@ script_V38565-describe:
 file_V38565-auditRules_selDACusers:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' setxattr ') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' setxattr -F auid>=500 ') %}
 file_V38565-auditRules_selDACusers:
   file.replace:
   - name: '/etc/audit/audit.rules'
-  - pattern: '^.* setxattr .*$'
+  - pattern: '^.* setxattr -F auid>=500 .*$'
   - repl: '-a always,exit -F arch=b64 -S setxattr -F auid>=500 -F auid!=4294967295 -k perm_mod'
   {% else %}
 file_V38565-auditRules_selDACusers:
