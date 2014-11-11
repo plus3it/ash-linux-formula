@@ -28,11 +28,11 @@ script_V38559-describe:
 file_V38559-auditRules_selDACusers:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' lremovexattr ') %}
+  {% elif salt['file.search']('/etc/audit/audit.rules', ' lremovexattr -F auid>=500 ') %}
 file_V38559-auditRules_selDACusers:
   file.replace:
   - name: '/etc/audit/audit.rules'
-  - pattern: '^.* lremovexattr .*$'
+  - pattern: '^.* lremovexattr -F auid>=500 .*$'
   - repl: '-a always,exit -F arch=b64 -S lremovexattr -F auid>=500 -F auid!=4294967295 -k perm_mod'
   {% else %}
 file_V38559-auditRules_selDACusers:
