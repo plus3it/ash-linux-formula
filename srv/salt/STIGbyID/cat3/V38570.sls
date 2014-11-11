@@ -10,8 +10,6 @@
 #
 ############################################################
 
-<<<<<<< HEAD
-=======
 script_V38570-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38570.sh
@@ -43,6 +41,3 @@ ocredit_V38570-minusOne:
   - repl: '\g<srctok> ocredit=-1'
   {% endif %}
 {% endif %}
-
-
->>>>>>> In-Progress
