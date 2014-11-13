@@ -16,10 +16,10 @@
 
 script_V38610-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38610.sh
+  - source: salt://STIGbyID/cat3/files/V38610.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax') %}
-  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax 0')
+  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax 0') %}
 file_V38610-configSet:
   cmd.run:
   - name: 'echo "ClientAliveCountMax already meets STIG-defined requirements"'
@@ -40,3 +40,9 @@ file_V38610-configSet:
     - 'ClientAliveCountMax 0'
 {% endif %}
 
+svc_V38610-configChk:
+  service:
+  - name: sshd
+  - running
+  - watch:
+    - file: /etc/ssh/sshd_config
