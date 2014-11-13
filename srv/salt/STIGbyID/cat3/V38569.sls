@@ -31,7 +31,7 @@ ucredit_V38569-minusOne:
   {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' ucredit=-[0-9][0-9]*[ ]*') %}
 ucredit_V38569-minusOne:
   cmd.run:
-  - name: 'echo "Passwords already require at least one digit"'
+  - name: 'echo "Passwords already require at least one uppercase letter"'
   {% else %}
 # Tack on decredit of minus-1 if necessary
 ucredit_V38569-minusOne:
