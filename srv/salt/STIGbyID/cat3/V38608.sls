@@ -16,10 +16,10 @@
 
 script_V38608-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38608.sh
+  - source: salt://STIGbyID/cat3/files/V38608.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval') %}
-  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval 900')
+  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval 900') %}
 file_V38608-configSet:
   file.replace:
   - name: '/etc/ssh/sshd_config'
@@ -40,3 +40,9 @@ file_V38608-configSet:
     - 'ClientAliveInterval 900'
 {% endif %}
 
+svc_V38608-configChk:
+  service:
+  - name: sshd
+  - running
+  - watch:
+    - file: /etc/ssh/sshd_config
