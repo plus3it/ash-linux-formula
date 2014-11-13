@@ -18,15 +18,20 @@ script_V38608-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38608.sh
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^Ciphers')
- %}
-file_V38608-repl:
+{% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval') %}
+  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval 900')
+file_V38608-configSet:
   file.replace:
   - name: '/etc/ssh/sshd_config'
   - pattern: '^ClientAliveInterval.*$'
   - repl: 'ClientAliveInterval 900'
+  {% else %}
+file_V38608-configSet:
+  cmd.run:
+  - name: 'echo "ClientAliveInterval already meets STIG-defined requirements"'
+  {% endif %}
 {% else %}
-file_V38608-append:
+file_V38608-configSet:
   file.append:
   - name: '/etc/ssh/sshd_config'
   - text:
