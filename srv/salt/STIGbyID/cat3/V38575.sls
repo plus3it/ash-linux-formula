@@ -38,7 +38,7 @@ file_V38575-auditRules_selusers:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
-    - '# Monitor for SELinux DAC changes (per STIG-ID V-38575)'
+    - '# Log all file deletions (per  V-38575)'
     - '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete'
   {% endif %}
 
@@ -58,7 +58,7 @@ file_V38575-auditRules_selroot:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
-    - '# Monitor for SELinux DAC changes (per STIG-ID V-38575)'
+    - '# Log all file deletions (per  V-38575)'
     - '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete'
   {% endif %}
 {% else %}
