@@ -35,9 +35,3 @@ file_V38616-configSet:
     - 'PermitUserEnvironment no'
 {% endif %}
 
-svc_V38616-configChk:
-  service:
-  - name: sshd
-  - running
-  - watch:
-    - file: /etc/ssh/sshd_config
