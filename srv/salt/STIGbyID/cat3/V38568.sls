@@ -16,49 +16,49 @@ script_V38568-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38568.sh
 
-# Monitoring of SELinux DAC config
+# Monitoring of mount actions
 {% if grains['cpuarch'] == 'x86_64' %}
 # ...for unprivileged users
   {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export') %}
-file_V38568-auditRules_selDACusers:
+file_V38568-auditRules_Mount:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
   {% elif salt['file.search']('/etc/audit/audit.rules', ' mount -F auid>=500 ') %}
-file_V38568-auditRules_selDACusers:
+file_V38568-auditRules_Mount:
   file.replace:
   - name: '/etc/audit/audit.rules'
   - pattern: '^.* mount -F auid>=500 .*$'
   - repl: '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export'
   {% else %}
-file_V38568-auditRules_selDACusers:
+file_V38568-auditRules_Mount:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
-    - '# Monitor for SELinux DAC changes (per STIG-ID V-38568)'
+    - '# Monitor filesystem mount actions (per STIG-ID V-38568)'
     - '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export'
   {% endif %}
 
 # ...for root user
   {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S mount -F auid=0 -k export') %}
-file_V38568-auditRules_selDACroot:
+file_V38568-auditRulesMountRoot:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
   {% elif salt['file.search']('/etc/audit/audit.rules', ' mount .*auid=0 ') %}
-file_V38568-auditRules_selDACroot:
+file_V38568-auditRulesMountRoot:
   file.replace:
   - name: '/etc/audit/audit.rules'
   - pattern: '^.* mount .*auid=0 .*$'
   - repl: '-a always,exit -F arch=b64 -S mount -F auid=0 -k export'
   {% else %}
-file_V38568-auditRules_selDACroot:
+file_V38568-auditRulesMountRoot:
   file.append:
   - name: '/etc/audit/audit.rules'
   - text:
-    - '# Monitor for SELinux DAC changes (per STIG-ID V-38568)'
+    - '# Monitor filesystem mount actions (per STIG-ID V-38568)'
     - '-a always,exit -F arch=b64 -S mount -F auid=0 -k export'
   {% endif %}
 {% else %}
-file_V38568-auditRules_selDAC:
+file_V38568-auditRules_Mount:
   cmd.run:
   - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}
