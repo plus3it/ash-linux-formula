@@ -21,14 +21,14 @@ script_V38610-describe:
 {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax') %}
   {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax 0')
 file_V38610-configSet:
+  cmd.run:
+  - name: 'echo "ClientAliveCountMax already meets STIG-defined requirements"'
+  {% else %}
+file_V38610-configSet:
   file.replace:
   - name: '/etc/ssh/sshd_config'
   - pattern: '^ClientAliveCountMax.*$'
   - repl: 'ClientAliveCountMax 0'
-  {% else %}
-file_V38610-configSet:
-  cmd.run:
-  - name: 'echo "ClientAliveCountMax already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
 file_V38610-configSet:
