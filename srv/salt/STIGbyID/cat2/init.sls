@@ -48,7 +48,6 @@ include:
 - STIGbyID/cat2/V38519
 - STIGbyID/cat2/V38520
 - STIGbyID/cat2/V38521
-- STIGbyID/cat2/V38522
 - STIGbyID/cat2/V38523
 - STIGbyID/cat2/V38524
 - STIGbyID/cat2/V38526
