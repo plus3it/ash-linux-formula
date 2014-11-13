@@ -29,14 +29,15 @@ msg_V38624-status:
   {% if not salt['file.file_exists']('/etc/cron.daily/logrotate') %}
 msg_V38624-status:
   cmd.run:
-  - name: 'echo "Logrotate not correctly-installed"'
+  - name: 'echo "Logrotate not correctly-installed. Correcting..."'
 
 pkg_V38624-logrotate:
   pkg.installed:
   - name: 'logrotate'
   - reinstall: 'True'
-  {% endif %}
+  {% else %}
 msg_V38624-status:
   cmd.run:
   - name: 'echo "Logrotate not found in cron log: manual verification required"'
+  {% endif %}
 {% endif %}
