@@ -58,3 +58,4 @@ include:
 - STIGbyID/cat3/V38590
 - STIGbyID/cat3/V38608
 - STIGbyID/cat3/V38610
+- STIGbyID/cat3/V38616
