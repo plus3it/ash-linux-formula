@@ -31,7 +31,7 @@ ocredit_V38570-minusOne:
   {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' ocredit=-[0-9][0-9]*[ ]*') %}
 ocredit_V38570-minusOne:
   cmd.run:
-  - name: 'echo "Passwords already require at least one digit"'
+  - name: 'echo "Passwords already require at least one special character"'
   {% else %}
 # Tack on decredit of minus-1 if necessary
 ocredit_V38570-minusOne:
