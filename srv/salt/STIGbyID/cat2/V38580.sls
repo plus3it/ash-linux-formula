@@ -20,10 +20,9 @@ file_V38580-appendModchk:
   - name: /etc/audit/audit.rules
   - text:
     - ' '
-    - '# STIG-ID V-38580 (RHEL-06-000202) - monitor dynamic kernel module (un)load'
+    - '# Monitor dynamic kernel module (un)load (per STIG-ID V-38580/RHEL-06-000202)'
     - '-w /sbin/insmod -p x -k modules'
     - '-w /sbin/rmmod -p x -k modules'
     - '-w /sbin/modprobe -p x -k modules'
     - '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules'
 {% endif %}
-
