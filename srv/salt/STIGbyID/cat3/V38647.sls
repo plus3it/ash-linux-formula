@@ -14,22 +14,12 @@ script_V38647-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38647.sh
 
-script_V38647-describe:
-  cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38647.sh
-
-{% if salt['file.search']('/etc/profile', '^umask') %}
-  {% if salt['file.search']('/etc/profile', '^umask 077') %}
+{% if salt['file.search']('/etc/profile', '^[ 	]*umask') %}
 file_V38647-configSet:
   file.replace:
   - name: '/etc/profile'
-  - pattern: '^umask.*$'
+  - pattern: 'umask.*$'
   - repl: 'umask 077'
-  {% else %}
-file_V38647-configSet:
-  cmd.run:
-  - name: 'echo "System-wide profile umask-setting already meets STIG-defined requirements"'
-  {% endif %}
 {% else %}
 file_V38647-configSet:
   file.append:
