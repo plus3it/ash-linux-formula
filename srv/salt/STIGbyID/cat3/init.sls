@@ -72,3 +72,4 @@ include:
 - STIGbyID/cat3/V38646
 - STIGbyID/cat3/V38647
 - STIGbyID/cat3/V38648
+- STIGbyID/cat3/V38649
