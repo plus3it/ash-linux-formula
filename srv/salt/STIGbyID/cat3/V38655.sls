@@ -27,6 +27,13 @@ script_V38655-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38655.sh
 
+{% if salt['file.search']('/etc/modprobe.d/usb.conf', 'install usb-storage /bin/true') or salt['file.search']('/etc/modprobe.conf', 'install usb-storage /bin/true') %}
+notify_V38655-usbDisabled:
+  cmd.run:
+  - name: 'echo "Mounting of USB devices disabled"'
+{% endif %}
+
+
 # Possibly:
 # * use salt['mount.fstab'] to load /etc/fstab into iterable list
 # * iterate and look for non root-VG elements that are not pseudo-devices
@@ -34,5 +41,5 @@ script_V38655-describe:
 # ?
 cmd_V38655-NotImplemented:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+  - name: 'echo "NOT YET IMPLEMENTED: test and fix for non-USB mountable media"'
 
