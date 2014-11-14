@@ -27,12 +27,29 @@ script_V38655-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38655.sh
 
+# Check if USB is enabled - notify if disabled
 {% if salt['file.search']('/etc/modprobe.d/usb.conf', 'install usb-storage /bin/true') or salt['file.search']('/etc/modprobe.conf', 'install usb-storage /bin/true') %}
 notify_V38655-usbDisabled:
   cmd.run:
   - name: 'echo "Mounting of USB devices disabled"'
 {% endif %}
 
+# Check for /dev/cdrom/ or /dev/floppy/ devices
+{% if salt['file.search']('/etc/fstab', '/dev/cdrom.*[ 	]') or salt['file.search']('/etc/fstab', '/dev/floppy*[ 	]') %}
+  {% if salt['file.search']('/etc/fstab', '/dev/cdrom.*noexec') or salt['file.search']('/etc/fstab', '/dev/floppy.*noexec') %}
+notify_V38655-noExec:
+  cmd.run:
+  - name: 'echo "The noexec option already set for cdrom or floppy devs found in fstab"'
+  {% else %}
+notify_V38655-noExec:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to floppy/cdrom mounts"'
+  {% endif %}
+{% else %}
+notify_V38655-noDevs:
+  cmd.run:
+  - name: 'echo "No cdrom or floppy devs found in fstab"'
+{% endif %}
 
 # Possibly:
 # * use salt['mount.fstab'] to load /etc/fstab into iterable list
