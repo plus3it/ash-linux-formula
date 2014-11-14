@@ -34,6 +34,12 @@ notify_V38655-usbDisabled:
   - name: 'echo "Mounting of USB devices disabled"'
 {% endif %}
 
+# Probaby better way of detecting these...:
+# * use salt['mount.fstab'] to load /etc/fstab into iterable list
+# * iterate and look for non root-VG elements that are not pseudo-devices
+#   and set 'noexec' option
+# ?
+
 # Check for /dev/cdrom/ or /dev/floppy/ devices
 {% if salt['file.search']('/etc/fstab', '^/dev/cdrom') or salt['file.search']('/etc/fstab', '^/dev/floppy') %}
   {% if salt['file.search']('/etc/fstab', '^/dev/cdrom.*noexec') or salt['file.search']('/etc/fstab', '^/dev/floppy.*noexec') %}
@@ -52,23 +58,27 @@ notify_V38655-mediaNoexec:
 {% endif %}
 
 # Check for iso9660s on other dev-paths
-{% if salt['file.search']('/etc/fstab', '[ 	][ 	]iso9660[ 	][ 	]')  %}
+{% if salt['file.search']('/etc/fstab', '^[/L].*[ 	]*iso9660[ 	]')  %}
+notify_V38655-isoNoexec:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to iso9660 mounts"'
 {% endif %}
 
 # Check for vfat on other dev-paths
-{% if salt['file.search']('/etc/fstab', '[ 	][ 	]vfat[ 	][ 	]')  %}
+{% if salt['file.search']('/etc/fstab', '^[/L].*[ 	]*vfat[ 	]')  %}
+notify_V38655-vfatNoexec:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to vfat mounts"'
 {% endif %}
 
 # Check for msdos on other dev-paths
-{% if salt['file.search']('/etc/fstab', '[ 	][ 	]msdos[ 	][ 	]')  %}
+{% if salt['file.search']('/etc/fstab', '^[/L].*[ 	]*msdos[ 	]')  %}
+notify_V38655-msdosNoexec:
+  cmd.run:
+  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to msdos mounts"'
 {% endif %}
 
 
-# Possibly:
-# * use salt['mount.fstab'] to load /etc/fstab into iterable list
-# * iterate and look for non root-VG elements that are not pseudo-devices
-#   and set 'noexec' option
-# ?
 cmd_V38655-NotImplemented:
   cmd.run:
   - name: 'echo "NOT YET IMPLEMENTED: test and fix for non-USB mountable media"'
