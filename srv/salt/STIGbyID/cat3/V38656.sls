@@ -20,13 +20,13 @@ script_V38656-describe:
 
 # If the Samba config files are installed...
 {% if salt['pkg.version']('samba-common') %}
-  # and the 'client signing' option is already set to some value,
+  # and the "client signing" option is already set to some value,
   # override as necessary
-  {% if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') %}
-salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
+  {% if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') or salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
 paramSet_V38656-clientSigning:
   file.replace:
-  - pattern: 'client signing.*$'
+  - name: '/etc/samba/smb.conf'
+  - pattern: 'client signing[ 	]=.*$'
   - repl: 'client signing = mandatory'
   {% else %}
   # ...otherwise, set a value (append immediately after [global]
@@ -35,7 +35,8 @@ paramSet_V38656-clientSigning:
   file.replace:
   - name: '/etc/samba/smb.conf'
   - pattern: '^(?P<srctok>^\[global\]$)'
-  - repl: '\g<srctok>\n\tclient signing = mandatory'
+  - repl: '\g<srctok>\n\n# client signing set per STIG-ID V-38656\n\tclient signing = mandatory'
+  {% endif %}
 # If the Samba config files are not installed...
 {% else %}
 paramSet_V38656-clientSigning:
