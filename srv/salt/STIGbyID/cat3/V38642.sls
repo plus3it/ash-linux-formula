@@ -14,10 +14,6 @@ script_V38642-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38642.sh
 
-script_V38642-describe:
-  cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38642.sh
-
 {% if salt['file.search']('/etc/init.d/functions', '^umask') %}
   {% if salt['file.search']('/etc/init.d/functions', '^umask 027') %}
 file_V38642-configSet:
