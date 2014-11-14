@@ -19,11 +19,11 @@ script_V38651-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38651.sh
 
-{% if salt['file.search']('/etc/bashrc', '^[   ]*umask') %}
+{% if salt['file.search']('/etc/bashrc', '^[   ]*umask[ 	][0-9][0-9]') %}
 file_V38651-bashrcUmask:
   file.replace:
   - name: '/etc/bashrc'
-  - pattern: 'umask.*$'
+  - pattern: 'umask[ 	][0-9][0-9]*'
   - repl: 'umask 077'
 {% else %}
 file_V38651-bashrcUmask:
@@ -41,7 +41,7 @@ file_V38651-bashrcUmask:
 file_V38651-kshrcUmask:
   file.replace:
   - name: '/etc/kshrc'
-  - pattern: 'umask.*$'
+  - pattern: 'umask[ 	][0-9][0-9]*'
   - repl: 'umask 077'
   {% endif %}
 
@@ -49,7 +49,7 @@ file_V38651-kshrcUmask:
 file_V38651-kshrcUmaskSkel:
   file.replace:
   - name: '/etc/skel/.kshrc'
-  - pattern: 'umask.*$'
+  - pattern: 'umask[ 	][0-9][0-9]*'
   - repl: 'umask 077'
   {% endif %}
 {% endif %}
@@ -61,7 +61,7 @@ file_V38651-kshrcUmaskSkel:
 file_V38651-mkshrcUmask:
   file.replace:
   - name: '/etc/mkshrc'
-  - pattern: 'umask.*$'
+  - pattern: 'umask[ 	][0-9][0-9]*'
   - repl: 'umask 077'
   {% endif %}
 
@@ -69,7 +69,7 @@ file_V38651-mkshrcUmask:
 file_V38651-mkshrcUmaskSkel:
   file.replace:
   - name: '/etc/skel/.mkshrc'
-  - pattern: 'umask.*$'
+  - pattern: 'umask[ 	][0-9][0-9]*'
   - repl: 'umask 077'
   {% endif %}
 {% endif %}
