@@ -21,6 +21,5 @@ cmd_V38639-setNoUserlist:
 {% else %}
 notify_V38639:
   cmd.run:
-  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken
-)"'
+  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {% endif %}
