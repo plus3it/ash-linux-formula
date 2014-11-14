@@ -35,21 +35,34 @@ notify_V38655-usbDisabled:
 {% endif %}
 
 # Check for /dev/cdrom/ or /dev/floppy/ devices
-{% if salt['file.search']('/etc/fstab', '/dev/cdrom.*[ 	]') or salt['file.search']('/etc/fstab', '/dev/floppy*[ 	]') %}
-  {% if salt['file.search']('/etc/fstab', '/dev/cdrom.*noexec') or salt['file.search']('/etc/fstab', '/dev/floppy.*noexec') %}
-notify_V38655-noExec:
+{% if salt['file.search']('/etc/fstab', '^/dev/cdrom') or salt['file.search']('/etc/fstab', '^/dev/floppy') %}
+  {% if salt['file.search']('/etc/fstab', '^/dev/cdrom.*noexec') or salt['file.search']('/etc/fstab', '^/dev/floppy.*noexec') %}
+notify_V38655-mediaNoxec:
   cmd.run:
   - name: 'echo "The noexec option already set for cdrom or floppy devs found in fstab"'
   {% else %}
-notify_V38655-noExec:
+notify_V38655-mediaNoexec:
   cmd.run:
   - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to floppy/cdrom mounts"'
   {% endif %}
 {% else %}
-notify_V38655-noDevs:
+notify_V38655-mediaNoexec:
   cmd.run:
   - name: 'echo "No cdrom or floppy devs found in fstab"'
 {% endif %}
+
+# Check for iso9660s on other dev-paths
+{% if salt['file.search']('/etc/fstab', '[ 	][ 	]iso9660[ 	][ 	]')  %}
+{% endif %}
+
+# Check for vfat on other dev-paths
+{% if salt['file.search']('/etc/fstab', '[ 	][ 	]vfat[ 	][ 	]')  %}
+{% endif %}
+
+# Check for msdos on other dev-paths
+{% if salt['file.search']('/etc/fstab', '[ 	][ 	]msdos[ 	][ 	]')  %}
+{% endif %}
+
 
 # Possibly:
 # * use salt['mount.fstab'] to load /etc/fstab into iterable list
