@@ -15,10 +15,6 @@ script_V38645-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38645.sh
 
-script_V38645-describe:
-  cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38645.sh
-
 {% if salt['file.search']('/etc/login.defs', '^UMASK') %}
   {% if salt['file.search']('/etc/login.defs', '^UMASK	077') %}
 file_V38645-configSet:
