@@ -14,7 +14,7 @@ include:
 
 {% set updatePairs = salt['pkg.list_upgrades']('name') %}
 
-remediate_V38481-{{ pkgName }}:
+remediate_V38481:
   pkg:
   - latest
   - pkgs:
