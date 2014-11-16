@@ -35,3 +35,4 @@ notify_V38657-noCIFS:
   - name: "No relevant finding: no CIFS mounts managed within /etc/fstab"
 {% endif %}
 
+# Will want to check /etc/mtab and autofs configs, as well...
