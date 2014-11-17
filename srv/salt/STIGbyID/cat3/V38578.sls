@@ -15,6 +15,10 @@
 #
 ############################################################
 
+script_V38578-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat3/files/V38578.sh
+
 # Monitoring of /etc/sudoers file
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/sudoers -p wa -k actions') %}
 file_V38531-auditRules_sudoers:
