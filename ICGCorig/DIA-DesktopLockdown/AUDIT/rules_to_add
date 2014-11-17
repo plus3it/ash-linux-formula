@@ -1,3 +1,0 @@
--a always,exit -F path=/bin/fusermount -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
--a always,exit -F path=/usr/bin/Xorg -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
--a always,exit -F path=/usr/lib64/vte/gnome-pty-helper -F perm=x -F auid>=500 -F auid!=4294967295 -k privileged
