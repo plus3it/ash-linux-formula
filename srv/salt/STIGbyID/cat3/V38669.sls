@@ -20,11 +20,11 @@ script_V38669-describe:
 
 {% if not salt['pkg.version']('postfix') %}
 notify_V38669-noPostfix:
-  cmd.run
+  cmd.run:
   - name: 'echo "Postfix not installed"'
   {% if salt['pkg.version']('sendmail') %}
 notify_V38669-sendmail:
-  cmd.run
+  cmd.run:
   - name: 'echo "Sendmail installed instead of postfix"'
   {% endif %}
 {% else %}
