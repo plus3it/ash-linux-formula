@@ -10,16 +10,12 @@
 #
 ############################################################
 
-script_V38675-describe:
+script_V38676-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38675.sh
-
-script_V38675-describe:
-  cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38675.sh
+  - source: salt://STIGbyID/cat3/files/V38676.sh
 
 {% if not salt['pkg.version']('xorg-x11-server-common') %}
-notify_V38675-noPostfix:
+notify_V38676-noPostfix:
   cmd.run:
   - name: 'echo "X Windows package not installed"'
 {% endif %}
