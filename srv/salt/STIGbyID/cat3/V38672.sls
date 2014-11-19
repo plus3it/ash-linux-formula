@@ -20,12 +20,12 @@ script_V38672-describe:
 
 {% if salt['pkg.version']('initscripts') %}
 # Ensure netconsole service is disabled and deactivated
-svc_V38672-netconsoleEnabled:
-  service.enabled:
+svc_V38672-netconsoleDisabled:
+  service.disabled:
   - name: 'netconsole'
 
-svc_V38672-netconsoleRunning:
-  service.running:
+svc_V38672-netconsoleDead:
+  service.dead:
   - name: 'netconsole'
 {% else %}
 notify_V38672-package:
