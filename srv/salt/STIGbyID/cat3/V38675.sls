@@ -20,26 +20,16 @@ script_V38675-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38675.sh
 
-{% if salt['file.search']('/etc/security/limits.conf','hard[ 	]core') %}
-  # Check for already correctly-set value and report
-  {% if salt['file.search']('/etc/security/limits.conf','^[ 	]\*[ 	]*hard[ 	]*core[ 	]0') %}
+{% if salt['file.search']('/etc/security/limits.conf','hard[ 	]*core') %}
+  {% if salt['file.search']('/etc/security/limits.conf', '^.*hard[ 	]core.*0$') %}
 set_V38675-noCores:
   cmd.run:
-  - name: 'echo "Core dumps already disabled"'
-  {% endif %}
-  # Check for commented correct value and uncomment
-  {% if salt['file.search']('/etc/security/limits.conf','^#[ 	]*\[ 	]*hard[ 	]core[ 	]*0') %}
-set_V38675-noCores:
-  file.uncomment:
-  - name: '/etc/security/limits.conf'
-  - regex: 'hard[ 	]core'
-  {% endif %}
-  # Check for other value settings and correct
-  {% if salt['file.search']('/etc/security/limits.conf','^[ 	]*\[ 	]*hard[ 	]core[ 	].*') %}
+  - name: 'echo "Process core dumps already disabled"'
+  {% else %}
 set_V38675-noCores:
   file.replace:
   - name: '/etc/security/limits.conf'
-  - pattern:
+  - pattern: '^.*hard[ 	]core.*$'
   - repl: '*	hard 	core	0'
   {% endif %}
 # Append if no "hard core" value is found
@@ -47,6 +37,5 @@ set_V38675-noCores:
 set_V38675-noCores:
   file.append:
   - name: '/etc/security/limits.conf'
-  - text: '*	hard 	core	0'
+  - text: '*	hard	core	0'
 {% endif %}
-
