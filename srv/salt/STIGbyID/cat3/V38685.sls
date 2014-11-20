@@ -22,7 +22,7 @@ script_V38685-describe:
 
 notify_V38685-generic:
   cmd.run:
-  - name: 'printf "******************************************\n** This is an informational test, only! **\n******************************************\nEach locally-managed user will be queried.\nExpiry settings will be enumerated but not\nmodified\n"'
+  - name: 'printf "******************************************\n** This is an informational test, only! **\n******************************************\nTest cannot auto-ID temporary accounts:\n  Each locally-managed user will be queried.\n  Expiry settings will be enumerated but not\n  modified\n"'
 
 # Generate a user-list to iterate
 {% for user in salt['user.getent']('') %}
