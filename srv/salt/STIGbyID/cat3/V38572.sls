@@ -21,6 +21,9 @@ script_V38572-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38572.sh
 
+{% set checkFile = '/etc/pam.d/system-auth-ac' %}
+{% set parmName = 'difok' %}
+
 {% if not salt['file.file_exists']('/etc/pam.d/system-auth-ac') %}
 cmd_V38572-linkSysauth:
   cmd.run:
@@ -28,24 +31,31 @@ cmd_V38572-linkSysauth:
 {% endif %}
 
 {% if salt['file.search']('/etc/pam.d/system-auth-ac', ' pam_cracklib.so ') %}
-  {% if salt['file.search']('/etc/pam.d/system-auth-ac', ' difok=[0-9][0-9]*[ ]*') %}
-# Change existing difok with positive integer value to minus-1
-difok_V38572-minusOne:
-  file.replace:
-  - name: /etc/pam.d/system-auth-ac
-  - pattern: 'difok=[0-9][0-9]*'
-  - repl: 'difok=-1'
-  {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' difok=-[0-9][0-9]*[ ]*') %}
-difok_V38572-minusOne:
+  {% if salt['file.search']('/etc/pam.d/system-auth-ac', ' ' + parmName + '=4') %}
+difok_V38572-setFour:
   cmd.run:
   - name: 'echo "Passwords already require at least four character differences"'
+  # Change existing difok with positive integer value to 4
+  {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' ' + parmName + '=[0-9][0-9]*[ ]*') %}
+difok_V38572-setFour:
+  file.replace:
+  - name: /etc/pam.d/system-auth-ac
+  - pattern: '{{ parmName }}=[0-9][0-9]*'
+  - repl: '{{ parmName }}=4'
+  # Change existing difok with negative integer value to 4
+  {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' ' + parmName + '=-[0-9][0-9]*[ ]*') %}
+difok_V38572-setFour:
+  file.replace:
+  - name: /etc/pam.d/system-auth-ac
+  - pattern: '{{ parmName }}=-[0-9][0-9]*'
+  - repl: '{{ parmName }}=4'
   {% else %}
-# Tack on decredit of minus-1 if necessary
-difok_V38572-minusOne:
+# Tack on difok value of 4 if necessary
+difok_V38572-setFour:
   file.replace:
   - name: '/etc/pam.d/system-auth-ac'
   - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
-  - repl: '\g<srctok> difok=-1'
+  - repl: '\g<srctok> {{ parmName }}=4'
   {% endif %}
 {% endif %}
 
