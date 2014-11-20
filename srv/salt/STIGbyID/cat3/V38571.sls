@@ -20,7 +20,7 @@ script_V38571-describe:
   - source: salt://STIGbyID/cat3/files/V38571.sh
 
 {% if not salt['file.file_exists']('/etc/pam.d/system-auth-ac') %}
-cmd-linkSysauth:
+cmd_V38571-linkSysauth:
   cmd.run:
   - name: '/usr/sbin/authconfig --update'
 {% endif %}
