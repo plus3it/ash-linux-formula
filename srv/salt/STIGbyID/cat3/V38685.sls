@@ -16,19 +16,26 @@
 #
 ############################################################
 
-script_V38684-describe:
+script_V38685-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38684.sh
+  - source: salt://STIGbyID/cat3/files/V38685.sh
+
+notify_V38685-generic:
+  cmd.run:
+  - name: 'printf "******************************************\n** This is an informational test, only! **\n******************************************\nEach locally-managed user will be queried.\nExpiry settings will be enumerated but not\nmodified\n"'
 
 # Generate a user-list to iterate
 {% for user in salt['user.getent']('') %}
-{% set ID = user['name'] %}
-# ganked from 681: modify to pull user['expire'] value...
-{% if not salt['file.search']('/etc/group', ':' + user['gid']|string() + ':' ) %}
-notify_V38684-{{ ID }}:
-  cmd.run:
-  - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'
-{% endif %}
-{% endfor %}
+  {% set ID = user['name'] %}
+  {% set ShadowData = salt['shadow.info'](ID) %}
 
-# Probably want output indicating that no unmapped GIDs were found...
+  {% if ShadowData.expire == -1 %}
+notify_V38685-{{ ID }}:
+  cmd.run:
+  - name: 'echo "Userid ''{{ ID }}'' is not set to expire"'
+  {% else %}
+notify_V38685-{{ ID }}:
+  cmd.run:
+  - name: 'echo "Userid ''{{ ID }}'' is set to expire [{{ ShadowData.expire }}]"'
+  {% endif %}
+{% endfor %}
