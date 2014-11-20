@@ -13,21 +13,24 @@ script_V38482-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38482.sh
 
-{% if not salt['file.file_exists']('/etc/pam.d/system-auth-ac') %}
+{% set checkFile = '/etc/pam.d/system-auth-ac' %}
+{% set parmName = 'dcredit' %}
+
+{% if not salt['file.file_exists'](checkFile) %}
 cmd_V38482-linkSysauth:
   cmd.run:
   - name: '/usr/sbin/authconfig --update'
 {% endif %}
 
-{% if salt['file.search']('/etc/pam.d/system-auth-ac', ' pam_cracklib.so ') %}
-  {% if salt['file.search']('/etc/pam.d/system-auth-ac', ' dcredit=[0-9][0-9]*[ ]*') %}
+{% if salt['file.search'](checkFile, ' pam_cracklib.so ') %}
+  {% if salt['file.search'](checkFile, ' ' + parmName + '=[0-9][0-9]*[ ]*') %}
 # Change existing dcredit with positive integer value to minus-1
 dcredit_V38482-minusOne:
   file.replace:
-  - name: /etc/pam.d/system-auth-ac
-  - pattern: 'dcredit=[0-9][0-9]*'
-  - repl: 'dcredit=-1'
-  {% elif salt['file.search']('/etc/pam.d/system-auth-ac', ' dcredit=-[0-9][0-9]*[ ]*') %}
+  - name: {{ checkFile }}
+  - pattern: '{{ parmName }}=[0-9][0-9]*'
+  - repl: '{{ parmName }}=-1'
+  {% elif salt['file.search'](checkFile, ' ' + parmName + '=-[0-9][0-9]*[ ]*') %}
 dcredit_V38482-minusOne:
   cmd.run:
   - name: 'echo "Passwords already require at least one digit"'
@@ -35,9 +38,9 @@ dcredit_V38482-minusOne:
 # Tack on decredit of minus-1 if necessary
 dcredit_V38482-minusOne:
   file.replace:
-  - name: '/etc/pam.d/system-auth-ac'
+  - name: {{ checkFile }}
   - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
-  - repl: '\g<srctok> dcredit=-1'
+  - repl: '\g<srctok> {{ parmName }}=-1'
   {% endif %}
 {% endif %}
 
