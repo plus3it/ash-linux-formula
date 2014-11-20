@@ -19,5 +19,8 @@ script_V38683-describe:
 
 notify_V38683-notImp:
   cmd.run:
-  - name: "NOT YET IMPLEMENTED"
+  - name: 'echo "NOT YET IMPLEMENTED"'
 
+cmd_V38683-userDupeChk:
+  cmd.run:
+  - name: '/usr/sbin/pwck -rq && echo "No duplicate user names found"'
