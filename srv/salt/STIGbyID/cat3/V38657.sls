@@ -28,7 +28,7 @@ script_V38657-describe:
   # mount.mounted?
 notify_V38657-notImp:
   cmd.run:
-  - name: "NOT YET IMPLEMENTED"
+  - name: 'echo "NOT YET IMPLEMENTED"'
 {% else %}
 notify_V38657-noCIFS:
   cmd.run:
