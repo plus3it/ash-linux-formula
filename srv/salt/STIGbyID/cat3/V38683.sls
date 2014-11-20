@@ -17,10 +17,6 @@ script_V38683-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38683.sh
 
-notify_V38683-notImp:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
-
 cmd_V38683-userDupeChk:
   cmd.run:
   - name: '/usr/sbin/pwck -rq && echo "No duplicate user names found"'
