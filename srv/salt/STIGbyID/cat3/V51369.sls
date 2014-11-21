@@ -35,11 +35,14 @@ script_V51369-describe:
 {% set selLink = '/etc/sysconfig/selinux' %}
 {% set selType = 'SELINUXTYPE' %}
 
-# Set SELINUXTYPE based on lowest, STIG-compatible installed policy-set
-{% if salt['pkg.version']('selinux-policy-targeted') %}
-  {% set typeMode = 'targeted' %}
-{% elif salt['pkg.version']('selinux-policy-mls') %}
+# Set SELINUXTYPE based on highest, installed policy-set
+{% if salt['pkg.version']('selinux-policy-mls') %}
   {% set typeMode = 'mls' %}
+notify_V51369-selWarn:
+  cmd.run:
+  - name: 'printf "STIG only mandates ''targeted''\n   mode. Setting ''mls'' due to \n  presence of the associated policy-\n  modules. This may break many\n   things if ''SELINUX=enforcing''\n"'
+{% elif salt['pkg.version']('selinux-policy-targeted') %}
+  {% set typeMode = 'targeted' %}
 {% else %}
 notify_V51369-selWarn:
   cmd.run:
