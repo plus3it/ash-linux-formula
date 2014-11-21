@@ -16,6 +16,17 @@
 #
 ############################################################
 
+# Possible applicable SELinux modes are determined by the installed 
+# SELinux policy-support modules. As of the writing of this 
+# enforcement-utility, the following pre-packaged policy modules are 
+# available for Enterprise Linux 6:
+#    'minimum' policy moudules:			selinux-policy-minimum
+#    'multi-level security' policy modules:	selinux-policy-mls
+#    'targeted' policy modules:			selinux-policy-targeted
+# The STIGs specify a minum level of "targeted"; however the 
+# more-restrictive 'mls' level may be substituted if the associated 
+# policy modules are installed.
+
 script_V51369-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V51369.sh
@@ -23,7 +34,17 @@ script_V51369-describe:
 {% set selConfig = '/etc/selinux/config' %}
 {% set selLink = '/etc/sysconfig/selinux' %}
 {% set selType = 'SELINUXTYPE' %}
-{% set typeMode = 'targeted' %}
+
+# Set SELINUXTYPE based on lowest, STIG-compatible installed policy-set
+{% if salt['pkg.version']('selinux-policy-targeted') %}
+  {% set typeMode = 'targeted' %}
+{% elif salt['pkg.version']('selinux-policy-mls') %}
+  {% set typeMode = 'mls' %}
+{% else %}
+notify_V51369-selWarn:
+  cmd.run:
+  - name: 'printf "STIG-compatible policy-modules not\n  installed. Install before\n  rebooting or system may fail\n  to properly restart."'
+{% endif %}
 
 {% if not salt['file.is_link'](selLink) %}
 symlink_V51369-selinxCfg:
@@ -43,10 +64,18 @@ set_V51369-selType:
   - name: {{ selConfig }}
   - pattern: '^{{ selType }}=.*$'
   - repl: '{{ selType }}={{ typeMode }}'
+
+touch_V51369-relabel:
+  file.touch:
+  - name: '/.autorelabel'
   {% endif %}
 {% else %}
 set_V51369-selType:
   file.append:
   - name: {{ selConfig }}
   - text: '{{ selType }}={{ typeMode }}'
+
+touch_V51369-relabel:
+  file.touch:
+  - name: '/.autorelabel'
 {% endif %}
