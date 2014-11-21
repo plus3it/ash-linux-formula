@@ -27,11 +27,25 @@ script_V38655-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38655.sh
 
+{% set modprobConf = '/etc/modprobe.conf' %}
+{% set usbConf = '/etc/modprobe.d/usb.conf' %}
+
 # Check if USB is enabled - notify if disabled
-{% if salt['file.search']('/etc/modprobe.d/usb.conf', 'install usb-storage /bin/true') or salt['file.search']('/etc/modprobe.conf', 'install usb-storage /bin/true') %}
+{% if salt['file.file_exists'](usbConf) or salt['file.file_exists'](modprobConf) %}
+  {% if salt['file.search'](usbConf, 'install usb-storage /bin/true') or salt['file.search'](modprobConf, 'install usb-storage /bin/true') %}
 notify_V38655-usbDisabled:
   cmd.run:
   - name: 'echo "Mounting of USB devices disabled"'
+  {% endif %}
+{% else %}
+file-V38655-touchUSBconf:
+  file.touch:
+  - name: {{ usbConf }}
+
+file_V38655-appendUSBconf:
+  file.append:
+  - name: {{ usbConf }}
+  - text: 'install usb-storage /bin/true'
 {% endif %}
 
 # Probaby better way of detecting these...:
