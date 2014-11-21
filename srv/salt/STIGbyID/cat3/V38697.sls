@@ -35,7 +35,7 @@ script_V38697-describe:
 {% if salt['file.check_perms'](dirTmp, '', 'root', 'root', '1777') %}
 directory_V38498-tmp:
   cmd.run:
-  - name: 'echo "The ''{{ dirTmp }}'' already set to mode 1777"'
+  - name: 'echo "The ''{{ dirTmp }}'' directory already set to mode 1777"'
 {% else %}
 directory_V38498-tmp:
   file.directory:
@@ -46,7 +46,7 @@ directory_V38498-tmp:
 {% if salt['file.check_perms'](dirVarTmp, '', 'root', 'root', '1777') %}
 directory_V38498-varTmp:
   cmd.run:
-  - name: 'echo "The ''{{ dirVarTmp }}'' already set to mode 1777"'
+  - name: 'echo "The ''{{ dirVarTmp }}'' directory already set to mode 1777"'
 {% else %}
 directory_V38498-varTmp:
   file.directory:
