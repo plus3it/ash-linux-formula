@@ -23,32 +23,59 @@ script_V38702-describe:
 # Check to see if vsftpd service is installed
 {% if salt['pkg.version']('vsftpd') %}
   {% set vsftpdConf = '/etc/vsftpd/vsftpd.conf' %}
-  {% set parmName = 'xferlog_enable' %}
+  {% set logEnable = 'xferlog_enable' %}
+  {% set logFormat = 'xferlog_std_format' %}
 
-  # ...and see if xferlog is already enabled
-  {% if salt['file.search'](vsftpdConf, '^' + parmName + '=YES') %}
-file_V38702-modify:
+  # ...and see if transfer-logging is already enabled
+  {% if salt['file.search'](vsftpdConf, '^' + logEnable + '=YES') %}
+file_V38702-xferLog:
   cmd.run:
-  - name: 'echo "The {{ parmName }} option is already appropriately set"'
+  - name: 'echo "The {{ logEnable }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
-  {% elif salt['file.search'](vsftpdConf, '^' + parmName + '=NO') %}
-file_V38702-modify:
+  {% elif salt['file.search'](vsftpdConf, '^' + logEnable + '=NO') %}
+file_V38702-xferLog:
   file.replace:
   - name: {{ vsftpdConf }}
-  - pattern: '^{{ parmName }}.*$'
-  - repl: '{{ parmName }}=YES'
+  - pattern: '^{{ logEnable }}.*$'
+  - repl: '{{ logEnable }}=YES'
 
   # ...if not defined at all
   {% else  %}
-file_V38702-modify:
+file_V38702-xferLog:
   file.append:
   - name: {{ vsftpdConf }}
   - text:
     - ' '
-    - '# Enable standard security banners (per STIG V-38702)'
-    - '{{ parmName }}=YES'
+    - '# Enable transfer-logging (per STIG V-38702)'
+    - '{{ logEnable }}=YES'
   {% endif %}
+
+  # ...and see if standard-logging is explicitly disabled
+  {% if salt['file.search'](vsftpdConf, '^' + logFormat + '=NO') %}
+file_V38702-logFmt:
+  cmd.run:
+  - name: 'echo "The {{ logFormat }} option is already appropriately set"'
+
+  # ...set it to disabled if already explicitly enabled
+  {% elif salt['file.search'](vsftpdConf, '^' + logFormat + '=YES') %}
+file_V38702-logFmt:
+  file.replace:
+  - name: {{ vsftpdConf }}
+  - pattern: '^{{ logFormat }}.*$'
+  - repl: '{{ logFormat }}=NO'
+
+  # ...if not defined at all
+  {% else  %}
+file_V38702-logFmt:
+  file.append:
+  - name: {{ vsftpdConf }}
+  - text:
+    - ' '
+    - '# Enable verbose logging (per STIG V-38702)'
+    - '{{ logFormat }}=YES'
+  {% endif %}
+
 
 # If not installed, call out as much...
 {% else  %}
