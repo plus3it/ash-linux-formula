@@ -19,14 +19,28 @@
 SELENFMODE=`/usr/sbin/getenforce`
 
 case ${SELENFMODE} in
-  Enforcing|Permissive) echo ${SELENFMODE}
-     SETEXIT=0
+  Enforcing|Permissive) SETEXIT=0
      ;;
-  Disabled) echo ${SELENFMODE}
-     SETEXIT=1
+  Disabled) SETEXIT=1
      ;;
 esac
 
 if [ ${SETEXIT} -eq 1 ]
 then
    printf "SELinux disabled: cannot check FS labeling\n"
+   exit ${SETEXIT}
+else
+   FILELIST=`find /dev -print | xargs ls -dZ /dev 2> /dev/null | grep unlabeled_t | awk '{print $5}'`
+   if [ "${FILELIST}" = "" ]
+   then
+      echo "No unlabled device-objects found"
+      exit ${SETEXIT}
+   else
+      for FILE in ${FILELIST}
+      do
+          echo "${FILE} is unlabeled"
+      done
+      SETEXIT=1
+      exit ${SETEXIT}
+   fi
+fi
