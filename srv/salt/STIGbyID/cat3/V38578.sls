@@ -19,22 +19,26 @@ script_V38578-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38578.sh
 
+{% set ruleFile = '/etc/audit/audit.rules' %}
+{% set checkFile = '/etc/sudoers' %}
+{% set auditRule = '-w ' + checkFile + ' -p wa -k actions' %}
+
 # Monitoring of /etc/sudoers file
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/sudoers -p wa -k actions') %}
-file_V38531-auditRules_sudoers:
+{% if salt['file.search'](ruleFile, auditRule) %}
+file_V38578-auditRules_sudoers:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/sudoers') %}
-file_V38531-auditRules_sudoers:
+{% elif salt['file.search'](ruleFile, checkFile) %}
+file_V38578-auditRules_sudoers:
   file.replace:
-  - name: '/etc/audit/audit.rules'
-  - pattern: '^.*/etc/sudoers.*$'
-  - repl: '-w /etc/sudoers -p wa -k actions'
+  - name: '{{ ruleFile }}'
+  - pattern: '^.*{{ checkFile }}.*$'
+  - repl: '{{ auditRule }}'
 {% else %}
-file_V38531-auditRules_sudoers:
+file_V38578-auditRules_sudoers:
   file.append:
-  - name: '/etc/audit/audit.rules'
+  - name: '{{ ruleFile }}'
   - text:
-    - '# Monitor /etc/sudoers for changes (per STIG-ID V-38531)'
-    - '-w /etc/sudoers -p wa -k actions'
+    - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38578)'
+    - '{{ auditRule }}'
 {% endif %}
