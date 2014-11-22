@@ -21,21 +21,25 @@ script_V38530-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38530.sh
 
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/localtime -p wa -k audit_time_rules') %}
+{% set auditRules = '/etc/audit/audit.rules' %}
+{% set checkFile = '/etc/localtime' %}
+{% set newRule = '-w ' + checkFile + ' -p wa -k audit_time_rules' %}
+
+{% if salt['file.search'](auditRules, newRule) %}
 file_auditRules:
   cmd.run:
   - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/localtime') %}
+{% elif salt['file.search'](auditRules, checkFile) %}
 file_auditRules:
   file.replace:
-  - name: '/etc/audit/audit.rules'
-  - pattern: '^.*/etc/localtime.*$'
-  - repl: '-w /etc/localtime -p wa -k audit_time_rules'
+  - name: '{{ auditRules }}'
+  - pattern: '{{ checkFile }}'
+  - repl: '{{ newRule }}'
 {% else %}
 file_auditRules:
   file.append:
-  - name: '/etc/audit/audit.rules'
+  - name: '{{ auditRules }}'
   - text:
-    - '# Monitor /etc/localtime for changes (per STIG-ID V-38530)'
-    - '-w /etc/localtime -p wa -k audit_time_rules'
+    - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38530)'
+    - '{{ newRule }}'
 {% endif %}
