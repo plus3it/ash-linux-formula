@@ -18,6 +18,7 @@ diag_out() {
 
 diag_out "----------------------------------"
 diag_out "STIG Finding ID: V38653"
-diag_out "  SNMPD must not us a default password"
+diag_out "  SNMPD must not use a default"
+diag_out "  password"
 diag_out "----------------------------------"
 
