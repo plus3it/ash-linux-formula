@@ -12,29 +12,47 @@
 #
 ############################################################
 
-# Will need to update with correct package-name
-pkg_V38666:
-  pkg.installed:
-  - name: MSFElinux
+script_V38666-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat1/files/V38666.sh
 
-##################################################################
-# FILE AGE TEST
-#   curtime=`(date "+%s")` filetime=`stat -c "%Y" ${FILENAME}` \
-#   diff=$(( (curtime - filetime) / 86400 )) ; test $diff -le 7
-# <Better method but longer than leveraging `find`>
-##################################################################
+# Will need to update with correct package-name
+{% set MSFEpkg = 'MSFElinux' %}
+{% set NAIdir = '/opt/NAI/LinuxShield/engine/dat' %}
+
+# If MSFE is installed, check the 'freshness' of its scan dbs and history
+{% if salt['pkg.version'](MSFEpkg) %}
+
+# The following is an ugly hack. Need to replace the following checks 
+# with SaltStatck's "file.lstat" module. Can pull the 'st_mtime' 
+# attribute then compare to system's current time in seconds
+# (e.g., `date '+%s'`) 
 
 cmd_V38666-scanChck:
   cmd.run:
-  - name: 'find /opt/NAI/LinuxShield/engine/dat -type f -mtime -7 -name avvscan.dat > /tmp/age ; test -s /tmp/age'
-  - onlyif: pkg_V38666
+  - name: 'find {{ NAIdir }} -type f -mtime -7 -name avvscan.dat > /tmp/age ; test -s /tmp/age'
 
 cmd_V38666-namesChck:
   cmd.run:
-  - name: 'find /opt/NAI/LinuxShield/engine/dat -type f -mtime -7 -name avvnames.dat > /tmp/age ; test -s /tmp/age'
-  - onlyif: pkg_V38666
+  - name: 'find {{ NAIdir }} -type f -mtime -7 -name avvnames.dat > /tmp/age ; test -s /tmp/age'
 
 cmd_V38666-cleanChck:
   cmd.run:
-  - name: 'find /opt/NAI/LinuxShield/engine/dat -type f -mtime -7 -name avvclean.dat > /tmp/age ; test -s /tmp/age'
-  - onlyif: pkg_V38666
+  - name: 'find {{ NAIdir }} -type f -mtime -7 -name avvclean.dat > /tmp/age ; test -s /tmp/age'
+
+# If not installed, see if it's available in the Yum repos
+{% else %}
+pkg_V38666:
+  pkg.installed:
+  - name: '{{ MSFEpkg }}'
+
+  {% if salt['pkg.version'](MSFEpkg) %}
+notify_V38666-instStat:
+  cmd.run:
+  - name: 'echo "Installed HBSS package"'
+  {% else %}
+notify_V38666-instStat:
+  cmd.run:
+  - name: 'printf "** WARNING **\n  Could neither find installed HBSS\n  package nor install one.\n"'
+  {% endif %}
+{% endif %}
