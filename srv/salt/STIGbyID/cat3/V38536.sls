@@ -22,15 +22,15 @@ script_V38536-describe:
 
 {% set auditCfg = '/etc/audit/audit.rules' %}
 {% set groupFile = '/etc/group' %}
-{% set groupRule = '-w ' + groupFile + ' -p wa -k audit_account_changes') %}
+{% set groupRule = '-w ' + groupFile + ' -p wa -k audit_account_changes' %}
 {% set passwdFile = '/etc/passwd' %}
-{% set passwdRule = '-w ' + passwdFile + ' -p wa -k audit_account_changes') %}
+{% set passwdRule = '-w ' + passwdFile + ' -p wa -k audit_account_changes' %}
 {% set opasswdFile = '/etc/security/opasswd' %}
-{% set opasswdRule = '-w ' + opasswdFile + ' -p wa -k audit_account_changes') %}
+{% set opasswdRule = '-w ' + opasswdFile + ' -p wa -k audit_account_changes' %}
 {% set shadowFile = '/etc/shadow' %}
-{% set shadowRule = '-w ' + shadowFile + ' -p wa -k audit_account_changes') %}
+{% set shadowRule = '-w ' + shadowFile + ' -p wa -k audit_account_changes' %}
 {% set gshadowFile = '/etc/gshadow' %}
-{% set gshadowRule = '-w ' + gshadowFile + ' -p wa -k audit_account_changes') %}
+{% set gshadowRule = '-w ' + gshadowFile + ' -p wa -k audit_account_changes' %}
 
 # Monitoring of /etc/group file
 {% if salt['file.search'](auditCfg, groupRule) %}
