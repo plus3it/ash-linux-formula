@@ -15,6 +15,7 @@ script_V38701:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38701.sh
 
+{% if salt['pkg.version']('tftp-server') %}
 file_V38701:
   file.sed:
   - name: /etc/xinetd.d/tftp
@@ -22,3 +23,8 @@ file_V38701:
   - after: 'server_args		= -s /var/lib/tftpboot'
   - require:
     - cmd: script_V38701
+{% else %}
+file_V38701:
+  cmd.run:
+  - name: 'echo "Not TFTP packages install: no applicable findings possible"'
+{% endif %}
