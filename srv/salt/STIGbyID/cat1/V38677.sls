@@ -9,7 +9,7 @@
 #
 ############################################################
 
-script_V38677:
+script_V38677-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38677.sh
 
