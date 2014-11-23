@@ -11,13 +11,15 @@
 #
 ############################################################
 
-# Standard outputter function
-diag_out() {
-   echo "${1}"
-}
+echo "Before fix:"
+sed 's/^/   /' /etc/exports
 
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38677"
-diag_out "Turn off insecure file-locking in"
-diag_out "NFS exports"
-diag_out "----------------------------------"
+sed -i '{
+   s/,insecure_locks)/)/
+   s/(insecure_locks,/(/
+   s/,insecure_locks,/,/
+   s/(insecure_locks)//
+}' /etc/exports
+
+echo "After fix:"
+sed 's/^/   /' /etc/exports

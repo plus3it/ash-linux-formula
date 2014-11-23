@@ -13,10 +13,36 @@ script_V38677:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38677.sh
 
-cmd_V38677:
+{% set exportFile = '/etc/exports' %}
+{% set badOpt = 'insecure_locks' %}
+
+{% if salt['file.search'](exportFile, badOpt) %}
+script_V38677-helper:
+  cmd.script:
+  - source: salt://STIGbyID/cat1/files/V38677-helper.sh
+{#
+  {% if salt['file.search'](exportFile, ',' + insecure_locks) %}
+fix_V38677-secondaryOpt:
+  file.replace:
+  - name: '{{ exportFile }}'
+  - pattern: ',{{ badOpt }}'
+  - repl: ''
+  {% elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + ',') %}
+fix_V38677-primaryOpt:
+  file.replace:
+  - name: '{{ exportFile }}'
+  - pattern: '{{ badOpt }},'
+  - repl: ''
+  {% elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + '[ 	]') %}
+fix_V38677-onlyOpt:
+  file.replace:
+  - name: '{{ exportFile }}'
+  - pattern: '{{ badOpt }},'
+  - repl: ''
+  {% endif %}
+#}
+{% else %}
+fix_V38677-noChange:
   cmd.run:
-  - name: 'sed -i -e "s/,insecure_locks//" -e "s/insecure_locks,//" /etc/exports'
-  - require:
-    - cmd: script_V38677
-
-
+  - name: 'echo "No ''{{ badOpt }}'' export options found in ''{{ exportFile }}''"'
+{% endif %}
