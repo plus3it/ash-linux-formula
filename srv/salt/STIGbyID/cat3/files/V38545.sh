@@ -20,6 +20,6 @@ diag_out() {
 
 diag_out "------------------------------------"
 diag_out "STIG Finding ID: V-38545"
-diat_out "  Audit system log all chown-"
-diat_out "  based DAC permission modifications"
+diag_out "  Audit system log all chown-"
+diag_out "  based DAC permission modifications"
 diag_out "------------------------------------"
