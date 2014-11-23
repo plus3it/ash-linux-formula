@@ -22,14 +22,3 @@ diag_out "----------------------------------"
 diag_out "STIG Finding ID: V-38701"
 diag_out "Chroot TFTP service (if installed)"
 diag_out "----------------------------------"
-
-# Check if TFTP service is installed
-rpm -q tftp-server > /dev/null 2>&1
-
-# Abort if not installed
-if [ $? -ne 0 ]
-then
-   diag_out "TFTP services not installed: skipping rest of procedures."
-   diag_out ""
-   exit 1
-fi

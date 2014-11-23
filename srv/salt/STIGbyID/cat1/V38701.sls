@@ -21,10 +21,8 @@ file_V38701:
   - name: /etc/xinetd.d/tftp
   - before: 'server_args.*=.*'
   - after: 'server_args		= -s /var/lib/tftpboot'
-  - require:
-    - cmd: script_V38701
 {% else %}
 file_V38701:
   cmd.run:
-  - name: 'echo "Not TFTP packages install: no applicable findings possible"'
+  - name: 'echo "No applicable findings possible: ''tftp-server'' package not installed"'
 {% endif %}
