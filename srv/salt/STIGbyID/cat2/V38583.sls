@@ -43,7 +43,7 @@ file_V38583-hardlink:
   - src: '/boot/grub/grub.conf'
   - path: '/boot/grub.conf'
 
-file_V38583-bootGrubGrub:
+file_V38583-bootGrub:
   file.managed:
   - name: '/boot/grub/grub.conf'
   - mode: 0600
