@@ -11,7 +11,7 @@
 #
 ############################################################
 
-script_V38701:
+script_V38701-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38701.sh
 
