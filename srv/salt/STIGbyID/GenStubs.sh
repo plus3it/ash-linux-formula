@@ -1,4 +1,12 @@
 #!/bin/sh
+#
+# Script to generate STIG description scripts for Enterprise Linux 6
+# STIG finding IDs
+#
+# Note: Create LISTFILE from the table at:
+#    http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11
+#
+#########################################################################
 
 LISTFILE=${1:-STIG-MAC-1_Classified}
 
@@ -9,8 +17,7 @@ while IFS= read -r FILE
 do
    VULNID=`echo ${FILE} | cut -d ";" -f 1`
    VULNLV=`echo ${FILE} | cut -d ";" -f 2`
-   VULNSUM=`echo ${FILE} | cut -d ";" -f 3`
-   VULNTXT=`echo ${FILE} | cut -d ";" -f 4`
+   VULNTXT=`echo ${FILE} | cut -d ";" -f 3`
    FILEID=`echo ${VULNID} | sed 's/V-/V/'`
 
 #    touch ${VULNID}.sh
@@ -26,4 +33,3 @@ do
    printf "############################################################\n\n"
    ) > ${FILEID}.sh
 done
-
