@@ -9,7 +9,8 @@ while IFS= read -r FILE
 do
    VULNID=`echo ${FILE} | cut -d ";" -f 1`
    VULNLV=`echo ${FILE} | cut -d ";" -f 2`
-   VULNTXT=`echo ${FILE} | cut -d ";" -f 3`
+   VULNSUM=`echo ${FILE} | cut -d ";" -f 3`
+   VULNTXT=`echo ${FILE} | cut -d ";" -f 4`
    FILEID=`echo ${VULNID} | sed 's/V-/V/'`
 
 #    touch ${VULNID}.sh
