@@ -18,7 +18,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38598"
+diag_out "STIG Finding ID: V-38614"
 diag_out "  The SSH daemon must not allow "
 diag_out "  use of empty passwords"
 diag_out "----------------------------------"
