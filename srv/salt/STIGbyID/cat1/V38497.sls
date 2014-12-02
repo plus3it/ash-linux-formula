@@ -27,8 +27,14 @@ cmd_V38497-linkSysauth:
   - name: '/usr/sbin/authconfig --update'
 {% endif %}
 
+{% if salt['file.search'](checkFile, 'nullok') %}
 file_V38497-sysauth_ac:
   file.replace:
   - name: '{{ checkFile }}'
   - pattern: " nullok"
   - repl: ""
+{% else %}
+file_V38497-sysauth_ac:
+  cmd.run:
+  - name: 'echo "PAM does not allow empty passwords"'
+{% endif %}
