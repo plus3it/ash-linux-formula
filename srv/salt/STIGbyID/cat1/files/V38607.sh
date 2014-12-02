@@ -17,7 +17,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38598"
+diag_out "STIG Finding ID: V-38607"
 diag_out "  The SSH daemon must only use the"
 diag_out "  SSHv2 protocol"
 diag_out "----------------------------------"
