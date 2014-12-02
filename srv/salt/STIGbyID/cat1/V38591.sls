@@ -17,11 +17,11 @@ script_V38591-describe:
 {% set chkPkg = 'rsh-server' %}
 
 {% if salt['pkg.version'](chkPkg) %}
-pkg_V38587-removeRsh:
+pkg_V38591-removeRsh:
   pkg.removed:
   - name: '{{ chkPkg }}'
 {% else %}
-pkg_V38587-removeRsh:
+pkg_V38591-removeRsh:
   cmd.run:
   - name: 'echo "The ''{{ chkPkg }}'' package is not installed"'
 {% endif %}
