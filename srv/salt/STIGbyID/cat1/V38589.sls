@@ -18,18 +18,18 @@ script_V38589-describe:
 {% if salt['pkg.version']('telnet-server') %}
   # If installed, and enabled, disable it
   {% if salt['service.enabled']('telnet') %}
-svc_V38650-telnetDisabled:
+svc_V38589-telnetDisabled:
   service.disabled:
   - name: 'telnet'
 
-svc_V38650-telnetDead:
+svc_V38589-telnetDead:
  service.dead:
   - name: 'telnet'
 
 notice_V38589-disableTelnet:
   cmd.run:
   - name: 'echo "The ''telnet'' service has been disabled"'
-  - unless: svc_V38650-telnetDisabled
+  - unless: svc_V38589-telnetDisabled
   # If installed but disabled, make a note of it
   {% else %}
 notice_V38589-disableTelnet:
