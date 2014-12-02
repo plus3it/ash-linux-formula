@@ -18,7 +18,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------"
-diag_out "STIG Finding ID: V-38598"
+diag_out "STIG Finding ID: V-38602"
 diag_out "  The rlogind service must not be"
 diag_out "  running"
 diag_out "----------------------------------"
