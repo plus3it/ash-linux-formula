@@ -23,11 +23,12 @@ script_V38573-describe:
   ]
 %}
 
+{% set pamMod = 'pam_faillock.so' %}
+{% set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 unlock_time=600' %}
+{% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=600 fail_interval=900' %}
+{% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=600 fail_interval=900' %}
 
 {% for checkFile in pamFiles %}
-  {% set pamMod = 'pam_faillock.so' %}
-  {% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=604800 fail_interval=900' %}
-  {% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=604800 fail_interval=900' %}
 
   {% if not salt['file.file_exists'](checkFile) %}
 cmd_V38573-linkSysauth:
@@ -36,7 +37,7 @@ cmd_V38573-linkSysauth:
   {% endif %}
 
 
-  {% if salt['file.search'](checkFile, pamMod) %}
+  {% if salt['file.search'](checkFile, preAuth) %}
 notify_V38573-{{ checkFile }}_exists:
   cmd.run:
   - name: 'echo "{{ pamMod }} already present in {{ checkFile }}"'
@@ -49,6 +50,19 @@ insert_V38573-{{ checkFile }}_faillock:
   file.replace:
   - name: {{ checkFile }}
   - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
-  - repl: '\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
+  - repl: '{{ preAuth }}\n\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
   {% endif %}
 {% endfor %}
+
+notify_V38573-docError:
+  cmd.run:
+  - name: 'printf "
+************\n
+** NOTICE **\n
+************\n
+\tIf following STIG/SCAP guidance and only implementing the:\n\n
+{{ authFail }}\n
+{{ authSucc }}\n\n
+\tGuidance, desired lockout behavior will not be achieved.  \n
+\tThis tool corrects the STIG-prescribed remediation per\n
+\tRedHat Solution ID 62949.\n"'
