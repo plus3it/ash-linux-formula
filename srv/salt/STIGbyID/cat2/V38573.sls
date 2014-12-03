@@ -13,7 +13,35 @@ script_V38573-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38573.sh
 
-cmd_V38573-NotImplemented:
+#################################################
+## Consult cat3/V38482.sls for handling-method ##
+#################################################
+
+{% set checkFile = '/etc/pam.d/system-auth-ac' %}
+{% set pamMod = 'pam_faillock.so' %}
+{% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=604800 fail_interval=900' %}
+{% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=604800 fail_interval=900' %}
+
+{% if not salt['file.file_exists'](checkFile) %}
+cmd_V38573-linkSysauth:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+  - name: '/usr/sbin/authconfig --update'
+{% endif %}
+
+
+{% if salt['file.search'](checkFile, pamMod) %}
+notify_V38573-exists:
+  cmd.run:
+  - name: 'echo "{{ pamMod }} already present in {{ checkFile }}"'
+{% else %}
+notify_V38573-exists:
+  cmd.run:
+  - name: 'echo "{{ pamMod }} absent in {{ checkFile }}"'
+
+inset_V38573-faillock:
+  file.replace:
+  - name: {{ checkFile }}
+  - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
+  - repl: '\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
+{% endif %}
 
