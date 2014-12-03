@@ -24,9 +24,10 @@ script_V38573-describe:
 %}
 
 {% set pamMod = 'pam_faillock.so' %}
-{% set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 unlock_time=600' %}
-{% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=600 fail_interval=900' %}
-{% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=600 fail_interval=900' %}
+{% set lockTO = '900' %}
+{% set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 unlock_time=' + lockTO %}
+{% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
+{% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 
 {% for checkFile in pamFiles %}
 
@@ -59,6 +60,10 @@ insert_V38573-{{ checkFile }}_faillock:
   - name: {{ checkFile }}
   - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
   - repl: '{{ preAuth }}\n\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
+
+notify_V38573-{{ checkFile }}_deviance:
+  cmd.run:
+  - name: 'echo "STIG prescribes indefinite-lock; utility implements {{ lockTO }}s lock"'
   {% endif %}
 {% endfor %}
 
