@@ -14,9 +14,33 @@ script_V38598-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38598.sh
 
-# (Need to rewrite once 2.7's fix to salt.states.service is available...)
-cmd_V38598-disable:
-  cmd.run:
-  - name: 'chkconfig rexec off'
-  - onlyif: 'chkconfig rexec --list | cut -f 2 | grep on'
+{% set rSvcName = 'rexec' %}
 
+# See if the rsh server package is even installed...
+{% if salt['pkg.version']('rsh-server') %}
+  # If installed, and enabled, disable it
+  {% if salt['service.enabled'](rSvcName) %}
+svc_V38598-{{ rSvcName }}Disabled:
+  service.disabled:
+  - name: '{{ rSvcName }}'
+
+svc_V38598-{{ rSvcName }}Dead:
+ service.dead:
+  - name: '{{ rSvcName }}'
+
+notice_V38598-disable{{ rSvcName }}:
+  cmd.run:
+  - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
+  - unless: svc_V38598-{{ rSvcName }}Disabled
+  # If installed but disabled, make a note of it
+  {% else %}
+notice_V38598-disable{{ rSvcName }}:
+  cmd.run:
+  - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
+  {% endif %}
+# Otherwise, just notify that rsh service isn't even present
+{% else %}
+notice_V38598-disable{{ rSvcName }}:
+  cmd.run:
+  - name: 'echo "The ''rsh-server'' package is not installed"'
+{% endif %}

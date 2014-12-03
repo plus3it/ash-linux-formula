@@ -18,18 +18,44 @@ script_V38672-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38672.sh
 
+{% set svcName = 'netconsole' %}
+
 {% if salt['pkg.version']('initscripts') %}
 # Ensure netconsole service is disabled and deactivated
-svc_V38672-netconsoleDisabled:
+  {% if salt['service.enabled'](svcName) %}
+svc_V38672-{{ svcName }}Disabled:
   service.disabled:
-  - name: 'netconsole'
+  - name: '{{ svcName }}'
+notify_V38672-{{ svcName }}Disabled:
+  cmd.run:
+  - name: 'echo "The ''{{ svcName }}'' service has been disabled"'
+  {% else %}
+notify_V38672-{{ svcName }}Disabled:
+  cmd.run:
+  - name: 'echo "The ''{{ svcName }}'' service is already disabled"'
+  {% endif %}
 
-svc_V38672-netconsoleDead:
+  {% if salt['service.status'](svcName) %}
+svc_V38672-{{ svcName }}Dead:
   service.dead:
-  - name: 'netconsole'
+  - name: '{{ svcName }}'
+
+notify_V38672-{{ svcName }}Dead:
+  cmd.run:
+  - name: 'echo "The ''{{ svcName }}'' service has been stopped"'
+
+  {% else %}
+ 
+notify_V38672-{{ svcName }}Dead:
+  cmd.run:
+  - name: 'echo "The ''{{ svcName }}'' service is already stopped"'
+
+  {% endif %}
 {% else %}
+
 notify_V38672-package:
   cmd.run:
-  - name: 'echo "Parent package of netconsole not installed"'
+  - name: 'echo "Parent package of {{ svcName }} not installed"'
+
 {% endif %}
 

@@ -24,6 +24,6 @@ diag_out() {
 
 diag_out "----------------------------------"
 diag_out "STIG Finding ID: V-38438"
-diag_out "  Automated file system mounting 
-diag_out "  tools should be disabled
+diag_out "  Auditing must be enabled at"
+diag_out "  kernel load-time"
 diag_out "----------------------------------"

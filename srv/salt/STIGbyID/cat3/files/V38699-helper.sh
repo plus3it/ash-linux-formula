@@ -23,7 +23,7 @@ do
    OFFENDERS=`find "${FS}" -xdev -type d -perm -0002 -uid +499 -print`
    if [ "${OFFENDERS}" = "" ]
    then
-      echo "All world-writable directories are owned by system accounts"
+      echo "All world-writable directories in ${FS} are owned by system accounts"
       SETEXIT=0
    else
       for OFFENDER in ${OFFENDERS}
