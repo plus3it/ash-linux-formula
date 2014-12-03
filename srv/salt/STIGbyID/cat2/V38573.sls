@@ -37,10 +37,18 @@ cmd_V38573-linkSysauth:
   {% endif %}
 
 
-  {% if salt['file.search'](checkFile, preAuth) %}
+  {% if salt['file.search'](checkFile, pamMod) %}
 notify_V38573-{{ checkFile }}_exists:
   cmd.run:
-  - name: 'echo "{{ pamMod }} already present in {{ checkFile }}"'
+  - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
+    {% if not salt['file.search'](checkFile, preAuth) %}
+notify_V38573-{{ checkFile }}_noPreauth:
+  cmd.run:
+  - name: 'printf "** Note **\n
+The following PAM directive:\n\n{{ preAuth }}\n\n
+is missing in {{ checkFile }} file. The targeted\n
+security-behavior is probably not present.\n"'
+    {% endif %}
   {% else %}
 notify_V38573-{{ checkFile }}_exists:
   cmd.run:
