@@ -14,6 +14,33 @@ script_V38619-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38619.sh
 
-cmd_V38619-NotImplemented:
+{% for user in salt['user.getent']('') %}
+  {% set ID = user['name'] %}
+  {% set homeDir = user['home'] %}
+  {% set netRc = homeDir + '/.netrc' %}
+
+  {% if salt['file.file_exists'](netRc) %}
+notify_V38619-{{ ID }}:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+  - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'
+
+move_V38619-{{ ID }}:
+  file.rename:
+  - src: '{{ netRc }}'
+  - dst: '{{ netRc }}-MOVEDperSTIGS'
+
+warn_V38619-{{ ID }}:
+  file.prepend
+  - name: '{{ netRc }}-MOVEDperSTIGS'
+  - onlyif: 'move_V38619-{{ ID }}'
+  - text:
+    - '######################################################'
+    - '# This file moved in accordance with STIG-ID V-38619'
+    - '#'
+    - '# DO NOT RENAME TO ''{{ homeDir}}/.netrc'' '
+    - '#'
+    - '######################################################'
+
+  {% endif %}
+{% endfor %}
+
