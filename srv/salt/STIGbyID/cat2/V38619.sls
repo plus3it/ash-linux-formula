@@ -24,23 +24,23 @@ notify_V38619-{{ ID }}:
   cmd.run:
   - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'
 
-  move_V38619-{{ ID }}:
-    file.rename:
-    - source: '{{ netRc }}'
-    - name: '{{ netRc }}-MOVEDperSTIGS'
+move_V38619-{{ ID }}:
+  file.rename:
+  - source: '{{ netRc }}'
+  - name: '{{ netRc }}-MOVEDperSTIGS'
 
-  warn_V38619-{{ ID }}:
-    file.prepend
-    - name: '{{ netRc }}-MOVEDperSTIGS'
-    - onlyif: 'move_V38619-{{ ID }}'
-    - text:
-      - '######################################################'
-      - '# This file moved in accordance with STIG-ID V-38619'
-      - '#'
-      - '# DO NOT RENAME TO ''{{ homeDir}}/.netrc'' '
-      - '#'
-      - '######################################################'
+warnfile_V38619-{{ ID }}:
+  file.prepend:
+  - name: '{{ netRc }}-MOVEDperSTIGS'
+  - text:
+    - '##################################################'
+    - '# File moved per STIG V-38619'
+    - '#'
+    - '# DO NOT RENAME to {{ netRc }}'
+    - '# * presence of netrcs is a security-violation'
+    - '#'
+    - '##################################################'
 
-  {% endif %}
+{% endif %}
 {% endfor %}
 
