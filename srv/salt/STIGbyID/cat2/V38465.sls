@@ -14,6 +14,27 @@ script_V38465-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38465.sh
 
-cmd_NotImplemented:
+# cmd_NotImplemented:
+#   cmd.run:
+#   - name: 'echo "NOT YET IMPLEMENTED"'
+
+{% set checkLibDirs = [
+	'/lib',
+	'/lib64',
+	'/usr/lib',
+	'/usr/lib64'
+  ]
+%}
+
+{% for libDir in checkLibDirs %}
+
+notify_V38465-{{ libDir }}:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+  - name: 'echo "Checking ''{{ libDir }}'' for group- or world-writable files"'
+
+strip_V38465-{{ libDir }}:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38465-helper.sh
+  - args: {{ libDir }}
+
+{% endfor %}
