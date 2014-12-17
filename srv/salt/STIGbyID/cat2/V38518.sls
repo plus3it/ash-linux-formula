@@ -45,12 +45,15 @@ script_V38518-describe:
   ] %}
 
 
+# Iterate the facility-list to see if there's any active
+# logging-targets defined
 {% for logFacility in facilityList %}
-  {% set searchPat = '^' + logFacility %}
-  {% if salt['file.search'](cfgFile, searchPat) %}
+  {% if salt['file.search'](cfgFile, '^' + logFacility) %}
+  {% set cfgStruct = salt['file.grep'](cfgFile, '^' + logFacility) %}
+  {% set cfgLine = cfgStruct['stdout'] %}
 
 notify_V38518-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "{{ searchPat }}"'
+  - name: 'echo "Logging-target set for ''{{ cfgLine }}'' syslog facility"'
   {% endif %}
 {% endfor %}
