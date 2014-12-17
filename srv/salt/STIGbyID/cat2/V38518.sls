@@ -14,6 +14,8 @@ script_V38518-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38518.sh
 
+{% set cfgFile = '/etc/rsyslog.conf' %}
+
 # Define list of syslog "facilities":
 #    These will be used to look for matching logging-targets
 #    within the /etc/rsyslog.conf file
@@ -39,12 +41,16 @@ script_V38518-describe:
 	'local5', 
 	'local6', 
 	'local7',
-	'*'
-  ]
-%}
+	'\*',
+  ] %}
+
 
 {% for logFacility in facilityList %}
+  {% set searchPat = '^' + logFacility %}
+  {% if salt['file.search'](cfgFile, searchPat) %}
+
 notify_V38518-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "{{ logFacility }}"'
+  - name: 'echo "{{ searchPat }}"'
+  {% endif %}
 {% endfor %}
