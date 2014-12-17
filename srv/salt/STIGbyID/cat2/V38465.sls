@@ -14,10 +14,7 @@ script_V38465-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38465.sh
 
-# cmd_NotImplemented:
-#   cmd.run:
-#   - name: 'echo "NOT YET IMPLEMENTED"'
-
+# Define list of library directories to search
 {% set checkLibDirs = [
 	'/lib',
 	'/lib64',
@@ -26,12 +23,15 @@ script_V38465-describe:
   ]
 %}
 
+# Iterate previously-defined list
 {% for libDir in checkLibDirs %}
 
+# Report what we're doing
 notify_V38465-{{ libDir }}:
   cmd.run:
   - name: 'echo "Checking ''{{ libDir }}'' for group- or world-writable files"'
 
+# Check (and fix as necessary) library
 strip_V38465-{{ libDir }}:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38465-helper.sh
