@@ -14,7 +14,37 @@ script_V38518-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38518.sh
 
-cmd_V38518-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+# Define list of syslog "facilities":
+#    These will be used to look for matching logging-targets
+#    within the /etc/rsyslog.conf file
+{% set facilityList = [
+	'auth', 
+	'authpriv', 
+	'cron', 
+	'daemon', 
+	'kern', 
+	'lpr', 
+	'mail', 
+	'mark', 
+	'news', 
+	'security', 
+	'syslog', 
+	'user', 
+	'uucp', 
+	'local0', 
+	'local1', 
+	'local2', 
+	'local3', 
+	'local4', 
+	'local5', 
+	'local6', 
+	'local7',
+	'*'
+  ]
+%}
 
+{% for logFacility in facilityList %}
+notify_V38518-{{ logFacility }}:
+  cmd.run:
+  - name: 'echo "{{ logFacility }}"'
+{% endfor %}
