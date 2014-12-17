@@ -14,6 +14,29 @@ script_V38469-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38469.sh
 
-cmd_V38469-NotImplemented:
+# Define list of binary directories to search
+{% set checkBinDirs = [
+	'/bin',
+	'/usr/bin',
+	'/usr/local/bin',
+	'/sbin',
+	'/usr/sbin',
+	'/usr/local/sbin'
+  ]
+%}
+
+# Iterate previously-defined list
+{% for binDir in checkBinDirs %}
+
+# Report what we're doing
+notify_V38469-{{ binDir }}:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+  - name: 'echo "Checking ''{{ binDir }}'' for group- or world-writable files"'
+
+# Check (and fix as necessary) library
+strip_V38469-{{ binDir }}:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38469-helper.sh
+  - args: {{ binDir }}
+
+{% endfor %}
