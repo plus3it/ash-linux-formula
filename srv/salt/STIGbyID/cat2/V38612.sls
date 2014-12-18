@@ -7,6 +7,11 @@
 #     relationships mean a compromise on one host can allow an attacker to 
 #     move trivially to other hosts.
 #
+#  CCI: CCI-000766
+#  NIST SP 800-53 :: IA-2 (2)
+#  NIST SP 800-53A :: IA-2 (2).1
+#  NIST SP 800-53 Revision 4 :: IA-2 (2)
+#
 ############################################################
 
 script_V38612-describe:
