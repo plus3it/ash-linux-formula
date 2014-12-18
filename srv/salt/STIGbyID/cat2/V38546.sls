@@ -7,6 +7,11 @@
 #     unless needed. Any unnecessary network stacks - including IPv6 - 
 #     should be disabled, to reduce the vulnerability to exploitation.
 #
+#  CCI: CCI-000366
+#  NIST SP 800-53 :: CM-6 b
+#  NIST SP 800-53A :: CM-6.1 (iv)
+#  NIST SP 800-53 Revision 4 :: CM-6 b
+#
 ############################################################
 
 script_V38546-describe:
