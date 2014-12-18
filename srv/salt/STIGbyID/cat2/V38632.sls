@@ -9,6 +9,11 @@
 #     kernel can be written to disk, or that appropriate actions will be 
 #     taken if other obstacles exist.
 #
+#  CCI: CCI-000130
+#  NIST SP 800-53 :: AU-3
+#  NIST SP 800-53A :: AU-3.1
+#  NIST SP 800-53 Revision 4 :: AU-3
+#
 ############################################################
 
 script_V38632-describe:
