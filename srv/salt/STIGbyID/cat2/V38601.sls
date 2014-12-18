@@ -8,6 +8,11 @@
 #     their routing information. The ability to send ICMP redirects is only 
 #     appropriate for routers.
 #
+#  CCI: CCI-000366
+#  NIST SP 800-53 :: CM-6 b
+#  NIST SP 800-53 :: CM-6.1 (iv)
+#  NIST SP 800-53 :: CM-6 b
+#
 ############################################################
 
 
