@@ -6,6 +6,9 @@
 #     Audit log files must be group-owned by root. If non-privileged users 
 #     can write to audit logs, audit trails can be modified or destroyed.
 #
+#  CCI: <None specified in DISA documentation>
+#  NIST SP 800-53 :: <None specified in DISA documentation>
+#
 ############################################################
 
 script_V38445-describe:
