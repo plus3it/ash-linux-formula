@@ -8,6 +8,10 @@
 #     system logs from multiple sources or correlate computer events with 
 #     real time events. Using a trusted NTP server provided by your ...
 #
+#  CCI: CCI-000160
+#  NIST SP 800-53 :: AU-8 (1)
+#  NIST SP 800-53A :: AU-8 (1).1 (iii)
+#
 ############################################################
 
 script_V38621-describe:
