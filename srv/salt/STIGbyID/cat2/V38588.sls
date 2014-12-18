@@ -7,6 +7,11 @@
 #     the console user could disable auditing, firewalls, or other 
 #     services, weakening system security.
 #
+#  CCI: CCI-000213
+#  NIST SP 800-53 :: AC-3
+#  NIST SP 800-53A :: AC-3.1
+#  NIST SP 800-53 Revision 4 :: AC-3
+#
 ############################################################
 
 script_V38588-describe:
