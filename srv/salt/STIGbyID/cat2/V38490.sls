@@ -7,7 +7,10 @@
 #     mobile devices to operating systems. USB storage devices such as 
 #     thumb drives can be used to introduce unauthorized software and other 
 #     vulnerabilities. Support for these devices should be disabled and the 
-#     devices themselves should be ...
+#     devices themselves should be tightly controlled.
+#
+#  CCI: <None specified in DISA documentation>
+#  NIST SP 800-53 :: <None specified in DISA documentation>
 #
 ############################################################
 
