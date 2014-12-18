@@ -7,6 +7,11 @@
 #     file stores password hashes. Protection of this file is critical for 
 #     system security.
 #
+#  CCI-000366
+#  NIST 800-53 :: CM-6 b
+#  NIST 800-53A :: CM-6.1 (iv)
+#  NIST 800-53 Revision 4 :: CM-6 b
+#
 ############################################################
 
 script_V38503-describe:
