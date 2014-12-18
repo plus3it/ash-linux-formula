@@ -9,6 +9,10 @@
 #     guessing attacks. Ensuring that an administrator is involved in 
 #     unlocking locked accounts draws appropriate ...
 #
+#  CCI: CCI-000047
+#  NIST SP 800-53 :: AC-7 b
+#  NIST SP 800-53A :: AC-7.1 (iv)
+#
 ############################################################
 
 script_V38592-describe:
