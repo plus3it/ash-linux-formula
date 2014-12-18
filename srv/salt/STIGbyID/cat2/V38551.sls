@@ -9,6 +9,11 @@
 #     security architecture. The "ip6tables" service provides the system's 
 #     host-based firewalling capability for IPv6 and ICMPv6.
 #
+#  CCI: CCI-001098
+#  NIST SP 800-53 :: SC-7 b
+#  NIST SP 800-53A :: SC-7.1 (iv)
+#  NIST SP 800-53 Revision 4 :: SC-7 c
+#
 ############################################################
 
 script_V38551-describe:
