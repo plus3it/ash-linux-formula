@@ -9,6 +9,11 @@
 #     against attackers. Alternatively, systems whose ownership should not 
 #     be obvious should ...
 #
+#  CCI: CCI-000048
+#  NIST SP 800-53 :: AC-8 a
+#  NIST SP 800-53A :: AC-8.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AC-8 a
+#
 ############################################################
 
 script_V38615-describe:
