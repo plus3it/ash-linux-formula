@@ -9,6 +9,11 @@
 #     whether to use ssl or not. If not specified it will default to "no". 
 #     It should be set to "start_tls" rather than doing LDAP over SSL.
 #
+#  CCI: CCI-001453
+#  NIST SP 800-53 :: AC-17 (2)
+#  NIST SP 800-53A :: AC-17 (2).1
+#  NIST SP 800-53 Revision 4 :: AC-17 (2)
+#
 ############################################################
 
 
