@@ -9,6 +9,11 @@
 #     potentially introduce malicious code into kernel space. It is 
 #     important to have an audit trail of modules ...
 #
+#  CCI: CCI-000172
+#  NIST SP 800-53 :: AU-12 c
+#  NIST SP 800-53A :: AU-12.1 (iv)
+#  NIST SP 800-53 Revision 4 :: AU-12 c
+#
 ############################################################
 script_V38580-describe:
   cmd.script:
