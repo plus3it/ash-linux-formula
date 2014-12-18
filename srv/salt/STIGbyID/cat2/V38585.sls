@@ -8,6 +8,11 @@
 #     physical access cannot trivially alter important bootloader settings. 
 #     These include which kernel to use, and whether to enter ...
 #
+#  CCI: CCI-000213
+#  NIST SP 800-53 :: AC-3
+#  NIST SP 800-53A :: AC-3.1
+#  NIST SP 800-53 Revision 4 :: AC-3
+#
 ############################################################
 
 script_V38585-describe:
