@@ -55,6 +55,7 @@ script_V38518-describe:
     {% set logTarg = cfgLine.split() %}
     {% set logFile = logTarg.pop() %}
 
+# Ensure that logging-target's filename starts with "/"
     {% if logFile[0] == '/' %}
 notify_V38518-{{ logFacility }}:
   cmd.run:
