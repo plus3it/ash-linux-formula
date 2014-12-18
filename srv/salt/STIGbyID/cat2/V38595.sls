@@ -10,6 +10,11 @@
 #     cards leverage a PKI (public key infrastructure) in order to provide 
 #     and ...
 #
+#  CCI: CCI-000765
+#  NIST SP 800-53 :: IA-2 (1)
+#  NIST SP 800-53A :: IA-2 (1).1
+#  NIST SP 800-53 Revision 4 :: IA-2 (1)
+#
 ############################################################
 script_V38595-describe:
   cmd.script:
