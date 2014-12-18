@@ -54,12 +54,9 @@ cmd_V38652-NotImplemented:
 #           - data=ordered
 
 {% set activeMntStream = salt['mount.active']('extended=true') %}
-{% for key,data in activeMntStream.items() %}
-{% set mountPoint = key %}
-{% set fsType = activeMntStream['fstype'] %}
+{% for mountPoint in activeMntStream.keys() %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "{{ mountPoint }}"'
-
+ 
 {% endfor %}
-
