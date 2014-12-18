@@ -41,7 +41,8 @@ script_V38518-describe:
 	'local5', 
 	'local6', 
 	'local7',
-  ] %}
+  ]
+%}
 
 
 # Iterate the facility-list to see if there's any active
