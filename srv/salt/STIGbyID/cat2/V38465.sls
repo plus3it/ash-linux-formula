@@ -8,6 +8,9 @@
 #     processes (including privileged ones) or of the kernel itself at 
 #     runtime. Restrictive permissions are necessary to protect ...
 #
+#  CCI: <None specified in DISA documentation>
+#  NIST SP 800-53 :: <None specified in DISA documentation>
+#
 ############################################################
 
 script_V38465-describe:
