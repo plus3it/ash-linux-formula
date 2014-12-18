@@ -9,6 +9,11 @@
 #     discard log data, or which use external processes to transfer it and 
 #     reclaim space, "keep_logs" can be employed. 
 #
+#  CCI: CCI-000366
+#  NIST SP 800-53 :: CM-6 b
+#  NIST SP 800-53A :: CM-6.1 (iv)
+#  NIST SP 800-53 Revision 4 :: CM-6 b
+#
 ############################################################
 
 script_V38634-describe:
