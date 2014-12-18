@@ -7,6 +7,10 @@
 #     ciphers. Approved algorithms should impart some level of confidence 
 #     in their implementation. These are also required for compliance.
 #
+#  CCI: CCI-001144
+#  NIST SP 800-53 :: SC-13
+#  NIST SP 800-53A :: SC-13.1
+#
 ############################################################
 
 script_V38617-describe:
