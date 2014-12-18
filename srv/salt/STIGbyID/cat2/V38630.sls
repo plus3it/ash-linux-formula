@@ -10,6 +10,11 @@
 #     the idle delay. Applications requiring continuous, real-time screen 
 #     display (such as network management ...
 #
+#  CCI: CCI-000057
+#  NIST SP 800-53 :: AC-11 a
+#  NIST SP 800-53A :: AC-11.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AC-11 a
+#
 ############################################################
 
 script_V38630-describe:
