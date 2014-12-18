@@ -7,6 +7,11 @@
 #     service ensures the system is not acting as a client in a NIS or NIS+ 
 #     domain.
 #
+#  CCI: CCI-000382
+#  NIST SP 800-53 :: CM-7
+#  NIST SP 800-53A :: CM-7.1 (iii)
+#  NIST SP 800-53 Revision 4 :: CM-7 a
+#
 ############################################################
 
 script_V38604-describe:
