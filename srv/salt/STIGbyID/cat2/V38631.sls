@@ -9,6 +9,11 @@
 #     kernel can be written to disk, or that appropriate actions will be 
 #     taken if other obstacles exist.
 #
+#  CCI: CCI-000067
+#  NIST SP 800-53 :: AC-17 (1)
+#  NIST SP 800-53A :: AC-17 (1).1
+#  NIST SP 800-53 Revision 4 :: AC-17 (1)
+#
 ############################################################
 
 script_V38631-describe:
