@@ -10,6 +10,11 @@
 #     uncommon services are not running, and also prevents attacks against
 #     xinetd itself.
 #
+#  CCI: CCI-000382
+#  NIST SP 800-53 :: CM-7
+#  NIST SP 800-53 :: CM-7.1 (iii)
+#  NIST SP 800-53 :: CM-7 b
+#
 ############################################################
 
 script_V38582-describe:
