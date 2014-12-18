@@ -9,6 +9,10 @@
 #     for openldap versions 2.1 and up). These directives define the path 
 #     to the trust ...
 #
+#  CCI: CCI-000776
+#  NIST SP 800-53 :: IA-2 (9)
+#  NIST SP 800-53A :: IA-2 (9).1 (ii)
+#
 ############################################################
 
 script_V38626-describe:
