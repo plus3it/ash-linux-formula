@@ -8,6 +8,11 @@
 #     system configuration, user authentication, and other such 
 #     information. Log files should be protected from unauthorized access.
 #
+#  CCI: CCI-001314
+#  NIST 800-53 :: SI-11 c
+#  NIST 800-53A :: SI-11.1 (iv)
+#  NIST 800-53 Revision 4 :: SI-11 b
+#
 ############################################################
 
 script_V38519-describe:
