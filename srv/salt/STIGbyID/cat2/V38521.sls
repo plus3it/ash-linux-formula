@@ -10,6 +10,11 @@
 #     additional log source in the event a system is compromised and its 
 #     local logs are suspect. ...
 #
+#  CCI: CCI-000169
+#  NIST SP 800-53 :: AU-12 a
+#  NIST SP 800-53A :: AU-12.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AU-12 a
+#
 ############################################################
 
 script_V38521-describe:
