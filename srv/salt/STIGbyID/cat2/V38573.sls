@@ -7,15 +7,16 @@
 #     login attempts. Locking out user accounts after a number of incorrect 
 #     attempts prevents direct password guessing attacks.
 #
+#  CCI: CCI-000044
+#  NIST SP 800-53 :: AC-7 a
+#  NIST SP 800-53A :: AC-7.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AC-7 a
+#
 ############################################################
 
 script_V38573-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38573.sh
-
-#################################################
-## Consult cat3/V38482.sls for handling-method ##
-#################################################
 
 {% set pamFiles = [
 	'/etc/pam.d/system-auth-ac',
