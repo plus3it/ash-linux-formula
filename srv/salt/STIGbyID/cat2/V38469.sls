@@ -8,6 +8,11 @@
 #     services, and restrictive permissions are necessary to ensure 
 #     execution of these programs cannot be co-opted.
 #
+#  CCI: CCI-001499
+#  NIST SP 800-53 :: CM-5 (6)
+#  NIST SP 800-53A :: CM-5 (6).1
+#  NIST SP 800-53 Revision 4 :: CM-5 (6)
+#
 ############################################################
 
 script_V38469-describe:
