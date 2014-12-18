@@ -7,6 +7,11 @@
 #     Installing software updates is a fundamental mitigation against the
 #     exploitation of publicly-known vulnerabilities.
 #
+#  CCI: CCI-001233
+#  NIST SP 800-53 :: SI-2 (2)
+#  NIST SP 800-53A :: SI-2 (2).1 (ii)
+#  NIST SP 800-53 Revision 4 :: SI-2 (2)
+#
 ############################################################
 
 script_V38481-describe:
