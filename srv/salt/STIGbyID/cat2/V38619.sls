@@ -8,6 +8,11 @@
 #     requires passwords be encrypted in storage and not used in access 
 #     scripts.
 #
+#  CCI: CCI-000196
+#  NIST SP 800-53 :: IA-5 (1) ©
+#  NIST SP 800-53A :: IA-5 (1).1 (v)
+#  NIST SP 800-53 Revision 4 :: IA-5 (1)
+#
 ############################################################
 
 script_V38619-describe:
