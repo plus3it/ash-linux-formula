@@ -8,6 +8,11 @@
 #     a stronger hashing algorithm makes password cracking attacks more 
 #     difficult.
 #
+#  CCI: CCI-000803
+#  NIST SP 800-53 :: IA-7
+#  NIST SP 800-53A :: IA-7.1
+#  NIST SP 800-53 Revision 4 :: IA-7
+#
 ############################################################
 
 script_V38576-describe:
