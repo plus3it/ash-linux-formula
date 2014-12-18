@@ -9,6 +9,10 @@
 #     "ip6tables" service provides the system's host-based firewalling 
 #     capability for IPv6 and ICMPv6.
 #
+#  CCI: CCI-001100
+#  NIST SP 800-53 :: SC-7 (2)
+#  NIST SP 800-53 :: SC-7 (2).1 (ii)
+#
 ############################################################
 
 script_V38553-describe:
