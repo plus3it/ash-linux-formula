@@ -8,6 +8,11 @@
 #     cycling back to a favorite password after satisfying the password 
 #     reuse requirement.
 #
+# CCI: CCI-000198
+# NIST SP 800-53 :: IA-5 (1) (d)
+# NIST SP 800-53A :: IA-5 (1).1 (v)
+# NIST SP 800-53 Revision 4 :: IA-5 (1) (d)
+#
 ############################################################
 
 script_V38477-describe:
