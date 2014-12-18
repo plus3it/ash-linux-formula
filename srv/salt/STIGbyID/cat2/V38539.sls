@@ -8,6 +8,11 @@
 #     connection table with connections in the SYN_RCVD state. Syncookies 
 #     can be used to track a connection when a subsequent ...
 #
+#  CCI: CCI-001095
+#  NIST SP 800-53 :: SC-5 (2)
+#  NIST SP 800-53A :: SC-5 (2).1
+#  NIST SP 800-53 Revision 4 :: SC-5 (2)
+#
 ############################################################
 
 script_V38539-describe:
