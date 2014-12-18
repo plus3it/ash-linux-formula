@@ -20,7 +20,70 @@ script_V38623-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38623.sh
 
-cmd_V38623-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+{% set cfgFile = '/etc/rsyslog.conf' %}
 
+# Define list of syslog "facilities":
+#    These will be used to look for matching logging-targets
+#    within the /etc/rsyslog.conf file
+{% set facilityList = [
+	'auth', 
+	'authpriv', 
+	'cron', 
+	'daemon', 
+	'kern', 
+	'lpr', 
+	'mail', 
+	'mark', 
+	'news', 
+	'security', 
+	'syslog', 
+	'user', 
+	'uucp', 
+	'local0', 
+	'local1', 
+	'local2', 
+	'local3', 
+	'local4', 
+	'local5', 
+	'local6', 
+	'local7',
+  ]
+%}
+
+# Iterate the facility-list to see if there's any active
+# logging-targets defined
+{% for logFacility in facilityList %}
+  {% set srchPat = '^' + logFacility + '\.' %}
+  {% if salt['file.search'](cfgFile, srchPat) %}
+    {% set cfgStruct = salt['file.grep'](cfgFile, srchPat) %}
+    {% set cfgLine = cfgStruct['stdout'] %}
+    {% set logTarg = cfgLine.split() %}
+    {% set logFile = logTarg.pop() %}
+
+# Ensure that logging-target's filename starts with "/"
+    {% if logFile[0] == '/' %}
+notify_V38623-{{ logFacility }}:
+  cmd.run:
+  - name: 'echo "Setting owner of {{ logFile }} to root."'
+
+owner_V38623-{{ logFacility }}:
+  file.managed:
+  - name: '{{ logFile }}'
+  - mode: '0600'
+  - replace: false
+
+    {% else %}
+{% set logFile = logFile[1:] %}
+notify_V38623-{{ logFacility }}:
+  cmd.run:
+  - name: 'echo "Setting owner of {{ logFile }} to root."'
+
+owner_V38623-{{ logFacility }}:
+  file.managed:
+  - name: '{{ logFile }}'
+  - user: root
+  - replace: false
+
+    {% endif %}
+  {% endif %}
+{% endfor %}
