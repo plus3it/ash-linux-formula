@@ -7,6 +7,11 @@
 #     disabled unless required. Disabling TIPC protects the system against 
 #     exploitation of any flaws in its implementation.
 #
+#  CCI: CCI-000382
+#  NIST 800-53 :: CM-7
+#  NIST 800-53A :: CM-7.1 (iii)
+#  NIST 800-53 Revision 4 :: CM-7 b
+#
 ############################################################
 
 script_V38517-describe:
@@ -23,4 +28,3 @@ file_V38517-appendBlacklist:
   file.append:
   - name: /etc/modprobe.d/tipc.conf
   - text: 'install tipc /bin/false'
-
