@@ -7,6 +7,10 @@
 #     ensures the system is not acting as a tftp server, which does not 
 #     provide encryption or authentication.
 #
+#  CCI: CCI-001436
+#  NIST SP 800-53 :: AC-17 (8)
+#  NIST SP 800-53A :: AC-17 (8).1 (ii)
+#
 ############################################################
 
 script_V38609-describe:
