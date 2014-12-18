@@ -9,6 +9,11 @@
 #
 #     Support for vsftpd, gridftpd, proftpd and pure-ftpd
 #
+#  CCI: CCI-000048
+#  NIST SP 800-53 :: AC-8 a
+#  NIST SP 800-53A :: AC-8.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AC-8 a
+#
 ############################################################
 
 script_V38599-describe:
