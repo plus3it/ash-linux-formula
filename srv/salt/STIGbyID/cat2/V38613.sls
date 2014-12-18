@@ -8,6 +8,11 @@
 #     information about who ran privileged commands on the system and also 
 #     allows direct attack attempts on root's password.
 #
+#  CCI: CCI-000770
+#  NIST SP 800-53 :: IA-2 (5) (b)
+#  NIST SP 800-53A :: IA-2 (5).2 (ii)
+#  NIST SP 800-53 Revision 4 :: IA-2 (5)
+#
 ############################################################
 
 script_V38613-describe:
