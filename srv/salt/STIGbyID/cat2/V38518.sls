@@ -55,8 +55,31 @@ script_V38518-describe:
     {% set logTarg = cfgLine.split() %}
     {% set logFile = logTarg.pop() %}
 
+    {% if logFile[0] == '/' %}
 notify_V38518-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "Logging-target set to {{ logFile }} for ''{{ logFacility }}'' syslog facility"'
+  - name: 'echo "Setting owner of {{ logFile }} to root."'
+
+owner_V38518-{{ logFacility }}:
+  file.managed:
+  - name: '{{ logFile }}'
+  - user: root
+  - replace: false
+
+    {% else %}
+{% set logFile = logFile[1:] %}
+notify_V38518-{{ logFacility }}:
+  cmd.run:
+  - name: 'echo "Setting owner of {{ logFile }} to root."'
+
+owner_V38518-{{ logFacility }}:
+  file.managed:
+  - name: '{{ logFile }}'
+  - user: root
+  - replace: false
+
+    {% endif %}
   {% endif %}
 {% endfor %}
+
+
