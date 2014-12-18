@@ -7,6 +7,10 @@
 #     provides the system's host-based firewalling capability for IPv6 and 
 #     ICMPv6.
 #
+#  CCI: CCI-001118
+#  NIST SP 800-53 :: SC-7 (12)
+#  NIST SP 800-53A :: SC-7 (12).1
+#
 ############################################################
 
 script_V38549-describe:
