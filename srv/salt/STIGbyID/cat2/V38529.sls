@@ -8,6 +8,11 @@
 #     legitimate uses. It should be disabled unless it is absolutely 
 #     required.
 #
+#  CCI: CI-000366
+#  NIST SP 800-53 :: CM-6 b
+#  NIST SP 800-53A :: CM-6.1 (iv)
+#  NIST SP 800-53 Revision 4 :: CM-6 b
+#
 ############################################################
 
 script_V38529-describe:
