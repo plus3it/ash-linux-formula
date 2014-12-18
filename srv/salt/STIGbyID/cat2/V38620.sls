@@ -11,6 +11,10 @@
 #     authentication services such as Kerberos, but it is also important 
 #     for maintaining accurate logs and auditing possible security breaches.
 #
+#  CCI: CCI-000160
+#  NIST SP 800-53 :: AU-8 (1)
+#  NIST SP 800-53A :: AU-8 (1).1 (iii)
+#
 ############################################################
 
 script_V38620-describe:
