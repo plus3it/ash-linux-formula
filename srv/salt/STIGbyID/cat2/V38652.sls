@@ -53,10 +53,23 @@ cmd_V38652-NotImplemented:
 #           - barrier=1
 #           - data=ordered
 
+# Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
+
+# Iterate the structure by top-level key
 {% for mountPoint in activeMntStream.keys() %}
+
+# Declare key as var 
+{% set mountList = activeMntStream[mountPoint] %}
+
+# Pull fstype value from key's dictionary
+{% set fsType = mountList['fstype'] %}
+
+# Perform action if mount-type is an NFS-type
+{% if fsType == 'nfs' or fsType == 'nfs4' %}
+{% set optList = mountList['opts'] %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "{{ mountPoint }}"'
- 
+  - name: 'echo "{{ fsType }}"'
+{% endif %} 
 {% endfor %}
