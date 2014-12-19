@@ -60,11 +60,12 @@ remount_V38652-{{ mountPoint }}:
   - fstype: '{{ fsType }}'
   - opts: '{{ optString }}'
 
+    # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_V38652-{{ mountPoint }}-remount:
   cmd.run:
   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
-# Update fstab
+
 fstab_V38652-{{ mountPoint }}:
   module.run:
   - name: 'mount.set_fstab'
@@ -73,6 +74,7 @@ fstab_V38652-{{ mountPoint }}:
   - fstype: '{{ fsType }}'
   - opts: '{{ optString }}'
     {% endif %}
+
   {% endif %}
 {% endif %} 
 {% endfor %}
