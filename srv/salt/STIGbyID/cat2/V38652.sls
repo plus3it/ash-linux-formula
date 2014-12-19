@@ -43,7 +43,11 @@ notify_V38652-{{ mountPoint }}:
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option. Remounting..."'
+  - name: 'printf "NFS mount {{ mountPoint }} not mounted with ''nodev'' option:
+\n\t* Attempting remount...
+\n\t* Updating /etc/fstab as necessary
+\n"'
+
 
 # Remount with "nodev" option added/set
   {% set optString = 'nodev,' + ','.join(optList) %}
