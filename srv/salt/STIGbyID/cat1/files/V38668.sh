@@ -14,6 +14,14 @@
 #
 ###########################################################################
 
-echo "This item handled via salt.states.file.managed routine"
-echo "Salt-ID: file_V38668_managed"
-echo "Source-file: salt://STIGbyID/cat1/files/V38668.txt"
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38668"
+diag_out "  Pressing Ctrl-Alt-Delete should"
+diag_out "  not reboot the system."
+diag_out "----------------------------------"
+
