@@ -24,16 +24,16 @@ script_V38652-describe:
 # Iterate the structure by top-level key
 {% for mountPoint in activeMntStream.keys() %}
 
-# Unpack key's value out to searchable dictionary
+# Unpack key values out to searchable dictionary
 {% set mountList = activeMntStream[mountPoint] %}
 
-# Pull fstype value from key's dictionary
+# Pull fstype value from key-value dictionary
 {% set fsType = mountList['fstype'] %}
 
 # Perform action if mount-type is an NFS-type
 {% if fsType == 'nfs' or fsType == 'nfs4' %}
 
-# Grab the mount's option-list
+# Grab the option-list for mount
 {% set optList = mountList['opts'] %}
   # See if the mount has the 'nodev' option set
   {% if 'nodev' in optList %}
@@ -45,12 +45,19 @@ notify_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option. Remounting..."'
 
-# Remount with 'nodev' option added/set
-  {% set optString = ','.join(optList) + ',nodev' %}
+# Remount with "nodev" option added/set
+  {% set optString = 'nodev,' + ','.join(optList) %}
   {% set remountDev = mountList['device'] %}
 remount_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'mount -o remount,{{ optString }} {{ mountPoint }}'
+
+fstab_V38652-{{ mountPoint }}:
+  mount.set_fstab:
+  - name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - fstype: '{{ fsType }}'
+  - opts: '{{ optString }}'
 
   {% endif %}
 {% endif %} 
