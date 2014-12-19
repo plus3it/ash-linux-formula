@@ -43,19 +43,27 @@ notify_V38652-{{ mountPoint }}:
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'printf "NFS mount {{ mountPoint }} not mounted with ''nodev'' option:
-\n\t* Attempting remount...
-\n\t* Updating /etc/fstab as necessary
-\n"'
-
+  - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option:"'
 
 # Remount with "nodev" option added/set
   {% set optString = 'nodev,' + ','.join(optList) %}
   {% set remountDev = mountList['device'] %}
-remount_V38652-{{ mountPoint }}:
+notify_V38652-{{ mountPoint }}-remount:
   cmd.run:
-  - name: 'mount -o remount,{{ optString }} {{ mountPoint }}'
+  - name: 'printf "\t* Attempting remount...\n"'
 
+remount_V38652-{{ mountPoint }}:
+  module.run:
+  - name: 'mount.remount'
+  - m_name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - fstype: '{{ fsType }}'
+  - opts: '{{ optString }}'
+
+    {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+notify_V38652-{{ mountPoint }}-remount:
+  cmd.run:
+  - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 # Update fstab
 fstab_V38652-{{ mountPoint }}:
   module.run:
@@ -64,7 +72,7 @@ fstab_V38652-{{ mountPoint }}:
   - device: '{{ remountDev }}'
   - fstype: '{{ fsType }}'
   - opts: '{{ optString }}'
-
+    {% endif %}
   {% endif %}
 {% endif %} 
 {% endfor %}
