@@ -75,6 +75,16 @@ notify_V38652-{{ mountPoint }}:
 notify_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "** FINDING: NFS mount {{ mountPoint }} not mounted with ''nodev'' option"'
+
+########################################################################
+# To fix, use salt['mount.remount'] ?
+#   (name, device, mkmnt=False, fstype='', opts='defaults', user=None)
+# Append/prepend 'nodev' to mount options list:
+# * convert "optList" list to comma-delimited string
+# * appehd ",nodev" to string
+# * pass as "- opts:" argument of mount.remount
+########################################################################
+
   {% endif %}
 {% endif %} 
 {% endfor %}
