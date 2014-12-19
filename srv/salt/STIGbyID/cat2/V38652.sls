@@ -52,9 +52,11 @@ remount_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'mount -o remount,{{ optString }} {{ mountPoint }}'
 
+# Update fstab
 fstab_V38652-{{ mountPoint }}:
-  mount.set_fstab:
-  - name: '{{ mountPoint }}'
+  module.run:
+  - name: 'mount.set_fstab'
+  - m_name: '{{ mountPoint }}'
   - device: '{{ remountDev }}'
   - fstype: '{{ fsType }}'
   - opts: '{{ optString }}'
