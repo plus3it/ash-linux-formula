@@ -18,37 +18,6 @@ script_V38652-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38652.sh
 
-# From `salt-call --no-color --local mount.active extended=true`
-#   /var/log/audit:  <---------------------------- Mount Point
-#       ----------
-#       alt_device:  <---------------------------- Device-node
-#           /dev/mapper/VolGroup00-auditVol
-#       device:  <-------------------------------- Device-node
-#           /dev/mapper/VolGroup00-auditVol
-#       device_uuid:  <--------------------------- Device UUID
-#           48431692-f9ae-4071-bf0e-c3ee42991027
-#       fstype:  <-------------------------------- Filesystem Type
-#           ext4
-#       major:  <--------------------------------- Device Major
-#           253
-#       minor:  <--------------------------------- Device Minor
-#           2
-#       mountid:  <------------------------------- Mount ID
-#           26
-#       opts:  <---------------------------------- Default Mount Options
-#           - rw
-#           - relatime
-#       parentid:  <------------------------------ Mount ID of parent filesystem
-#           25
-#       root:  <---------------------------------- Device-root
-#           /
-#       superopts:  <----------------------------- 
-#           - rw
-#           - seclabel
-#           - acl
-#           - barrier=1
-#           - data=ordered
-
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
 
@@ -74,16 +43,14 @@ notify_V38652-{{ mountPoint }}:
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "** FINDING: NFS mount {{ mountPoint }} not mounted with ''nodev'' option"'
+  - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option. Remounting..."'
 
-########################################################################
-# To fix, use salt['mount.remount'] ?
-#   (name, device, mkmnt=False, fstype='', opts='defaults', user=None)
-# Append/prepend 'nodev' to mount options list:
-# * convert "optList" list to comma-delimited string
-# * appehd ",nodev" to string
-# * pass as "- opts:" argument of mount.remount
-########################################################################
+# Remount with 'nodev' option added/set
+  {% set optString = ','.join(optList) + ',nodev' %}
+  {% set remountDev = mountList['device'] %}
+remount_V38652-{{ mountPoint }}:
+  cmd.run:
+  - name: 'mount -o remount,{{ optString }} {{ mountPoint }}'
 
   {% endif %}
 {% endif %} 
