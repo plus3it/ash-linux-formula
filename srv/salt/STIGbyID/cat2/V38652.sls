@@ -18,10 +18,6 @@ script_V38652-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38652.sh
 
-cmd_V38652-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
-
 # From `salt-call --no-color --local mount.active extended=true`
 #   /var/log/audit:  <---------------------------- Mount Point
 #       ----------
@@ -59,7 +55,7 @@ cmd_V38652-NotImplemented:
 # Iterate the structure by top-level key
 {% for mountPoint in activeMntStream.keys() %}
 
-# Declare key as var 
+# Unpack key's value out to searchable dictionary
 {% set mountList = activeMntStream[mountPoint] %}
 
 # Pull fstype value from key's dictionary
@@ -67,9 +63,18 @@ cmd_V38652-NotImplemented:
 
 # Perform action if mount-type is an NFS-type
 {% if fsType == 'nfs' or fsType == 'nfs4' %}
+
+# Grab the mount's option-list
 {% set optList = mountList['opts'] %}
+  # See if the mount has the 'nodev' option set
+  {% if 'nodev' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "{{ fsType }}"'
+  - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nodev'' option"'
+  {% else %}
+notify_V38652-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "** FINDING: NFS mount {{ mountPoint }} not mounted with ''nodev'' option"'
+  {% endif %}
 {% endif %} 
 {% endfor %}
