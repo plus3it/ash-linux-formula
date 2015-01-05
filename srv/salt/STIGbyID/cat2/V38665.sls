@@ -9,6 +9,11 @@
 #     incorrect could allow an unauthorized user to gain privileges that 
 #     they should not have. The group-ownership set by the vendor should ...
 #
+#  CCI: CCI-001495
+#  NIST SP 800-53 :: AU-9
+#  NIST SP 800-53A :: AU-9.1
+#  NIST SP 800-53 Revision 4 :: AU-9
+#
 ############################################################
 
 script_V38665-describe:
