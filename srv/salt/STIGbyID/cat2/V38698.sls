@@ -10,6 +10,10 @@
 #     install itself for periodic execution. Periodically running AIDE may 
 #     reveal unexpected changes in installed files.
 #
+#  CCI: CCI-001069
+#  NIST SP 800-53 :: RA-5 (7)
+#  NIST SP 800-53A :: RA-5 (7).1 (ii)
+#
 ############################################################
 
 script_V38698-describe:
