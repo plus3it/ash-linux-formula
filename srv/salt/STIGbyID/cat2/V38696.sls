@@ -10,6 +10,11 @@
 #     Periodically running AIDE may reveal unexpected changes in installed 
 #     files.
 #
+#  CCI: CCI-000416
+#  NIST SP 800-53 :: CM-8 (3) (a)
+#  NIST SP 800-53A :: CM-8 (3).1 (ii)
+#  NIST SP 800-53 Revision 4 :: CM-8 (3) (a)
+#
 ############################################################
 
 script_V38696-describe:
