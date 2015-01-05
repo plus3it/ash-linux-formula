@@ -8,6 +8,11 @@
 #     ensures password entry will be required in order to access the 
 #     system, preventing access by passersby.
 #
+#  CCI: CCI-000057
+#  NIST SP 800-53 :: AC-11 a
+#  NIST SP 800-53A :: AC-11.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AC-11 a
+#
 ############################################################
 
 script_V38638.g-describe:
