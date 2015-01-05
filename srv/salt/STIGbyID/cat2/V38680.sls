@@ -8,6 +8,11 @@
 #     account is typically aliased to the administrators of the system, who 
 #     can take appropriate action.
 #
+#  CCI: CCI-000139
+#  NIST SP 800-53 :: AU-5 a
+#  NIST SP 800-53A :: AU-5.1 (ii)
+#  NIST SP 800-53 Revision 4 :: AU-5 a
+#
 ############################################################
 
 script_V38680-describe:
