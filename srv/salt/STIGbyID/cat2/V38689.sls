@@ -8,6 +8,21 @@
 #     message reinforces policy awareness during the logon process and 
 #     facilitates possible legal action against attackers.
 #
+#  CCI: 
+#       CCI-001384
+#       CCI-001385
+#       CCI-001386
+#       CCI-001387
+#       CCI-001388
+#  NIST SP 800-53 :: AC-8 c
+#  NIST SP 800-53A :: AC-8.2 (i)
+#  NIST SP 800-53 Revision 4 ::
+#       AC-8 c 1
+#       AC-8.2 (ii),AC-8 c 2
+#       AC-8.2 (ii),AC-8 c 2
+#       AC-8.2 (ii),AC-8 c 2
+#       AC-8.2 (iii),AC-8 c 3
+#
 ############################################################
 
 script_V38689-describe:
