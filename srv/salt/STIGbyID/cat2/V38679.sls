@@ -33,3 +33,40 @@ notify_V38679-{{ ipv4If }}:
   - name: 'echo "Checking if interface ''{{ ipv4If }}'' is configured for DHCP"'
 {% endif %}
 {% endfor %}
+
+#######################################################################
+# Investigate use of "network.interfaces" Salt-module:
+# local:
+#     ----------
+#     eth0:
+#         ----------
+#         hwaddr:
+#             0a:db:89:de:10:94
+#         inet:
+#             |_
+#               ----------
+#               address:
+#                   172.31.2.104
+#               broadcast:
+#                   172.31.15.255
+#               label:
+#                   eth0
+#               netmask:
+#                   255.255.240.0
+#             |_
+#               ----------
+#               address:
+#                   192.168.22.100
+#               broadcast:
+#                   192.168.22.255
+#               label:
+#                   eth0:100
+#               netmask:
+#                   255.255.255.0
+#         up:
+#             True
+# 
+# Grab the if->inet->label value, then look in 
+# /etc/sysconfig/network-scripts for config files using DHCP on active 
+# interfaces?
+#######################################################################
