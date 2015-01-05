@@ -12,3 +12,14 @@
 #
 ############################################################
 
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-38633"
+diag_out "  The system must set a maximum"
+diag_out "  audit log file-size. The minimum"
+diag_out "  recommended value is '6'"
+diag_out "----------------------------------"
