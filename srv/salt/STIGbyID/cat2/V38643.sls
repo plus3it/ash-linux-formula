@@ -4,9 +4,16 @@
 # Finding Level:	Medium
 #
 #     There must be no world-writable files on the system. Data in 
-#     world-writable files can be modified by any user on the system. In 
-#     almost all circumstances, files can be configured using a combination 
-#     of user and group permissions to support whatever ...
+#     world-writable files can be modified by any user on the system. 
+#     In almost all circumstances, files can be configured using a 
+#     combination of user and group permissions to support whatever 
+#     legitimate access is needed without the risk caused by 
+#     world-writable files. 
+#
+#  CCI: CCI-000366
+#  NIST SP 800-53 :: CM-6 b
+#  NIST SP 800-53A :: CM-6.1 (iv)
+#  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
 
