@@ -47,7 +47,7 @@ notify_V38652-{{ mountPoint }}:
 
 # Remount with "nodev" option added/set
   {% set optString = 'nodev,' + ','.join(optList) %}
-  {% set remountDev = mountList['device'] %}
+  {% set remountDev = mountList['alt_device'] %}
 notify_V38652-{{ mountPoint }}-remount:
   cmd.run:
   - name: 'printf "\t* Attempting remount...\n"'
@@ -62,7 +62,7 @@ remount_V38652-{{ mountPoint }}:
 
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
-notify_V38652-{{ mountPoint }}-remount:
+notify_V38652-{{ mountPoint }}-fixFstab:
   cmd.run:
   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
