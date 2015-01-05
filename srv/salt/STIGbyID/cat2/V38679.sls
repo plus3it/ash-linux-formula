@@ -23,3 +23,13 @@ cmd_V38679-NotImplemented:
   cmd.run:
   - name: 'echo "NOT YET IMPLEMENTED"'
 
+{% set netCfgRoot = '/etc/sysconfig/network-scripts/ifcfg-' %}
+
+{% set netIfs = salt['grains.item']('ip4_interfaces') %}
+{% for ipv4If in netIfs['ip4_interfaces'] %}
+{% if not ipv4If == 'lo' %}
+notify_V38679-{{ ipv4If }}:
+  cmd.run:
+  - name: 'echo "Checking if interface ''{{ ipv4If }}'' is configured for DHCP"'
+{% endif %}
+{% endfor %}
