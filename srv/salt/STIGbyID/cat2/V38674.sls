@@ -6,6 +6,10 @@
 #     X Windows must not be enabled unless required. Unnecessary services 
 #     should be disabled to decrease the attack surface of the system.
 #
+#  CCI: CCI-001436
+#  NIST SP 800-53 :: AC-17 (8)
+#  NIST SP 800-53A :: AC-17 (8).1 (ii)
+#
 ############################################################
 
 script_V38674-describe:
