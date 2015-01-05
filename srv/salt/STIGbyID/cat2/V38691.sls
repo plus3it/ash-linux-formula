@@ -8,6 +8,10 @@
 #     devices, which entails some security risk. Nevertheless, variation in 
 #     this risk decision may be expected ...
 #
+#  CCI: CCI-000085
+#  NIST SP 800-53 :: AC-19 c
+#  NIST SP 800-53A :: AC-19.1 (iii)
+#
 ############################################################
 
 script_V38691-describe:
