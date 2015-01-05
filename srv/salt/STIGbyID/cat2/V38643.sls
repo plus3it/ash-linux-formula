@@ -14,7 +14,28 @@ script_V38643-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38643.sh
 
-cmd_V38643-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+# Ingest list of mounted filesystesm into a searchable-structure
+{% set activeMntStream = salt['mount.active']('extended=true') %}
 
+# Iterate the structure by top-level key
+{% for mountPoint in activeMntStream.keys() %}
+
+# Unpack key values out to searchable dictionary
+{% set mountList = activeMntStream[mountPoint] %}
+
+# Pull fstype value from key-value dictionary
+{% set fsType = mountList['fstype'] %}
+
+# Perform action if mount-type is an EXT-type
+{% if fsType == 'ext2' or fsType == 'ext3' or fsType == 'ext4' %}
+notify_V38643-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "Checking ''{{ mountPoint }}'' for world-writable files"'
+
+strip_V38643-{{ mountPoint }}:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38643-helper.sh
+  - args: {{ mountPoint }}
+
+{% endif %} 
+{% endfor %}
