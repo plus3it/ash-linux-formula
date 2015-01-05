@@ -9,7 +9,7 @@
 #     installation ensures the provenance of the software and protects 
 #     against malicious tampering.
 #
-#  CI: CCI-000663
+#  CCI: CCI-000663
 #  NIST SP 800-53 :: SA-7
 #  NIST SP 800-53A :: SA-7.1 (ii)
 #
