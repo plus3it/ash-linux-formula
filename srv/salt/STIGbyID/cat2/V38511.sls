@@ -8,7 +8,7 @@
 #     network interface to another. The ability to forward packets between 
 #     two networks is only appropriate for routers.
 #
-#  CCI-000366
+#  CCI: CCI-000366
 #  NIST 800-53 :: CM-6 b
 #  NIST 800-53A :: CM-6.1 (iv)
 #  NIST 800-53 Revision 4 :: CM-6 b
