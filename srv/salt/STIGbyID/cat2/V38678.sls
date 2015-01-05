@@ -9,6 +9,10 @@
 #     disk space problem may allow them to take corrective action prior to 
 #     any disruption.
 #
+#  CCI: CCI-000143
+#  NIST SP 800-53 :: AU-5 (1)
+#  NIST SP 800-53A :: AU-5 (1).1 (ii)
+#
 ############################################################
 
 script_V38678-describe:
