@@ -22,11 +22,6 @@ script_V38633-describe:
 {% set auditConf = '/etc/audit/auditd.conf' %}
 {% set logParm = 'max_log_file' %}
 
-{% set logValStr = salt['file.search'](auditConf, '^' + logParm + ' = ') %}
-test:
-  cmd.run:
-  - name: 'echo "logstring: {{ logValStr }}"'
-
 {% if salt['file.search'](auditConf, '^' + logParm + ' = ') %}
   {% if salt['file.search'](auditConf, '^' + logParm + ' = 6') %}
 notify_V38633-Set:
