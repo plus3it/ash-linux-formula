@@ -15,7 +15,49 @@ script_V38678-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38678.sh
 
-cmd_V38678-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+{% set auditConf = '/etc/audit/auditd.conf' %}
+{% set logParm = 'space_left' %}
+{% set auditDir = '/var/log/audit' %}
+{% set pctFree = '0.15'|float %}
 
+# Ingest statvfs data for auditDir into unpackable structure
+{% set auditInfoStream = salt['status.diskusage'](auditDir) %}
+
+# Unpack key-values out to searchable dictionary
+{% set auditDict = auditInfoStream[auditDir] %}
+
+# Get max-size of auditDir
+{% set auditDiskTotBlocks = auditDict['total'] %}
+
+# Compute MB to reserve
+{% set keepFreeMB = ((auditDiskTotBlocks * pctFree) / 1024 / 1024)|int %}
+{% set keepFreeVar = keepFreeMB|string %}
+
+
+{% if salt['file.search'](auditConf, '^' + logParm + ' = ') %}
+  {% if salt['file.search'](auditConf, '^' + logParm + ' = ' + keepFreeVar) %}
+notify_V38678-Set:
+  cmd.run:
+  - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already set to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+  {% else %}
+notify_V38678-Set:
+  cmd.run:
+  - name: 'echo "Changing ''{{ logParm }}'' value in ''{{ auditConf }}'' to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+
+file_V38678-setVal:
+  file.replace:
+  - name: '{{ auditConf }}'
+  - pattern: '^{{ logParm }} = .*'
+  - repl: '{{ logParm }} = {{ keepFreeVar }}'
+  {% endif %}
+
+{% else %}
+notify_V38678-Set:
+  cmd.run:
+  - name: 'echo "''{{ logParm }}'' not set in ''{{ auditConf }}''. Setting to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+
+file_V38678-setVal:
+  file.append:
+  - name: '{{ auditConf }}'
+  - text: '{{ logParm }} = {{ keepFreeVar }}'
+{% endif %}
