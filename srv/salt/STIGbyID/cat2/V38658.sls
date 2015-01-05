@@ -7,6 +7,11 @@
 #     iterations. Preventing reuse of previous passwords helps ensure that 
 #     a compromised password is not reused by a user.
 #
+#  CCI: CCI-000200
+#  NIST SP 800-53 :: IA-5 (1) (e)
+#  NIST SP 800-53A :: IA-5 (1).1 (v)
+#  NIST SP 800-53 Revision 4 :: IA-5 (1)
+#
 ############################################################
 
 script_V38658-describe:
