@@ -9,6 +9,11 @@
 #     table are examined for a match. Setting the default policy to "DROP" 
 #     implements proper design for a firewall, ...
 #
+#  CCI: CCI-001109
+#  NIST SP 800-53 :: SC-7 (5)
+#  NIST SP 800-53A :: SC-7 (5).1 (i) (ii)
+#  NIST SP 800-53 Revision 4 :: SC-7 (5)
+#
 ############################################################
 
 script_V38686-describe:
