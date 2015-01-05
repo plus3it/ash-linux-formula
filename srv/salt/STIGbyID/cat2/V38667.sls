@@ -10,6 +10,10 @@
 #     provide network awareness of system, which may not otherwise exist in 
 #     an organization's systems management regime. 
 #
+#  CCI: CCI-001263
+#  NIST SP 800-53 :: SI-4 (5)
+#  NIST SP 800-53A :: SI-4 (5).1 (ii)
+#
 ############################################################################
 
 script_V38667-describe:
