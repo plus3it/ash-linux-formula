@@ -7,6 +7,11 @@
 #     developed with security in mind and its design prevents it from being 
 #     effectively contained by SELinux. Postfix should be used instead.
 #
+#  CCI: CCI-000366
+#  NIST SP 800-53 :: CM-6 b
+#  NIST SP 800-53A :: CM-6.1 (iv)
+#  NIST SP 800-53 Revision 4 :: CM-6 b
+#
 ############################################################
 
 script_V38671-describe:
