@@ -8,6 +8,10 @@
 #     the kernel module provides an additional safeguard against its 
 #     activation.
 #
+#  CCI: CCI-000085
+#  NIST SP 800-53 :: AC-19 c
+#  NIST SP 800-53A :: AC-19.1 (iii)
+#
 ############################################################
 
 script_V38682-describe:
