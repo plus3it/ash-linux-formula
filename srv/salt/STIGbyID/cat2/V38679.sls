@@ -26,19 +26,22 @@ script_V38679-describe:
 
 {% for netIfBase in netIfStream.keys() %}
   {% if not netIfBase == 'lo' %}
-test_IfPrint-{{ netIfBase }}:
-  cmd.run:
-  - name: 'echo "Base Interface Name: {{ netIfBase }}"'
-
     {% set inetList = netIfBase['inet'] %}
     {% set ifDict = netIfStream[netIfBase] %}
     {% set ifInetList = ifDict['inet'] %}
 
     {% for listElem in ifInetList %}
-     {% set ifLabel = listElem['label'] %}
-test-printit-{{ ifLabel }}:
+      {% set ifLabel = listElem['label'] %}
+      {% if salt['file.file_exists'](netCfgRoot + ifLabel) %}
+notify_V38679-{{ ifLabel }}:
   cmd.run:
-  - name: 'echo "{{ ifLabel }}"'
+  - name: 'echo "Checking {{ netCfgRoot }}{{ ifLabel }} for DCHP use."'
+        {% if salt['file.search'](netCfgRoot + ifLabel, 'dhcp') %}
+notify_V38679-{{ ifLabel }}_hasDHCP:
+  cmd.run:
+  - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP" ; exit 1'
+        {% endif %}
+      {% endif %}
     {% endfor %}
 
   {% endif %}
