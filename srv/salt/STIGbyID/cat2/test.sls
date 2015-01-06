@@ -30,28 +30,16 @@ test_IfPrint-{{ netIfBase }}:
   cmd.run:
   - name: 'echo "Base Interface Name: {{ netIfBase }}"'
 
-  {% set inetList = netIfBase['inet'] %}
-  {% set ifDict = netIfStream['netIfBase'] %}
+    {% set inetList = netIfBase['inet'] %}
+    {% set ifDict = netIfStream[netIfBase] %}
+    {% set ifInetList = ifDict['inet'] %}
+
+    {% for listElem in ifInetList %}
+     {% set ifLabel = listElem['label'] %}
+test-printit-{{ ifLabel }}:
+  cmd.run:
+  - name: 'echo "{{ ifLabel }}"'
+    {% endfor %}
 
   {% endif %}
 {% endfor %}
-
-
-{% set eth0Dict = netIfStream['eth0'] %}
-
-{% set eth0InetList = eth0Dict['inet'] %}
-
-{% for listElem in eth0InetList %}
-{% set eth0Label = listElem['label'] %}
-test-printit-{{ eth0Label }}:
-  cmd.run:
-  - name: 'echo "{{ eth0Label }}"'
-{% endfor %}
-
-
-#######################################################################
-# Investigate use of "network.interfaces" Salt-module:
-#
-# data = {'local': {'lo': {'hwaddr': '00:00:00:00:00:00', 'up': True, 'inet': [{'broadcast': None, 'netmask': '255.0.0.0', 'label': 'lo', 'address': '127.0.0.1'}]}, 'eth0': {'hwaddr': '0a:db:89:de:10:94', 'up': True, 'inet': [{'broadcast': '172.31.15.255', 'netmask': '255.255.240.0', 'label': 'eth0', 'address': '172.31.2.104'}, {'broadcast': '192.168.22.255', 'netmask': '255.255.255.0', 'label': 'eth0:100', 'address': '192.168.22.100'}]}}}
-#
-#######################################################################
