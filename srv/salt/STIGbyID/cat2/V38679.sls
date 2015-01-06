@@ -19,54 +19,27 @@ script_V38679-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38679.sh
 
-cmd_V38679-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
-
 {% set netCfgRoot = '/etc/sysconfig/network-scripts/ifcfg-' %}
 
-{% set netIfs = salt['grains.item']('ip4_interfaces') %}
-{% for ipv4If in netIfs['ip4_interfaces'] %}
-{% if not ipv4If == 'lo' %}
-notify_V38679-{{ ipv4If }}:
-  cmd.run:
-  - name: 'echo "Checking if interface ''{{ ipv4If }}'' is configured for DHCP"'
-{% endif %}
-{% endfor %}
+# Ingest list of mounted filesystesm into a searchable-structure
+{% set netIfStream = salt['network.interfaces']() %}
 
-#######################################################################
-# Investigate use of "network.interfaces" Salt-module:
-# local:
-#     ----------
-#     eth0:
-#         ----------
-#         hwaddr:
-#             0a:db:89:de:10:94
-#         inet:
-#             |_
-#               ----------
-#               address:
-#                   172.31.2.104
-#               broadcast:
-#                   172.31.15.255
-#               label:
-#                   eth0
-#               netmask:
-#                   255.255.240.0
-#             |_
-#               ----------
-#               address:
-#                   192.168.22.100
-#               broadcast:
-#                   192.168.22.255
-#               label:
-#                   eth0:100
-#               netmask:
-#                   255.255.255.0
-#         up:
-#             True
-# 
-# Grab the if->inet->label value, then look in 
-# /etc/sysconfig/network-scripts for config files using DHCP on active 
-# interfaces?
-#######################################################################
+{% for netIfBase in netIfStream.keys() %}
+  {% if not netIfBase == 'lo' %}
+test_IfPrint-{{ netIfBase }}:
+  cmd.run:
+  - name: 'echo "Base Interface Name: {{ netIfBase }}"'
+
+    {% set inetList = netIfBase['inet'] %}
+    {% set ifDict = netIfStream[netIfBase] %}
+    {% set ifInetList = ifDict['inet'] %}
+
+    {% for listElem in ifInetList %}
+     {% set ifLabel = listElem['label'] %}
+test-printit-{{ ifLabel }}:
+  cmd.run:
+  - name: 'echo "{{ ifLabel }}"'
+    {% endfor %}
+
+  {% endif %}
+{% endfor %}
