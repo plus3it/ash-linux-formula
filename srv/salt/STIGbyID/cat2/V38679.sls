@@ -21,25 +21,39 @@ script_V38679-describe:
 
 {% set netCfgRoot = '/etc/sysconfig/network-scripts/ifcfg-' %}
 
+#####################################################################
+# The following logic is probably overly-exhaustive in identifying
+# interfaces that might be using DHCP. However, it should handle
+# Hosts that use IP aliasing, interface-bonding and/or tagged VLANs
+#####################################################################
+
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set netIfStream = salt['network.interfaces']() %}
 
+# Start digging down into the structure to get our network-labels
 {% for netIfBase in netIfStream.keys() %}
   {% if not netIfBase == 'lo' %}
     {% set inetList = netIfBase['inet'] %}
     {% set ifDict = netIfStream[netIfBase] %}
     {% set ifInetList = ifDict['inet'] %}
 
+    # Iterate our list of labels
     {% for listElem in ifInetList %}
       {% set ifLabel = listElem['label'] %}
+      # Check if there's a "network-scripts" config file
       {% if salt['file.file_exists'](netCfgRoot + ifLabel) %}
 notify_V38679-{{ ifLabel }}:
   cmd.run:
   - name: 'echo "Checking {{ netCfgRoot }}{{ ifLabel }} for DCHP use."'
+        # Check if boot-time interface configuration uses DHCP and alert
         {% if salt['file.search'](netCfgRoot + ifLabel, 'dhcp') %}
-notify_V38679-{{ ifLabel }}_hasDHCP:
+notify_V38679-{{ ifLabel }}_DHCP:
   cmd.run:
   - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP" ; exit 1'
+        {% else %}
+notify_V38679-{{ ifLabel }}_DHCP:
+  cmd.run:
+  - name: 'echo "Info: Interface ''{{ ifLabel }}'' does not use DHCP"'
         {% endif %}
       {% endif %}
     {% endfor %}
