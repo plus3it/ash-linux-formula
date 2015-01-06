@@ -36,3 +36,64 @@ notify_V38657-noCIFS:
 {% endif %}
 
 # Will want to check /etc/mtab and autofs configs, as well...
+
+# Ingest list of mounted filesystesm into a searchable-structure
+{% set activeMntStream = salt['mount.active']('extended=true') %}
+
+# Iterate the structure by top-level key
+{% for mountPoint in activeMntStream.keys() %}
+
+# Unpack key values out to searchable dictionary
+{% set mountList = activeMntStream[mountPoint] %}
+
+# Pull fstype value from key-value dictionary
+{% set fsType = mountList['fstype'] %}
+
+# Perform action if mount-type is an SMB/CIFS-type
+{% if fsType == 'smb' or fsType == 'cifs' %}
+
+# Grab the option-list for mount
+{% set optList = mountList['opts'] %}
+  # See if the mount has the 'sec=krb5i' option set
+  {% if 'sec=krb5i' in optList %}
+notify_V38652-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''sec=krb5i'' option"'
+  {% else %}
+notify_V38652-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "CIFS mount {{ mountPoint }} not mounted with ''sec=krb5i'' option:"'
+
+## # Remount with "sec=krb5i" option added/set
+##   {% set optString = 'sec=krb5i,' + ','.join(optList) %}
+##   {% set remountDev = mountList['alt_device'] %}
+## notify_V38652-{{ mountPoint }}-remount:
+##   cmd.run:
+##   - name: 'printf "\t* Attempting remount...\n"'
+
+## remount_V38652-{{ mountPoint }}:
+##   module.run:
+##   - name: 'mount.remount'
+##   - m_name: '{{ mountPoint }}'
+##   - device: '{{ remountDev }}'
+##   - fstype: '{{ fsType }}'
+##   - opts: '{{ optString }}'
+
+##     # Update fstab (if necessary)
+##     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+## notify_V38652-{{ mountPoint }}-fixFstab:
+##   cmd.run:
+##   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
+## 
+## fstab_V38652-{{ mountPoint }}:
+##   module.run:
+##   - name: 'mount.set_fstab'
+##   - m_name: '{{ mountPoint }}'
+##   - device: '{{ remountDev }}'
+##   - fstype: '{{ fsType }}'
+##   - opts: '{{ optString }}'
+##     {% endif %}
+
+  {% endif %}
+{% endif %} 
+{% endfor %}
