@@ -20,12 +20,6 @@ script_V38657-describe:
 
 # Need to ID fstab-managed CIFS mounts then examine any hits
 {% if salt['file.search']('/etc/fstab', 'cifs') %}
-  # If any CIFS mounts are found, need to figure out a way to ID 
-  # which are and which are not using secure mount options without 
-  # getting any false hits or misses (especially when multiple CIFS 
-  # mounts are present in fstab.  Possibly leverage iterate list 
-  # produced by mount.fstab and verify mount-options via 
-  # mount.mounted?
 notify_V38657-notImp:
   cmd.run:
   - name: 'echo "NOT YET IMPLEMENTED"'
@@ -54,15 +48,27 @@ notify_V38657-noCIFS:
 
 # Grab the option-list for mount
 {% set optList = mountList['opts'] %}
-  # See if the mount has the 'sec=krb5i' option set
-  {% if 'sec=krb5i' in optList %}
+  # See if the mount has a client-signing option set
+  {% if 'sec=krb5i' in optList or 'sec=ntlmv2i' in optList or 'sec=ntlmsspi' in optList %}
+    # See if using Kerberos v5 client-signing (PASSING CONDITION)
+    {% if 'sec=krb5i' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''sec=krb5i'' option"'
+  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''krb5i'' client-signing option"'
+    # See if using NTLM v2 client-signing (PASSING CONDITION)
+    {% elif 'sec=ntlmv2i' in optList %}
+notify_V38652-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmv2i'' client-signing option"'
+    {% elif 'sec=ntlmsspi' in optList %}
+notify_V38652-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmsspi'' client-signing option"'
+    {% endif %}
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "CIFS mount {{ mountPoint }} not mounted with ''sec=krb5i'' option:"'
+  - name: 'echo "CIFS mount {{ mountPoint }} not mounted with client-signing options:"'
 
 ## # Remount with "sec=krb5i" option added/set
 ##   {% set optString = 'sec=krb5i,' + ','.join(optList) %}
