@@ -18,19 +18,6 @@ script_V38657-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38657.sh
 
-# Need to ID fstab-managed CIFS mounts then examine any hits
-{% if salt['file.search']('/etc/fstab', 'cifs') %}
-notify_V38657-notImp:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
-{% else %}
-notify_V38657-noCIFS:
-  cmd.run:
-  - name: 'echo "No relevant finding: no CIFS mounts managed within /etc/fstab"'
-{% endif %}
-
-# Will want to check /etc/mtab and autofs configs, as well...
-
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
 
@@ -46,37 +33,57 @@ notify_V38657-noCIFS:
 # Perform action if mount-type is an SMB/CIFS-type
 {% if fsType == 'smb' or fsType == 'cifs' %}
 
-# Grab the option-list for mount
+# Grab the option-list for targeted-mount(s)
 {% set optList = mountList['opts'] %}
+
   # See if the mount has a client-signing option set
   {% if 'sec=krb5i' in optList or 'sec=ntlmv2i' in optList or 'sec=ntlmsspi' in optList %}
+
     # See if using Kerberos v5 client-signing (PASSING CONDITION)
     {% if 'sec=krb5i' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''krb5i'' client-signing option"'
+
     # See if using NTLM v2 client-signing (PASSING CONDITION)
     {% elif 'sec=ntlmv2i' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmv2i'' client-signing option"'
+
+    # See if using NTLM v2 client-signing encapsulated in Raw NTLMSSP message
+    # (PASSING CONDITION - STIG only specifically enumerates use of NTLM v2
+    # client-signing, but this is an extension to this option)
     {% elif 'sec=ntlmsspi' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmsspi'' client-signing option"'
     {% endif %}
+
+  # No client-signing in use (FAILURE CONDITION)
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "CIFS mount {{ mountPoint }} not mounted with client-signing options:"'
+  - name: 'printf "
+WARNING: CIFS mount {{ mountPoint }} not mounted with\n
+client-signing options.\n
+Cannot safely auto-remediate: no way of ensuring that\n
+CIFS server supports signed-connections - cannot assure\n
+the mount will continue to function if client-side\n
+mount-options are altered.\n
+MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 
+##################################################################
+## Following sections commented out as it's not safe to attempt
+## auto-remediation of CIFS mounts not using client-signing option
+##
 ## # Remount with "sec=krb5i" option added/set
 ##   {% set optString = 'sec=krb5i,' + ','.join(optList) %}
 ##   {% set remountDev = mountList['alt_device'] %}
 ## notify_V38652-{{ mountPoint }}-remount:
 ##   cmd.run:
 ##   - name: 'printf "\t* Attempting remount...\n"'
-
+##
 ## remount_V38652-{{ mountPoint }}:
 ##   module.run:
 ##   - name: 'mount.remount'
@@ -84,7 +91,7 @@ notify_V38652-{{ mountPoint }}:
 ##   - device: '{{ remountDev }}'
 ##   - fstype: '{{ fsType }}'
 ##   - opts: '{{ optString }}'
-
+##
 ##     # Update fstab (if necessary)
 ##     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 ## notify_V38652-{{ mountPoint }}-fixFstab:
@@ -99,6 +106,7 @@ notify_V38652-{{ mountPoint }}:
 ##   - fstype: '{{ fsType }}'
 ##   - opts: '{{ optString }}'
 ##     {% endif %}
+##################################################################
 
   {% endif %}
 {% endif %} 
