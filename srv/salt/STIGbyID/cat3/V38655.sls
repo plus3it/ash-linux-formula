@@ -48,52 +48,45 @@ file_V38655-appendUSBconf:
   - text: 'install usb-storage /bin/true'
 {% endif %}
 
-# Probaby better way of detecting these...:
-# * use salt['mount.fstab'] to load /etc/fstab into iterable list
-# * iterate and look for non root-VG elements that are not pseudo-devices
-#   and set 'noexec' option
-# ?
+# Define list of filesystem types that are normally only found on 
+# mounted media devices
+{% set mediaFStypes = 'iso9660 ntfs udf msdos fat vfat' %}
+{% set pseudoFStypes = 'tmpfs proc sysfs selinuxfs usbfs devpts devtmpfs binfmt_misc' %}
+{% set NASfstypes = 'nfs cifs' %}
+{% set ignoreFStypes = pseudoFStypes + ' ' + NASfstypes %}
 
-# Check for /dev/cdrom/ or /dev/floppy/ devices
-{% if salt['file.search']('/etc/fstab', '^/dev/cdrom') or salt['file.search']('/etc/fstab', '^/dev/floppy') %}
-  {% if salt['file.search']('/etc/fstab', '^/dev/cdrom.*noexec') or salt['file.search']('/etc/fstab', '^/dev/floppy.*noexec') %}
-notify_V38655-mediaNoxec:
+# Ingest list of mounted filesystems into a searchable-structure
+{% set activeMntStream = salt['mount.active']('extended=true') %}
+
+# Ingest list of fstab-managed filesystems into a searchable-structure
+{% set fstabMntStream = salt['mount.fstab']() %}
+{% set fstabMntList = fstabMntStream.keys() %}
+
+notify_V38655-scan:
   cmd.run:
-  - name: 'echo "The noexec option already set for cdrom or floppy devs found in fstab"'
+  - name: 'echo "Scanning for mounted media devices..."'
+
+# Iterate the structure by top-level key
+{% for mountPoint in activeMntStream.keys() %}
+
+# Unpack key values out to searchable dictionary
+{% set mountList = activeMntStream[mountPoint] %}
+
+# Pull fstype value from key-value dictionary
+{% set fsType = mountList['fstype'] %}
+
+{% set fstabList = fstabMntList|join(' ') %}
+
+{% if fsType in mediaFStypes %}
+
+  {% if mountPoint in fstabList %}
+crosscheck_V38655-{{ mountPoint }}:
+  cmd.run:
+  - name: 'printf "Info: ''{{ mountPoint }}'' defined in /etc/fstab\n\n"'
   {% else %}
-notify_V38655-mediaNoexec:
+crosscheck_V38655-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to floppy/cdrom mounts"'
+  - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
   {% endif %}
-{% else %}
-notify_V38655-mediaNoexec:
-  cmd.run:
-  - name: 'echo "No cdrom or floppy devs found in fstab"'
 {% endif %}
-
-# Check for iso9660s on other dev-paths
-{% if salt['file.search']('/etc/fstab', '^[/L].*[ 	]*iso9660[ 	]')  %}
-notify_V38655-isoNoexec:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to iso9660 mounts"'
-{% endif %}
-
-# Check for vfat on other dev-paths
-{% if salt['file.search']('/etc/fstab', '^[/L].*[ 	]*vfat[ 	]')  %}
-notify_V38655-vfatNoexec:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to vfat mounts"'
-{% endif %}
-
-# Check for msdos on other dev-paths
-{% if salt['file.search']('/etc/fstab', '^[/L].*[ 	]*msdos[ 	]')  %}
-notify_V38655-msdosNoexec:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED: adding noexec option to msdos mounts"'
-{% endif %}
-
-
-cmd_V38655-NotImplemented:
-  cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED: test and fix for non-USB mountable media"'
-
+{% endfor %}
