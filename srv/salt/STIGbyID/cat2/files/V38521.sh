@@ -20,7 +20,8 @@ diag_out() {
 
 diag_out "----------------------------------"
 diag_out "STIG Finding ID: V-38521"
-diag_out "  All rsyslog must be configured"
-diag_out "  send copies of log entires to a"
-diag_out "  remote collection-node"
+diag_out "  The rsyslog service must be"
+diag_out "  configured send copies of log"
+diag_out "  entries to a remote collection-"
+diag_out "  node"
 diag_out "----------------------------------"
