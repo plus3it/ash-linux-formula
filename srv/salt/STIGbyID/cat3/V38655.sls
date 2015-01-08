@@ -27,6 +27,9 @@ script_V38655-describe:
   cmd.script:
   - source: salt://STIGbyID/cat3/files/V38655.sh
 
+####################################
+# Disable USB support (if enabled)
+####################################
 {% set modprobConf = '/etc/modprobe.conf' %}
 {% set usbConf = '/etc/modprobe.d/usb.conf' %}
 
@@ -48,8 +51,10 @@ file_V38655-appendUSBconf:
   - text: 'install usb-storage /bin/true'
 {% endif %}
 
+####################################################################
 # Define list of filesystem types that are normally only found on 
 # mounted media devices
+####################################################################
 {% set mediaFStypes = 'iso9660 ntfs udf msdos fat vfat' %}
 {% set pseudoFStypes = 'tmpfs proc sysfs selinuxfs usbfs devpts devtmpfs binfmt_misc' %}
 {% set NASfstypes = 'nfs cifs' %}
@@ -62,9 +67,9 @@ file_V38655-appendUSBconf:
 {% set fstabMntStream = salt['mount.fstab']() %}
 {% set fstabMntList = fstabMntStream.keys() %}
 
-####################################
+######################################
 ## Check/fix fstab-managed mounts
-####################################
+######################################
 notify_V38655-fstabScan:
   cmd.run:
   - name: 'echo "Scanning for fstab-managed media devices..."'
@@ -86,10 +91,10 @@ notify_V38655-fstabScan:
   {% if 'noexec' in fstabMountOpts %}
 notify_V38655-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
-  - name: 'echo "Info: Mountpount ''{{ fstabMount }} has ''noexec'' option set"'
+  - name: 'echo "Info: Mountpount ''{{ fstabMount }}'' has ''noexec'' option set"'
   {% else %}
 {% set remountDev = fstabMountStruct['device'] %}
-{% set optString = fstabMountOpts|join + ',noexec' %}
+{% set optString = fstabMountOpts|join(' ') + ',noexec' %}
 
 notify_V38655-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
@@ -97,8 +102,6 @@ notify_V38655-{{ fstabMount }}_fstabMntOpt:
 WARNING: Mountpount ''{{ fstabMount }} does not have\n
 ''noexec'' option set ...changing\n
 "'
-
-# salt-call --local mount.set_fstab /mnt/testing/vfat /dev/loop1 vfat rw,noexec
 fstab_V38655-{{ fstabMount }}:
   module.run:
   - name: 'mount.set_fstab'
@@ -130,12 +133,17 @@ notify_V38655-mountScan:
 
 # Pull fstype value from key-value dictionary
 {% set fsType = mountList['fstype'] %}
-{% set remountOptString = mountList['opts']|join + ',noexec' %}
+
+# Get and extend mount options-list
+{% set mountOpts = mountList['opts'] %}
+{% set remountOptString = mountOpts|join(',') + ',noexec' %}
 
 {% set fstabList = fstabMntList|join(' ') %}
 
+# Check if mounted filesystem is of a targeted type
 {% if fsType in mediaFStypes %}
 
+  # See if mounted filesystem is fstab-managed
   {% if mountPoint in fstabList %}
 crosscheck_V38655-{{ mountPoint }}:
   cmd.run:
@@ -145,13 +153,16 @@ crosscheck_V38655-{{ mountPoint }}:
   cmd.run:
   - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
   {% endif %}
-{% endif %}
 
-  {% if not 'noexec' in  mountList['opts'] %}
-  {% else %}
-notify_V38655-{{ mountPoint }}-remount:
+  # See if mounted filesystem has 'noexec' opton set
+  {% if 'noexec' in mountOpts %}
+notify_V38655-{{ mountPoint }}_remount:
   cmd.run:
-  - name: 'echo "Remounting ''{{ mountPoint }}'' with ''noexec'' option"'
+  - name: 'echo "''{{ mountPoint }}'' has ''noexec'' option set"'
+  {% else %}
+notify_V38655-{{ mountPoint }}_remount:
+  cmd.run:
+  - name: 'echo "NOTICE: ''{{ mountPoint }}'' does not have ''noexec'' option set ...remounting"'
 
 remount_V38655-{{ mountPoint }}:
   module.run:
@@ -161,5 +172,6 @@ remount_V38655-{{ mountPoint }}:
   - fstype: '{{ fsType }}'
   - opts: '{{ remountOptString }}'
   {% endif %}
+{% endif %}
 
 {% endfor %}
