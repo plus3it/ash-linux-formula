@@ -94,8 +94,8 @@ notify_V38655-{{ fstabMount }}_fstabMntOpt:
 notify_V38655-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
   - name: 'printf "
-WARNING: Mountpount ''{{ fstabMount }} does not have ''noexec''\n
-option set ...changing\n
+WARNING: Mountpount ''{{ fstabMount }} does not have\n
+''noexec'' option set ...changing\n
 "'
 
 # salt-call --local mount.set_fstab /mnt/testing/vfat /dev/loop1 vfat rw,noexec
