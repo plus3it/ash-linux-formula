@@ -125,8 +125,12 @@ notify_V38655-mountScan:
 # Unpack key values out to searchable dictionary
 {% set mountList = activeMntStream[mountPoint] %}
 
+# Pull device value from key-value dictionary
+{% set remountDev = mountList['device'] %}
+
 # Pull fstype value from key-value dictionary
 {% set fsType = mountList['fstype'] %}
+{% set remountOptString = mountList['opts']|join + ',noexec' %}
 
 {% set fstabList = fstabMntList|join(' ') %}
 
@@ -142,4 +146,20 @@ crosscheck_V38655-{{ mountPoint }}:
   - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
   {% endif %}
 {% endif %}
+
+  {% if not 'noexec' in  mountList['opts'] %}
+  {% else %}
+notify_V38655-{{ mountPoint }}-remount:
+  cmd.run:
+  - name: 'echo "Remounting ''{{ mountPoint }}'' with ''noexec'' option"'
+
+remount_V38655-{{ mountPoint }}:
+  module.run:
+  - name: 'mount.remount'
+  - m_name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - fstype: '{{ fsType }}'
+  - opts: '{{ remountOptString }}'
+  {% endif %}
+
 {% endfor %}
