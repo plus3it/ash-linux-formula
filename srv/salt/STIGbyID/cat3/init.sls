@@ -21,6 +21,7 @@ include:
 - STIGbyID/cat3/V38516
 - STIGbyID/cat3/V38522
 - STIGbyID/cat3/V38525
+- STIGbyID/cat3/V38527
 - STIGbyID/cat3/V38528
 - STIGbyID/cat3/V38530
 - STIGbyID/cat3/V38531
@@ -99,4 +100,3 @@ include:
 - STIGbyID/cat3/V38702
 - STIGbyID/cat3/V51369
 - STIGbyID/cat3/V51379
-
