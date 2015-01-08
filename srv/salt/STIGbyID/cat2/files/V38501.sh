@@ -10,6 +10,10 @@
 #     of incorrect attempts within a specific period of time prevents 
 #     direct password guessing attacks.
 #
+#  CCI: CCI-001452
+#  NIST SP 800-53 :: AC-7 a
+#  NIST SP 800-53A :: AC-7.1 (ii)
+#
 ############################################################
 
 # Standard outputter function
