@@ -62,7 +62,60 @@ file_V38655-appendUSBconf:
 {% set fstabMntStream = salt['mount.fstab']() %}
 {% set fstabMntList = fstabMntStream.keys() %}
 
-notify_V38655-scan:
+####################################
+## Check/fix fstab-managed mounts
+####################################
+notify_V38655-fstabScan:
+  cmd.run:
+  - name: 'echo "Scanning for fstab-managed media devices..."'
+
+# Ingest list of fstab-managed filesystems into a searchable-structure
+{% set fstabMntStream = salt['mount.fstab']() %}
+{% set fstabMntList = fstabMntStream.keys() %}
+
+# Iterate the structure by top-level key
+{% for fstabMount in fstabMntList %}
+
+{% set fstabMountStruct = fstabMntStream[fstabMount] %}
+
+# Pull fstype value from key-value dictionary
+{% set fstabfsType = fstabMountStruct['fstype'] %}
+{% set fstabMountOpts = fstabMountStruct['opts'] %}
+
+{% if fstabfsType in mediaFStypes %}
+  {% if 'noexec' in fstabMountOpts %}
+notify_V38655-{{ fstabMount }}_fstabMntOpt:
+  cmd.run:
+  - name: 'echo "Info: Mountpount ''{{ fstabMount }} has ''noexec'' option set"'
+  {% else %}
+{% set remountDev = fstabMountStruct['device'] %}
+{% set optString = fstabMountOpts|join + ',noexec' %}
+
+notify_V38655-{{ fstabMount }}_fstabMntOpt:
+  cmd.run:
+  - name: 'printf "
+WARNING: Mountpount ''{{ fstabMount }} does not have ''noexec''\n
+option set ...changing\n
+"'
+
+# salt-call --local mount.set_fstab /mnt/testing/vfat /dev/loop1 vfat rw,noexec
+fstab_V38655-{{ fstabMount }}:
+  module.run:
+  - name: 'mount.set_fstab'
+  - m_name: '{{ fstabMount }}'
+  - device: '{{ remountDev }}'
+  - fstype: '{{ fstabfsType }}'
+  - opts: '{{ optString }}'
+
+  {% endif %}
+{% endif %}
+{% endfor %}
+
+
+####################################
+## Check/fix active mounts
+####################################
+notify_V38655-mountScan:
   cmd.run:
   - name: 'echo "Scanning for mounted media devices..."'
 
