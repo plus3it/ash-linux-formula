@@ -17,10 +17,12 @@
 {% set userList = salt['user.list_users']() %}
 {% for userName in userList %}
 {% set userInfo =  salt['user.info'](userName) %}
+{% set userShadow =  salt['shadow.info'](userName) %}
 {% set userID = userInfo['uid'] %}
+{% set userPasswd = userShadow['passwd'] %}
 
 list_V38496-{{ userName }}:
   cmd.run:
-  - name: 'echo "{{ userName }} : {{ userID }}"'
+  - name: 'echo "{{ userName }} : {{ userID }} : {{ userPasswd }}"'
 
 {% endfor %}
