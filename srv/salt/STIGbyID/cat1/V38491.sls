@@ -25,12 +25,21 @@ file_V38491-hostsEquiv:
   - name: 'echo "No ''{{ hostsEquiv }}'' file found"'
 {% endif %}
 
-
-# Might be able to make this cleaner by using salt-based user lookup
-# and *only* look for .rhosts files in each found user's defined home 
-# directory
-cmd_V38491-rhosts:
-  cmd.run:
-  - name: 'find / \( -fstype ext4 -o -fstype ext3 \) -type f -name .rhosts -exec rm {} \;'
-  - onlyif: 'find / \( -fstype ext4 -o -fstype ext3 \) -type f -name .rhosts -print > /tmp/narf && test -s /tmp/narf'
-
+# Iterate locally-managed users to look for .rhosts files
+{% for userName in salt['user.list_users']() %}
+{% set userInfo = salt['user.info'](userName) %}
+{% set userHome = userInfo['home'] %}
+{% set userRhost = userHome + '/.rhosts' %}
+{% if salt['file.file_exists'](userRhost) %}
+notify-{{ userName }}:
+  cmd.run: 
+  - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..." ; exit 1'
+cmd_V38491-{{ userRhost }}_remove:
+  file.absent: 
+  - name: '{{ userRhost }}'
+{% else %}
+notify-{{ userName }}:
+  cmd.run: 
+  - name: 'echo "Info: User ''{{ userName }}'' does not have an ''.rhosts'' file."'
+{% endif %}
+{% endfor %}
