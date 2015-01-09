@@ -18,9 +18,19 @@ script_V38443-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38443.sh
 
-file_38443:
+{% if salt['file.get_user']('/etc/gshadow') == 'root' %}
+notify_V38443-ownership:
+  cmd.run:
+  - name: 'echo "Info: ''/etc/gshadow'' file already owned by ''root''."'
+{% else %}
+notify_V38443-ownership:
+  cmd.run:
+  - name: 'echo "WARNING: ''/etc/gshadow'' not owned by ''root''. Fixing..." ; exit 1'
+
+file_V38443:
   file.managed:
   - name: /etc/gshadow
   - user: root
   - group: root
   - mode: '0000'
+{% endif %}
