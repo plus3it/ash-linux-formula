@@ -18,7 +18,19 @@ script_V38448-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38448.sh
 
-file_38448:
+{% set checkFile = '/etc/gshadow' %}
+{% if salt['file.get_group'](checkFile) == 'root' %}
+notify_V38448-ownership:
+  cmd.run:
+  - name: 'echo "Info: ''{{ checkFile }}'' file already group-owned by ''root''."'
+{% else %}
+notify_V38448-ownership:
+  cmd.run:
+  - name: 'echo "WARNING: ''{{ checkFile }}'' not group-owned by ''root''. Fixing..." ; exit 1'
+
+file_V38448-setOwn:
   file.managed:
-  - name: /etc/gshadow
-  - group: root
+  - name: '{{ checkFile }}'
+  - group: 'root'
+  - replace: 'False'
+{% endif %}
