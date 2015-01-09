@@ -41,7 +41,7 @@ notify_V38444-iptablesSave:
   cmd.run:
   - name: 'echo "Info: Saving in-memory ip6tables configuration to disk."'
 
-iptables_V38513-iptablesSave:
+iptables_V38444-iptablesSave:
   module.run:
   - name: 'iptables.save'
   - family: 'ipv6'
