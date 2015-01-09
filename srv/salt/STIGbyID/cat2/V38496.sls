@@ -14,6 +14,10 @@
 #
 ############################################################
 
+notify_V38496-userScan:
+  cmd.run:
+  - name: 'echo "Scanning locally-managed users..."'
+
 {% set userList = salt['user.list_users']() %}
 {% for userName in userList %}
 {% set userInfo =  salt['user.info'](userName) %}
@@ -21,8 +25,28 @@
 {% set userID = userInfo['uid'] %}
 {% set userPasswd = userShadow['passwd'] %}
 
+{% if userID < 500 and userID > 0%}
+  {% if userPasswd == '*' or userPasswd == '!!' %}
 list_V38496-{{ userName }}:
   cmd.run:
-  - name: 'echo "{{ userName }} : {{ userID }} : {{ userPasswd }}"'
+  - name: 'echo "Info: User ''{{ userName }}'' has a locked password"'
+
+  {% elif '$' in userPasswd %}
+list_V38496-{{ userName }}:
+  cmd.run:
+  - name: 'echo "WARNING: User ''{{ userName }}'' has a password assigned" ; exit 1'
+
+  {% elif userPasswd == '' %}
+list_V38496-{{ userName }}:
+  cmd.run:
+  - name: 'printf "** CRITICAL: User ''{{ userName }}'' has a NULL password!! **\n\tAttempting to lock...\n" ; exit 1'
+
+pwlock__V38496-{{ userName }}:
+  user.present:
+  - name: {{ userName }}
+  - password: '!!'
+
+  {% endif %}
+{% endif %}
 
 {% endfor %}
