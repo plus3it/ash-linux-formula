@@ -12,22 +12,32 @@ script_V38462-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38462.sh
 
-cmd-etc_rpmrc:
+{% set fileList = [
+	'/etc/rpmrc',
+	'/usr/lib/rpm/rpmrc',
+	'/usr/lib/rpm/redhat/rpmrc',
+	'/root/.rpmrc',
+] %}
+{% for checkFile in fileList %}
+{% if salt['file.file_exists'](checkFile) %}
+  {% if salt['file.search'](checkFile,'^nosignature') %}
+notify_V38462-{{ checkFile }}:
   cmd.run:
-  - name: 'sed -e "/nosignature/s/^/## /" /etc/rpmrc'
-  - onlyif: 'test -s /etc/rpmrc && grep nosignature /etc/rpmrc'
+  - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'
 
-cmd_V38462-lib_rpmrc:
+comment_V38462-{{ checkFile }}:
+  file.comment:
+  - name: '{{ checkFile }}'
+  - regex: 'nosignature'
+  {% else %}
+notify_V38462-{{ checkFile }}:
   cmd.run:
-  - name: 'sed -e "/nosignature/s/^/## /" /usr/lib/rpm/rpmrc'
-  - onlyif: 'test -s /usr/lib/rpm/rpmrc && grep nosignature /usr/lib/rpm/rpmrc'
+  - name: 'echo "Info: ''nosignature'' option not set in ''{{ checkFile }}''"'
+  {% endif %}
+{% else %}
+notify_V38462-{{ checkFile }}:
+  cmd.run:
+  - name: 'echo "Info: Configuration-file ''{{ checkFile }}'' does not exist"'
+{% endif %}
+{% endfor %}
 
-cmd_V38462-redhat_rpmrc:
-  cmd.run:
-  - name: 'sed -e "/nosignature/s/^/## /" /usr/lib/rpm/redhat/rpmrc'
-  - onlyif: 'test -s /usr/lib/rpm/redhat/rpmrc && grep nosignature /usr/lib/rpm/redhat/rpmrc'
-
-file_V38462-root_rpmrc:
-  cmd.run:
-  - name: 'sed -e "/nosignature/s/^/## /" /root/.rpmrc'
-  - onlyif: 'test -s /root/.rpmrc && grep nosignature /root/.rpmrc'
