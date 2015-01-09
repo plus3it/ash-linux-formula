@@ -13,3 +13,14 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+
+{% set userList = salt['user.list_users']() %}
+{% for userName in userList %}
+{% set userInfo =  salt['user.info'](userName) %}
+{% set userID = userInfo['uid'] %}
+
+list_V38496-{{ userName }}:
+  cmd.run:
+  - name: 'echo "{{ userName }} : {{ userID }}"'
+
+{% endfor %}
