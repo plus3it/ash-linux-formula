@@ -23,10 +23,15 @@
   {% set userInfo = salt['user.info'](user) %}
   {% set userId = userInfo['uid'] %}
   {% if userId == 0 %}
+    #########################################
+    # If the user is "root", just acknowledge
     {% if user == 'root' %}
-check_V38500-{{ user }}:
+notify_V38500-{{ user }}:
   cmd.run:
   - name: 'echo "Info: User ''{{ user }}'' has userid ''{{ userId }}''"'
+
+    #################################################################
+    # If the uid '0' account isn't "root", nuke and recreate as non-0
     {% else %}
     {% set userShadow = salt['shadow.info'](user) %}
     {% set userDate = userShadow['lstchg'] %}
@@ -45,14 +50,15 @@ check_V38500-{{ user }}:
     {% set userWarnDay = userShadow['warn'] %}
     {% set userWorkPhone = userInfo['workphone'] %}
 
-check_V38500-{{ user }}:
+notify_V38500-{{ user }}:
   cmd.run:
-  - name: 'printf "WARNING: Non-root user ''{{ user }}'' has userid ''{{ userId }}''.\n\t** Automatic remediation will be attempted **\n\n\tNote:\n\t* Secondary groups may be lost;\n\t* Account expiry info may be altered\n"'
+  - name: 'printf "WARNING: Non-root user ''{{ user }}'' has userid ''{{ userId }}''.\n\t** Automatic remediation will be attempted **\n\n\tNote:\n\t* First free, non-privileged UID will be allocated;\n\t* Secondary groups may be lost;\n\t* Account expiry info may be altered\n"'
 
 update_V38500-{{ user }}_nuke:
   user.absent:
   - name: '{{ userName }}'
   - force: 'True'
+
 update_V38500-{{ user }}_recreate:
   user.present:
   - name: '{{ userName }}'
@@ -70,6 +76,10 @@ update_V38500-{{ user }}_recreate:
   - inactdays: '{{ userInactiv }}'
   - warndays: '{{ userWarnDay }}'
   - expire: '{{ userExpire }}'
+
+update_V38500-{{ user }}_chown:
+  cmd.run:
+  - name: 'echo "Chowning {{ userName }}''s home directory" ; chown -R {{ userName }} {{ userHome }}'
     {% endif %}
   {% endif %}
 
