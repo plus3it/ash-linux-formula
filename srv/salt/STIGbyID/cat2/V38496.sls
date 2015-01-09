@@ -14,9 +14,13 @@
 #
 ############################################################
 
+script_V38496-describe:
+  cmd.script:
+  - source: salt://STIGbyID/cat2/files/V38496.sh
+
 notify_V38496-userScan:
   cmd.run:
-  - name: 'echo "Scanning locally-managed users..."'
+  - name: 'printf "Scanning locally-managed users:\n\t* Examing users with uid 0 >< 500\n\t* Looking for set or null passwords\n"'
 
 {% set userList = salt['user.list_users']() %}
 {% for userName in userList %}
