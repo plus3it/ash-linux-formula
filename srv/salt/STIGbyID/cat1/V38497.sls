@@ -21,20 +21,15 @@ script_V38497-describe:
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 
-{% if not salt['file.file_exists'](checkFile) %}
+# If authconfig has never been run, run it
 cmd_V38497-linkSysauth:
   cmd.run:
   - name: '/usr/sbin/authconfig --update'
-{% endif %}
+  - unless: 'test -f {{ checkFile }}'
 
-{% if salt['file.search'](checkFile, 'nullok') %}
 file_V38497-sysauth_ac:
   file.replace:
   - name: '{{ checkFile }}'
   - pattern: " nullok"
   - repl: ""
-{% else %}
-file_V38497-sysauth_ac:
-  cmd.run:
-  - name: 'echo "PAM does not allow empty passwords"'
-{% endif %}
+  - unles: cmd_V38497-linkSysauth
