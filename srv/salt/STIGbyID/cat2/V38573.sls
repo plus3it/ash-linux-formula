@@ -30,14 +30,14 @@ script_V38573-describe:
 {% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 {% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 
-{% for checkFile in pamFiles %}
-
-  {% if not salt['file.file_exists'](checkFile) %}
+# Ensure that authconfig has been run prior to trying to update the PAM files
 cmd_V38573-linkSysauth:
   cmd.run:
   - name: '/usr/sbin/authconfig --update'
-  {% endif %}
+  - unless: 'test -f /etc/pam.d/system-auth-ac'
 
+# Iterate files to alter...
+{% for checkFile in pamFiles %}
 
   {% if salt['file.search'](checkFile, pamMod) %}
 notify_V38573-{{ checkFile }}_exists:
