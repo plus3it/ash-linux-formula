@@ -1,0 +1,20 @@
+If you're reading this file, you've already downloaded the 
+SCAP-related VID-remediation files.
+
+To install these files so that SaltStack will find them, run the 
+"setup.sh" script located in the same directory as this README file. 
+The "setup.sh" script will create links into the "/srv/salt" 
+hierarchy and install an output-filter into "/usr/local/bin"
+
+To execute the SaltStack remediation files, execute the 
+"runsingly.sh" located located in the same directory as this README 
+file. To capture the output for later review, execute this script as 
+follows:
+
+     ./runsingly.sh 2>&1 | tee /<YOUR>/<LOG>/<DIR>/<LOGFILE>
+
+Once SaltStack completes running all of its remediation-routines, 
+review the contents of /<YOUR>/<LOG>/<DIR>/<LOGFILE>. To cut down on 
+the amount of output to sort through, execute: 
+
+     /usr/local/bin/SaltOutFilter.sh /<YOUR>/<LOG>/<DIR>/<LOGFILE> | more
