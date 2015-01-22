@@ -12,6 +12,15 @@
 VIDHOME="${1:-/srv/salt}"
 DEBUGLVL="warning"
 SALTCMD="/usr/bin/salt-call --no-color --local  -l ${DEBUGLVL} state.sls"
+INSTALLED="false"
+
+rpm -qf /usr/bin/salt-call && INSTALLED="true"
+
+if [ "${INSTALLED}" = "false" ]
+then
+  echo "Saltstack RPMs not installed. Aborting!"
+  exit 1
+fi
 
 # Locate all the VID SLS files and create a list
 VIDLIST=`find -L ${VIDHOME} -type f -name "V*.sls" | sort | sed '{
