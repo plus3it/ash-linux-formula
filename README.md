@@ -73,23 +73,29 @@ This README assumes that the Salt packages have been downloaded via the `git` co
 
 Navigate into the "ash-linux-formula" directory. Within this directory is a setup-utility, `setup.sh`. Running this utility will take care of installing the security policy modules into a file-hierarchy rooted under '/srv/salt'. This is the default search-location for the 'salt-minion' service. The 'salt-minion' service is used to run the security policy modules. This utility will also install an output-filter, `outFilter.sed`, into /usr/local/bin (this filter can be used to suppress some of the less-meaningful output produced by a run of the Salt packages).
 
-The `runsingly.sh` script may be left within and invoked from its default installation directory or moved eslewhere within the host system's filesystem-hierarchy. This script is designed that it should work correctly wherever it's installed or invoked from.
+The `policyrun.sh` script may be left within and invoked from its default installation directory or moved eslewhere within the host system's filesystem-hierarchy. This script is designed that it should work correctly wherever it's installed or invoked from.
 
 The *ash-linux* formula does not currently support configuration via Salt's "pillar" functionality. Currently-expected deployment profiles did not necessitate the use of pillar to govern application-behavior beyond that available through the "run-all" or "individual-run" invocation methods. As this solution gains greater adoption and specific use-cases are identified, the *ash-linux* formulae will be updated to leverage Salt's "pillar" functionality to match those usage-profiles.
 
 # How to Run
 
 ##Available Run-modes
-This collection of modules may be applied as either a "run-all" or "individual-run" invocation.
-- Use of the 'runsingly.sh' script will run all of the handlers supplied within this bundle
-- Individual modules may be run by manually running them via the 'salt-call' utility
-Instructions for both modes are provided later in this document. Each mode runs from the commandline writes to standard-out. Use the `tee` or other utility to capture this to the log-file.
+This collection of modules may be applied as either a "run-all", "run-category" or "run individual tests" invocation. Use of the 'policyrun.sh' script gives a "friendly" method for running the Salt modules. This script uses flags and options to define its runtime behaviors. This is the expected run-method for these modules. This method will be further detailed below.
+
+Note: Individual modules or groups modules of may also be run by manually executing them via the 'salt-call' utility. However, use of manual-execution via the 'salt-call' utility may create some inconsistencies within the comment- and other change-ordering within remediated files. See the salt-call man page for usage instructions - bearing in mind the caveat regarding change-ordering.
 
 ###"Run-all" Mode
-This mode will run all of the VID files installed as part of this archive.
+This mode will run all of the security modules installed as part of this archive. To run in this mode, execute: `runpolicy.sh -a`. The script will indicate the run-mode and the location of logged output. The script will display all output to the screen and log all of the remediation-related steps to its log file.
+
+###"Category-run" Mode
+This mode will run all of the security modules of a given category. To run in this mode, execute: `runpolicy.sh -c <CATEGORY>`: The script will indicate the run-mode and the location of logged output. The script will display all output to the screen and log all of the remediation-related steps to its log file.
 
 ###"Individual-Run" Mode
-This mode will individually-selected elements of the VID files installed as part of this archive.
+This mode will individually-selected elements of the VID files installed as part of this archive. To run in this mode, execute: `runpolicy.sh -v <Vulnerability ID>`. The script will indicate the run-mode and the location of logged output. The script will display all output to the screen and log all of the remediation-related steps to its log file.
+
+###Usage-note for non-default SaltStack installation-locations:
+This script assumes that the Salt software has been configured to run from the "/srv/salt" hierarchy. If the Salt software has been configured to fun from another location, invoke the script with the '-h /<SALT>/<RUN>/<ROOT>' argument
 
 ##References
 (See links embedded above)
+

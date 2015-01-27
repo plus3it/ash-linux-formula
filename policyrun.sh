@@ -1,6 +1,26 @@
 #!/bin/sh
 #
-# Option-parser testing
+# This script is designed to make the running of the security modules
+# a little more "friendly". This script hides the actual Salt commands
+# and arguments behind a moded script. Through the use of command-line
+# options, the user may select a run-mode for the tool. Run-options
+# are as follows:
+#
+#    `runpolicy.sh -a`: Use this invocation-method to run *ALL*
+#        security-modules included in this tool-kit.
+#
+#    `runpolicy.sh -c <CATEGORY>`: Use this invocation-method to
+#        run *ALL* security-modules within a given category of
+#        security-modules included in this tool-kit.
+#
+#    `runpolicy.sh -v <Vulnerability ID>`: Use this invocation-
+#        method to select specific STIG vulnerability-IDs to
+#        test/remediate.
+#
+# Note: this script assumes that the Salt software has been configured
+#    to run from the "/srv/salt" hierarchy. If the Salt software has
+#    been configured to fun from another location, invoke the script
+#    with the '-h /<SALT>/<RUN>/<ROOT>' argument
 #
 ######################################################################
 RUNTYPE="ALL"
