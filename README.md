@@ -78,14 +78,17 @@ The `runsingly.sh` script may be left within and invoked from its default instal
 The *ash-linux* formula does not currently support configuration via Salt's "pillar" functionality. Currently-expected deployment profiles did not necessitate the use of pillar to govern application-behavior beyond that available through the "run-all" or "individual-run" invocation methods. As this solution gains greater adoption and specific use-cases are identified, the *ash-linux* formulae will be updated to leverage Salt's "pillar" functionality to match those usage-profiles.
 
 # How to Run
+
 ##Available Run-modes
 This collection of modules may be applied as either a "run-all" or "individual-run" invocation.
 - Use of the 'runsingly.sh' script will run all of the handlers supplied within this bundle
 - Individual modules may be run by manually running them via the 'salt-call' utility
 Instructions for both modes are provided later in this document. Each mode runs from the commandline writes to standard-out. Use the `tee` or other utility to capture this to the log-file.
-### "Run-all" Mode
+
+###"Run-all" Mode
 This mode will run all of the VID files installed as part of this archive.
-### "Individual-Run" Mode
+
+###"Individual-Run" Mode
 This mode will individually-selected elements of the VID files installed as part of this archive.
 
 ##References
