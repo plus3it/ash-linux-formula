@@ -8,6 +8,6 @@ This framework primarily references security guidance is derived from [SCAP guid
 The SCAP-recommended tests and remediations have been verified to implement the refereneced guidances. This verification has resulted in some deviances from the authoritative guidances. The deviances fall into three primary categories:
 * Loosening settings that would result in a system not sustainably manageable in an enterprise-scale system deployment (e.g., automated account-lockouts are timed rather than indefinite: this prevents having to shut down systems to maintenance mode to counteract certain intentional or accidental Denial of Service scenarios)
 * Taking a "report-only" response-posture where automated remediation is either not possible (guidance is policy-oriented rather than technical or remediation would require a system rebuild - such as implementing recommended filesystem layouts)
-* Hardening beyond what's prescribed by the SCAP guidance - either fixing bugs in the guidance or selecting the more-secure of settings that are prescribed with more than one option).
+* Hardening beyond what's prescribed by the SCAP guidance - either selecting the more-secure of settings that are prescribed with more than one option or fixing bugs in the formal guidances.
 
 As this Salt-based framework is adopted for wider use, additional security layers will be made availabe. This will include security layers to meet the [DISA IAVMs](https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip) and agency-specific poly overlays.
