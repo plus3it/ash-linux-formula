@@ -10,6 +10,8 @@ DEBUGLVL="warning"
 SALTROOT="/srv/salt"
 SALTCMD="/usr/bin/salt-call --no-color --local -l ${DEBUGLVL} state.sls"
 INSTALLED="false"
+DATETAG=`date "+%Y%m%d_%H%M%S"`
+LOGFILE="/var/tmp/salt_run-${DATETAG}.log"
 
 # Make sure Saltstack RPM is present
 rpm --quiet -qf /usr/bin/salt-call && INSTALLED="true"
@@ -28,13 +30,61 @@ then
    exit 1
 fi
 
+VidListConstruct(){
+   printf "Constructing V-ID list... "
+   if [ "${1}" = "" ]
+   then
+      VIDLIST=`find -L ${VIDHOME} -type f -name "V*.sls" | sort | sed '{
+         s/^.*STIGbyID/STIGbyID/
+         s/\.sls$//
+      }'`
+   else
+      for VID in ${1}
+      do
+         VIDLIST="${VIDLIST} `find -L ${VIDHOME} -type f -name "${VID}.sls" | \
+	 sort | sed '{
+	    s/^.*STIGbyID/STIGbyID/
+	    s/\.sls$//
+         }' ; echo`"
+      done
+   fi
+   echo "Done!"
+   echo "Starting test-run: will log to ${LOGFILE}"
+
+   # Run Test(s)
+   for TESTID in ${VIDLIST}
+   do
+      ${SALTCMD} ${TESTID} 2>&1
+   done | tee ${LOGFILE}
+}
+
 RunLayer(){
    SERCHTYP="${1}"
    SERCHLST="${2}"
    VIDHOME="${SALTROOT}/${3:-STIGbyID}"
-   echo "Salt search-root: ${VIDHOME}"
-   echo "Run-mode: ${RUNTYPE}"
-   echo "Run-args: ${SERCHLST}"
+
+   case ${SERCHTYP} in
+      ALL)
+         VidListConstruct
+         ;;
+      CATEGORY)
+         case ${SERCHLST} in
+	    1|cat1|Cat1)
+               VIDHOME="${SALTROOT}/STIGbyID/cat1"
+	       ;;
+	    2|cat2|Cat2)
+               VIDHOME="${SALTROOT}/STIGbyID/cat2"
+	       ;;
+	    3|cat3|Cat3)
+               VIDHOME="${SALTROOT}/STIGbyID/cat3"
+	       ;;
+         esac
+         VidListConstruct
+         ;;
+      VID)
+         VidListConstruct "${SERCHLST}"
+         ;;
+   esac
 ## # Locate all the VID SLS files and create a list
 ## printf "Constructing V-ID list... "
 ## VIDLIST=`find -L ${3} -type f -name "V*.sls" | sort | sed '{
@@ -102,6 +152,3 @@ while true ; do
 done
 
 RunLayer "${RUNTYPE}" "${RUNARG}" "${VIDHOME}"
-## echo "Salt search-root: ${SALTROOT}"
-## echo "Run-mode: ${RUNTYPE}"
-## echo "Run-args: ${RUNARG}"
