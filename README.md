@@ -14,21 +14,37 @@ As this Salt-based framework is adopted for wider use, additional security layer
 
 ##Dependencies
 
+- Optional (one of):
+    - git and related RPMs [Already installed if this package was fetched via `git`]
+    - wget
+    - curl
+    - CIFS client
+    - NFS client
+    - FTP client
 - A masterless salt configuration. This is due to the path references to the 
 included tools/utilities/content. A later version will look into caching these 
 from a salt master.
 
 A masterless salt configuration requires the following software groups and packages:
 - EL6 "Core" package-group
-- From the distribution's standard repository's main channels/repositories
-    - PyYAML
+- From the distribution's standard channel/repository
+    - audit-libs-python
+    - authconfig
+    - libcgroup
+    - libselinux-python
+    - libsemanage-python
     - libyaml
     - m2crypto
-    - Pciutils
+    - pciutils
+    - policycoreutils-python
     - python-babel
     - python-crypto
     - python-jinja2
-- From the distribution's standard repository's 'Extras' channels/repositories
+    - PyYAML
+    - setools-libs
+    - setools-libs-python
+
+- From the distribution's 'Extras' channels/repositories
     - python-backports
     - python-backports-ssl_match_hostname
     - python-chardet
@@ -45,3 +61,5 @@ A masterless salt configuration requires the following software groups and packa
     - salt-minion
     - sshpass
     - zeromq3
+
+
