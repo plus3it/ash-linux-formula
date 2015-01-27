@@ -22,13 +22,13 @@ for TARG in ${LINKLIST}
 do
    if [ -e ${SLSROOT}/${TARG} ]
    then
-      if [ -L ${SLSROOT}/${TARG} ]
+      if [ -L /${SALTHOME}/${TARG} ]
       then
-         echo "${SLSROOT}/${TARG} already exists as link"
+         echo "/${SALTHOME}/${TARG} already exists as link"
+      else
+         printf "Creating symlink at /${SALTHOME}/${TARG}... "
+         ln -s ${SLSROOT}/${TARG} /${SALTHOME}/${TARG} && echo "Success."
       fi
-   else
-      printf "Creating symlink at /${SALTHOME}/${TARG}... "
-      ln -s ${SLSROOT}/${TARG} /${SALTHOME}/${TARG} && echo "Success."
    fi
 done
 
