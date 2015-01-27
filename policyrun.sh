@@ -151,4 +151,16 @@ while true ; do
    esac
 done
 
+# Verify that authconfig has been run at least once
+if [ ! -e /etc/pam.d/system-auth-ac ]
+then
+   if [ ! -x /usr/sbin/authconfig ]
+   then
+      echo "PAM not set up and authconfig not available to fix. Aborting."
+      exit 1
+   fi
+   echo "Running authconfig"
+   /usr/sbin/authconfig --update
+fi
+
 RunLayer "${RUNTYPE}" "${RUNARG}" "${VIDHOME}"
