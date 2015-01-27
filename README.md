@@ -11,3 +11,37 @@ The SCAP-recommended tests and remediations have been verified to implement the 
 * Hardening beyond what's prescribed by the SCAP guidance - either selecting the more-secure of settings that are prescribed with more than one option or fixing bugs in the formal guidances.
 
 As this Salt-based framework is adopted for wider use, additional security layers will be made availabe. It is expected that these extentions will include security layers to meet the [DISA IAVMs](https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip) and agency-specific policy-overlays.
+
+##Dependencies
+
+- A masterless salt configuration. This is due to the path references to the 
+included tools/utilities/content. A later version will look into caching these 
+from a salt master.
+
+A masterless salt configuration requires the following software groups and packages:
+- EL6 "Core" package-group
+- From the distribution's standard repository's main channels/repositories
+    - PyYAML
+    - libyaml
+    - m2crypto
+    - Pciutils
+    - python-babel
+    - python-crypto
+    - python-jinja2
+- From the distribution's standard repository's 'Extras' channels/repositories
+    - python-backports
+    - python-backports-ssl_match_hostname
+    - python-chardet
+    - python-ordereddict
+    - python-requests
+    - python-six
+    - python-urllib3
+- From the [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL) repositories
+    - epel-release
+    - openpgm
+    - python-msgpack
+    - python-zmq
+    - salt
+    - salt-minion
+    - sshpass
+    - zeromq3
