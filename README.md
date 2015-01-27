@@ -26,33 +26,33 @@ included tools/utilities/content. A later version will look into caching these
 from a salt master.
 
 A masterless salt configuration requires the following software groups and packages:
-- EL6 "Core" package-group
-- From the distribution's standard channel/repository
-    - audit-libs-python
-    - authconfig
-    - libcgroup
-    - libselinux-python
-    - libsemanage-python
-    - libyaml
-    - m2crypto
-    - pciutils
-    - policycoreutils-python
-    - python-babel
-    - python-crypto
-    - python-jinja2
-    - PyYAML
-    - setools-libs
-    - setools-libs-python
-
-- From the distribution's 'Extras' channels/repositories
-    - python-backports
-    - python-backports-ssl_match_hostname
-    - python-chardet
-    - python-ordereddict
-    - python-requests
-    - python-six
-    - python-urllib3
-- From the [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL) repositories
+- EL6 built with "Core" package-group or better
+- Additional distribution-vendor RPMs:
+    - From the distribution's standard channel/repository
+        - audit-libs-python
+        - authconfig
+        - libcgroup
+        - libselinux-python
+        - libsemanage-python
+        - libyaml
+        - m2crypto
+        - pciutils
+        - policycoreutils-python
+        - python-babel
+        - python-crypto
+        - python-jinja2
+        - PyYAML
+        - setools-libs
+        - setools-libs-python
+    - From the distribution's 'Extras' channels/repositories
+        - python-backports
+        - python-backports-ssl_match_hostname
+        - python-chardet
+        - python-ordereddict
+        - python-requests
+        - python-six
+        - python-urllib3
+- From the [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL) repositories:
     - epel-release
     - openpgm
     - python-msgpack
