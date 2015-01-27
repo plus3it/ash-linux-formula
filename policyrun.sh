@@ -3,18 +3,46 @@
 # Option-parser testing
 #
 ######################################################################
-RUNTYPE="${1:-ALL}"
+RUNTYPE="ALL"
 RUNARG="UNDEF"
 PROGNAME="${0}"
+DEBUGLVL="warning"
+SALTROOT="/srv/salt"
+SALTCMD="/usr/bin/salt-call --no-color --local -l ${DEBUGLVL} state.sls"
+INSTALLED="false"
 
-OPTIONBUFR=`getopt -o ac:v: --long all,category:,vid: -n ${PROGNAME} -- "$@"`
+# Make sure Saltstack RPM is present
+rpm --quiet -qf /usr/bin/salt-call && INSTALLED="true"
+if [ "${INSTALLED}" = "false" ]
+then
+   echo "Saltstack RPMs not installed. Aborting!"
+   exit 1
+fi
 
-# Ensure option-list is non-null
+OPTIONBUFR=`getopt -o ac:v:h: --long all,category:,vid:,salt-root:: -n ${PROGNAME} -- "$@"`
+
+# Ensure parsable option-list is non-null
 if [ $? != 0 ]
 then
    echo "Terminating..." >&2
    exit 1
 fi
+
+RunLayer(){
+   SERCHTYP="${1}"
+   SERCHLST="${2}"
+   VIDHOME="${SALTROOT}/${3:-STIGbyID}"
+   echo "Salt search-root: ${VIDHOME}"
+   echo "Run-mode: ${RUNTYPE}"
+   echo "Run-args: ${SERCHLST}"
+## # Locate all the VID SLS files and create a list
+## printf "Constructing V-ID list... "
+## VIDLIST=`find -L ${3} -type f -name "V*.sls" | sort | sed '{
+## s/^.*STIGbyID/STIGbyID/
+## s/\.sls$//
+## }'`
+## echo "Done!"
+}
 
 # Note the quotes around '$OPTIONBUFR': they are essential!
 eval set -- "$OPTIONBUFR"
@@ -32,6 +60,7 @@ while true ; do
          echo "Full-category run-mode selected: will run category '${2}'"
          RUNTYPE="CATEGORY"
          RUNARG="${2}"
+         VIDHOME="${VIDHOME}/${2}"
          shift 2
          break
          ;;
@@ -57,6 +86,10 @@ while true ; do
                ;;
          esac
          ;;
+      -h|--salt-root)
+         VIDHOME="${2}"
+         shift 2
+         ;;
       --)
          shift
          break
@@ -67,5 +100,8 @@ while true ; do
          ;;
    esac
 done
-echo "Run-mode: ${RUNTYPE}"
-echo "Run-args: ${RUNARG}"
+
+RunLayer "${RUNTYPE}" "${RUNARG}" "${VIDHOME}"
+## echo "Salt search-root: ${SALTROOT}"
+## echo "Run-mode: ${RUNTYPE}"
+## echo "Run-args: ${RUNARG}"
