@@ -1,2 +1,11 @@
 # ash-linux-formula
-Automated System Hardening (ash-linux) is a Salt formula to apply SCAP benchmarks to Linux systems
+Automated System Hardening for Linux is a [Salt](http://saltstack.org) formula to apply security benchmarks to Linux systems. This specific security bundle primarily targets systems derived from the Red Hat Enterprise Linux 6 distribution (RedHat Enterprise Linux, Community ENTerprise OS and Scientific Linux).
+
+This bundle also has partial applicability to upstream distributions of Red Hat Enterprise Linux (i.e., "Fedora") as well as custom hybrids that share components with Red Hat Enterprise Linuxe (e.g., "Amazon Linux"). The "partial" is a reflection that neither type of distribution attempts to maintain 100% compatibility with the software packages or security settings prescribed by the SCAP and related documentation sets. This package's hardening features are "best effort". Some modules may fail to work 100% correctly and will not cover any distribution-specific components that are not in the main EL6 distribution.
+
+This framework primarily references security guidance is derived from [SCAP](http://scap.nist.gov/). SCAP guidances are joint effort between the primary distribution-vendor and the Defense Information Systems Agency (DISA), with contributions from security repositories such as the Common Vulnerabilities and Exposure (maintained by MITRE). These efforts are managed through [National Institute of Standards and Technology's](http://www.nist.gov/itl/) Information Technology Laboratory group.
+
+The SCAP-recommended tests and remediations have been verified to implement the refereneced guidances. This verification has resulted in some deviances from the authoritative guidances. The deviances fall into three primary categories:
+* Loosening settings that would result in a system not sustainably manageable in an enterprise-scale system deployment (e.g., automated account-lockouts are timed rather than indefinite: this prevents having to shut down systems to maintenance mode to counteract certain intentional or accidental Denial of Service scenarios)
+* Taking a "report-only" response-posture where automated remediation is either not possible (guidance is policy-oriented rather than technical or remediation would require a system rebuild - such as implementing recommended filesystem layouts)
+* Hardening beyond what's prescribed by the SCAP guidance - either fixing bugs in the guidance or selecting the more-secure of settings that are prescribed with more than one option).
