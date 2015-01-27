@@ -1,5 +1,5 @@
 # ash-linux-formula
-Automated System Hardening for Linux is a [Salt](http://saltstack.org) formula to apply security benchmarks to Linux systems. This specific security bundle primarily targets systems derived from the Red Hat Enterprise Linux 6 distribution (typically RedHat Enterprise Linux, Community ENTerprise OS and Scientific Linux).
+Automated System Hardening (ASH) for Linux is a [Salt](http://saltstack.org) formula to apply security benchmarks to Linux systems. This specific security bundle primarily targets systems derived from the Red Hat Enterprise Linux 6 distribution (typically RedHat Enterprise Linux, Community ENTerprise OS and Scientific Linux).
 
 This bundle also has partial applicability to upstream distributions of Red Hat Enterprise Linux 6 (i.e., Fedora 12 and 13) as well as custom hybrids that share components with Red Hat Enterprise Linux (such as Amazon Linux and Oracle Unbreakable Linux). The "partial" is a reflection that neither type of distribution attempts to maintain 100% compatibility with the software packages or security settings prescribed by the SCAP and related documentation sets. This package's hardening features are "best effort". Some modules may fail to work 100% correctly and will not cover any distribution-specific components that are not in the main EL6 distribution.
 
