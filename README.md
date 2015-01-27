@@ -10,4 +10,4 @@ The SCAP-recommended tests and remediations have been verified to implement the 
 * Taking a "report-only" response-posture where automated remediation is either not possible (guidance is policy-oriented rather than technical or remediation would require a system rebuild - such as implementing recommended filesystem layouts)
 * Hardening beyond what's prescribed by the SCAP guidance - either selecting the more-secure of settings that are prescribed with more than one option or fixing bugs in the formal guidances.
 
-As this Salt-based framework is adopted for wider use, additional security layers will be made availabe. This will include security layers to meet the [DISA IAVMs](https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip) and agency-specific poly overlays.
+As this Salt-based framework is adopted for wider use, additional security layers will be made availabe. It is expected that these extentions will include security layers to meet the [DISA IAVMs](https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip) and agency-specific policy-overlays.
