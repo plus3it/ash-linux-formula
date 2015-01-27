@@ -23,10 +23,25 @@ then
 fi
 
 # Locate all the VID SLS files and create a list
+printf "Constructing V-ID list... "
 VIDLIST=`find -L ${VIDHOME} -type f -name "V*.sls" | sort | sed '{
 s/^.*STIGbyID/STIGbyID/
 s/\.sls$//
 }'`
+echo "Done!"
+
+# Verify that authconfig has been run at least once
+if [ ! -e /etc/pam.d/system-auth-ac ]
+then
+   if [ ! -x /usr/sbin/authconfig ]
+   then
+      echo "PAM not set up and authconfig not available to fix. Aborting."
+      exit 1
+   fi
+   echo "Running authconfig"
+   /usr/sbin/authconfig --update
+fi
+
 
 # Iterate individual VIDs from VID-list
 for VID in ${VIDLIST}
