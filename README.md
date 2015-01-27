@@ -26,7 +26,7 @@ included tools/utilities/content. A later version will look into caching these
 from a salt master.
 
 A masterless salt configuration requires the following software groups and packages:
-- EL6 built with "Core" package-group or better
+- EL6 (x86_64) built with "Core" package-group or better
 - Additional distribution-vendor RPMs:
     - From the distribution's standard channel/repository
         - audit-libs-python
@@ -62,4 +62,20 @@ A masterless salt configuration requires the following software groups and packa
     - sshpass
     - zeromq3
 
+##Available Run-modes
+This collection of modules may be applied as either a "run-all" or "individual-run" invocation.
+- Use of the 'runsingly.sh' script will run all of the handlers supplied within this bundle
+- Individual modules may be run by manually running them via the 'salt-call' utility
+Instructions for both modes are provided later in this document. Each mode runs from the commandline writes to standard-out. Use the `tee` or other utility to capture this to the log-file.
 
+##Configuration
+This README assumes that the Salt packages have been downloaded via the `git` commandline-utility's 'clone' operation. This will create an "ash-linux-formula" subdirectory within the directory it is run from. It is assumed that this bundle will also be made available via TAR or 'cpio' archive - each should similarly result in the creation of an "ash-linux-formula" subdirectory somewhere on the host system.
+
+Navigate into the "ash-linux-formula" directory. Within this directory is a setup-utility, `setup.sh`. Running this utility will take care of installing the security policy modules into a file-hierarchy rooted under '/srv/salt'. This is the default search-location for the 'salt-minion' service. The 'salt-minion' service is used to run the security policy modules. This utility will also install an output-filter, `outFilter.sed`, into /usr/local/bin (this filter can be used to suppress some of the less-meaningful output produced by a run of the Salt packages).
+
+The `runsingly.sh` script may be left within and invoked from its default installation directory or moved eslewhere within the host system's filesystem-hierarchy. This script is designed that it should work correctly wherever it's installed or invoked from.
+
+The *ash-linux* formula does not currently support configuration via Salt's "pillar" functionality. Currently-expected deployment profiles did not necessitate the use of pillar to govern application-behavior beyond that available through the "run-all" or "individual-run" invocation methods. As this solution gains greater adoption and specific use-cases are identified, the *ash-linux* formulae will be updated to leverage Salt's "pillar" functionality to match those usage-profiles.
+
+##References
+(See links embedded above)
