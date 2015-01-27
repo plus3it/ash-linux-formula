@@ -12,7 +12,13 @@ The SCAP-recommended tests and remediations have been verified to implement the 
 
 As this Salt-based framework is adopted for wider use, additional security layers will be made availabe. It is expected that these extentions will include security layers to meet the [DISA IAVMs](https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip) and agency-specific policy-overlays.
 
+# Installation
+It is expected that these utilities will be installed primarily within environments that have access to RPM repositores homed on network- or media-based shares. While a stub-repo will be included in the archive containing these utilities, it is generally recommended to use a fully-updated RPM repository to install dependencies from.
 ##Dependencies
+This archive includes a bootstrapping script. This script is desinged almost exclusively for use on internet-connected systems (or ones with transparent web-proxying configured):
+- If invoked on a host attached to a public network, this script will take care of installing all dependencies prescribed for a masterless salt configuration (described below).
+- If invoked on an isolated host or a host without access to both a privately-maintained, full vendor repository and a copy of the EPEL 6 repository, it is recommended to manually-install the enumerated RPMs.
+- If installing to host with access to a privately-maintained, full vendor repository and a copy of the EPEL 6 repository, it is critical that appropriate /etc/yum.repos.d/* files be configured *prior* to any attempts to run the bootstrap script.
 
 - Optional (one of):
     - git and related RPMs [Already installed if this package was fetched via `git`]
@@ -62,12 +68,6 @@ A masterless salt configuration requires the following software groups and packa
     - sshpass
     - zeromq3
 
-##Available Run-modes
-This collection of modules may be applied as either a "run-all" or "individual-run" invocation.
-- Use of the 'runsingly.sh' script will run all of the handlers supplied within this bundle
-- Individual modules may be run by manually running them via the 'salt-call' utility
-Instructions for both modes are provided later in this document. Each mode runs from the commandline writes to standard-out. Use the `tee` or other utility to capture this to the log-file.
-
 ##Configuration
 This README assumes that the Salt packages have been downloaded via the `git` commandline-utility's 'clone' operation. This will create an "ash-linux-formula" subdirectory within the directory it is run from. It is assumed that this bundle will also be made available via TAR or 'cpio' archive - each should similarly result in the creation of an "ash-linux-formula" subdirectory somewhere on the host system.
 
@@ -76,6 +76,17 @@ Navigate into the "ash-linux-formula" directory. Within this directory is a setu
 The `runsingly.sh` script may be left within and invoked from its default installation directory or moved eslewhere within the host system's filesystem-hierarchy. This script is designed that it should work correctly wherever it's installed or invoked from.
 
 The *ash-linux* formula does not currently support configuration via Salt's "pillar" functionality. Currently-expected deployment profiles did not necessitate the use of pillar to govern application-behavior beyond that available through the "run-all" or "individual-run" invocation methods. As this solution gains greater adoption and specific use-cases are identified, the *ash-linux* formulae will be updated to leverage Salt's "pillar" functionality to match those usage-profiles.
+
+# How to Run
+##Available Run-modes
+This collection of modules may be applied as either a "run-all" or "individual-run" invocation.
+- Use of the 'runsingly.sh' script will run all of the handlers supplied within this bundle
+- Individual modules may be run by manually running them via the 'salt-call' utility
+Instructions for both modes are provided later in this document. Each mode runs from the commandline writes to standard-out. Use the `tee` or other utility to capture this to the log-file.
+### "Run-all" Mode
+This mode will run all of the VID files installed as part of this archive.
+### "Individual-Run" Mode
+This mode will individually-selected elements of the VID files installed as part of this archive.
 
 ##References
 (See links embedded above)
