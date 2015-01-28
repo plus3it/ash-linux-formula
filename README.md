@@ -93,6 +93,8 @@ This mode will run all of the security modules of a given category. To run in th
 ###"Individual-Run" Mode
 This mode will individually-selected elements of the VID files installed as part of this archive. To run in this mode, execute: `runpolicy.sh -v <Vulnerability ID>`. The script will indicate the run-mode and the location of logged output. The script will display all output to the screen and log all of the remediation-related steps to its log file.
 
+Runs of multiple individual tests can be accomplishe by declaring multiple '-v <Vulnerability ID>' pairs (e.g., `policyrun.sh -v V38466 -v V38586 -v V38491`).
+
 ###Usage-note for non-default SaltStack installation-locations:
 This script assumes that the Salt software has been configured to run from the "/srv/salt" hierarchy. If the Salt software has been configured to fun from another location, invoke the script with the '-h /<SALT>/<RUN>/<ROOT>' argument
 
