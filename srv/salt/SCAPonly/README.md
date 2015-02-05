@@ -1,1 +1,3 @@
 Salt policies found in this hierarchy are designed to address security recomendations published in the SCAP guidances that have not yet been included in the DISA STIGS (as of the January 2015 u6 release). While not yet part of the DISA stigs, these guidances are still included in some of the SCAP profiles that are included with the EL6 `openscap` RPMs. These guidances are currently advisory in nature and are provided to provide alerting and remediation for findings identified through use of more-aggressive profiles with the `oscap` utility.
+
+NOTE: the policies in this hierarchy are not yet invokable via the policyrun.sh utility. This will be addressed once this policy-repository is more-fully populated
