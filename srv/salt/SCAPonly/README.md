@@ -1,0 +1,1 @@
+Salt policies found in this hierarchy are designed to address security recomendations published in the SCAP guidances that have not yet been included in the DISA STIGS (as of the January 2015 u6 release).
