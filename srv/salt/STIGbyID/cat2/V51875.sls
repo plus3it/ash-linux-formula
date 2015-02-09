@@ -44,6 +44,7 @@ insert_V51875-{{ pamFile }}:
   - name: {{ pamFile }}
   - pattern: '^(session[ 	]*[a-z]*[ 	]*pam_lastlog.so[ 	][a-z]*)'
   - repl: '{{ failNotice }}'
+  {% else %}
 {% else %}
 
 notify_V51875-{{ pamFile }}:
