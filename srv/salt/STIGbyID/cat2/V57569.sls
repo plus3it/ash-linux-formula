@@ -21,6 +21,7 @@ script_V57569-describe:
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set tmpMnt = '/tmp' %}
 {% set activeMntStream = salt['mount.active']('extended=true') %}
+{% set mountStruct = activeMntStream[tmpMnt] %}
 
 {% if not tmpMnt in activeMntStream %}
 notify_V57569:
@@ -65,8 +66,6 @@ fstab_V57569-{{ mountPoint }}:
   - m_name: '{{ mountPoint }}'
   - device: '{{ remountDev }}'
   - opts: '{{ optString }}'
-    {% endif %}
-
     {% endif %}
   {% endif %} 
 {% endif %}
