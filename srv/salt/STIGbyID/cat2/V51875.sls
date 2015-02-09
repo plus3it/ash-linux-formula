@@ -30,10 +30,10 @@ cmd_V51875-linkSysauth:
 {% set pamFile = '/etc/pam.d/system-auth-ac' %}
 {% set pamMod = 'pam_lastlog.so' %}
 
-{% if salt['file.search'](checkFile, pamMod) %}
-  {% if salt['file.search'](checkFile, pamMod + ' showfailed') %}
-notify_V51875-{{ checkFile }}:
+{% if salt['file.search'](pamFile, pamMod) %}
+  {% if salt['file.search'](pamFile, pamMod + ' showfailed') %}
+notify_V51875-{{ pamFile }}:
   cmd.run:
-  - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ checkFile }}\n"'
+  - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ pamFile }}\n"'
   {% endif %}
 {% endif %}
