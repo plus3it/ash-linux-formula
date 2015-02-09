@@ -19,33 +19,26 @@ script_V57569-describe:
   - source: salt://STIGbyID/cat2/files/V57569.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
+{% set tmpMnt = '/tmp' %}
 {% set activeMntStream = salt['mount.active']('extended=true') %}
 
-{% if '/tmp' in activeMntStream %}
+{% if tmpMnt in activeMntStream %}
 notify_V57569:
   cmd.run:
-  - name: 'echo "/tmp is on its own partition"'
-{% else %}
-notify_V57569:
-  cmd.run:
-  - name: 'echo "/tmp is not on its own partition"'
-{% endif %}
+  - name: 'echo "''{{ tmpMnt }}'' is on its own partition"'
+  {% set mountStruct = activeMntStream[tmpMnt] %}
 
-############################################################
-
-{% set mountStruct = activeMntStream['/tmp'] %}
-
-# Grab the option-list for mount
-{% set optList = mountStruct['opts'] %}
+  # Grab the option-list for mount
+  {% set optList = mountStruct['opts'] %}
   # See if the mount has the 'noexec' option set
   {% if 'noexec' in optList %}
 notify_V57569-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "''/tmp'' mounted with ''noexec'' option"'
+  - name: 'echo "''{{ tmpMnt }}'' mounted with ''noexec'' option"'
   {% else %}
 notify_V57569-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "''/tmp'' not mounted with ''noexec'' option:"'
+  - name: 'echo "''{{ tmpMnt }}'' not mounted with ''noexec'' option:"'
 
 # Remount with "noexec" option added/set
   {% set optString = 'noexec,' + ','.join(optList) %}
@@ -75,6 +68,10 @@ fstab_V57569-{{ mountPoint }}:
   - opts: '{{ optString }}'
     {% endif %}
 
-  {% endif %}
-{% endif %} 
-{% endfor %}
+    {% endif %}
+  {% endif %} 
+{% else %}
+notify_V57569:
+  cmd.run:
+  - name: 'echo "''{{ tmpMnt }}'' is not on its own partition"'
+{% endif %}
