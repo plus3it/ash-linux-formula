@@ -35,7 +35,7 @@ notify_V54381:
 file_V54381:
   file.replace:
   - name: '{{ checkFile }}'
-  - pattern: '^{{ auditParm }}'
+  - pattern: '^{{ auditParm }} = .*'
   - repl: '{{ auditParm }} = suspend'
   {% endif %}
 {% else %}
