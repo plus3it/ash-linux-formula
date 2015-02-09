@@ -41,12 +41,19 @@ cmd_V38482-linkSysauth:
 set_V38574-sha512:
   cmd.run:
   - name: 'echo "Passwords already require SHA512 encryption"'
-  {% else %}
-# Tack on sha512 token if necessary
+  # If set to md5, switch to sha512
+  {% elif salt['file.search'](checkFile, '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.* md5 ') %}
 set_V38574-sha512:
   file.replace:
   - name: {{ checkFile }}
-  - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_unix.so.*$)'
+  - pattern: ' md5 '
+  - repl: ' {{ parmName }} '
+  # Tack on sha512 token if necessary
+  {% else %}
+set_V38574-sha512:
+  file.replace:
+  - name: {{ checkFile }}
+  - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
   - repl: '\g<srctok> {{ parmName }}'
   {% endif %}
 {% endif %}
