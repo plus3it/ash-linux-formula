@@ -1,4 +1,4 @@
-#!bin/sh
+#!/bin/sh
 #
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-57569
 # Finding ID:	V-57569
