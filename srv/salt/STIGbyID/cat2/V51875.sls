@@ -40,7 +40,11 @@ notify_V51875-{{ pamFile }}:
 
 {% else %}
 
-insert_V38501-{{ pamFile }}_faillock:
+notify_V51875-{{ pamFile }}:
+  cmd.run:
+  - name: 'printf "Adding {{ pamMod }} with ''showfailed'' option in {{ pamFile }}\n"'
+
+insert_V51875-{{ pamFile }}:
   file.replace:
   - name: {{ pamFile }}
   - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
