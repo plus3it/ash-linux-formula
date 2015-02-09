@@ -37,6 +37,7 @@ cmd_V38482-linkSysauth:
 {% endif %}
 
 {% if salt['file.search'](checkFile, ' pam_unix.so ') %}
+  # See if SHA512 already set
   {% if salt['file.search'](checkFile, ' ' + parmName) %}
 set_V38574-sha512:
   cmd.run:
