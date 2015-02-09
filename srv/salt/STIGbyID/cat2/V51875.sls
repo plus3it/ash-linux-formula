@@ -38,9 +38,9 @@ notify_V51875-{{ pamFile }}:
 {% endif %}
 ############################################################
 {% else %}
-insert_V38501-{{ checkFile }}_faillock:
+insert_V38501-{{ pamFile }}_faillock:
   file.replace:
-  - name: {{ checkFile }}
+  - name: {{ pamFile }}
   - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
   - repl: '\g<srctok>\n{{ failNotice }}'
   {% endif %}
