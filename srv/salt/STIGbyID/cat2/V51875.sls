@@ -29,7 +29,7 @@ cmd_V51875-linkSysauth:
 
 {% set pamFile = '/etc/pam.d/system-auth-ac' %}
 {% set pamMod = 'pam_lastlog.so' %}
-{% set failNotice = 'session     required	pam_lastlog.so showfailed' %}
+{% set failNotice = 'session     required      pam_lastlog.so showfailed' %}
 
 
 {% if salt['file.search'](pamFile, pamMod) %}
