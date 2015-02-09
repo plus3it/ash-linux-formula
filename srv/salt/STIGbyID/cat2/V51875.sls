@@ -31,17 +31,19 @@ cmd_V51875-linkSysauth:
 {% set pamMod = 'pam_lastlog.so' %}
 {% set failNotice = 'session	required	pam_lastlog.so showfailed' %}
 
+
 {% if salt['file.search'](pamFile, pamMod) %}
+
 notify_V51875-{{ pamFile }}:
   cmd.run:
   - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ pamFile }}\n"'
-{% endif %}
-############################################################
+
 {% else %}
+
 insert_V38501-{{ pamFile }}_faillock:
   file.replace:
   - name: {{ pamFile }}
   - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
   - repl: '\g<srctok>\n{{ failNotice }}'
-  {% endif %}
-{% endfor %}
+
+{% endif %}
