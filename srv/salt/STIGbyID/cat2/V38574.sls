@@ -42,7 +42,7 @@ set_V38574-sha512:
   cmd.run:
   - name: 'echo "Passwords already require SHA512 encryption"'
   # If set to md5, switch to sha512
-  {% elif salt['file.search'](checkFile, '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.* md5 ') %}
+  {% elif salt['file.search'](checkFile, '^[ 	]*password[ 	]*sufficient[ 	]*pam_unix.so.* md5 ') %}
 set_V38574-sha512:
   file.replace:
   - name: {{ checkFile }}
