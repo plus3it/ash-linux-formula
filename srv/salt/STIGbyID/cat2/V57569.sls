@@ -22,12 +22,11 @@ script_V57569-describe:
 {% set tmpMnt = '/tmp' %}
 {% set activeMntStream = salt['mount.active']('extended=true') %}
 
-{% if tmpMnt in activeMntStream %}
+{% if not tmpMnt in activeMntStream %}
 notify_V57569:
   cmd.run:
-  - name: 'echo "''{{ tmpMnt }}'' is on its own partition"'
-  {% set mountStruct = activeMntStream[tmpMnt] %}
-
+  - name: 'echo "''{{ tmpMnt }}'' is not on its own partition: nothing to do."'
+{% else %}
   # Grab the option-list for mount
   {% set optList = mountStruct['opts'] %}
   # See if the mount has the 'noexec' option set
@@ -70,8 +69,4 @@ fstab_V57569-{{ mountPoint }}:
 
     {% endif %}
   {% endif %} 
-{% else %}
-notify_V57569:
-  cmd.run:
-  - name: 'echo "''{{ tmpMnt }}'' is not on its own partition"'
 {% endif %}
