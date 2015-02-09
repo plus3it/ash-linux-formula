@@ -43,6 +43,7 @@ notify_V57569-{{ mountPoint }}:
 # Remount with "noexec" option added/set
   {% set optString = 'noexec,' + ','.join(optList) %}
   {% set remountDev = mountStruct['alt_device'] %}
+  {% set fsType = mountStruct['fstype'] %}
 notify_V57569-{{ mountPoint }}-remount:
   cmd.run:
   - name: 'printf "\t* Attempting remount...\n"'
@@ -53,6 +54,7 @@ remount_V57569-{{ mountPoint }}:
   - m_name: '{{ mountPoint }}'
   - device: '{{ remountDev }}'
   - opts: '{{ optString }}'
+  - fstype: '{{ fsType }}'
 
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
@@ -66,6 +68,7 @@ fstab_V57569-{{ mountPoint }}:
   - m_name: '{{ mountPoint }}'
   - device: '{{ remountDev }}'
   - opts: '{{ optString }}'
+  - fstype: '{{ fsType }}'
     {% endif %}
   {% endif %} 
 {% endif %}
