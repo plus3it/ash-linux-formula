@@ -19,14 +19,14 @@ script_V57569-describe:
   - source: salt://STIGbyID/cat2/files/V57569.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set tmpMnt = '/tmp' %}
+{% set mountPoint = '/tmp' %}
 {% set activeMntStream = salt['mount.active']('extended=true') %}
-{% set mountStruct = activeMntStream[tmpMnt] %}
+{% set mountStruct = activeMntStream[mountPoint] %}
 
-{% if not tmpMnt in activeMntStream %}
+{% if not mountPoint in activeMntStream %}
 notify_V57569:
   cmd.run:
-  - name: 'echo "''{{ tmpMnt }}'' is not on its own partition: nothing to do."'
+  - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
 {% else %}
   # Grab the option-list for mount
   {% set optList = mountStruct['opts'] %}
@@ -34,11 +34,11 @@ notify_V57569:
   {% if 'noexec' in optList %}
 notify_V57569-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "''{{ tmpMnt }}'' mounted with ''noexec'' option"'
+  - name: 'echo "''{{ mountPoint }}'' mounted with ''noexec'' option"'
   {% else %}
 notify_V57569-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "''{{ tmpMnt }}'' not mounted with ''noexec'' option:"'
+  - name: 'echo "''{{ mountPoint }}'' not mounted with ''noexec'' option:"'
 
 # Remount with "noexec" option added/set
   {% set optString = 'noexec,' + ','.join(optList) %}
