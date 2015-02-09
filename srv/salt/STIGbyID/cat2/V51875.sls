@@ -29,7 +29,7 @@ cmd_V51875-linkSysauth:
 
 {% set pamFile = '/etc/pam.d/system-auth-ac' %}
 {% set pamMod = 'pam_lastlog.so' %}
-{% set failNotice = 'session	required	pam_lastlog.so showfailed' %}
+{% set failNotice = 'session     required	pam_lastlog.so showfailed' %}
 
 
 {% if salt['file.search'](pamFile, pamMod) %}
@@ -47,7 +47,7 @@ notify_V51875-{{ pamFile }}:
 insert_V51875-{{ pamFile }}:
   file.replace:
   - name: {{ pamFile }}
-  - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
+  - pattern: '^(?P<srctok>session[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
   - repl: '\g<srctok>\n{{ failNotice }}'
 
 {% endif %}
