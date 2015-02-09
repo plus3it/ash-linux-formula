@@ -34,10 +34,16 @@ cmd_V51875-linkSysauth:
 
 {% if salt['file.search'](pamFile, pamMod) %}
 
+   {% if salt['file.search'](pamFile, pamMod + ' showfailed') %}
 notify_V51875-{{ pamFile }}:
   cmd.run:
   - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ pamFile }}\n"'
-
+   {% else %}
+insert_V51875-{{ pamFile }}:
+  file.replace:
+  - name: {{ pamFile }}
+  - pattern: '^(session[ 	]*[a-z]*[ 	]*pam_lastlog.so[ 	][a-z]*)'
+  - repl: '{{ failNotice }}'
 {% else %}
 
 notify_V51875-{{ pamFile }}:
