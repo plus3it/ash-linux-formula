@@ -34,6 +34,6 @@ cmd_V51875-linkSysauth:
   {% if salt['file.search'](checkFile, pamMod + ' showfailed') %}
 notify_V51875-{{ checkFile }}:
   cmd.run:
-  - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ checkFile }}\n'
+  - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ checkFile }}\n"'
   {% endif %}
 {% endif %}
