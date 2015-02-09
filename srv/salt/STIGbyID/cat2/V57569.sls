@@ -42,7 +42,7 @@ notify_V57569-{{ mountPoint }}:
 
 # Remount with "noexec" option added/set
   {% set optString = 'noexec,' + ','.join(optList) %}
-  {% set remountDev = mountList['alt_device'] %}
+  {% set remountDev = mountPoint['alt_device'] %}
 notify_V57569-{{ mountPoint }}-remount:
   cmd.run:
   - name: 'printf "\t* Attempting remount...\n"'
