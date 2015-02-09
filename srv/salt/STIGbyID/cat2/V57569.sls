@@ -30,3 +30,51 @@ notify_V57569:
   cmd.run:
   - name: 'echo "/tmp is not on its own partition"'
 {% endif %}
+
+############################################################
+
+{% set mountStruct = activeMntStream['/tmp'] %}
+
+# Grab the option-list for mount
+{% set optList = mountStruct['opts'] %}
+  # See if the mount has the 'noexec' option set
+  {% if 'noexec' in optList %}
+notify_V57569-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "''/tmp'' mounted with ''noexec'' option"'
+  {% else %}
+notify_V57569-{{ mountPoint }}:
+  cmd.run:
+  - name: 'echo "''/tmp'' not mounted with ''noexec'' option:"'
+
+# Remount with "noexec" option added/set
+  {% set optString = 'noexec,' + ','.join(optList) %}
+  {% set remountDev = mountList['alt_device'] %}
+notify_V57569-{{ mountPoint }}-remount:
+  cmd.run:
+  - name: 'printf "\t* Attempting remount...\n"'
+
+remount_V57569-{{ mountPoint }}:
+  module.run:
+  - name: 'mount.remount'
+  - m_name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - opts: '{{ optString }}'
+
+    # Update fstab (if necessary)
+    {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+notify_V57569-{{ mountPoint }}-fixFstab:
+  cmd.run:
+  - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
+
+fstab_V57569-{{ mountPoint }}:
+  module.run:
+  - name: 'mount.set_fstab'
+  - m_name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - opts: '{{ optString }}'
+    {% endif %}
+
+  {% endif %}
+{% endif %} 
+{% endfor %}
