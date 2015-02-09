@@ -5,12 +5,27 @@
 # Version:	
 # Finding Level:	Medium
 #
-#     The operating system, upon successful logon/access, must display to 
-#     the user the number of unsuccessful logon/access attempts since the 
-#     last successful logon/access. Users need to be aware of activity that 
-#     occurs regarding their account. Providing users with information 
-#     regarding the number of unsuccessful attempts that were made to login 
-#     to their account allows ...
+#     Users need to be aware of activity that occurs regarding their 
+#     account. Providing users with information regarding the number 
+#     of unsuccessful attempts that were made to login to their 
+#     account allows the user to determine if any unauthorized 
+#     activity has occurred and gives them an opportunity to notify 
+#     administrators. 
 #
-############################################################
+# CCI: CCI-000366
+# NIST SP 800-53 :: CM-6 b
+# NIST SP 800-53A :: CM-6.1 (iv)
+# NIST SP 800-53 Revision 4 :: CM-6 b
+#
+#################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: V-51875"
+diag_out "  OS must display count of failed"
+diag_out "  login attempts since last logon"
+diag_out "----------------------------------"
 
