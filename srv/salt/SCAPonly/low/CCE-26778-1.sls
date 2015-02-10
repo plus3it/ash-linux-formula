@@ -42,7 +42,7 @@ notify_CCE-26778-1-{{ mountPoint }}:
 
 # Remount with "nodev" option added/set
   {% set optString = 'nodev,' + ','.join(optList) %}
-  {% set remountDev = mountStruct[mountPoint] %}
+  {% set remountDev = mountPoint %}
   {% set fsType = mountStruct['fstype'] %}
 notify_CCE-26778-1-{{ mountPoint }}-remount:
   cmd.run:
