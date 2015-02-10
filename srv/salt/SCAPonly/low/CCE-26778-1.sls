@@ -42,6 +42,22 @@ notify_CCE-26778-1-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "''{{ mountPoint }}'' not mounted with ''nodev'' option:"'
 
+    # Update fstab (if necessary)
+    {% if salt['file.search']('/etc/fstab', '^' + fsType + '[ 	]' + mountPoint + '[ 	]') %}
+notify_CCE-26778-1-{{ mountPoint }}-fixFstab:
+  cmd.run:
+  - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
+
+fstab_CCE-26778-1-{{ mountPoint }}:
+  module.run:
+  - name: 'mount.set_fstab'
+  - m_name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - opts: '{{ optString }}'
+  - fstype: '{{ fsType }}'
+    {% endif %}
+  {% endif %} 
+
 # Remount with "nodev" option added/set
   {% set optString = 'nodev,' + ','.join(optList) %}
   {% set remountDev = mountPoint %}
@@ -58,19 +74,4 @@ remount_CCE-26778-1-{{ mountPoint }}:
   - opts: '{{ optString }}'
   - fstype: '{{ fsType }}'
 
-    # Update fstab (if necessary)
-    {% if salt['file.search']('/etc/fstab', '^' + fsType + '[ 	]' + mountPoint + '[ 	]') %}
-notify_CCE-26778-1-{{ mountPoint }}-fixFstab:
-  cmd.run:
-  - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
-
-fstab_CCE-26778-1-{{ mountPoint }}:
-  module.run:
-  - name: 'mount.set_fstab'
-  - m_name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - opts: '{{ optString }}'
-  - fstype: '{{ fsType }}'
-    {% endif %}
-  {% endif %} 
 {% endif %}
