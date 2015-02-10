@@ -42,6 +42,11 @@ notify_CCE-26778-1-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "''{{ mountPoint }}'' not mounted with ''nodev'' option:"'
 
+# Remount with "nodev" option added/set
+  {% set optString = 'nodev,' + ','.join(optList) %}
+  {% set remountDev = mountPoint %}
+  {% set fsType = mountStruct['fstype'] %}
+
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + fsType + '[ 	]' + mountPoint + '[ 	]') %}
 notify_CCE-26778-1-{{ mountPoint }}-fixFstab:
@@ -58,10 +63,6 @@ fstab_CCE-26778-1-{{ mountPoint }}:
     {% endif %}
   {% endif %} 
 
-# Remount with "nodev" option added/set
-  {% set optString = 'nodev,' + ','.join(optList) %}
-  {% set remountDev = mountPoint %}
-  {% set fsType = mountStruct['fstype'] %}
 notify_CCE-26778-1-{{ mountPoint }}-remount:
   cmd.run:
   - name: 'printf "\t* Attempting remount...\n"'
