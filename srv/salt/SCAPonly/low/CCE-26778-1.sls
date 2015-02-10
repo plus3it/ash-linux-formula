@@ -12,6 +12,8 @@
 #            /dev/shm. Add the nodev option to the fourth column of 
 #            /etc/fstab for the line which controls mounting of /dev/shm.
 #
+# NOTE: /dev/shm not governed by /etc/fstab.
+#
 #################################################################
 
 script_CCE-26778-1-describe:
@@ -57,7 +59,7 @@ remount_CCE-26778-1-{{ mountPoint }}:
   - fstype: '{{ fsType }}'
 
     # Update fstab (if necessary)
-    {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+    {% if salt['file.search']('/etc/fstab', '^' + fsType + '[ 	]' + mountPoint + '[ 	]') %}
 notify_CCE-26778-1-{{ mountPoint }}-fixFstab:
   cmd.run:
   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
