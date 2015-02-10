@@ -48,7 +48,7 @@ notify_CCE-26778-1-{{ mountPoint }}:
   {% set fsType = mountStruct['fstype'] %}
 
     # Update fstab (if necessary)
-    {% if salt['file.search']('/etc/fstab', '^' + fsType + '[ 	]' + mountPoint + '[ 	]') %}
+    {% if salt['file.search']('/etc/fstab', '^' + fsType + '[ 	]*' + mountPoint + '[ 	]*') %}
 notify_CCE-26778-1-{{ mountPoint }}-fixFstab:
   cmd.run:
   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
