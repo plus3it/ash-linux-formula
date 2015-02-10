@@ -14,9 +14,9 @@
 #
 #################################################################
 
-script_V57569-describe:
+script_CCE-26499-4-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V57569.sh
+  - source: salt://STIGbyID/cat2/files/CCE-26499-4.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set mountPoint = '/tmp' %}
@@ -24,7 +24,7 @@ script_V57569-describe:
 {% set mountStruct = activeMntStream[mountPoint] %}
 
 {% if not mountPoint in activeMntStream %}
-notify_V57569:
+notify_CCE-26499-4:
   cmd.run:
   - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
 {% else %}
@@ -32,11 +32,11 @@ notify_V57569:
   {% set optList = mountStruct['opts'] %}
   # See if the mount has the 'nodev' option set
   {% if 'nodev' in optList %}
-notify_V57569-{{ mountPoint }}:
+notify_CCE-26499-4-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "''{{ mountPoint }}'' mounted with ''nodev'' option"'
   {% else %}
-notify_V57569-{{ mountPoint }}:
+notify_CCE-26499-4-{{ mountPoint }}:
   cmd.run:
   - name: 'echo "''{{ mountPoint }}'' not mounted with ''nodev'' option:"'
 
@@ -44,11 +44,11 @@ notify_V57569-{{ mountPoint }}:
   {% set optString = 'nodev,' + ','.join(optList) %}
   {% set remountDev = mountStruct['alt_device'] %}
   {% set fsType = mountStruct['fstype'] %}
-notify_V57569-{{ mountPoint }}-remount:
+notify_CCE-26499-4-{{ mountPoint }}-remount:
   cmd.run:
   - name: 'printf "\t* Attempting remount...\n"'
 
-remount_V57569-{{ mountPoint }}:
+remount_CCE-26499-4-{{ mountPoint }}:
   module.run:
   - name: 'mount.remount'
   - m_name: '{{ mountPoint }}'
@@ -58,11 +58,11 @@ remount_V57569-{{ mountPoint }}:
 
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
-notify_V57569-{{ mountPoint }}-fixFstab:
+notify_CCE-26499-4-{{ mountPoint }}-fixFstab:
   cmd.run:
   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
-fstab_V57569-{{ mountPoint }}:
+fstab_CCE-26499-4-{{ mountPoint }}:
   module.run:
   - name: 'mount.set_fstab'
   - m_name: '{{ mountPoint }}'
