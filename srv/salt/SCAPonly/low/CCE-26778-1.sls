@@ -19,6 +19,7 @@
 script_CCE-26778-1-describe:
   cmd.script:
   - source: salt://SCAPonly/low/files/CCE-26778-1.sh
+  - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set mountPoint = '/dev/shm' %}

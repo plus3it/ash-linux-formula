@@ -16,6 +16,7 @@
 script_CCE-27221-1-describe:
   cmd.script:
   - source: salt://SCAPonly/low/files/CCE-27221-1.sh
+  - cwd: '/root'
 
 {% set TargFile = '/etc/sysconfig/prelink' %}
 
