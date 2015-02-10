@@ -16,7 +16,7 @@
 
 script_CCE-26499-4-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/CCE-26499-4.sh
+  - source: salt://SCAPonly/low/files/CCE-26499-4.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set mountPoint = '/tmp' %}
