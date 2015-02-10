@@ -30,19 +30,19 @@ notify_CCE-26778-1:
 {% else %}
   # Grab the option-list for mount
   {% set optList = mountStruct['opts'] %}
-  # See if the mount has the 'nosuid' option set
-  {% if 'nosuid' in optList %}
+  # See if the mount has the 'nodev' option set
+  {% if 'nodev' in optList %}
 notify_CCE-26778-1-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "''{{ mountPoint }}'' mounted with ''nosuid'' option"'
+  - name: 'echo "''{{ mountPoint }}'' mounted with ''nodev'' option"'
   {% else %}
 notify_CCE-26778-1-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "''{{ mountPoint }}'' not mounted with ''nosuid'' option:"'
+  - name: 'echo "''{{ mountPoint }}'' not mounted with ''nodev'' option:"'
 
-# Remount with "nosuid" option added/set
-  {% set optString = 'nosuid,' + ','.join(optList) %}
-  {% set remountDev = mountStruct['alt_device'] %}
+# Remount with "nodev" option added/set
+  {% set optString = 'nodev,' + ','.join(optList) %}
+  {% set remountDev = mountStruct['mountPoint'] %}
   {% set fsType = mountStruct['fstype'] %}
 notify_CCE-26778-1-{{ mountPoint }}-remount:
   cmd.run:
