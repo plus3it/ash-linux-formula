@@ -18,22 +18,22 @@
 
 script_V38615-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38615.sh
+    - source: salt://STIGbyID/cat2/files/V38615.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^Banner')
  %}
 file_V38615-repl:
   file.replace:
-  - name: '/etc/ssh/sshd_config'
-  - pattern: '^Banner.*$'
-  - repl: 'Banner /etc/issue'
+    - name: '/etc/ssh/sshd_config'
+    - pattern: '^Banner.*$'
+    - repl: 'Banner /etc/issue'
 {% else %}
 file_V38615-append:
   file.append:
-  - name: '/etc/ssh/sshd_config'
-  - text:
-    - ' '
-    - '# SSH service must present DoD login banners (per STIG V-38615)'
-    - 'Banner /etc/issue'
+    - name: '/etc/ssh/sshd_config'
+    - text:
+      - ' '
+      - '# SSH service must present DoD login banners (per STIG V-38615)'
+      - 'Banner /etc/issue'
 {% endif %}
 

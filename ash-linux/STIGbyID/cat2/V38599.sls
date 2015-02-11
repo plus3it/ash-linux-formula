@@ -18,12 +18,12 @@
 
 script_V38599-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38599.sh
+    - source: salt://STIGbyID/cat2/files/V38599.sh
 
 {% if salt['pkg.version']('nordugrid-arc-gridftpd') %}
 cmd_V38599-NotImplemented:
   cmd.run:
-  - name: 'echo "NOT YET IMPLEMENTED"'
+    - name: 'echo "NOT YET IMPLEMENTED"'
 {% endif %}
 
 ###################################
@@ -32,15 +32,15 @@ cmd_V38599-NotImplemented:
 {% if salt['pkg.version']('proftpd') and salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
 file_V38599-repl:
   file.replace:
-  - name: '/etc/proftpd.conf'
-  - pattern: '^DisplayConnect.*$'
-  - repl: 'DisplayConnect	/etc/issue'
+    - name: '/etc/proftpd.conf'
+    - pattern: '^DisplayConnect.*$'
+    - repl: 'DisplayConnect	/etc/issue'
 {% elif salt['pkg.version']('proftpd') and not salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
 file_V38599-repl:
   file.replace:
-  - name: '/etc/proftpd.conf'
-  - pattern: '^(?P<srctok>ServerIdent.*$)'
-  - repl: '\g<srctok>\nDisplayConnect\t\t\t/etc/issue'
+    - name: '/etc/proftpd.conf'
+    - pattern: '^(?P<srctok>ServerIdent.*$)'
+    - repl: '\g<srctok>\nDisplayConnect\t\t\t/etc/issue'
 {% endif %}
 ###################################
 
@@ -50,17 +50,17 @@ file_V38599-repl:
 {% if salt['pkg.version']('pure-ftpd') and salt['file.search']('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
 file_V38599-repl:
   file.replace:
-  - name: '/etc/pure-ftpd/pure-ftpd.conf'
-  - pattern: '^FortunesFile.*$'
-  - repl: 'FortunesFile	/etc/issue'
+    - name: '/etc/pure-ftpd/pure-ftpd.conf'
+    - pattern: '^FortunesFile.*$'
+    - repl: 'FortunesFile	/etc/issue'
 {% elif salt['pkg.version']('pure-ftpd') and not salt['file.search']('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
 file_V38599-append:
   file.append:
-  - name: '/etc/pure-ftpd/pure-ftpd.conf'
-  - text:
-    - ' '
-    - '# Enable standard security banners (per STIG V-38599)'
-    - 'FortunesFile	/etc/issue'
+    - name: '/etc/pure-ftpd/pure-ftpd.conf'
+    - text:
+      - ' '
+      - '# Enable standard security banners (per STIG V-38599)'
+      - 'FortunesFile	/etc/issue'
 {% endif %}
 #####################################
 
@@ -71,16 +71,16 @@ file_V38599-append:
 {% if salt['pkg.version']('vsftpd') and salt['file.search']('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
 file_V38599-repl:
   file.replace:
-  - name: '/etc/vsftpd/vsftpd.conf'
-  - pattern: '^banner_file.*$'
-  - repl: 'banner_file=/etc/issue'
+    - name: '/etc/vsftpd/vsftpd.conf'
+    - pattern: '^banner_file.*$'
+    - repl: 'banner_file=/etc/issue'
 {% elif salt['pkg.version']('vsftpd') and not salt['file.search']('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
 file_V38599-append:
   file.append:
-  - name: '/etc/vsftpd/vsftpd.conf'
-  - text:
-    - ' '
-    - '# Enable standard security banners (per STIG V-38599)'
-    - 'banner_file=/etc/issue'
+    - name: '/etc/vsftpd/vsftpd.conf'
+    - text:
+      - ' '
+      - '# Enable standard security banners (per STIG V-38599)'
+      - 'banner_file=/etc/issue'
 {% endif %}
 ##################################

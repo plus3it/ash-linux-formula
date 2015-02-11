@@ -19,7 +19,7 @@
 
 script_V38684-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38684.sh
+    - source: salt://STIGbyID/cat3/files/V38684.sh
 
 {% set CHANGED = 0 %}
 
@@ -30,7 +30,7 @@ script_V38684-describe:
     {% set CHANGED = '1' %}
 set_V38684-noCores:
   cmd.run:
-  - name: 'echo "Users already limited to 10 interactive logins"'
+    - name: 'echo "Users already limited to 10 interactive logins"'
   {% endif %}
 
   # If proper value present but commented out, uncomment
@@ -38,23 +38,23 @@ set_V38684-noCores:
     {% set CHANGED = '1' %}
 set_V38684-noCores:
   file.uncomment:
-  - name: '/etc/security/limits.conf'
-  - regex: '^\*[ 	]hard[ 	]*maxlogins[ 	]*.*$'
-  - text: '*	hard 	maxlogins	10'
+    - name: '/etc/security/limits.conf'
+    - regex: '^\*[ 	]hard[ 	]*maxlogins[ 	]*.*$'
+    - text: '*	hard 	maxlogins	10'
   {% endif %}
 
   # If bad value present, change it
   {% if CHANGED == 0 %}
 set_V38684-noCores:
   file.replace:
-  - name: '/etc/security/limits.conf'
-  - pattern: '^\*[ 	]hard[ 	]*maxlogins[ 	]*.*$'
-  - repl: '*	hard 	maxlogins	10'
+    - name: '/etc/security/limits.conf'
+    - pattern: '^\*[ 	]hard[ 	]*maxlogins[ 	]*.*$'
+    - repl: '*	hard 	maxlogins	10'
   {% endif %}
 # Append if no "hard maxlogins" value is found
 {% else %}
 set_V38684-noCores:
   file.append:
-  - name: '/etc/security/limits.conf'
-  - text: '*	hard	maxlogins	10'
+    - name: '/etc/security/limits.conf'
+    - text: '*	hard	maxlogins	10'
 {% endif %}

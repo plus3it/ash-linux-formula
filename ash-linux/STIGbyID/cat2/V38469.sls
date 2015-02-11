@@ -17,7 +17,7 @@
 
 script_V38469-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38469.sh
+    - source: salt://STIGbyID/cat2/files/V38469.sh
 
 # Define list of binary directories to search
 {% set checkBinDirs = [
@@ -36,12 +36,12 @@ script_V38469-describe:
 # Report what we're doing
 notify_V38469-{{ binDir }}:
   cmd.run:
-  - name: 'echo "Checking ''{{ binDir }}'' for group- or world-writable files"'
+    - name: 'echo "Checking ''{{ binDir }}'' for group- or world-writable files"'
 
 # Check (and fix as necessary) library
 strip_V38469-{{ binDir }}:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38469-helper.sh
-  - args: {{ binDir }}
+    - source: salt://STIGbyID/cat2/files/V38469-helper.sh
+    - args: {{ binDir }}
 
 {% endfor %}

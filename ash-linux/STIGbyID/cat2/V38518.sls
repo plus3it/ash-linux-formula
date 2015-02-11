@@ -17,7 +17,7 @@
 
 script_V38518-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38518.sh
+    - source: salt://STIGbyID/cat2/files/V38518.sh
 
 {% set cfgFile = '/etc/rsyslog.conf' %}
 
@@ -64,25 +64,25 @@ script_V38518-describe:
     {% if logFile[0] == '/' %}
 notify_V38518-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "Setting owner of {{ logFile }} to root."'
+    - name: 'echo "Setting owner of {{ logFile }} to root."'
 
 owner_V38518-{{ logFacility }}:
   file.managed:
-  - name: '{{ logFile }}'
-  - user: root
-  - replace: false
+    - name: '{{ logFile }}'
+    - user: root
+    - replace: false
 
     {% else %}
 {% set logFile = logFile[1:] %}
 notify_V38518-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "Setting owner of {{ logFile }} to root."'
+    - name: 'echo "Setting owner of {{ logFile }} to root."'
 
 owner_V38518-{{ logFacility }}:
   file.managed:
-  - name: '{{ logFile }}'
-  - user: root
-  - replace: false
+    - name: '{{ logFile }}'
+    - user: root
+    - replace: false
 
     {% endif %}
   {% endif %}

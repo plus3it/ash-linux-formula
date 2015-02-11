@@ -17,7 +17,7 @@
 
 script_V38619-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38619.sh
+    - source: salt://STIGbyID/cat2/files/V38619.sh
 
 {% for user in salt['user.getent']('') %}
   {% set ID = user['name'] %}
@@ -27,24 +27,24 @@ script_V38619-describe:
   {% if salt['file.file_exists'](netRc) %}
 notify_V38619-{{ ID }}:
   cmd.run:
-  - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'
+    - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'
 
 move_V38619-{{ ID }}:
   file.rename:
-  - source: '{{ netRc }}'
-  - name: '{{ netRc }}-MOVEDperSTIGS'
+    - source: '{{ netRc }}'
+    - name: '{{ netRc }}-MOVEDperSTIGS'
 
 warnfile_V38619-{{ ID }}:
   file.prepend:
-  - name: '{{ netRc }}-MOVEDperSTIGS'
-  - text:
-    - '##################################################'
-    - '# File moved per STIG V-38619'
-    - '#'
-    - '# DO NOT RENAME to {{ netRc }}'
-    - '# * presence of netrcs is a security-violation'
-    - '#'
-    - '##################################################'
+    - name: '{{ netRc }}-MOVEDperSTIGS'
+    - text:
+      - '##################################################'
+      - '# File moved per STIG V-38619'
+      - '#'
+      - '# DO NOT RENAME to {{ netRc }}'
+      - '# * presence of netrcs is a security-violation'
+      - '#'
+      - '##################################################'
 
 {% endif %}
 {% endfor %}

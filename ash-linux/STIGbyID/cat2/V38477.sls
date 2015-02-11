@@ -17,11 +17,10 @@
 
 script_V38477-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38477.sh
+    - source: salt://STIGbyID/cat2/files/V38477.sh
 
 file_V38477:
   file.replace:
-  - name: /etc/login.defs
-  - pattern: "^PASS_MIN_DAYS.*$"
-  - repl: "PASS_MIN_DAYS	1"
-
+    - name: /etc/login.defs
+    - pattern: "^PASS_MIN_DAYS.*$"
+    - repl: "PASS_MIN_DAYS	1"

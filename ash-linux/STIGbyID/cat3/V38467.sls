@@ -16,7 +16,7 @@
 
 script_V38467-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38467.sh
+    - source: salt://STIGbyID/cat3/files/V38467.sh
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
@@ -24,9 +24,9 @@ script_V38467-describe:
 {% if salt['file.search']('/etc/fstab', '[ 	]/var/log/audit[ 	]') %}
 mount_V38467-tmp:
    cmd.run:
-   - name: 'echo "/var/log/audit already mounted as its own filesystem"'
+     - name: 'echo "/var/log/audit already mounted as its own filesystem"'
 {% else %}
 mount_V38467-tmp:
    cmd.run:
-   - name: 'echo "Manual intervention required: create and mount a device as /var/log/audit"'
+     - name: 'echo "Manual intervention required: create and mount a device as /var/log/audit"'
 {% endif %}

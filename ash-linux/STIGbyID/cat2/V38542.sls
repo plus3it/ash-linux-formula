@@ -18,20 +18,20 @@
 
 script_V38542-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38542.sh
+    - source: salt://STIGbyID/cat2/files/V38542.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.rp_filter') %}
 file_V38542-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^net.ipv4.conf.all.rp_filter.*$'
-  - repl: 'net.ipv4.conf.all.rp_filter = 1'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^net.ipv4.conf.all.rp_filter.*$'
+    - repl: 'net.ipv4.conf.all.rp_filter = 1'
 {% else %}
 file_V38542-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ' '
-    - '# Enable reverse-path filtering (per STIG V-38542)'
-    - 'net.ipv4.conf.all.rp_filter = 1'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ' '
+      - '# Enable reverse-path filtering (per STIG V-38542)'
+      - 'net.ipv4.conf.all.rp_filter = 1'
 {% endif %}

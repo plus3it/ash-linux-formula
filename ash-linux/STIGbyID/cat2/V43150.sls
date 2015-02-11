@@ -17,14 +17,14 @@
 
 script_V43150-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V43150.sh
+    - source: salt://STIGbyID/cat2/files/V43150.sh
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V43150-setNoUserlist:
   cmd.run:
-  - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/disable_user_list true'
+    - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/disable_user_list true'
 {% else %}
 notify_V43150:
   cmd.run:
-  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
+    - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {% endif %}

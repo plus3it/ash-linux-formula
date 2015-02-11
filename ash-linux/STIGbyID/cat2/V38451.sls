@@ -16,9 +16,9 @@
 
 script_V38451-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38451.sh
+    - source: salt://STIGbyID/cat2/files/V38451.sh
 
 file_38451:
   file.managed:
-  - name: /etc/passwd
-  - group: root
+    - name: /etc/passwd
+    - group: root

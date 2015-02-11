@@ -12,7 +12,7 @@
 
 script_V38455-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38455.sh
+    - source: salt://STIGbyID/cat3/files/V38455.sh
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
@@ -20,14 +20,14 @@ script_V38455-describe:
 {% if salt['file.search']('/etc/fstab', '[ 	]/tmp[ 	]') %}
 mount_V38455-tmp:
    cmd.run:
-   - name: 'echo "/tmp already mounted as its own filesystem"'
+     - name: 'echo "/tmp already mounted as its own filesystem"'
 {% else %}
 mount_V38455-tmp:
   mount.mounted:
-  - name: /tmp
-  - device: tmpfs
-  - fstype: tmpfs
-  - mkmnt: True
-  - opts:
-    - defaults
+    - name: /tmp
+    - device: tmpfs
+    - fstype: tmpfs
+    - mkmnt: True
+    - opts:
+      - defaults
 {% endif %}

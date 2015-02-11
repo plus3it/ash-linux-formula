@@ -17,22 +17,21 @@
 
 script_V38600-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38600.sh
+    - source: salt://STIGbyID/cat2/files/V38600.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.send_redirects')
  %}
 file_V38600-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^net.ipv4.conf.default.send_redirects.*$'
-  - repl: 'net.ipv4.conf.default.send_redirects = 0'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^net.ipv4.conf.default.send_redirects.*$'
+    - repl: 'net.ipv4.conf.default.send_redirects = 0'
 {% else %}
 file_V38600-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ' '
-    - '# Disable sending ICMP redirects (per STIG V-38600)'
-    - 'net.ipv4.conf.default.send_redirects = 0'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ' '
+      - '# Disable sending ICMP redirects (per STIG V-38600)'
+      - 'net.ipv4.conf.default.send_redirects = 0'
 {% endif %}
-

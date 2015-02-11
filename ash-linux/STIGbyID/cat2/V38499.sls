@@ -16,8 +16,8 @@
 
 script_V38499-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38499.sh
+    - source: salt://STIGbyID/cat2/files/V38499.sh
 
 cmd_V38499:
   cmd.run:
-  - name: '/usr/sbin/pwconv'
+    - name: '/usr/sbin/pwconv'

@@ -17,28 +17,27 @@
 
 script_V38659-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38659.sh
+    - source: salt://STIGbyID/cat3/files/V38659.sh
 
 notify_V38659-NotApplicable:
   cmd.run:
-  - name: 'printf "Not a technical control:\n\tReview local policies then determine\n\tif policies have been applied to system.\n\tModule will check for LUKS indicators.\n"'
+    - name: 'printf "Not a technical control:\n\tReview local policies then determine\n\tif policies have been applied to system.\n\tModule will check for LUKS indicators.\n"'
 
 {% if salt['file.file_exists']('/etc/crypttab') %}
 notify_V38659-CryptTab:
   cmd.run:
-  - name: 'echo "System crypttab found."'
+    - name: 'echo "System crypttab found."'
 
 chk_V38659-LUKSdevs:
   cmd.run:
-  - name: "echo 'Found LUKS-devs:' ; blkid -t TYPE=ext4 | awk -F':' '{print $1}'"
+    - name: "echo 'Found LUKS-devs:' ; blkid -t TYPE=ext4 | awk -F':' '{print $1}'"
 {% else %}
 notify_V38659-CryptTab:
   cmd.run:
-  - name: 'echo "No crypttab file found: automated LUKS mounts not configured."'
+    - name: 'echo "No crypttab file found: automated LUKS mounts not configured."'
   {% if not salt['pkg.version']('cryptsetup-luks') %}
 notify_V38659-LUKStools:
   cmd.run:
-  - name: 'echo "LUKS tools not installed: LUKS device-management not possible."'
+    - name: 'echo "LUKS tools not installed: LUKS device-management not possible."'
   {% endif %}
 {% endif %}
-

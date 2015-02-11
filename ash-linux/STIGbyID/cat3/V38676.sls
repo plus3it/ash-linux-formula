@@ -12,10 +12,10 @@
 
 script_V38676-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38676.sh
+    - source: salt://STIGbyID/cat3/files/V38676.sh
 
 {% if not salt['pkg.version']('xorg-x11-server-common') %}
 notify_V38676-noPostfix:
   cmd.run:
-  - name: 'echo "X Windows package not installed"'
+    - name: 'echo "X Windows package not installed"'
 {% endif %}

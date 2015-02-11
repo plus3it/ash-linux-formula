@@ -17,7 +17,7 @@
 
 script_V38571-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38571.sh
+    - source: salt://STIGbyID/cat3/files/V38571.sh
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 {% set parmName = 'lcredit' %}
@@ -25,29 +25,27 @@ script_V38571-describe:
 {% if not salt['file.file_exists'](checkFile) %}
 cmd_V38571-linkSysauth:
   cmd.run:
-  - name: '/usr/sbin/authconfig --update'
+    - name: '/usr/sbin/authconfig --update'
 {% endif %}
 
 {% if salt['file.search'](checkFile, ' pam_cracklib.so ') %}
   {% if salt['file.search'](checkFile, ' ' + parmName + '=-[0-9][0-9]*[ ]*') %}
 lcredit_V38571-minusOne:
   cmd.run:
-  - name: 'echo "Passwords already require at least one lowercase letter"'
+    - name: 'echo "Passwords already require at least one lowercase letter"'
   {% elif salt['file.search'](checkFile, ' ' + parmName + '=[0-9][0-9]*[ ]*') %}
 # Change existing lcredit with positive integer value to minus-1
 lcredit_V38571-minusOne:
   file.replace:
-  - name: {{ checkFile }}
-  - pattern: '{{ parmName }}=[0-9][0-9]*'
-  - repl: '{{ parmName }}=-1'
+    - name: {{ checkFile }}
+    - pattern: '{{ parmName }}=[0-9][0-9]*'
+    - repl: '{{ parmName }}=-1'
   {% else %}
 # Tack on decredit of minus-1 if necessary
 lcredit_V38571-minusOne:
   file.replace:
-  - name: {{ checkFile }}
-  - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
-  - repl: '\g<srctok> {{ parmName }}=-1'
+    - name: {{ checkFile }}
+    - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
+    - repl: '\g<srctok> {{ parmName }}=-1'
   {% endif %}
 {% endif %}
-
-

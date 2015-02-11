@@ -13,21 +13,20 @@
 
 script_V38649-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38649.sh
+    - source: salt://STIGbyID/cat3/files/V38649.sh
 
 {% if salt['file.search']('/etc/csh.cshrc', '^[ 	]*umask') %}
 file_V38649-configSet:
   file.replace:
-  - name: '/etc/csh.cshrc'
-  - pattern: 'umask.*$'
-  - repl: 'umask 077'
+    - name: '/etc/csh.cshrc'
+    - pattern: 'umask.*$'
+    - repl: 'umask 077'
 {% else %}
 file_V38649-configSet:
   file.append:
-  - name: '/etc/csh.cshrc'
-  - text:
-    - ' '
-    - '# Umask must be set to "077" (per STIG V-38649)'
-    - 'umask 077'
+    - name: '/etc/csh.cshrc'
+    - text:
+      - ' '
+      - '# Umask must be set to "077" (per STIG V-38649)'
+      - 'umask 077'
 {% endif %}
-

@@ -18,8 +18,8 @@
 
 script_V38488-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38488.sh
+    - source: salt://STIGbyID/cat2/files/V38488.sh
 
 cmd_V38488-NotTechnical:
   cmd.run:
-  - name: 'echo "Not a technical/enforcible control"'
+    - name: 'echo "Not a technical/enforcible control"'

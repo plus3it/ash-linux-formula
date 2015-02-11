@@ -16,33 +16,33 @@
 
 script_V38608-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38608.sh
+    - source: salt://STIGbyID/cat3/files/V38608.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval') %}
   {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval 900') %}
 file_V38608-configSet:
   file.replace:
-  - name: '/etc/ssh/sshd_config'
-  - pattern: '^ClientAliveInterval.*$'
-  - repl: 'ClientAliveInterval 900'
+    - name: '/etc/ssh/sshd_config'
+    - pattern: '^ClientAliveInterval.*$'
+    - repl: 'ClientAliveInterval 900'
   {% else %}
 file_V38608-configSet:
   cmd.run:
-  - name: 'echo "ClientAliveInterval already meets STIG-defined requirements"'
+    - name: 'echo "ClientAliveInterval already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
 file_V38608-configSet:
   file.append:
-  - name: '/etc/ssh/sshd_config'
-  - text:
-    - ' '
-    - '# SSH service must set a session idle-timeout (per STIG V-38608)'
-    - 'ClientAliveInterval 900'
+    - name: '/etc/ssh/sshd_config'
+    - text:
+      - ' '
+      - '# SSH service must set a session idle-timeout (per STIG V-38608)'
+      - 'ClientAliveInterval 900'
 {% endif %}
 
 svc_V38608-configChk:
   service:
-  - name: sshd
-  - running
-  - watch:
-    - file: /etc/ssh/sshd_config
+    - name: sshd
+    - running
+    - watch:
+      - file: /etc/ssh/sshd_config

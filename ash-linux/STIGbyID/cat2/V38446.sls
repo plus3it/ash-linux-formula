@@ -18,8 +18,8 @@
 
 script_V38446-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38446.sh
+    - source: salt://STIGbyID/cat2/files/V38446.sh
 
 cmd_V38446:
   cmd.run:
-  - name: 'echo "Not a technically-implementable control"'
+    - name: 'echo "Not a technically-implementable control"'

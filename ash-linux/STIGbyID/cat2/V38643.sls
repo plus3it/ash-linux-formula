@@ -19,7 +19,7 @@
 
 script_V38643-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38643.sh
+    - source: salt://STIGbyID/cat2/files/V38643.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
@@ -37,12 +37,12 @@ script_V38643-describe:
 {% if fsType == 'ext2' or fsType == 'ext3' or fsType == 'ext4' %}
 notify_V38643-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "Checking ''{{ mountPoint }}'' for world-writable files"'
+    - name: 'echo "Checking ''{{ mountPoint }}'' for world-writable files"'
 
 strip_V38643-{{ mountPoint }}:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38643-helper.sh
-  - args: {{ mountPoint }}
+    - source: salt://STIGbyID/cat2/files/V38643-helper.sh
+    - args: {{ mountPoint }}
 
 {% endif %} 
 {% endfor %}

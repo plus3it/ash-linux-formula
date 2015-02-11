@@ -16,16 +16,15 @@
 
 script_V38515-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38515.sh
+    - source: salt://STIGbyID/cat2/files/V38515.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/sctp.conf') %}
 file-V38515-touchRules:
   file.touch:
-  - name: '/etc/modprobe.d/sctp.conf'
+    - name: '/etc/modprobe.d/sctp.conf'
 {% endif %}
 
 file_V38515-appendBlacklist:
   file.append:
-  - name: /etc/modprobe.d/sctp.conf
-  - text: 'install sctp /bin/false'
-
+    - name: /etc/modprobe.d/sctp.conf
+    - text: 'install sctp /bin/false'

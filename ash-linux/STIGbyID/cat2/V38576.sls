@@ -17,22 +17,21 @@
 
 script_V38576-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38576.sh
+    - source: salt://STIGbyID/cat2/files/V38576.sh
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/login.defs', '^ENCRYPT_METHOD') %}
 file_V38576-repl:
   file.replace:
-  - name: /etc/login.defs
-  - pattern: '^ENCRYPT_METHOD.*$'
-  - repl: 'ENCRYPT_METHOD SHA512'
+    - name: /etc/login.defs
+    - pattern: '^ENCRYPT_METHOD.*$'
+    - repl: 'ENCRYPT_METHOD SHA512'
 {% else %}
 file_V38576-append:
   file.append:
-  - name: /etc/login.defs
-  - text:
-    - ' '
-    - '# Use SHA512 to encrypt password.'
-    - 'ENCRYPT_METHOD SHA512'
+    - name: /etc/login.defs
+    - text:
+      - ' '
+      - '# Use SHA512 to encrypt password.'
+      - 'ENCRYPT_METHOD SHA512'
 {% endif %}
-

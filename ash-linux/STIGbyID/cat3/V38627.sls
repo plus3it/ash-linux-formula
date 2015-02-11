@@ -11,23 +11,22 @@
 
 script_V38627-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38627.sh
+    - source: salt://STIGbyID/cat3/files/V38627.sh
 
 {% if salt['pkg.version']('openldap-servers') %}
 svc_V38627-openldapEnabled:
   service.disabled:
-  - name: 'slapd'
+    - name: 'slapd'
 
 svc_V38627-openldapRunning:
- service.dead:
-  - name: 'slapd'
+  service.dead:
+    - name: 'slapd'
 
 pkg_V38627-remove:
   pkg.removed:
-  - name: 'openldap-servers'
+    - name: 'openldap-servers'
 {% else %}
 notice_V38627-notPresent:
-   cmd.run:
-   - name: 'echo "The openldap-servers subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The openldap-servers subsystem is not installed"'
 {% endif %}
-

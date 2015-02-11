@@ -17,15 +17,15 @@
 
 script_V38474-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38474.sh
+    - source: salt://STIGbyID/cat3/files/V38474.sh
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V38474-setNoUserlist:
   cmd.run:
-  - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome_settings_daemon/keybindings/screensaver "l"'
+    - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome_settings_daemon/keybindings/screensaver "l"'
 {% else %}
 notify_V38474:
   cmd.run:
-  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken
+    - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken
 )"'
 {% endif %}

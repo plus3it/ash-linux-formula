@@ -17,7 +17,7 @@
 
 script_V51391-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V51391.sh
+    - source: salt://STIGbyID/cat2/files/V51391.sh
 
 # See if AIDE package is installed
 {% if salt['pkg.version']('aide') %}
@@ -33,24 +33,23 @@ script_V51391-describe:
     {% if salt['file.file_exists'](aideDbPath) %}
 notify_V51391-foundfile:
   cmd.run:
-  - name: 'echo "The configured AIDE database [{{ aideDbPath }}] exists" && exit 0'
+    - name: 'echo "The configured AIDE database [{{ aideDbPath }}] exists" && exit 0'
 
     # Alert if DB file-path does not exist
     {% else %}
 notify_V51391-foundfile:
   cmd.run:
-  - name: 'printf "The configured AIDE database [{{ aideDbPath }}] does not exist!\n** Run ''/usr/sbin/aide --init'' to create.\n" && exit 1'
+    - name: 'printf "The configured AIDE database [{{ aideDbPath }}] does not exist!\n** Run ''/usr/sbin/aide --init'' to create.\n" && exit 1'
     {% endif %}
   {% else %}
 notify_V51391-foundfile:
   cmd.run:
-  - name: 'echo "The AIDE database location-definition does not meet test-assumptions. Automated test not possible" && exit 1'
+    - name: 'echo "The AIDE database location-definition does not meet test-assumptions. Automated test not possible" && exit 1'
   {% endif %}
 
 # Alert if AIDE not installed
 {% else %}
 warn_V51391-noAide:
    cmd.run:
-   - name: 'echo "The AIDE tools are not installed" && exit 1'
+     - name: 'echo "The AIDE tools are not installed" && exit 1'
 {% endif %}
-

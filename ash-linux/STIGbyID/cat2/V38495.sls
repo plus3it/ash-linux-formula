@@ -15,12 +15,11 @@
 
 script_V38495-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38495.sh
+    - source: salt://STIGbyID/cat2/files/V38495.sh
 
 directory_V38495:
   file.directory:
-  - name: /var/log/audit
-  - user: root
-  - recurse:
-    - user
-
+    - name: /var/log/audit
+    - user: root
+    - recurse:
+      - user

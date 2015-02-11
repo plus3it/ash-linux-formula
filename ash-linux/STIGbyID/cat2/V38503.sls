@@ -16,9 +16,9 @@
 
 script_V38503-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38503.sh
+    - source: salt://STIGbyID/cat2/files/V38503.sh
 
 file_V38503:
   file.managed:
-  - name: /etc/shadow
-  - group: root
+    - name: /etc/shadow
+    - group: root

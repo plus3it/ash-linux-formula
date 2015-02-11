@@ -16,16 +16,15 @@
 
 script_V38514-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38514.sh
+    - source: salt://STIGbyID/cat2/files/V38514.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/dccp.conf') %}
 file-V38514-touchRules:
   file.touch:
-  - name: '/etc/modprobe.d/dccp.conf'
+    - name: '/etc/modprobe.d/dccp.conf'
 {% endif %}
 
 file_V38514-appendBlacklist:
   file.append:
-  - name: /etc/modprobe.d/dccp.conf
-  - text: 'install dccp /bin/false'
-
+    - name: /etc/modprobe.d/dccp.conf
+    - text: 'install dccp /bin/false'

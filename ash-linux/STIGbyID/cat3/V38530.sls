@@ -19,7 +19,7 @@
 
 script_V38530-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38530.sh
+    - source: salt://STIGbyID/cat3/files/V38530.sh
 
 {% set auditRules = '/etc/audit/audit.rules' %}
 {% set checkFile = '/etc/localtime' %}
@@ -28,18 +28,18 @@ script_V38530-describe:
 {% if salt['file.search'](auditRules, newRule) %}
 file_auditRules:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](auditRules, checkFile) %}
 file_auditRules:
   file.replace:
-  - name: '{{ auditRules }}'
-  - pattern: '{{ checkFile }}'
-  - repl: '{{ newRule }}'
+    - name: '{{ auditRules }}'
+    - pattern: '{{ checkFile }}'
+    - repl: '{{ newRule }}'
 {% else %}
 file_auditRules:
   file.append:
-  - name: '{{ auditRules }}'
-  - text:
-    - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38530)'
-    - '{{ newRule }}'
+    - name: '{{ auditRules }}'
+    - text:
+      - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38530)'
+      - '{{ newRule }}'
 {% endif %}

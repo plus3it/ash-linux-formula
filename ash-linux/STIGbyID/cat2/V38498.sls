@@ -15,12 +15,11 @@
 
 script_V38498-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38498.sh
+    - source: salt://STIGbyID/cat2/files/V38498.sh
 
 directory_V38498:
   file.directory:
-  - name: /var/log/audit
-  - file_mode: 0640
-  - recurse:
-    - mode
-
+    - name: /var/log/audit
+    - file_mode: 0640
+    - recurse:
+      - mode

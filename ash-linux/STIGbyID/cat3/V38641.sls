@@ -13,19 +13,18 @@
 
 script_V38641-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38641.sh
+    - source: salt://STIGbyID/cat3/files/V38641.sh
 
 {% if salt['pkg.version']('at') %}
 svc_V38641-atdEnabled:
   service.disabled:
-  - name: 'atd'
+    - name: 'atd'
 
 svc_V38641-atdRunning:
- service.dead:
-  - name: 'atd'
+  service.dead:
+    - name: 'atd'
 {% else %}
 notice_V38641-notPresent:
-   cmd.run:
-   - name: 'echo "The at subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The at subsystem is not installed"'
 {% endif %}
-

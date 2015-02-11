@@ -13,19 +13,18 @@
 
 script_V38646-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38646.sh
+    - source: salt://STIGbyID/cat3/files/V38646.sh
 
 {% if salt['pkg.version']('oddjob') %}
 svc_V38646-oddjobdEnabled:
   service.disabled:
-  - name: 'oddjobd'
+    - name: 'oddjobd'
 
 svc_V38646-oddjobdRunning:
- service.dead:
-  - name: 'oddjobd'
+  service.dead:
+    - name: 'oddjobd'
 {% else %}
 notice_V38646-notPresent:
-   cmd.run:
-   - name: 'echo "The oddjob subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The oddjob subsystem is not installed"'
 {% endif %}
-

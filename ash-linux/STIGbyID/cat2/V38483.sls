@@ -17,11 +17,10 @@
 
 script_V38483-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38483.sh
+    - source: salt://STIGbyID/cat2/files/V38483.sh
 
 file_V38483:
   file.replace:
-  - name: /etc/yum.conf
-  - pattern: "^gpgcheck=.*$"
-  - repl: "gpgcheck=1"
-
+    - name: /etc/yum.conf
+    - pattern: "^gpgcheck=.*$"
+    - repl: "gpgcheck=1"

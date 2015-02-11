@@ -25,7 +25,7 @@
 
 script_V38655-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38655.sh
+   - source: salt://STIGbyID/cat3/files/V38655.sh
 
 ####################################
 # Disable USB support (if enabled)
@@ -38,17 +38,17 @@ script_V38655-describe:
   {% if salt['file.search'](usbConf, 'install usb-storage /bin/true') or salt['file.search'](modprobConf, 'install usb-storage /bin/true') %}
 notify_V38655-usbDisabled:
   cmd.run:
-  - name: 'echo "Mounting of USB devices disabled"'
+    - name: 'echo "Mounting of USB devices disabled"'
   {% endif %}
 {% else %}
 file-V38655-touchUSBconf:
   file.touch:
-  - name: {{ usbConf }}
+    - name: {{ usbConf }}
 
 file_V38655-appendUSBconf:
   file.append:
-  - name: {{ usbConf }}
-  - text: 'install usb-storage /bin/true'
+    - name: {{ usbConf }}
+    - text: 'install usb-storage /bin/true'
 {% endif %}
 
 ####################################################################
@@ -72,7 +72,7 @@ file_V38655-appendUSBconf:
 ######################################
 notify_V38655-fstabScan:
   cmd.run:
-  - name: 'echo "Scanning for fstab-managed media devices..."'
+    - name: 'echo "Scanning for fstab-managed media devices..."'
 
 # Ingest list of fstab-managed filesystems into a searchable-structure
 {% set fstabMntStream = salt['mount.fstab']() %}
@@ -91,24 +91,24 @@ notify_V38655-fstabScan:
   {% if 'noexec' in fstabMountOpts %}
 notify_V38655-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
-  - name: 'echo "Info: Mountpount ''{{ fstabMount }}'' has ''noexec'' option set"'
+    - name: 'echo "Info: Mountpount ''{{ fstabMount }}'' has ''noexec'' option set"'
   {% else %}
 {% set remountDev = fstabMountStruct['device'] %}
 {% set optString = fstabMountOpts|join(' ') + ',noexec' %}
 
 notify_V38655-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
-  - name: 'printf "
+    - name: 'printf "
 WARNING: Mountpount ''{{ fstabMount }} does not have\n
 ''noexec'' option set ...changing\n
 "'
 fstab_V38655-{{ fstabMount }}:
   module.run:
-  - name: 'mount.set_fstab'
-  - m_name: '{{ fstabMount }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fstabfsType }}'
-  - opts: '{{ optString }}'
+    - name: 'mount.set_fstab'
+    - m_name: '{{ fstabMount }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fstabfsType }}'
+    - opts: '{{ optString }}'
 
   {% endif %}
 {% endif %}
@@ -120,7 +120,7 @@ fstab_V38655-{{ fstabMount }}:
 ####################################
 notify_V38655-mountScan:
   cmd.run:
-  - name: 'echo "Scanning for mounted media devices..."'
+    - name: 'echo "Scanning for mounted media devices..."'
 
 # Iterate the structure by top-level key
 {% for mountPoint in activeMntStream.keys() %}
@@ -147,30 +147,30 @@ notify_V38655-mountScan:
   {% if mountPoint in fstabList %}
 crosscheck_V38655-{{ mountPoint }}:
   cmd.run:
-  - name: 'printf "Info: ''{{ mountPoint }}'' defined in /etc/fstab\n\n"'
+    - name: 'printf "Info: ''{{ mountPoint }}'' defined in /etc/fstab\n\n"'
   {% else %}
 crosscheck_V38655-{{ mountPoint }}:
   cmd.run:
-  - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
+    - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
   {% endif %}
 
   # See if mounted filesystem has 'noexec' opton set
   {% if 'noexec' in mountOpts %}
 notify_V38655-{{ mountPoint }}_remount:
   cmd.run:
-  - name: 'echo "''{{ mountPoint }}'' has ''noexec'' option set"'
+    - name: 'echo "''{{ mountPoint }}'' has ''noexec'' option set"'
   {% else %}
 notify_V38655-{{ mountPoint }}_remount:
   cmd.run:
-  - name: 'echo "NOTICE: ''{{ mountPoint }}'' does not have ''noexec'' option set ...remounting"'
+    - name: 'echo "NOTICE: ''{{ mountPoint }}'' does not have ''noexec'' option set ...remounting"'
 
 remount_V38655-{{ mountPoint }}:
   module.run:
-  - name: 'mount.remount'
-  - m_name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fsType }}'
-  - opts: '{{ remountOptString }}'
+    - name: 'mount.remount'
+    - m_name: '{{ mountPoint }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fsType }}'
+    - opts: '{{ remountOptString }}'
   {% endif %}
 {% endif %}
 

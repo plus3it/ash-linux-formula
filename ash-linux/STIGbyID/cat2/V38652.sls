@@ -16,7 +16,7 @@
 
 script_V38652-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38652.sh
+    - source: salt://STIGbyID/cat2/files/V38652.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
@@ -39,40 +39,40 @@ script_V38652-describe:
   {% if 'nodev' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nodev'' option"'
+    - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nodev'' option"'
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option:"'
+    - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option:"'
 
 # Remount with "nodev" option added/set
   {% set optString = 'nodev,' + ','.join(optList) %}
   {% set remountDev = mountList['alt_device'] %}
 notify_V38652-{{ mountPoint }}-remount:
   cmd.run:
-  - name: 'printf "\t* Attempting remount...\n"'
+    - name: 'printf "\t* Attempting remount...\n"'
 
 remount_V38652-{{ mountPoint }}:
   module.run:
-  - name: 'mount.remount'
-  - m_name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fsType }}'
-  - opts: '{{ optString }}'
+    - name: 'mount.remount'
+    - m_name: '{{ mountPoint }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fsType }}'
+    - opts: '{{ optString }}'
 
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_V38652-{{ mountPoint }}-fixFstab:
   cmd.run:
-  - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
+    - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
 fstab_V38652-{{ mountPoint }}:
   module.run:
-  - name: 'mount.set_fstab'
-  - m_name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fsType }}'
-  - opts: '{{ optString }}'
+    - name: 'mount.set_fstab'
+    - m_name: '{{ mountPoint }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fsType }}'
+    - opts: '{{ optString }}'
     {% endif %}
 
   {% endif %}

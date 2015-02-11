@@ -16,23 +16,22 @@
 
 script_V38604-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38604.sh
+    - source: salt://STIGbyID/cat2/files/V38604.sh
 
 {% if salt['pkg.version']('ypbind') %}
 svc_V38604-ypbind:
   service.disabled:
-  - name: 'ypbind'
+    - name: 'ypbind'
 {% endif %}
 
 {% if salt['pkg.version']('ypserv') %}
 svc_V38604-ypserv:
   service.disabled:
-  - name: 'ypserv'
+    - name: 'ypserv'
 {% endif %}
 
 {% if salt['pkg.version']('yp-tools') %}
 svc_V38604-yptools:
   service.disabled:
-  - name: 'yp-tools'
+    - name: 'yp-tools'
 {% endif %}
-

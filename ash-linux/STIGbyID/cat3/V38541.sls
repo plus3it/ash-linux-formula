@@ -13,25 +13,24 @@
 
 script_V38541-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38541.sh
+    - source: salt://STIGbyID/cat3/files/V38541.sh
 
 # Monitoring of SELinux MAC config
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/selinux/ -p wa -k MAC-policy') %}
 file_V38541-auditRules_selMAC:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search']('/etc/audit/audit.rules', '/etc/selinux/') %}
 file_V38541-auditRules_selMAC:
   file.replace:
-  - name: '/etc/audit/audit.rules'
-  - pattern: '^.*/etc/selinux/.*$'
-  - repl: '-w /etc/selinux/ -p wa -k MAC-policy'
+    - name: '/etc/audit/audit.rules'
+    - pattern: '^.*/etc/selinux/.*$'
+    - repl: '-w /etc/selinux/ -p wa -k MAC-policy'
 {% else %}
 file_V38541-auditRules_selMAC:
   file.append:
-  - name: '/etc/audit/audit.rules'
-  - text:
-    - '# Monitor /etc/selinux/ for changes (per STIG-ID V-38541)'
-    - '-w /etc/selinux/ -p wa -k MAC-policy'
+    - name: '/etc/audit/audit.rules'
+    - text:
+      - '# Monitor /etc/selinux/ for changes (per STIG-ID V-38541)'
+      - '-w /etc/selinux/ -p wa -k MAC-policy'
 {% endif %}
-

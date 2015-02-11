@@ -18,48 +18,48 @@
 
 script_V38667-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38667.sh
+    - source: salt://STIGbyID/cat2/files/V38667.sh
 
 # Alter the running system-state
 {% if salt['pkg.version']('policycoreutils-python') %}
 sel_V38667:
   selinux:
-  - mode
-  - name: 'Enforcing'
+    - mode
+    - name: 'Enforcing'
 {% endif %}
 
 # Verify that the reboot system-state is acceptable
 {% if salt['file.search']('/etc/sysconfig/selinux', '^SELINUX=disabled') %}
 file_V38667-enableSEL:
   file.replace:
-  - name: '/etc/sysconfig/selinux'
-  - pattern: '^SELINUX=disabled'
-  - repl: '^SELINUX=permissive'
+    - name: '/etc/sysconfig/selinux'
+    - pattern: '^SELINUX=disabled'
+    - repl: '^SELINUX=permissive'
 
 status_v38667:
   cmd.run:
-  - name: 'echo "NOTICE: SELinux found disabled. Changing to \"Permissive\". Reboot required to take effect"'
+    - name: 'echo "NOTICE: SELinux found disabled. Changing to \"Permissive\". Reboot required to take effect"'
 
 {% else %}
 status_v38667:
   cmd.run:
-  - name: 'echo "Info: SELinux already enabled to at least a level of Permissive"'
+    - name: 'echo "Info: SELinux already enabled to at least a level of Permissive"'
 
 {% endif %}
 
 # Make sure AIDE is installed
 pkg_V38667-aide:
   pkg.installed:
-  - name: aide
+    - name: aide
 
 # Ensure audit service is enabled and running
 svc_V38667-auditEnabled:
   service.enabled:
-  - name: 'auditd'
+    - name: 'auditd'
 
 svc_V38667-auditRunning:
   service.running:
-  - name: 'auditd'
+    - name: 'auditd'
 
 #############################
 # Enable audit at kernel load
@@ -67,13 +67,13 @@ svc_V38667-auditRunning:
 
 file_V38667-repl:
   file.replace:
-  - name: '/boot/grub/grub.conf'
-  - pattern: '(?P<srctok>kernel.*$)'
-  - repl: '\g<srctok> audit=1'
+    - name: '/boot/grub/grub.conf'
+    - pattern: '(?P<srctok>kernel.*$)'
+    - repl: '\g<srctok> audit=1'
 
 {% else %}
 status_V38667:
   cmd.run:
-  - name: 'echo "Auditing already enabled at boot"'
+    - name: 'echo "Auditing already enabled at boot"'
 {% endif %}
 

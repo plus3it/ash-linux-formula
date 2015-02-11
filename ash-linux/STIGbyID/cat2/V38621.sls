@@ -16,14 +16,14 @@
 
 script_V38621-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38621.sh
+    - source: salt://STIGbyID/cat2/files/V38621.sh
 
 {% if not salt['pkg.version']('ntp') %}
 pkg_V38621-ntp:
   pkg.installed:
-  - name: 'ntp'
+    - name: 'ntp'
 {% endif %}
 
 cmd_V38621-notice:
   cmd.run:
-  - name: 'echo "Manual remediation required"'
+    - name: 'echo "Manual remediation required"'

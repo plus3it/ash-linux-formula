@@ -17,7 +17,7 @@
 
 script_V38678-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38678.sh
+    - source: salt://STIGbyID/cat2/files/V38678.sh
 
 {% set auditConf = '/etc/audit/auditd.conf' %}
 {% set logParm = 'space_left' %}
@@ -42,26 +42,26 @@ script_V38678-describe:
   {% if salt['file.search'](auditConf, '^' + logParm + ' = ' + keepFreeVar) %}
 notify_V38678-Set:
   cmd.run:
-  - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already set to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+    - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already set to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
   {% else %}
 notify_V38678-Set:
   cmd.run:
-  - name: 'echo "Changing ''{{ logParm }}'' value in ''{{ auditConf }}'' to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+    - name: 'echo "Changing ''{{ logParm }}'' value in ''{{ auditConf }}'' to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
 
 file_V38678-setVal:
   file.replace:
-  - name: '{{ auditConf }}'
-  - pattern: '^{{ logParm }} = .*'
-  - repl: '{{ logParm }} = {{ keepFreeVar }}'
+    - name: '{{ auditConf }}'
+    - pattern: '^{{ logParm }} = .*'
+    - repl: '{{ logParm }} = {{ keepFreeVar }}'
   {% endif %}
 
 {% else %}
 notify_V38678-Set:
   cmd.run:
-  - name: 'echo "''{{ logParm }}'' not set in ''{{ auditConf }}''. Setting to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+    - name: 'echo "''{{ logParm }}'' not set in ''{{ auditConf }}''. Setting to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
 
 file_V38678-setVal:
   file.append:
-  - name: '{{ auditConf }}'
-  - text: '{{ logParm }} = {{ keepFreeVar }}'
+    - name: '{{ auditConf }}'
+    - text: '{{ logParm }} = {{ keepFreeVar }}'
 {% endif %}

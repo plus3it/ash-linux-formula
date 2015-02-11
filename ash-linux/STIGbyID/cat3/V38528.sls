@@ -18,15 +18,15 @@
 
 script_V38528-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38528.sh
+    - source: salt://STIGbyID/cat3/files/V38528.sh
 
 {% if salt['sysctl.get']('net.ipv4.conf.all.log_martians') == '1' %}
 sysctl_V38528-logMartians:
   cmd.run:
-  - name: 'echo "Logging of Martian packets already enabled"'
+    - name: 'echo "Logging of Martian packets already enabled"'
 {% else %}
 sysctl_V38528-logMartians:
   sysctl.present:
-  - name: 'net.ipv4.conf.all.log_martians'
-  - value: '1'
+    - name: 'net.ipv4.conf.all.log_martians'
+    - value: '1'
 {% endif %}

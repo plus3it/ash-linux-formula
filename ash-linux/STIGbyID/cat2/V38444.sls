@@ -16,33 +16,33 @@
 ############################################################
 
 script_V38444-describe:
-   cmd.script:
-   - source: salt://STIGbyID/cat2/files/V38444.sh
+  cmd.script:
+    - source: salt://STIGbyID/cat2/files/V38444.sh
 
 # Check if IPv6 is enabled
 {% set ipv6Value =  salt['sysctl.get']('net.ipv6.conf.all.disable_ipv6') %}
 {% if 'unknown' in ipv6Value %}
 notify_V38444-sysctl:
   cmd.run:
-  - name: 'echo "Notice: IPv6 Is disabled: cannot update ip6tables"'
+    - name: 'echo "Notice: IPv6 Is disabled: cannot update ip6tables"'
 {% else %}
 notify_V38444-sysctl:
   cmd.run:
-  - name: 'echo "Info: Updating in-memory ip6tables configuration."'
+    - name: 'echo "Info: Updating in-memory ip6tables configuration."'
 
 cmd_V38444-iptablesSet:
   iptables.set_policy:
-  - table: filter
-  - chain: INPUT
-  - policy: DROP
-  - family: ipv6
+    - table: filter
+    - chain: INPUT
+    - policy: DROP
+    - family: ipv6
 
 notify_V38444-iptablesSave:
   cmd.run:
-  - name: 'echo "Info: Saving in-memory ip6tables configuration to disk."'
+    - name: 'echo "Info: Saving in-memory ip6tables configuration to disk."'
 
 iptables_V38444-iptablesSave:
   module.run:
-  - name: 'iptables.save'
-  - family: 'ipv6'
+    - name: 'iptables.save'
+    - family: 'ipv6'
 {% endif %}

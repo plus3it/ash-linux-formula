@@ -19,7 +19,7 @@
 
 script_V38521-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38521.sh
+    - source: salt://STIGbyID/cat2/files/V38521.sh
 
 # Only look for rsyslog configuration if rsyslog is installed
 {% if salt['pkg.version']('rsyslog') %}
@@ -28,28 +28,28 @@ script_V38521-describe:
   {% if salt['file.search']('/etc/rsyslog.conf', '\*\.\*[ 	]*@[a-z0-9]') %}
 notify_V38521-extLogging:
   cmd.run:
-  - name: 'printf "Info: System is configured to do UDP-based logging to an\n\texternal host"'
+    - name: 'printf "Info: System is configured to do UDP-based logging to an\n\texternal host"'
 
   # Check if TCP-logging to loghost
   {% elif salt['file.search']('/etc/rsyslog.conf', '^\*\.\*[ 	]*@@[a-z0-9]') %}
 notify_V38521-extLogging:
   cmd.run:
-  - name: 'printf "Info: System is configured to do TCP-based logging to an\n\texternal host"'
+    - name: 'printf "Info: System is configured to do TCP-based logging to an\n\texternal host"'
 
   # Check if RELP-logging to loghost
   {% elif salt['file.search']('/etc/rsyslog.conf', '^\*\.\*[ 	]*:omrelp:[a-z0-9]') %}
 notify_V38521-extLogging:
   cmd.run:
-  - name: 'printf "Info: System is configured to do RELP-based logging to an\n\texternal host\n"'
+    - name: 'printf "Info: System is configured to do RELP-based logging to an\n\texternal host\n"'
 
   # No remote-logging configured
   {% else %}
 notify_V38521-extLogging:
   cmd.run:
-  - name: 'printf "WARNING: System does not appear to be configured to log\n\tto an external host.\n" ; exit 1'
+    - name: 'printf "WARNING: System does not appear to be configured to log\n\tto an external host.\n" ; exit 1'
   {% endif %}
 {% else %}
 notify_V38521-extLogging:
   cmd.run:
-  - name: 'printf "NOTICE: The ''rsyslog'' service is not installed.\n\tUnable to test for remote-logging"'
+    - name: 'printf "NOTICE: The ''rsyslog'' service is not installed.\n\tUnable to test for remote-logging"'
 {% endif %}

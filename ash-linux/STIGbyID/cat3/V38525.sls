@@ -12,14 +12,14 @@
 
 script_V38525-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38525.sh
+    - source: salt://STIGbyID/cat3/files/V38525.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
 file_V38525-settimeofday:
   cmd.run:
-  - name: 'echo "Not applicable to 64-bit systems: no changes made"'
+    - name: 'echo "Not applicable to 64-bit systems: no changes made"'
 {% else %}
 file_V38525-settimeofday:
   cmd.run:
-  - name: 'echo "Architecture not supported: no changes made"'
+    - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}

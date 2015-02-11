@@ -17,34 +17,34 @@
 
 script_V38460-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38460.sh
+    - source: salt://STIGbyID/cat3/files/V38460.sh
 
 {% if salt['pkg.version']('nfs-utils') %}
   {% if salt['file.search']('/etc/exports', 'all_squash') %}
 file_V38460-onlyOpt:
   file.replace:
-  - name: '/etc/exports'
-  - pattern: '\(all_squash\)'
-  - repl: ''
+    - name: '/etc/exports'
+    - pattern: '\(all_squash\)'
+    - repl: ''
 
 file_V38460-firstOpt:
   file.replace:
-  - name: '/etc/exports'
-  - pattern: '\(all_squash,'
-  - repl: '('
+    - name: '/etc/exports'
+    - pattern: '\(all_squash,'
+    - repl: '('
 
 file_V38460-secondaryOpt:
   file.replace:
-  - name: '/etc/exports'
-  - pattern: ',all_squash'
-  - repl: ''
+    - name: '/etc/exports'
+    - pattern: ',all_squash'
+    - repl: ''
   {% else %}
 cmd_V38460-notice:
   cmd.run:
-  - name: 'echo "No NFS exports found with all_squash option enabled"'
+    - name: 'echo "No NFS exports found with all_squash option enabled"'
   {% endif %}
 {% else %}
 cmd_V38460-notice:
   cmd.run:
-  - name: 'echo "NFS service not installed: security control not relevant"'
+    - name: 'echo "NFS service not installed: security control not relevant"'
 {% endif %}

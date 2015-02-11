@@ -11,15 +11,15 @@
 
 script_V38537-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38537.sh
+    - source: salt://STIGbyID/cat3/files/V38537.sh
 
 {% if salt['sysctl.get']('net.ipv4.icmp_ignore_bogus_error_responses') == '1' %}
 sysctl_V38537-noRedirects:
   cmd.run:
-  - name: 'echo "System already ignores bogus ICMPv4 error responses"'
+    - name: 'echo "System already ignores bogus ICMPv4 error responses"'
 {% else %}
 sysctl_V38537-noRedirects:
   sysctl.present:
-  - name: 'net.ipv4.icmp_ignore_bogus_error_responses'
-  - value: '1'
+    - name: 'net.ipv4.icmp_ignore_bogus_error_responses'
+    - value: '1'
 {% endif %}

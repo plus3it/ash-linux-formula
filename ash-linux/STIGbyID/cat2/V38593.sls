@@ -28,9 +28,9 @@
 
 script_V38593-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38593.sh
+    - source: salt://STIGbyID/cat2/files/V38593.sh
 
 file_V38593-etcIssue:
   file.managed:
-  - name: '/etc/issue'
-  - source: salt://STIGbyID/cat2/files/issue.txt
+    - name: '/etc/issue'
+    - source: salt://STIGbyID/cat2/files/issue.txt

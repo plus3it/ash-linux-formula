@@ -17,7 +17,7 @@
 
 script_V38692-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38692.sh
+    - source: salt://STIGbyID/cat3/files/V38692.sh
 
 {% set checkFile = '/etc/default/useradd' %}
 {% set parmName = 'INACTIVE' %}
@@ -28,14 +28,14 @@ script_V38692-describe:
   {% if salt['file.search'](checkFile, '^' + parmName + '=35') %}
 set_V38692-inactive:
   cmd.run:
-  - name: 'echo "Account inactivity-lockout already set to 35 days"'
+    - name: 'echo "Account inactivity-lockout already set to 35 days"'
   # ...If not, set correct value
   {% else %}
 set_V38692-inactive:
   file.replace:
-  - name: {{ checkFile }}
-  - pattern: '^{{ parmName }}=.*$'
-  - repl: '{{ parmName }}=35'
+    - name: {{ checkFile }}
+    - pattern: '^{{ parmName }}=.*$'
+    - repl: '{{ parmName }}=35'
   {% endif %}
 # If no live 'INACTIVE' parameter is set...
 {% else %}
@@ -43,13 +43,13 @@ set_V38692-inactive:
   {% if salt['file.search'](checkFile, '#[ 	]*' + parmName + '=35') %}
 set_V38692-inactive:
   file.uncomment:
-  - name: {{ checkFile }}
-  - regex: '{{ parmName }}=35'
+    - name: {{ checkFile }}
+    - regex: '{{ parmName }}=35'
   # ...and append if necessary
   {% else %}
 set_V38692-inactive:
   file.append:
-  - name: {{ checkFile }}
-  - text: '{{ parmName }}=35'
+    - name: {{ checkFile }}
+    - text: '{{ parmName }}=35'
   {% endif %}
 {% endif %}

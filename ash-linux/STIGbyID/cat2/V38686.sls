@@ -18,29 +18,29 @@
 
 script_V38686-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38686.sh
+    - source: salt://STIGbyID/cat2/files/V38686.sh
 
 {% if salt['file.file_exists']('/etc/sysconfig/iptables') %}
 file_V38686-repl:
   file.replace:
-  - name: /etc/sysconfig/iptables
-  - pattern: 'FORWARD ACCEPT .*$'
-  - repl: 'FORWARD DROP [0:0]'
+    - name: /etc/sysconfig/iptables
+    - pattern: 'FORWARD ACCEPT .*$'
+    - repl: 'FORWARD DROP [0:0]'
 {% else %}
 iptables_V38686-forwardDefault:
   module.run:
-  - name: 'iptables.set_policy'
-  - table: filter
-  - chain: INPUT
-  - policy: DROP
+    - name: 'iptables.set_policy'
+    - table: filter
+    - chain: INPUT
+    - policy: DROP
   
 iptables_V38686-saveRunning:
   module.run:
-  - name: 'iptables.save'
+    - name: 'iptables.save'
 
 service_V38686:
   service:
-  - name: iptables
-  - running
-  - enable: True
+    - name: iptables
+    - running
+    - enable: True
 {% endif %}

@@ -17,9 +17,9 @@
 
 script_V38461-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38461.sh
+    - source: salt://STIGbyID/cat2/files/V38461.sh
 
 file_V38461:
   file.managed:
-  - name: /etc/group
-  - mode: '0644'
+    - name: /etc/group
+    - mode: '0644'

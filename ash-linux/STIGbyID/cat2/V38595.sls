@@ -18,8 +18,8 @@
 ############################################################
 script_V38595-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38595.sh
+    - source: salt://STIGbyID/cat2/files/V38595.sh
 
 cmd_V38595-notice:
   cmd.run:
-  - name: 'echo "Not a technical/enforcible control"'
+    - name: 'echo "Not a technical/enforcible control"'

@@ -16,16 +16,15 @@
 
 script_V38546-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38546.sh
+    - source: salt://STIGbyID/cat2/files/V38546.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/disabled.conf') %}
 file-V38546-touchRules:
   file.touch:
-  - name: '/etc/modprobe.d/disabled.conf'
+    - name: '/etc/modprobe.d/disabled.conf'
 {% endif %}
 
 file_V38546-appendBlacklist:
   file.append:
-  - name: /etc/modprobe.d/disabled.conf
-  - text: 'options ipv6 disable=1'
-
+    - name: /etc/modprobe.d/disabled.conf
+    - text: 'options ipv6 disable=1'

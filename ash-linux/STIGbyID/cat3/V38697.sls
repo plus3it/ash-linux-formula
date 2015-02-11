@@ -20,7 +20,7 @@
 
 script_V38697-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38697.sh
+    - source: salt://STIGbyID/cat3/files/V38697.sh
 
 # STIG specifies a fix for an indeterminate list. The following only 
 # addresses the Linux default directories /tmp, /var/tmp and /dev/shm.
@@ -35,21 +35,21 @@ script_V38697-describe:
 {% if salt['file.check_perms'](dirTmp, '', 'root', 'root', '1777') %}
 directory_V38498-tmp:
   cmd.run:
-  - name: 'echo "The ''{{ dirTmp }}'' directory already set to mode 1777"'
+    - name: 'echo "The ''{{ dirTmp }}'' directory already set to mode 1777"'
 {% else %}
 directory_V38498-tmp:
   file.directory:
-  - name: {{ dirTmp }}
-  - mode: 1777
+    - name: {{ dirTmp }}
+    - mode: 1777
 {% endif %}
 
 {% if salt['file.check_perms'](dirVarTmp, '', 'root', 'root', '1777') %}
 directory_V38498-varTmp:
   cmd.run:
-  - name: 'echo "The ''{{ dirVarTmp }}'' directory already set to mode 1777"'
+    - name: 'echo "The ''{{ dirVarTmp }}'' directory already set to mode 1777"'
 {% else %}
 directory_V38498-varTmp:
   file.directory:
-  - name: {{ dirVarTmp }}
-  - mode: 1777
+    - name: {{ dirVarTmp }}
+    - mode: 1777
 {% endif %}

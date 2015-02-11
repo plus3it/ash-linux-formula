@@ -28,7 +28,7 @@
     {% if user == 'root' %}
 notify_V38500-{{ user }}:
   cmd.run:
-  - name: 'echo "Info: User ''{{ user }}'' has userid ''{{ userId }}''"'
+    - name: 'echo "Info: User ''{{ user }}'' has userid ''{{ userId }}''"'
 
     #################################################################
     # If the uid '0' account isn't "root", nuke and recreate as non-0
@@ -52,34 +52,34 @@ notify_V38500-{{ user }}:
 
 notify_V38500-{{ user }}:
   cmd.run:
-  - name: 'printf "WARNING: Non-root user ''{{ user }}'' has userid ''{{ userId }}''.\n\t** Automatic remediation will be attempted **\n\n\tNote:\n\t* First free, non-privileged UID will be allocated;\n\t* Secondary groups may be lost;\n\t* Account expiry info may be altered\n"'
+    - name: 'printf "WARNING: Non-root user ''{{ user }}'' has userid ''{{ userId }}''.\n\t** Automatic remediation will be attempted **\n\n\tNote:\n\t* First free, non-privileged UID will be allocated;\n\t* Secondary groups may be lost;\n\t* Account expiry info may be altered\n"'
 
 update_V38500-{{ user }}_nuke:
   user.absent:
-  - name: '{{ userName }}'
-  - force: 'True'
+    - name: '{{ userName }}'
+    - force: 'True'
 
 update_V38500-{{ user }}_recreate:
   user.present:
-  - name: '{{ userName }}'
-  - gid: '{{ userGid }}'
-  - home: '{{ userHome }}'
-  - password: '{{ userPasswd }}'
-  - shell: '{{ userShell }}'
-  - fullname: '{{ userFullname }}'
-  - roomnumber: '{{ userRoomNo }}'
-  - workphone: '{{ userWorkPhone }}'
-  - homephone: '{{ userHomePhone }}'
-  - date: '{{ userDate }}'
-  - mindays: '{{ userMinDay }}'
-  - maxdays: '{{ userMaxDay }}'
-  - inactdays: '{{ userInactiv }}'
-  - warndays: '{{ userWarnDay }}'
-  - expire: '{{ userExpire }}'
+    - name: '{{ userName }}'
+    - gid: '{{ userGid }}'
+    - home: '{{ userHome }}'
+    - password: '{{ userPasswd }}'
+    - shell: '{{ userShell }}'
+    - fullname: '{{ userFullname }}'
+    - roomnumber: '{{ userRoomNo }}'
+    - workphone: '{{ userWorkPhone }}'
+    - homephone: '{{ userHomePhone }}'
+    - date: '{{ userDate }}'
+    - mindays: '{{ userMinDay }}'
+    - maxdays: '{{ userMaxDay }}'
+    - inactdays: '{{ userInactiv }}'
+    - warndays: '{{ userWarnDay }}'
+    - expire: '{{ userExpire }}'
 
 update_V38500-{{ user }}_chown:
   cmd.run:
-  - name: 'echo "Chowning {{ userName }}''s home directory" ; chown -R {{ userName }} {{ userHome }}'
+    - name: 'echo "Chowning {{ userName }}''s home directory" ; chown -R {{ userName }} {{ userHome }}'
     {% endif %}
   {% endif %}
 

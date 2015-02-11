@@ -17,40 +17,40 @@
 
 script_V38626-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38626.sh
+    - source: salt://STIGbyID/cat2/files/V38626.sh
 
 {% if salt['pkg.version']('pam_ldap') and salt['file.search']('/etc/pam_ldap.conf', '^tls_cacert') %}
 file_V38626-replCertdir:
   file.replace:
-  - name: '/etc/pam_ldap.conf'
-  - pattern: '^tls_cacertdir.*$'
-  - repl: 'tls_cacertdir /etc/pki/tls/CA'
+    - name: '/etc/pam_ldap.conf'
+    - pattern: '^tls_cacertdir.*$'
+    - repl: 'tls_cacertdir /etc/pki/tls/CA'
 
 file_V38626-replCertfile:
   file.replace:
-  - name: '/etc/pam_ldap.conf'
-  - pattern: '^tls_cacertfile.*$'
-  - repl: 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
+    - name: '/etc/pam_ldap.conf'
+    - pattern: '^tls_cacertfile.*$'
+    - repl: 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
 
 {% elif salt['pkg.version']('pam_ldap') and not salt['file.search']('/etc/pam_ldap.conf', '^tls_cacert') %}
 file_V38626-appendCertdir:
   file.append:
-  - name: '/etc/pam_ldap.conf'
-  - text:
-    - ' '
-    - '# LDAP TLS certificates must come from trusted CA (per STIG V-38626)'
-    - 'tls_cacertdir /etc/pki/tls/CA'
+    - name: '/etc/pam_ldap.conf'
+    - text:
+      - ' '
+      - '# LDAP TLS certificates must come from trusted CA (per STIG V-38626)'
+      - 'tls_cacertdir /etc/pki/tls/CA'
 
 file_V38626-appendCertfile:
   file.append:
-  - name: '/etc/pam_ldap.conf'
-  - text:
-    - ' '
-    - '# LDAP TLS certificates must come from trusted CA (per STIG V-38626)'
-    - 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
+    - name: '/etc/pam_ldap.conf'
+    - text:
+      - ' '
+      - '# LDAP TLS certificates must come from trusted CA (per STIG V-38626)'
+      - 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
 
 {% elif not salt['pkg.version']('pam_ldap') %}
 cmd_V38626-notice:
   cmd.run:
-  - name: 'echo "LDAP PAM modules not installed"'
+    - name: 'echo "LDAP PAM modules not installed"'
 {% endif %}

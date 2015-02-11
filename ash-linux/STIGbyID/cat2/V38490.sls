@@ -16,42 +16,42 @@
 
 script_V38490-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38490.sh
+    - source: salt://STIGbyID/cat2/files/V38490.sh
 
 {% if salt['file.file_exists']('/etc/modprobe.conf') %}
   {% if salt['file.search']('/etc/modprobe.conf', 'usb-storage') %}
 file_V38490-replModprobe:
   file.replace:
-  - name: /etc/modprobe.conf
-  - pattern: "install usb-storage .*$"
-  - repl: "install usb-storage /bin/true"
+    - name: /etc/modprobe.conf
+    - pattern: "install usb-storage .*$"
+    - repl: "install usb-storage /bin/true"
   {% endif %}
 {% else %}
   {% if not salt['file.file_exists']('/etc/modprobe.d/usb.conf') %}
 file-V38490-touchUSBconf:
   file.touch:
-  - name: '/etc/modprobe.d/usb.conf'
+    - name: '/etc/modprobe.d/usb.conf'
   {% endif %}
 file_V38490-appendUSBconf:
   file.append:
-  - name: '/etc/modprobe.d/usb.conf'
-  - text: 'install usb-storage /bin/true'
+    - name: '/etc/modprobe.d/usb.conf'
+    - text: 'install usb-storage /bin/true'
 {% endif %}
 
 {% if not salt['file.file_exists']('/etc/udev/rules.d/99-usb.rules') %}
 file-V38490-touchRules:
   file.touch:
-  - name: '/etc/udev/rules.d/99-usb.rules'
+    - name: '/etc/udev/rules.d/99-usb.rules'
 {% endif %}
 
 file_V38490-appendRules:
   file.append:
-  - name: /etc/udev/rules.d/99-usb.rules
-  - text: 'ACTION=="add|change", BUS=="usb", SUBSYSTEMS=="usb", DRIVERS=="usb", OPTIONS:="ignore_device"'
+    - name: /etc/udev/rules.d/99-usb.rules
+    - text: 'ACTION=="add|change", BUS=="usb", SUBSYSTEMS=="usb", DRIVERS=="usb", OPTIONS:="ignore_device"'
 
 {% if salt['file.file_exists']('/etc/modprobe.d/blacklist.conf') %}
 file_V38490-appendBlacklist:
   file.append:
-  - name: /etc/modprobe.d/blacklist.conf
-  - text: 'blacklist usb_storage'
+    - name: /etc/modprobe.d/blacklist.conf
+    - text: 'blacklist usb_storage'
 {% endif %}

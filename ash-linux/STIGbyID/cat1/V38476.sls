@@ -11,12 +11,12 @@
 
 script_V38476-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38476.sh
+    - source: salt://STIGbyID/cat1/files/V38476.sh
 
 cmd_V38476:
   cmd.run:
   {% if grains['os'] == 'RedHat' %}
-  - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Red Hat, Inc. (release key 2)"'
+    - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Red Hat, Inc. (release key 2)"'
   {% elif grains['os'] == 'CentOS' %}
-  - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "CentOS 6 Official Signing Key"'
+    - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "CentOS 6 Official Signing Key"'
   {% endif %}

@@ -15,48 +15,48 @@
 #
 ############################################################
 
-cript_V38472-describe:
+script_V38472-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38472.sh
+    - source: salt://STIGbyID/cat2/files/V38472.sh
 
-file_V38466-bin:
+file_V38472-bin:
   file.directory:
-  - name: /bin
-  - user: root
-  - recurse:
+    - name: /bin
+    - user: root
+    - recurse:
+      - user
+
+file_V38472-ubin:
+  file.directory:
+    - name: /usr/bin
+    - user: root
+    - recurse:
+     - user
+
+file_V38472-lbin:
+  file.directory:
+    - name: /usr/local/bin
+    - user: root
+    - recurse:
     - user
 
-file_V38466-ubin:
+file_V38472-sbin:
   file.directory:
-  - name: /usr/bin
-  - user: root
-  - recurse:
-    - user
+    - name: /sbin
+    - user: root
+    - recurse:
+      - user
 
-file_V38466-lbin:
+file_V38472-usbin:
   file.directory:
-  - name: /usr/local/bin
-  - user: root
-  - recurse:
-    - user
+    - name: /usr/sbin
+    - user: root
+    - recurse:
+      - user
 
-file_V38466-sbin:
+file_V38472-lsbin:
   file.directory:
-  - name: /sbin
-  - user: root
-  - recurse:
-    - user
-
-file_V38466-usbin:
-  file.directory:
-  - name: /usr/sbin
-  - user: root
-  - recurse:
-    - user
-
-file_V38466-lsbin:
-  file.directory:
-  - name: /usr/local/sbin
-  - user: root
-  - recurse:
-    - user
+    - name: /usr/local/sbin
+    - user: root
+    - recurse:
+      - user

@@ -12,27 +12,26 @@
 
 script_V38642-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38642.sh
+    - source: salt://STIGbyID/cat3/files/V38642.sh
 
 {% if salt['file.search']('/etc/init.d/functions', '^umask') %}
   {% if salt['file.search']('/etc/init.d/functions', '^umask 027') %}
 file_V38642-configSet:
   file.replace:
-  - name: '/etc/init.d/functions'
-  - pattern: '^umask.*$'
-  - repl: 'umask 027'
+    - name: '/etc/init.d/functions'
+    - pattern: '^umask.*$'
+    - repl: 'umask 027'
   {% else %}
 file_V38642-configSet:
   cmd.run:
-  - name: 'echo "Daemon umask-setting already meets STIG-defined requirements"'
+    - name: 'echo "Daemon umask-setting already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
 file_V38642-configSet:
   file.append:
-  - name: '/etc/init.d/functions'
-  - text:
-    - ' '
-    - '# Umask must be set to "022" or "027" (per STIG V-38642)'
-    - 'umask 027'
+    - name: '/etc/init.d/functions'
+    - text:
+      - ' '
+      - '# Umask must be set to "022" or "027" (per STIG V-38642)'
+      - 'umask 027'
 {% endif %}
-

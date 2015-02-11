@@ -17,11 +17,10 @@
 
 script_V38479-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38479.sh
+    - source: salt://STIGbyID/cat2/files/V38479.sh
 
 file_V38479:
   file.replace:
-  - name: /etc/login.defs
-  - pattern: "^PASS_MAX_DAYS.*$"
-  - repl: "PASS_MAX_DAYS	60"
-
+    - name: /etc/login.defs
+    - pattern: "^PASS_MAX_DAYS.*$"
+    - repl: "PASS_MAX_DAYS	60"

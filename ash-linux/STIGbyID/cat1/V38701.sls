@@ -13,16 +13,16 @@
 
 script_V38701-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38701.sh
+    - source: salt://STIGbyID/cat1/files/V38701.sh
 
 {% if salt['pkg.version']('tftp-server') %}
 file_V38701:
   file.sed:
-  - name: /etc/xinetd.d/tftp
-  - before: 'server_args.*=.*'
-  - after: 'server_args		= -s /var/lib/tftpboot'
+    - name: /etc/xinetd.d/tftp
+    - before: 'server_args.*=.*'
+    - after: 'server_args		= -s /var/lib/tftpboot'
 {% else %}
 file_V38701:
   cmd.run:
-  - name: 'echo "No applicable findings possible: ''tftp-server'' package not installed"'
+    - name: 'echo "No applicable findings possible: ''tftp-server'' package not installed"'
 {% endif %}

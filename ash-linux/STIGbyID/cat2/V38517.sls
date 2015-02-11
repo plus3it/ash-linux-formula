@@ -16,15 +16,15 @@
 
 script_V38517-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38517.sh
+    - source: salt://STIGbyID/cat2/files/V38517.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/tipc.conf') %}
 file-V38517-touchRules:
   file.touch:
-  - name: '/etc/modprobe.d/tipc.conf'
+    - name: '/etc/modprobe.d/tipc.conf'
 {% endif %}
 
 file_V38517-appendBlacklist:
   file.append:
-  - name: /etc/modprobe.d/tipc.conf
-  - text: 'install tipc /bin/false'
+    - name: /etc/modprobe.d/tipc.conf
+    - text: 'install tipc /bin/false'

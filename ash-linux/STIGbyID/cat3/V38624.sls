@@ -12,32 +12,32 @@
 
 script_V38624-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38624.sh
+    - source: salt://STIGbyID/cat3/files/V38624.sh
 
 {% if not salt['pkg.version']('logrotate') %}
 V38624.sls:
 pkg_V38624-logrotate:
   pkg.installed:
-  - name: 'logrotate'
+    - name: 'logrotate'
 {% endif %}
 
 {% if salt['file.search']('/var/log/cron', ' logrotate$') %}
 msg_V38624-status:
   cmd.run:
-  - name: 'echo "Logrotate service already configured to run"'
+    - name: 'echo "Logrotate service already configured to run"'
 {% else %}
   {% if not salt['file.file_exists']('/etc/cron.daily/logrotate') %}
 msg_V38624-status:
   cmd.run:
-  - name: 'echo "Logrotate not correctly-installed. Correcting..."'
+    - name: 'echo "Logrotate not correctly-installed. Correcting..."'
 
 pkg_V38624-logrotate:
   pkg.installed:
-  - name: 'logrotate'
-  - reinstall: 'True'
+    - name: 'logrotate'
+    - reinstall: 'True'
   {% else %}
 msg_V38624-status:
   cmd.run:
-  - name: 'echo "Logrotate not found in cron log: manual verification required"'
+    - name: 'echo "Logrotate not found in cron log: manual verification required"'
   {% endif %}
 {% endif %}

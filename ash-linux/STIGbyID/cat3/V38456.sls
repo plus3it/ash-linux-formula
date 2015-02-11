@@ -18,17 +18,17 @@
 
 script_V38456-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38456.sh
+    - source: salt://STIGbyID/cat3/files/V38456.sh
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
 {% if salt['file.search']('/etc/fstab', '[ 	]/var[ 	]') %}
 mount_V38456-tmp:
-   cmd.run:
-   - name: 'echo "/var already mounted as its own filesystem"'
+  cmd.run:
+    - name: 'echo "/var already mounted as its own filesystem"'
 {% else %}
 mount_V38456-tmp:
-   cmd.run:
-   - name: 'echo "Manual intervention required: create and mount a device as /var"'
+  cmd.run:
+    - name: 'echo "Manual intervention required: create and mount a device as /var"'
 {% endif %}

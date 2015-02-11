@@ -17,7 +17,7 @@
 
 script_V54381-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V54381.sh
+    - source: salt://STIGbyID/cat2/files/V54381.sh
 
 {% set checkFile = '/etc/audit/auditd.conf' %}
 {% set auditParm = 'admin_space_left_action' %}
@@ -26,21 +26,21 @@ script_V54381-describe:
   {% if salt['file.search'](checkFile, '^' + auditParm + ' = suspend') %}
 notify_V54381:
   cmd.run:
-  - name: 'echo "{{ auditParm }} parameter already set in {{ checkFile }}"'
+    - name: 'echo "{{ auditParm }} parameter already set in {{ checkFile }}"'
   {% else %}
 notify_V54381:
   cmd.run:
-  - name: 'echo "{{ auditParm }} parameter set in {{ checkFile }} but not to recommended value (''suspend'')"'
+    - name: 'echo "{{ auditParm }} parameter set in {{ checkFile }} but not to recommended value (''suspend'')"'
 
 file_V54381:
   file.replace:
-  - name: '{{ checkFile }}'
-  - pattern: '^{{ auditParm }} = .*'
-  - repl: '{{ auditParm }} = suspend'
+    - name: '{{ checkFile }}'
+    - pattern: '^{{ auditParm }} = .*'
+    - repl: '{{ auditParm }} = suspend'
   {% endif %}
 {% else %}
 file_V54381:
   file.append:
-  - name: '{{ checkFile }}'
-  - text: '{{ auditParm }} = suspend'
+    - name: '{{ checkFile }}'
+    - text: '{{ auditParm }} = suspend'
 {% endif %}

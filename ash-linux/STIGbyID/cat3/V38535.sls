@@ -17,15 +17,15 @@
 
 script_V38535-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38535.sh
+    - source: salt://STIGbyID/cat3/files/V38535.sh
 
 {% if salt['sysctl.get']('net.ipv4.icmp_echo_ignore_broadcasts') == '1' %}
 sysctl_V38535-noRedirects:
   cmd.run:
-  - name: 'echo "System already ignores ICMPv4 packets sent to a broadcast address"'
+    - name: 'echo "System already ignores ICMPv4 packets sent to a broadcast address"'
 {% else %}
 sysctl_V38535-noRedirects:
   sysctl.present:
-  - name: 'net.ipv4.icmp_echo_ignore_broadcasts'
-  - value: '1'
+    - name: 'net.ipv4.icmp_echo_ignore_broadcasts'
+    - value: '1'
 {% endif %}

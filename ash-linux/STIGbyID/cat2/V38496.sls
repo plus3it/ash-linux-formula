@@ -16,11 +16,11 @@
 
 script_V38496-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38496.sh
+    - source: salt://STIGbyID/cat2/files/V38496.sh
 
 notify_V38496-userScan:
   cmd.run:
-  - name: 'printf "Scanning locally-managed users:\n\t* Examing users with uid 0 >< 500\n\t* Looking for set or null passwords\n"'
+    - name: 'printf "Scanning locally-managed users:\n\t* Examing users with uid 0 >< 500\n\t* Looking for set or null passwords\n"'
 
 {% set userList = salt['user.list_users']() %}
 {% for userName in userList %}
@@ -33,22 +33,22 @@ notify_V38496-userScan:
   {% if userPasswd == '*' or userPasswd == '!!' %}
 list_V38496-{{ userName }}:
   cmd.run:
-  - name: 'echo "Info: User ''{{ userName }}'' has a locked password"'
+    - name: 'echo "Info: User ''{{ userName }}'' has a locked password"'
 
   {% elif '$' in userPasswd %}
 list_V38496-{{ userName }}:
   cmd.run:
-  - name: 'echo "WARNING: User ''{{ userName }}'' has a password assigned" ; exit 1'
+    - name: 'echo "WARNING: User ''{{ userName }}'' has a password assigned" ; exit 1'
 
   {% elif userPasswd == '' %}
 list_V38496-{{ userName }}:
   cmd.run:
-  - name: 'printf "** CRITICAL: User ''{{ userName }}'' has a NULL password!! **\n\tAttempting to lock...\n" ; exit 1'
+    - name: 'printf "** CRITICAL: User ''{{ userName }}'' has a NULL password!! **\n\tAttempting to lock...\n" ; exit 1'
 
 pwlock__V38496-{{ userName }}:
   user.present:
-  - name: {{ userName }}
-  - password: '!!'
+    - name: {{ userName }}
+    - password: '!!'
 
   {% endif %}
 {% endif %}

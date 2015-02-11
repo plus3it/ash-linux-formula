@@ -19,9 +19,8 @@
 
 script_V38520-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38520.sh
+    - source: salt://STIGbyID/cat2/files/V38520.sh
 
 script_V38520-helper:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38520-helper.sh
-
+    - source: salt://STIGbyID/cat2/files/V38520-helper.sh

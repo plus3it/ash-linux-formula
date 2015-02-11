@@ -17,7 +17,7 @@
 
 script_V38679-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38679.sh
+    - source: salt://STIGbyID/cat2/files/V38679.sh
 
 {% set netCfgRoot = '/etc/sysconfig/network-scripts/ifcfg-' %}
 
@@ -44,16 +44,16 @@ script_V38679-describe:
       {% if salt['file.file_exists'](netCfgRoot + ifLabel) %}
 notify_V38679-{{ ifLabel }}:
   cmd.run:
-  - name: 'echo "Checking {{ netCfgRoot }}{{ ifLabel }} for DCHP use."'
+    - name: 'echo "Checking {{ netCfgRoot }}{{ ifLabel }} for DCHP use."'
         # Check if boot-time interface configuration uses DHCP and alert
         {% if salt['file.search'](netCfgRoot + ifLabel, 'dhcp') %}
 notify_V38679-{{ ifLabel }}_DHCP:
   cmd.run:
-  - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP" ; exit 1'
+    - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP" ; exit 1'
         {% else %}
 notify_V38679-{{ ifLabel }}_DHCP:
   cmd.run:
-  - name: 'echo "Info: Interface ''{{ ifLabel }}'' does not use DHCP"'
+    - name: 'echo "Info: Interface ''{{ ifLabel }}'' does not use DHCP"'
         {% endif %}
       {% endif %}
     {% endfor %}

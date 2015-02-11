@@ -10,11 +10,11 @@ include:
 # Singleton...
 0744_auditdInit:
   file.managed:
-  - name: /etc/rc.d/init.d/auditd
-  - mode: 0744
+    - name: /etc/rc.d/init.d/auditd
+    - mode: 0744
 
 # Singleton...
 0755_EtcSecurity:
   file.directory:
-  - name: /etc/security
-  - dir_mode: 755
+    - name: /etc/security
+    - dir_mode: 755

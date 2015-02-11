@@ -19,13 +19,13 @@
 
 script_V51875-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V51875.sh
+    - source: salt://STIGbyID/cat2/files/V51875.sh
 
 # Ensure that authconfig has been run prior to trying to update the PAM files
 cmd_V51875-linkSysauth:
   cmd.run:
-  - name: '/usr/sbin/authconfig --update'
-  - unless: 'test -f /etc/pam.d/system-auth-ac'
+    - name: '/usr/sbin/authconfig --update'
+    - unless: 'test -f /etc/pam.d/system-auth-ac'
 
 {% set pamFile = '/etc/pam.d/system-auth-ac' %}
 {% set pamMod = 'pam_lastlog.so' %}
@@ -37,24 +37,24 @@ cmd_V51875-linkSysauth:
    {% if salt['file.search'](pamFile, pamMod + ' showfailed') %}
 notify_V51875-{{ pamFile }}:
   cmd.run:
-  - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ pamFile }}\n"'
+    - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ pamFile }}\n"'
    {% else %}
 insert_V51875-{{ pamFile }}:
   file.replace:
-  - name: {{ pamFile }}
-  - pattern: '^(session[ 	]*[a-z]*[ 	]*pam_lastlog.so[ 	][a-z]*)'
-  - repl: '{{ failNotice }}'
+    - name: {{ pamFile }}
+    - pattern: '^(session[ 	]*[a-z]*[ 	]*pam_lastlog.so[ 	][a-z]*)'
+    - repl: '{{ failNotice }}'
   {% endif %}
 {% else %}
 
 notify_V51875-{{ pamFile }}:
   cmd.run:
-  - name: 'printf "Adding {{ pamMod }} with ''showfailed'' option in {{ pamFile }}\n"'
+    - name: 'printf "Adding {{ pamMod }} with ''showfailed'' option in {{ pamFile }}\n"'
 
 insert_V51875-{{ pamFile }}:
   file.replace:
-  - name: {{ pamFile }}
-  - pattern: '^(?P<srctok>session[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
-  - repl: '\g<srctok>\n{{ failNotice }}'
+    - name: {{ pamFile }}
+    - pattern: '^(?P<srctok>session[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
+    - repl: '\g<srctok>\n{{ failNotice }}'
 
 {% endif %}

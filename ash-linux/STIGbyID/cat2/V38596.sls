@@ -17,22 +17,21 @@
 
 script_V38596-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38596.sh
+    - source: salt://STIGbyID/cat2/files/V38596.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', '^kernel.randomize_va_space')
  %}
 file_V38596-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^kernel.randomize_va_space.*$'
-  - repl: 'kernel.randomize_va_space = 2'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^kernel.randomize_va_space.*$'
+    - repl: 'kernel.randomize_va_space = 2'
 {% else %}
 file_V38596-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ' '
-    - '# enable ASLR (per STIG V-38596)'
-    - 'kernel.randomize_va_space = 2'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ' '
+      - '# enable ASLR (per STIG V-38596)'
+      - 'kernel.randomize_va_space = 2'
 {% endif %}
-

@@ -18,24 +18,21 @@
 
 script_V38586-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38586.sh
+    - source: salt://STIGbyID/cat2/files/V38586.sh
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/sysconfig/init', '^SINGLE') %}
 file_V38586-repl:
   file.replace:
-  - name: '/etc/sysconfig/init'
-  - pattern: '^SINGLE.*$'
-  - repl: 'SINGLE=/sbin/sulogin' 
+    - name: '/etc/sysconfig/init'
+    - pattern: '^SINGLE.*$'
+    - repl: 'SINGLE=/sbin/sulogin' 
 {% else %}
 file_V38586-append:
   file.append:
-  - name: '/etc/sysconfig/init'
-  - text:
-    - ' '
-    - '# Require root password for single-user access (per STIG V-38586)'
-    - 'SINGLE=/sbin/sulogin'
+    - name: '/etc/sysconfig/init'
+    - text:
+      - ' '
+      - '# Require root password for single-user access (per STIG V-38586)'
+      - 'SINGLE=/sbin/sulogin'
 {% endif %}
-
-
-

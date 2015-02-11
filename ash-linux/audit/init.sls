@@ -29,43 +29,42 @@
 # Make sure the package is installed
 audit-pkg-local: # State ID
   pkg.installed:
-  - name: audit
+    - name: audit
 
 # Govern the permissions on our config files
 auditd-etc_dir-local:
   file.directory:
-  - name: /etc/audit
-  - user: root
-  - group: root
-  - dir_mode: 700
-  - file_mode: 600
-  - recurse:
-    - user
-    - group
-    - mode
+    - name: /etc/audit
+    - user: root
+    - group: root
+    - dir_mode: 700
+    - file_mode: 600
+    - recurse:
+      - user
+      - group
+      - mode
 
 # Govern the permissions on our log files
 auditd-log_dir-local:
   file.directory:
-  - name: /var/log/audit
-  - user: root
-  - group: root
-  - dir_mode: 700
-  - file_mode: 600
-  - recurse:
-    - user
-    - group
-    - mode
+    - name: /var/log/audit
+    - user: root
+    - group: root
+    - dir_mode: 700
+    - file_mode: 600
+    - recurse:
+      - user
+      - group
+      - mode
 
 # Put reference service-config file in place
 audit-conf-local:
   file.managed:
-  - name: /etc/audit/auditd.conf
-  - source: salt://audit/files/auditd.conf
+    - name: /etc/audit/auditd.conf
+    - source: salt://audit/files/auditd.conf
 
 # Put reference rules-config file in place
 audit-rules-local:
   file.managed:
-  - name: /etc/audit/audit.rules
-  - source: salt://audit/files/audit.rules
-
+    - name: /etc/audit/audit.rules
+    - source: salt://audit/files/audit.rules

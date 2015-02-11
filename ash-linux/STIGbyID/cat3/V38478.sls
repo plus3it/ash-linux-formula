@@ -18,19 +18,19 @@
 
 script_V38478-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38478.sh
+    - source: salt://STIGbyID/cat3/files/V38478.sh
 
 {% if salt['pkg.version']('rhnsd') %}
 # Ensure rhnsd service is disabled and stopped
 svc_V38478-rhnsdDisabled:
   service.disabled:
-  - name: 'rhnsd'
+    - name: 'rhnsd'
 
 svc_V38478-rhnsdDead:
- service.dead:
-  - name: 'rhnsd'
+  service.dead:
+    - name: 'rhnsd'
 {% else %}
 cmd_V38478-notice:
   cmd.run:
-  - name: 'echo "RHNSD service not installed. No relevant findings possible."'
+    - name: 'echo "RHNSD service not installed. No relevant findings possible."'
 {% endif %}

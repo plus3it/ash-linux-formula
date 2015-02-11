@@ -3,5 +3,5 @@
 {% for filename in mode_0750_files %}
 {{ filename }}:
    file.directory:
-       - mode: 0750
+     - mode: 0750
 {% endfor %}

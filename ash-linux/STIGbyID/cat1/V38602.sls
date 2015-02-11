@@ -14,7 +14,7 @@
 
 script_V38602-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38602.sh
+    - source: salt://STIGbyID/cat1/files/V38602.sh
 
 {% set rSvcName = 'rlogin' %}
 
@@ -24,25 +24,25 @@ script_V38602-describe:
   {% if salt['service.enabled'](rSvcName) %}
 svc_V38602-{{ rSvcName }}Disabled:
   service.disabled:
-  - name: '{{ rSvcName }}'
+    - name: '{{ rSvcName }}'
 
 svc_V38602-{{ rSvcName }}Dead:
  service.dead:
-  - name: '{{ rSvcName }}'
+    - name: '{{ rSvcName }}'
 
 notice_V38602-disable{{ rSvcName }}:
   cmd.run:
-  - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
-  - unless: svc_V38602-{{ rSvcName }}Disabled
+    - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
+    - unless: svc_V38602-{{ rSvcName }}Disabled
   # If installed but disabled, make a note of it
   {% else %}
 notice_V38602-disable{{ rSvcName }}:
   cmd.run:
-  - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
+    - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
   {% endif %}
 # Otherwise, just notify that rsh service isn't even present
 {% else %}
 notice_V38602-disable{{ rSvcName }}:
   cmd.run:
-  - name: 'echo "The ''rsh-server'' package is not installed"'
+    - name: 'echo "The ''rsh-server'' package is not installed"'
 {% endif %}

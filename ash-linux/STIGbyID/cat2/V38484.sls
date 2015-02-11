@@ -20,16 +20,16 @@
 
 script_V38484-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38484.sh
+    - source: salt://STIGbyID/cat2/files/V38484.sh
 
 file_V38484-repl:
   file.replace:
-  - name: /etc/ssh/sshd_config
-  - pattern: "^PrintLastLog.*$"
-  - repl: "PrintLastLog yes"
+    - name: /etc/ssh/sshd_config
+    - pattern: "^PrintLastLog.*$"
+    - repl: "PrintLastLog yes"
 
 file_V38484-add:
   file.append:
-  - name: /etc/ssh/sshd_config
-  - text: 'PrintLastLog yes'
-  - onlyif: 'grep ^PrintLastLog /etc/ssh/sshd_config'
+    - name: /etc/ssh/sshd_config
+    - text: 'PrintLastLog yes'
+    - onlyif: 'grep ^PrintLastLog /etc/ssh/sshd_config'

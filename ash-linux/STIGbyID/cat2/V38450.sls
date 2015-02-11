@@ -16,9 +16,9 @@
 
 script_V38450-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38450.sh
+    - source: salt://STIGbyID/cat2/files/V38450.sh
 
 file_38450:
   file.managed:
-  - name: /etc/passwd
-  - user: root
+    - name: /etc/passwd
+    - user: root
