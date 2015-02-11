@@ -24,9 +24,8 @@ pkg_V38512:
     - name: iptables
 
 service_V38512:
-  service:
+  service.running:
     - name: iptables
-    - running
     - enable: True
     - require:
       - pkg: pkg_V38512
