@@ -18,7 +18,7 @@
 
 script_V38702-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38702.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38702.sh
 
 # Check to see if vsftpd service is installed
 {% if salt['pkg.version']('vsftpd') %}

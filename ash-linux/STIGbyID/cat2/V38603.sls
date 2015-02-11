@@ -16,7 +16,7 @@
 
 script_V38603-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38603.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38603.sh
 
 pkg_V38603:
   pkg.purged:

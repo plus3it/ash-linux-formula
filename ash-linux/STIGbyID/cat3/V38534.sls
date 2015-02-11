@@ -18,7 +18,7 @@
 
 script_V38534-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38534.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38534.sh
 
 {% set ruleFile = '/etc/audit/audit.rules' %}
 {% set groupFile = '/etc/group' %}

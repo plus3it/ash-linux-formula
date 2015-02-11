@@ -17,7 +17,7 @@
 
 script_V38444-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38444.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38444.sh
 
 # Check if IPv6 is enabled
 {% set ipv6Value =  salt['sysctl.get']('net.ipv6.conf.all.disable_ipv6') %}

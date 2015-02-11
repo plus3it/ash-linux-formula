@@ -18,7 +18,7 @@
 
 script_V38531-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38531.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38531.sh
 
 {% set ruleFile = '/etc/audit/audit.rules' %}
 {% set auditRule = ' -p wa -k audit_account_changes' %}

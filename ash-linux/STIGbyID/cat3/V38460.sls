@@ -17,7 +17,7 @@
 
 script_V38460-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38460.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38460.sh
 
 {% if salt['pkg.version']('nfs-utils') %}
   {% if salt['file.search']('/etc/exports', 'all_squash') %}

@@ -18,10 +18,10 @@
 
 script_V38663-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38663.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38663.sh
 
 # NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
 script_V38663-helper:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38663-helper.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38663-helper.sh

@@ -16,7 +16,7 @@
 
 script_V38658-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38658.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38658.sh
 
 {% if salt['file.search']('/etc/pam.d/system-auth-ac', 'password[ 	]*sufficient[ 	]*pam_unix.so') and not salt['file.search']('/etc/pam.d/system-auth-ac', 'password[ 	]*sufficient[ 	]*pam_unix.so.*remember=24') %}
 file_V38658-repl:

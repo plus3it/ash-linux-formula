@@ -61,10 +61,10 @@ auditd-log_dir-local:
 audit-conf-local:
   file.managed:
     - name: /etc/audit/auditd.conf
-    - source: salt://audit/files/auditd.conf
+    - source: salt://ash-linux/audit/files/auditd.conf
 
 # Put reference rules-config file in place
 audit-rules-local:
   file.managed:
     - name: /etc/audit/audit.rules
-    - source: salt://audit/files/audit.rules
+    - source: salt://ash-linux/audit/files/audit.rules

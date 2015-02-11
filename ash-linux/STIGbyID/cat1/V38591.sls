@@ -12,7 +12,7 @@
 
 script_V38591-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38591.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38591.sh
     - cwd: /root
 
 {% set chkPkg = 'rsh-server' %}

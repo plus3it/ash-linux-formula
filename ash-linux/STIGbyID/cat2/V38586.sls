@@ -18,7 +18,7 @@
 
 script_V38586-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38586.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38586.sh
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/sysconfig/init', '^SINGLE') %}

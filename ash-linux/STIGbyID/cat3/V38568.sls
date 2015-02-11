@@ -14,7 +14,7 @@
 
 script_V38568-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38568.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38568.sh
 
 # Monitoring of mount actions
 {% if grains['cpuarch'] == 'x86_64' %}

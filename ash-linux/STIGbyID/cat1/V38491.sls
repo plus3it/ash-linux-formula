@@ -11,7 +11,7 @@
 
 script_V38491-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38491.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38491.sh
     - cwd: /root
 
 {% set hostsEquiv = '/etc/hosts.equiv' %}

@@ -13,7 +13,7 @@
 
 script_V38646-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38646.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38646.sh
 
 {% if salt['pkg.version']('oddjob') %}
 svc_V38646-oddjobdEnabled:

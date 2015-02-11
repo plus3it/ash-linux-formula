@@ -16,7 +16,7 @@
 
 script_V38682-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38682.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38682.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/bluetooth.conf') %}
 file-V38682-touchRules:

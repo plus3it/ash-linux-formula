@@ -15,7 +15,7 @@
 
 script_V38579-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38579.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38579.sh
 
 {% if salt['file.file_exists']('/boot/grub/grub.conf') %}
 file_V38579-bootGrubGrub:

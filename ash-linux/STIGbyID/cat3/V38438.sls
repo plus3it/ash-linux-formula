@@ -18,7 +18,7 @@
 
 script_V38438-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38438.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38438.sh
 
 # Enable audit at kernel load
 {% if salt['file.search']('/boot/grub/grub.conf', 'kernel') and not salt['file.search']('/boot/grub/grub.conf', 'kernel.*audit=1') %}

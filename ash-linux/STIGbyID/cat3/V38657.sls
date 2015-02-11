@@ -16,7 +16,7 @@
 
 script_V38657-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38657.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38657.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}

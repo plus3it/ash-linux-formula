@@ -12,7 +12,7 @@
 
 script_V38624-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38624.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38624.sh
 
 {% if not salt['pkg.version']('logrotate') %}
 V38624.sls:

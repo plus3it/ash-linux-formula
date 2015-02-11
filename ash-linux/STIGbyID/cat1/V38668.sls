@@ -14,7 +14,7 @@
 
 script_V38668-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38668.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38668.sh
     - cwd: /root
 
 {% set distCAD = '/etc/init/control-alt-delete.conf' %}
@@ -46,6 +46,6 @@ notify_V38668-override:
 # file_V38668_managed:
 #   file.managed:
 #     - name: /etc/init/control-alt-delete.override
-#     - source: salt://STIGbyID/cat1/files/V38668.txt
+#     - source: salt://ash-linux/STIGbyID/cat1/files/V38668.txt
 #     - cwd: /root
 #     - force: True

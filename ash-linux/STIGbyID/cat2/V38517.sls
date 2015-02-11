@@ -16,7 +16,7 @@
 
 script_V38517-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38517.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38517.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/tipc.conf') %}
 file-V38517-touchRules:

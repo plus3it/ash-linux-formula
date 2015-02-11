@@ -18,7 +18,7 @@
 
 script_V38456-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38456.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38456.sh
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but

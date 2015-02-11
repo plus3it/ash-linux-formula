@@ -19,7 +19,7 @@
 
 script_V38530-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38530.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38530.sh
 
 {% set auditRules = '/etc/audit/audit.rules' %}
 {% set checkFile = '/etc/localtime' %}

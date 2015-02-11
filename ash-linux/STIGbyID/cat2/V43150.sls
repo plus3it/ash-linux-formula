@@ -17,7 +17,7 @@
 
 script_V43150-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V43150.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V43150.sh
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V43150-setNoUserlist:

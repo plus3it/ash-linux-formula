@@ -17,7 +17,7 @@
 
 script_V38479-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38479.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38479.sh
 
 file_V38479:
   file.replace:

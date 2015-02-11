@@ -18,7 +18,7 @@
 
 script_V38650-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38650.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38650.sh
 
 {% if salt['pkg.version']('iputils') %}
 svc_V38650-rdiscEnabled:

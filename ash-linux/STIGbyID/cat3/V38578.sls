@@ -17,7 +17,7 @@
 
 script_V38578-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38578.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38578.sh
 
 {% set ruleFile = '/etc/audit/audit.rules' %}
 {% set checkFile = '/etc/sudoers' %}

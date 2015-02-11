@@ -16,7 +16,7 @@
 
 script_V38546-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38546.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38546.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/disabled.conf') %}
 file-V38546-touchRules:

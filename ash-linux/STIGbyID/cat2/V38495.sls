@@ -15,7 +15,7 @@
 
 script_V38495-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38495.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38495.sh
 
 directory_V38495:
   file.directory:

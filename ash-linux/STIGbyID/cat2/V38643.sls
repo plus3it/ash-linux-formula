@@ -19,7 +19,7 @@
 
 script_V38643-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38643.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38643.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
@@ -41,7 +41,7 @@ notify_V38643-{{ mountPoint }}:
 
 strip_V38643-{{ mountPoint }}:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38643-helper.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38643-helper.sh
     - args: {{ mountPoint }}
 
 {% endif %} 

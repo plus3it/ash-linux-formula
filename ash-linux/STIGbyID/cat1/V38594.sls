@@ -12,7 +12,7 @@
 
 script_V38594-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38594.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38594.sh
     - cwd: /root
 
 # See if the rsh server package is even installed...

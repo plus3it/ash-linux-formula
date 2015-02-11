@@ -11,7 +11,7 @@
 
 script_V38627-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38627.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38627.sh
 
 {% if salt['pkg.version']('openldap-servers') %}
 svc_V38627-openldapEnabled:

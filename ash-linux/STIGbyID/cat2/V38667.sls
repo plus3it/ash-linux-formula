@@ -18,7 +18,7 @@
 
 script_V38667-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38667.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38667.sh
 
 # Alter the running system-state
 {% if salt['pkg.version']('policycoreutils-python') %}

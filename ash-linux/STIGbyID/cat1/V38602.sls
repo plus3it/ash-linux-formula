@@ -14,7 +14,7 @@
 
 script_V38602-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38602.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38602.sh
     - cwd: /root
 
 {% set rSvcName = 'rlogin' %}

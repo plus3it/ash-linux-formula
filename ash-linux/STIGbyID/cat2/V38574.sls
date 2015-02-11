@@ -17,7 +17,7 @@
 
 script_V38574-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38574.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38574.sh
 
 # Update /etc/sysconfig/authconfig
 file_V38574-repl:

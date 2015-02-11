@@ -16,7 +16,7 @@
 
 script_V38471-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38471.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38471.sh
 
 {% set syslogConf = '/etc/audisp/plugins.d/syslog.conf' %}
 

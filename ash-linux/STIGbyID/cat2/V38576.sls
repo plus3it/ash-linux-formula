@@ -17,7 +17,7 @@
 
 script_V38576-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38576.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38576.sh
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/login.defs', '^ENCRYPT_METHOD') %}

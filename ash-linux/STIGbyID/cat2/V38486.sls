@@ -18,7 +18,7 @@
 
 script_V38486-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38486.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38486.sh
 
 cmd_V38486-NotTechnical:
   cmd.run:

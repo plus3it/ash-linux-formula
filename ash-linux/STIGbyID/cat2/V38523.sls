@@ -17,7 +17,7 @@
 
 script_V38523-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38523.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38523.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.accept_source_route') %}
 file_V38523-repl:

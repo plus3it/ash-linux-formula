@@ -13,7 +13,7 @@
 
 script_V38445-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38445.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38445.sh
 
 notify_V38445-status:
   cmd.run:

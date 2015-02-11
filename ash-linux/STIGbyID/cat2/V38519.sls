@@ -17,7 +17,7 @@
 
 script_V38519-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38519.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38519.sh
 
 {% set cfgFile = '/etc/rsyslog.conf' %}
 

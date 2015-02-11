@@ -13,7 +13,7 @@
 
 script_V38567-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38567.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38567.sh
 
 ########################################################################
 # Will need to rewrite this as a set of modules/functions
@@ -26,4 +26,4 @@ script_V38567-describe:
 ########################################################################
 script_V38567-helper:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38567-helper.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38567-helper.sh

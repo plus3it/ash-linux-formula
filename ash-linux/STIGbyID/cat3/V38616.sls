@@ -11,7 +11,7 @@
 
 script_V38616-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38616.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38616.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^PermitUserEnvironment') %}
   {% if salt['file.search']('/etc/ssh/sshd_config', '^PermitUserEnvironment no') %}

@@ -17,7 +17,7 @@
  
 script_V38651-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38651.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38651.sh
 
 {% if salt['file.search']('/etc/bashrc', '^[   ]*umask[ 	][0-9][0-9]') %}
 file_V38651-bashrcUmask:

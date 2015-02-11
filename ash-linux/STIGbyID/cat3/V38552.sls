@@ -19,7 +19,7 @@
 
 script_V38552-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38552.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38552.sh
 
 # Monitoring of SELinux DAC config
 {% if grains['cpuarch'] == 'x86_64' %}
