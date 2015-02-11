@@ -2,6 +2,6 @@
 
 {% for filename in mode_0400_files %}
 {{ filename }}:
-   file.managed:
-     - mode: 0400
+  file.managed:
+    - mode: 0400
 {% endfor %}
