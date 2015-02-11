@@ -31,14 +31,14 @@ file_V38472-ubin:
     - name: /usr/bin
     - user: root
     - recurse:
-     - user
+      - user
 
 file_V38472-lbin:
   file.directory:
     - name: /usr/local/bin
     - user: root
     - recurse:
-    - user
+      - user
 
 file_V38472-sbin:
   file.directory:
