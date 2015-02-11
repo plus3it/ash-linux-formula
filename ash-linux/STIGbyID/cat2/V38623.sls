@@ -20,12 +20,12 @@ script_V38623-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38623.sh
 
-{% set cfgFile = '/etc/rsyslog.conf' %}
+{%- set cfgFile = '/etc/rsyslog.conf' %}
 
 # Define list of syslog "facilities":
 #    These will be used to look for matching logging-targets
 #    within the /etc/rsyslog.conf file
-{% set facilityList = [
+{%- set facilityList = [
     'auth', 
     'authpriv', 
     'cron', 
@@ -52,16 +52,16 @@ script_V38623-describe:
 
 # Iterate the facility-list to see if there's any active
 # logging-targets defined
-{% for logFacility in facilityList %}
-  {% set srchPat = '^' + logFacility + '\.' %}
-  {% if salt['file.search'](cfgFile, srchPat) %}
-    {% set cfgStruct = salt['file.grep'](cfgFile, srchPat) %}
-    {% set cfgLine = cfgStruct['stdout'] %}
-    {% set logTarg = cfgLine.split() %}
-    {% set logFile = logTarg.pop() %}
+{%- for logFacility in facilityList %}
+  {%- set srchPat = '^' + logFacility + '\.' %}
+  {%- if not salt['cmd.run']('grep -c -E "' + srchPat + '" ' + cfgFile) == '0' %}
+    {%- set cfgStruct = salt['file.grep'](cfgFile, srchPat) %}
+    {%- set cfgLine = cfgStruct['stdout'] %}
+    {%- set logTarg = cfgLine.split() %}
+    {%- set logFile = logTarg.pop() %}
 
 # Ensure that logging-target's filename starts with "/"
-    {% if logFile[0] == '/' %}
+    {%- if logFile[0] == '/' %}
 notify_V38623-{{ logFacility }}:
   cmd.run:
     - name: 'echo "Setting owner of {{ logFile }} to root."'
@@ -72,8 +72,8 @@ owner_V38623-{{ logFacility }}:
     - mode: '0600'
     - replace: false
 
-    {% else %}
-{% set logFile = logFile[1:] %}
+    {%- else %}
+{%- set logFile = logFile[1:] %}
 notify_V38623-{{ logFacility }}:
   cmd.run:
     - name: 'echo "Setting owner of {{ logFile }} to root."'
@@ -84,6 +84,6 @@ owner_V38623-{{ logFacility }}:
     - user: root
     - replace: false
 
-    {% endif %}
-  {% endif %}
-{% endfor %}
+    {%- endif %}
+  {%- endif %}
+{%- endfor %}
