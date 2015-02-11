@@ -17,14 +17,14 @@
 
 script_V38513-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38513.sh
+    - source: salt://STIGbyID/cat2/files/V38513.sh
 
 {% if salt['file.file_exists']('/etc/sysconfig/iptables') %}
 file_V38513-repl:
   file.replace:
-  - name: /etc/sysconfig/iptables
-  - pattern: 'INPUT ACCEPT .*$'
-  - repl: 'INPUT DROP [0:0]'
+    - name: /etc/sysconfig/iptables
+    - pattern: 'INPUT ACCEPT .*$'
+    - repl: 'INPUT DROP [0:0]'
 {% else %}
 iptables_V38513-existing:
   iptables.append:
@@ -44,18 +44,18 @@ iptables_V38513-sshdSafety:
   
 iptables_V38513-inputDefault:
   module.run:
-  - name: 'iptables.set_policy'
-  - table: filter
-  - chain: INPUT
-  - policy: DROP
+    - name: 'iptables.set_policy'
+    - table: filter
+    - chain: INPUT
+    - policy: DROP
   
 iptables_V38513-saveRunning:
   module.run:
-  - name: 'iptables.save'
+    - name: 'iptables.save'
 
 service_V38513:
   service:
-  - name: iptables
-  - running
-  - enable: True
+    - name: iptables
+    - running
+    - enable: True
 {% endif %}

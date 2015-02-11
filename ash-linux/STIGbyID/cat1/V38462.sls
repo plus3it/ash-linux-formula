@@ -10,8 +10,8 @@
 
 script_V38462-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38462.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38462.sh
+    - cwd: /root
 
 {% set fileList = [
 	'/etc/rpmrc',
@@ -24,21 +24,21 @@ script_V38462-describe:
   {% if salt['file.search'](checkFile,'^nosignature') %}
 notify_V38462-{{ checkFile }}:
   cmd.run:
-  - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'
+    - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'
 
 comment_V38462-{{ checkFile }}:
   file.comment:
-  - name: '{{ checkFile }}'
-  - regex: 'nosignature'
+    - name: '{{ checkFile }}'
+    - regex: 'nosignature'
   {% else %}
 notify_V38462-{{ checkFile }}:
   cmd.run:
-  - name: 'echo "Info: ''nosignature'' option not set in ''{{ checkFile }}''"'
+    - name: 'echo "Info: ''nosignature'' option not set in ''{{ checkFile }}''"'
   {% endif %}
 {% else %}
 notify_V38462-{{ checkFile }}:
   cmd.run:
-  - name: 'echo "Info: Configuration-file ''{{ checkFile }}'' does not exist"'
+    - name: 'echo "Info: Configuration-file ''{{ checkFile }}'' does not exist"'
 {% endif %}
 {% endfor %}
 

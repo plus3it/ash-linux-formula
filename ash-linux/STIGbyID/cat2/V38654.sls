@@ -17,7 +17,7 @@
 
 script_V38654-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38654.sh
+    - source: salt://STIGbyID/cat2/files/V38654.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
@@ -40,40 +40,40 @@ script_V38654-describe:
   {% if 'nosuid' in optList %}
 notify_V38654-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nosuid'' option"'
+    - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nosuid'' option"'
   {% else %}
 notify_V38654-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nosuid'' option:"'
+    - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nosuid'' option:"'
 
 # Remount with "nosuid" option added/set
   {% set optString = 'nosuid,' + ','.join(optList) %}
   {% set remountDev = mountList['alt_device'] %}
 notify_V38654-{{ mountPoint }}-remount:
   cmd.run:
-  - name: 'printf "\t* Attempting remount... {{ remountDev }}\n"'
+    - name: 'printf "\t* Attempting remount... {{ remountDev }}\n"'
 
 remount_V38654-{{ mountPoint }}:
   module.run:
-  - name: 'mount.remount'
-  - m_name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fsType }}'
-  - opts: '{{ optString }}'
+    - name: 'mount.remount'
+    - m_name: '{{ mountPoint }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fsType }}'
+    - opts: '{{ optString }}'
 
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_V38654-{{ mountPoint }}-fixFstab:
   cmd.run:
-  - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
+    - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
 fstab_V38654-{{ mountPoint }}:
   module.run:
-  - name: 'mount.set_fstab'
-  - m_name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fsType }}'
-  - opts: '{{ optString }}'
+    - name: 'mount.set_fstab'
+    - m_name: '{{ mountPoint }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fsType }}'
+    - opts: '{{ optString }}'
     {% endif %}
 
   {% endif %}

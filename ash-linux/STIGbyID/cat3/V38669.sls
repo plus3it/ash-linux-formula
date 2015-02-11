@@ -16,43 +16,42 @@
 
 script_V38669-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38669.sh
+    - source: salt://STIGbyID/cat3/files/V38669.sh
 
 {% set wantedPkg = 'postfix' %}
 
 {% if not salt['pkg.version'](wantedPkg) %}
 notify_V38669-noPostfix:
   cmd.run:
-  - name: 'echo "Postfix not installed"'
+    - name: 'echo "Postfix not installed"'
   {% if salt['pkg.version']('sendmail') %}
 notify_V38669-sendmail:
   cmd.run:
-  - name: 'echo "Sendmail installed instead of postfix"'
+    - name: 'echo "Sendmail installed instead of postfix"'
   {% else %}
 notify_V38669-postfix:
   cmd.run:
-  - name: 'echo "Attempting to install missing {{ wantedPkg }} package."'
+    - name: 'echo "Attempting to install missing {{ wantedPkg }} package."'
 
 pkg_V38669-postfix:
   pkg.installed:
-  - name: '{{ wantedPkg }}'
+    - name: '{{ wantedPkg }}'
 
 svc_V38669-postfixEnabled:
   service.enabled:
-  - name: '{{ wantedPkg }}'
+    - name: '{{ wantedPkg }}'
 
 svc_V38669-postfixRunning:
   service.running:
-  - name: '{{ wantedPkg }}'
+    - name: '{{ wantedPkg }}'
   {% endif %}
 {% else %}
 # Ensure postfix service is enabled and running
 svc_V38669-postfixEnabled:
   service.enabled:
-  - name: '{{ wantedPkg }}'
+    - name: '{{ wantedPkg }}'
 
 svc_V38669-postfixRunning:
   service.running:
-  - name: '{{ wantedPkg }}'
+    - name: '{{ wantedPkg }}'
 {% endif %}
-

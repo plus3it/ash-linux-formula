@@ -3,5 +3,5 @@
 {% for filename in mode_0444_files %}
 {{ filename }}:
    file.managed:
-       - mode: 0444
+     - mode: 0444
 {% endfor %}

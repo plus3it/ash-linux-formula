@@ -18,19 +18,18 @@
 
 script_V38650-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38650.sh
+    - source: salt://STIGbyID/cat3/files/V38650.sh
 
 {% if salt['pkg.version']('iputils') %}
 svc_V38650-rdiscEnabled:
   service.disabled:
-  - name: 'rdisc'
+    - name: 'rdisc'
 
 svc_V38650-rdiscRunning:
- service.dead:
-  - name: 'rdisc'
+  service.dead:
+    - name: 'rdisc'
 {% else %}
 notice_V38650-notPresent:
-   cmd.run:
-   - name: 'echo "The rdisc subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The rdisc subsystem is not installed"'
 {% endif %}
-

@@ -15,15 +15,14 @@
 ############################################################
 
 include:
-- STIGbyID/cat2/V38481
+  - STIGbyID/cat2/V38481
 
 {% set updatePairs = salt['pkg.list_upgrades']('name') %}
 
 remediate_V38481:
   pkg:
-  - latest
-  - pkgs:
+    - latest
+    - pkgs:
 {% for pkgName in updatePairs %}
-    - {{ pkgName }}
+      - {{ pkgName }}
 {% endfor %}
-

@@ -11,27 +11,26 @@
 
 script_V38616-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38616.sh
+    - source: salt://STIGbyID/cat3/files/V38616.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^PermitUserEnvironment') %}
   {% if salt['file.search']('/etc/ssh/sshd_config', '^PermitUserEnvironment no') %}
 file_V38616-configSet:
   cmd.run:
-  - name: 'echo "PermitUserEnvironment already meets STIG-defined requirements"'
+    - name: 'echo "PermitUserEnvironment already meets STIG-defined requirements"'
   {% else %}
 file_V38616-configSet:
   file.replace:
-  - name: '/etc/ssh/sshd_config'
-  - pattern: '^PermitUserEnvironment.*$'
-  - repl: 'PermitUserEnvironment no'
+    - name: '/etc/ssh/sshd_config'
+    - pattern: '^PermitUserEnvironment.*$'
+    - repl: 'PermitUserEnvironment no'
   {% endif %}
 {% else %}
 file_V38616-configSet:
   file.append:
-  - name: '/etc/ssh/sshd_config'
-  - text:
-    - ' '
-    - '# SSH service must not allow setting of user environment options (per STIG V-38616)'
-    - 'PermitUserEnvironment no'
+    - name: '/etc/ssh/sshd_config'
+    - text:
+      - ' '
+      - '# SSH service must not allow setting of user environment options (per STIG V-38616)'
+      - 'PermitUserEnvironment no'
 {% endif %}
-

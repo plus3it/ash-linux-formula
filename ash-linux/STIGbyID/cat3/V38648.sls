@@ -14,19 +14,18 @@
 
 script_V38648-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38648.sh
+    - source: salt://STIGbyID/cat3/files/V38648.sh
 
 {% if salt['pkg.version']('qpid-cpp-server') %}
 svc_V38648-qpiddEnabled:
   service.disabled:
-  - name: 'qpidd'
+    - name: 'qpidd'
 
 svc_V38648-qpiddRunning:
- service.dead:
-  - name: 'qpidd'
+  service.dead:
+    - name: 'qpidd'
 {% else %}
 notice_V38648-notPresent:
-   cmd.run:
-   - name: 'echo "The qpid subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The qpid subsystem is not installed"'
 {% endif %}
-

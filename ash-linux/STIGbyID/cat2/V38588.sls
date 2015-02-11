@@ -16,24 +16,21 @@
 
 script_V38588-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38588.sh
+    - source: salt://STIGbyID/cat2/files/V38588.sh
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/sysconfig/init', '^PROMPT') %}
 file_V38588-repl:
   file.replace:
-  - name: '/etc/sysconfig/init'
-  - pattern: '^PROMPT.*$'
-  - repl: 'PROMPT=no' 
+    - name: '/etc/sysconfig/init'
+    - pattern: '^PROMPT.*$'
+    - repl: 'PROMPT=no' 
 {% else %}
 file_V38588-append:
   file.append:
-  - name: '/etc/sysconfig/init'
-  - text:
-    - ' '
-    - '# Disable interactive-booting of system (per STIG V-38588)'
-    - 'PROMPT=no' 
+    - name: '/etc/sysconfig/init'
+    - text:
+      - ' '
+      - '# Disable interactive-booting of system (per STIG V-38588)'
+      - 'PROMPT=no' 
 {% endif %}
-
-
-

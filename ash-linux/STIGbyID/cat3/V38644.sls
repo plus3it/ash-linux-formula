@@ -13,19 +13,18 @@
 
 script_V38644-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38644.sh
+    - source: salt://STIGbyID/cat3/files/V38644.sh
 
 {% if salt['pkg.version']('ntpdate') %}
 svc_V38644-ntpdateEnabled:
   service.disabled:
-  - name: 'ntpdate'
+    - name: 'ntpdate'
 
 svc_V38644-ntpdateRunning:
- service.dead:
-  - name: 'ntpdate'
+  service.dead:
+    - name: 'ntpdate'
 {% else %}
 notice_V38644-notPresent:
-   cmd.run:
-   - name: 'echo "The ntpdate subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The ntpdate subsystem is not installed"'
 {% endif %}
-

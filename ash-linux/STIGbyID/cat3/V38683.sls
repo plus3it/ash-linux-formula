@@ -15,8 +15,8 @@
 
 script_V38683-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38683.sh
+    - source: salt://STIGbyID/cat3/files/V38683.sh
 
 cmd_V38683-userDupeChk:
   cmd.run:
-  - name: '/usr/sbin/pwck -rq && echo "No duplicate user names found"'
+    - name: '/usr/sbin/pwck -rq && echo "No duplicate user names found"'

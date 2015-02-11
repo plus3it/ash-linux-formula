@@ -12,19 +12,19 @@
 
 script_V38618-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38618.sh
+    - source: salt://STIGbyID/cat3/files/V38618.sh
 
 {% if salt['pkg.version']('avahi') %}
 svc_V38618-avahiDisabled:
   service.disabled:
-  - name: 'avahi-daemon'
+    - name: 'avahi-daemon'
 
 svc_V38618-avahiRunning:
- service.dead:
-  - name: 'avahi-daemon'
+  service.dead:
+    - name: 'avahi-daemon'
 
 {% else %}
 notice_V38618-notPresent:
-   cmd.run:
-   - name: 'echo "The avahi subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The avahi subsystem is not installed"'
 {% endif %}

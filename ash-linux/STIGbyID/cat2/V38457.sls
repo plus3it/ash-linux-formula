@@ -17,9 +17,9 @@
 
 script_V38457-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38457.sh
+    - source: salt://STIGbyID/cat2/files/V38457.sh
 
 file_38457:
   file.managed:
-  - name: /etc/passwd
-  - mode: '0644'
+    - name: /etc/passwd
+    - mode: '0644'

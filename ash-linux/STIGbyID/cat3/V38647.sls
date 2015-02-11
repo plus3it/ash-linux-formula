@@ -12,21 +12,20 @@
 
 script_V38647-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38647.sh
+    - source: salt://STIGbyID/cat3/files/V38647.sh
 
 {% if salt['file.search']('/etc/profile', '^[ 	]*umask') %}
 file_V38647-configSet:
   file.replace:
-  - name: '/etc/profile'
-  - pattern: 'umask.*$'
-  - repl: 'umask 077'
+    - name: '/etc/profile'
+    - pattern: 'umask.*$'
+    - repl: 'umask 077'
 {% else %}
 file_V38647-configSet:
   file.append:
-  - name: '/etc/profile'
-  - text:
-    - ' '
-    - '# Umask must be set to "077" (per STIG V-38647)'
-    - 'umask 077'
+    - name: '/etc/profile'
+    - text:
+      - ' '
+      - '# Umask must be set to "077" (per STIG V-38647)'
+      - 'umask 077'
 {% endif %}
-

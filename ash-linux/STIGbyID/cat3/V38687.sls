@@ -16,19 +16,19 @@
 
 script_V38687-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38687.sh
+    - source: salt://STIGbyID/cat3/files/V38687.sh
 
 {% if salt['pkg.version']('openswan') %}
 notify_V38687-openSwan:
   cmd.run:
-  - name: 'echo "OpenSwan utilities already installed"'
+    - name: 'echo "OpenSwan utilities already installed"'
 {% else %}
 installed_V38687-openSwan:
   pkg.installed:
-  - name: 'openswan'
+    - name: 'openswan'
 
 notify_V38687-openSwan:
   cmd.run:
-  - name: 'echo "Installed OpenSwan utilities"'
-  - unless: 'installed_V38687-openSwan'
+    - name: 'echo "Installed OpenSwan utilities"'
+    - unless: 'installed_V38687-openSwan'
 {% endif %}

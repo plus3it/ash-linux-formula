@@ -16,7 +16,7 @@
 
 script_V38657-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38657.sh
+    - source: salt://STIGbyID/cat3/files/V38657.sh
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set activeMntStream = salt['mount.active']('extended=true') %}
@@ -43,13 +43,13 @@ script_V38657-describe:
     {% if 'sec=krb5i' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''krb5i'' client-signing option"'
+    - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''krb5i'' client-signing option"'
 
     # See if using NTLM v2 client-signing (PASSING CONDITION)
     {% elif 'sec=ntlmv2i' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmv2i'' client-signing option"'
+    - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmv2i'' client-signing option"'
 
     # See if using NTLM v2 client-signing encapsulated in Raw NTLMSSP message
     # (PASSING CONDITION - STIG only specifically enumerates use of NTLM v2
@@ -57,14 +57,14 @@ notify_V38652-{{ mountPoint }}:
     {% elif 'sec=ntlmsspi' in optList %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmsspi'' client-signing option"'
+    - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmsspi'' client-signing option"'
     {% endif %}
 
   # No client-signing in use (FAILURE CONDITION)
   {% else %}
 notify_V38652-{{ mountPoint }}:
   cmd.run:
-  - name: 'printf "
+    - name: 'printf "
 WARNING: CIFS mount {{ mountPoint }} not mounted with\n
 client-signing options.\n
 Cannot safely auto-remediate: no way of ensuring that\n
@@ -82,29 +82,29 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ##   {% set remountDev = mountList['alt_device'] %}
 ## notify_V38652-{{ mountPoint }}-remount:
 ##   cmd.run:
-##   - name: 'printf "\t* Attempting remount...\n"'
+##     - name: 'printf "\t* Attempting remount...\n"'
 ##
 ## remount_V38652-{{ mountPoint }}:
 ##   module.run:
-##   - name: 'mount.remount'
-##   - m_name: '{{ mountPoint }}'
-##   - device: '{{ remountDev }}'
-##   - fstype: '{{ fsType }}'
-##   - opts: '{{ optString }}'
+##     - name: 'mount.remount'
+##     - m_name: '{{ mountPoint }}'
+##     - device: '{{ remountDev }}'
+##     - fstype: '{{ fsType }}'
+##     - opts: '{{ optString }}'
 ##
 ##     # Update fstab (if necessary)
 ##     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 ## notify_V38652-{{ mountPoint }}-fixFstab:
 ##   cmd.run:
-##   - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
+##     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 ## 
 ## fstab_V38652-{{ mountPoint }}:
 ##   module.run:
-##   - name: 'mount.set_fstab'
-##   - m_name: '{{ mountPoint }}'
-##   - device: '{{ remountDev }}'
-##   - fstype: '{{ fsType }}'
-##   - opts: '{{ optString }}'
+##     - name: 'mount.set_fstab'
+##     - m_name: '{{ mountPoint }}'
+##     - device: '{{ remountDev }}'
+##     - fstype: '{{ fsType }}'
+##     - opts: '{{ optString }}'
 ##     {% endif %}
 ##################################################################
 

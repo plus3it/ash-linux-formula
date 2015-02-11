@@ -11,8 +11,8 @@
 
 script_V38607-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38607.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38607.sh
+    - cwd: /root
 
 {% set sshConfigFile = '/etc/ssh/sshd_config' %}
 
@@ -20,20 +20,20 @@ script_V38607-describe:
   {% if salt['file.search'](sshConfigFile, '^Protocol 2') %}
 file_V38607:
   cmd.run:
-  - name: 'echo "Protocol version 2 already forced in ''{{ sshConfigFile }}''"'
+    - name: 'echo "Protocol version 2 already forced in ''{{ sshConfigFile }}''"'
   {% else %}
 file_V38607:
   file.replace:
-  - name: '{{ sshConfigFile }}'
-  - pattern: "^Protocol .*"
-  - repl: "Protocol 2"
+    - name: '{{ sshConfigFile }}'
+    - pattern: "^Protocol .*"
+    - repl: "Protocol 2"
   {% endif %}
 {% else %}
 file_V38607:
   file.append:
-  - name: '{{ sshConfigFile }}'
-  - text:
-    - ' '
-    - '# SSH Must only allow Protocol Version 2 (per STIG V-38607)'
-    - 'Protocol 2'
+    - name: '{{ sshConfigFile }}'
+    - text:
+      - ' '
+      - '# SSH Must only allow Protocol Version 2 (per STIG V-38607)'
+      - 'Protocol 2'
 {% endif %}

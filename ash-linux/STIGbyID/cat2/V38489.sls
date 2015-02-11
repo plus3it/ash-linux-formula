@@ -14,9 +14,8 @@
 
 script_V38489-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38489.sh
+    - source: salt://STIGbyID/cat2/files/V38489.sh
 
 pkg_V38489:
   pkg.installed:
-  - name: aide
-
+    - name: aide

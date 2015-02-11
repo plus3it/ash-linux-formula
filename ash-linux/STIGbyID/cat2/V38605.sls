@@ -15,18 +15,18 @@
 
 script_V38605-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38605.sh
+    - source: salt://STIGbyID/cat2/files/V38605.sh
 
 {% if not salt['pkg.version']('cronie') %}
 pkg_V38605-cronie:
   pkg.installed:
-  - name: 'cronie'
+    - name: 'cronie'
 {% endif %}
 
 svc_V38605-crondEnabled:
   service.enabled:
-  - name: 'crond'
+    - name: 'crond'
 
 svc_V38605-crondRunning:
   service.running:
-  - name: 'crond'
+    - name: 'crond'

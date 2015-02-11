@@ -17,7 +17,7 @@
 
 script_V51337-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V51337.sh
+    - source: salt://STIGbyID/cat2/files/V51337.sh
 
 #########################################
 # Ensure SELinux is active at kernel load
@@ -25,13 +25,12 @@ script_V51337-describe:
 
 file_V51337-repl:
   file.replace:
-  - name: '/boot/grub/grub.conf'
-  - pattern: ' selinux=0'
-  - repl: ''
+    - name: '/boot/grub/grub.conf'
+    - pattern: ' selinux=0'
+    - repl: ''
 
 {% else %}
 status_V51337:
   cmd.run:
-  - name: 'echo "SELinux not disabled in GRUB"'
+    - name: 'echo "SELinux not disabled in GRUB"'
 {% endif %}
-

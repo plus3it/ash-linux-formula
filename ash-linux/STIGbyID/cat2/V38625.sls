@@ -19,24 +19,24 @@
 
 script_V38625-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38625.sh
+    - source: salt://STIGbyID/cat2/files/V38625.sh
 
 {% if salt['pkg.version']('pam_ldap') and salt['file.search']('/etc/pam_ldap.conf', '^ssl') %}
 file_V38625-repl:
   file.replace:
-  - name: '/etc/pam_ldap.conf'
-  - pattern: '^ssl.*$'
-  - repl: 'ssl start_tls'
+    - name: '/etc/pam_ldap.conf'
+    - pattern: '^ssl.*$'
+    - repl: 'ssl start_tls'
 {% elif salt['pkg.version']('pam_ldap') and not salt['file.search']('/etc/pam_ldap.conf', '^ssl') %}
 file_V38625-append:
   file.append:
-  - name: '/etc/pam_ldap.conf'
-  - text:
-    - ' '
-    - '# LDAP auth-queries must use TLS (per STIG V-38625)'
-    - 'ssl start_tls'
+    - name: '/etc/pam_ldap.conf'
+    - text:
+      - ' '
+      - '# LDAP auth-queries must use TLS (per STIG V-38625)'
+      - 'ssl start_tls'
 {% elif not salt['pkg.version']('pam_ldap') %}
 cmd_V38625-notice:
   cmd.run:
-  - name: 'echo "LDAP PAM modules not installed"'
+    - name: 'echo "LDAP PAM modules not installed"'
 {% endif %}

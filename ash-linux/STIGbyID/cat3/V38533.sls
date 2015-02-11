@@ -16,15 +16,15 @@
 
 script_V38533-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38533.sh
+    - source: salt://STIGbyID/cat3/files/V38533.sh
 
 {% if salt['sysctl.get']('net.ipv4.conf.default.accept_redirects') == '0' %}
 sysctl_V38533-noRedirects:
   cmd.run:
-  - name: 'echo "System already configured to ignore ICMPv4 redirect messages"'
+    - name: 'echo "System already configured to ignore ICMPv4 redirect messages"'
 {% else %}
 sysctl_V38533-noRedirects:
   sysctl.present:
-  - name: 'net.ipv4.conf.default.accept_redirects'
-  - value: '0'
+    - name: 'net.ipv4.conf.default.accept_redirects'
+    - value: '0'
 {% endif %}

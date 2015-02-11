@@ -17,7 +17,7 @@
 
 script_V38473-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38473.sh
+    - source: salt://STIGbyID/cat3/files/V38473.sh
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
@@ -25,9 +25,9 @@ script_V38473-describe:
 {% if salt['file.search']('/etc/fstab', '[ 	]/home[ 	]') %}
 mount_V38473-tmp:
    cmd.run:
-   - name: 'echo "/home already mounted as its own filesystem"'
+     - name: 'echo "/home already mounted as its own filesystem"'
 {% else %}
 mount_V38473-tmp:
    cmd.run:
-   - name: 'echo "Manual intervention required: create and mount a device as /home"'
+     - name: 'echo "Manual intervention required: create and mount a device as /home"'
 {% endif %}

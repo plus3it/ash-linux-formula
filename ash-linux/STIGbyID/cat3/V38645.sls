@@ -13,27 +13,26 @@
 
 script_V38645-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38645.sh
+    - source: salt://STIGbyID/cat3/files/V38645.sh
 
 {% if salt['file.search']('/etc/login.defs', '^UMASK') %}
   {% if salt['file.search']('/etc/login.defs', '^UMASK	077') %}
 file_V38645-configSet:
   file.replace:
-  - name: '/etc/login.defs'
-  - pattern: '^UMASK.*$'
-  - repl: 'UMASK	077'
+    - name: '/etc/login.defs'
+    - pattern: '^UMASK.*$'
+    - repl: 'UMASK	077'
   {% else %}
 file_V38645-configSet:
   cmd.run:
-  - name: 'echo "Default user umask-setting already meets STIG-defined requirements"'
+    - name: 'echo "Default user umask-setting already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
 file_V38645-configSet:
   file.append:
-  - name: '/etc/login.defs'
-  - text:
-    - ' '
-    - '# Umask must be set to "077" (per STIG V-38645)'
-    - 'UMASK	077'
+    - name: '/etc/login.defs'
+    - text:
+      - ' '
+      - '# Umask must be set to "077" (per STIG V-38645)'
+      - 'UMASK	077'
 {% endif %}
-

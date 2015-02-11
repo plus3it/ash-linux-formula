@@ -17,9 +17,9 @@
 
 script_V38454-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38454.sh
+    - source: salt://STIGbyID/cat3/files/V38454.sh
 
 # Probably need to replace this with custom module...
 script_V38454-Verfiy:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38454-helper.sh
+    - source: salt://STIGbyID/cat3/files/V38454-helper.sh

@@ -17,20 +17,20 @@
 
 script_V38523-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38523.sh
+    - source: salt://STIGbyID/cat2/files/V38523.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.accept_source_route') %}
 file_V38523-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^net.ipv4.conf.all.accept_source_route.*$'
-  - repl: 'net.ipv4.conf.all.accept_source_route = 0'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^net.ipv4.conf.all.accept_source_route.*$'
+    - repl: 'net.ipv4.conf.all.accept_source_route = 0'
 {% else %}
 file_V38523-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ''
-    - '# Disable source-routed packets'
-    - 'net.ipv4.conf.all.accept_source_route = 0'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ''
+      - '# Disable source-routed packets'
+      - 'net.ipv4.conf.all.accept_source_route = 0'
 {% endif %}

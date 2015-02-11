@@ -17,7 +17,7 @@
 
 script_V38578-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38578.sh
+    - source: salt://STIGbyID/cat3/files/V38578.sh
 
 {% set ruleFile = '/etc/audit/audit.rules' %}
 {% set checkFile = '/etc/sudoers' %}
@@ -27,18 +27,18 @@ script_V38578-describe:
 {% if salt['file.search'](ruleFile, auditRule) %}
 file_V38578-auditRules_sudoers:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](ruleFile, checkFile) %}
 file_V38578-auditRules_sudoers:
   file.replace:
-  - name: '{{ ruleFile }}'
-  - pattern: '^.*{{ checkFile }}.*$'
-  - repl: '{{ auditRule }}'
+    - name: '{{ ruleFile }}'
+    - pattern: '^.*{{ checkFile }}.*$'
+    - repl: '{{ auditRule }}'
 {% else %}
 file_V38578-auditRules_sudoers:
   file.append:
-  - name: '{{ ruleFile }}'
-  - text:
-    - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38578)'
-    - '{{ auditRule }}'
+    - name: '{{ ruleFile }}'
+    - text:
+      - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38578)'
+      - '{{ auditRule }}'
 {% endif %}

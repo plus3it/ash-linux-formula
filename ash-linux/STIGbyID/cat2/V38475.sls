@@ -18,11 +18,10 @@
 
 script_V38475-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38475.sh
+    - source: salt://STIGbyID/cat2/files/V38475.sh
 
 file_V38475:
   file.replace:
-  - name: /etc/login.defs
-  - pattern: "^PASS_MIN_LEN.*$"
-  - repl: "PASS_MIN_LEN	14"
-
+    - name: /etc/login.defs
+    - pattern: "^PASS_MIN_LEN.*$"
+    - repl: "PASS_MIN_LEN	14"

@@ -18,19 +18,19 @@
 
 script_V38631-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38631.sh
+    - source: salt://STIGbyID/cat2/files/V38631.sh
 
 {% if not salt['pkg.version']('auditd') %}
 pkg_V38631-audit:
   pkg.installed:
-  - name: 'audit'
+    - name: 'audit'
 {% endif %}
 
 svc_V38631-auditEnabled:
   service.enabled:
-  - name: 'auditd'
+    - name: 'auditd'
 
 svc_V38631-auditRunning:
   service.running:
-  - name: 'auditd'
+    - name: 'auditd'
 

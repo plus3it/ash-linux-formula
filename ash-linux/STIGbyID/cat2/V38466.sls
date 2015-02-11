@@ -17,32 +17,32 @@
 
 script_V38466-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38466.sh
+    - source: salt://STIGbyID/cat2/files/V38466.sh
 
 file_V38466-lib:
   file.directory:
-  - name: /lib
-  - user: root
-  - recurse:
-    - user
+    - name: /lib
+    - user: root
+    - recurse:
+      - user
 
 file_V38466-lib64:
   file.directory:
-  - name: /lib64
-  - user: root
-  - recurse:
-    - user
+    - name: /lib64
+    - user: root
+    - recurse:
+      - user
 
 file_V38466-ulib:
   file.directory:
-  - name: /usr/lib
-  - user: root
-  - recurse:
-    - user
+    - name: /usr/lib
+    - user: root
+    - recurse:
+      - user
 
 file_V38466-ulib64:
   file.directory:
-  - name: /usr/lib64
-  - user: root
-  - recurse:
-    - user
+    - name: /usr/lib64
+    - user: root
+    - recurse:
+      - user

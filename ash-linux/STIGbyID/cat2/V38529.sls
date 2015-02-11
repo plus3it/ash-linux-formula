@@ -17,20 +17,20 @@
 
 script_V38529-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38529.sh
+    - source: salt://STIGbyID/cat2/files/V38529.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.accept_source_route') %}
 file_V38529-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^net.ipv4.conf.default.accept_source_route.*$'
-  - repl: 'net.ipv4.conf.default.accept_source_route = 0'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^net.ipv4.conf.default.accept_source_route.*$'
+    - repl: 'net.ipv4.conf.default.accept_source_route = 0'
 {% else %}
 file_V38529-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ' '
-    - '# Disable ICMPv4 secure redirect packtes'
-    - 'net.ipv4.conf.default.accept_source_route = 0'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ' '
+      - '# Disable ICMPv4 secure redirect packtes'
+      - 'net.ipv4.conf.default.accept_source_route = 0'
 {% endif %}

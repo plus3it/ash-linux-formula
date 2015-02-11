@@ -11,9 +11,9 @@
 
 script_V38480-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38480.sh
+    - source: salt://STIGbyID/cat3/files/V38480.sh
 
 # Super-ugly: gotta spiff later
 script_V38480-helper:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38480-helper.sh
+    - source: salt://STIGbyID/cat3/files/V38480-helper.sh

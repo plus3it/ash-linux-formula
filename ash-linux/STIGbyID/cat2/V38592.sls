@@ -17,7 +17,7 @@
 
 script_V38592-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38592.sh
+    - source: salt://STIGbyID/cat2/files/V38592.sh
 
 #################################################
 ## Consult cat3/V38482.sls for handling-method ##
@@ -38,8 +38,8 @@ script_V38592-describe:
 # Ensure that authconfig has been run prior to trying to update the PAM files
 cmd_V38592-linkSysauth:
   cmd.run:
-  - name: '/usr/sbin/authconfig --update'
-  - unless: 'test -f /etc/pam.d/system-auth-ac'
+    - name: '/usr/sbin/authconfig --update'
+    - unless: 'test -f /etc/pam.d/system-auth-ac'
 
 # Iterate files to alter...
 {% for checkFile in pamFiles %}
@@ -47,11 +47,11 @@ cmd_V38592-linkSysauth:
   {% if salt['file.search'](checkFile, pamMod) %}
 notify_V38592-{{ checkFile }}_exists:
   cmd.run:
-  - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
+    - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
     {% if not salt['file.search'](checkFile, preAuth) %}
 notify_V38592-{{ checkFile }}_noPreauth:
   cmd.run:
-  - name: 'printf "** Note **\n
+    - name: 'printf "** Note **\n
 The following PAM directive:\n\n{{ preAuth }}\n\n
 is missing in {{ checkFile }} file. The targeted\n
 security-behavior is probably not present.\n"'
@@ -59,19 +59,19 @@ security-behavior is probably not present.\n"'
   {% else %}
 notify_V38592-{{ checkFile }}_exists:
   cmd.run:
-  - name: 'echo "{{ pamMod }} absent in {{ checkFile }}"'
+    - name: 'echo "{{ pamMod }} absent in {{ checkFile }}"'
 
 insert_V38592-{{ checkFile }}_faillock:
   file.replace:
-  - name: {{ checkFile }}
-  - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
-  - repl: '{{ preAuth }}\n\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
+    - name: {{ checkFile }}
+    - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
+    - repl: '{{ preAuth }}\n\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
   {% endif %}
 {% endfor %}
 
 notify_V38592-docError:
   cmd.run:
-  - name: 'printf "
+    - name: 'printf "
 ************\n
 ** NOTICE **\n
 ************\n

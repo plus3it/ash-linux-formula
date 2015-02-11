@@ -18,11 +18,11 @@
 
 script_V38664-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38664.sh
+    - source: salt://STIGbyID/cat2/files/V38664.sh
 
 # NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
 script_V38664-helper:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38664-helper.sh
+    - source: salt://STIGbyID/cat2/files/V38664-helper.sh
 

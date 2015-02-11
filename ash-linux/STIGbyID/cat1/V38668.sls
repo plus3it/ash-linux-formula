@@ -14,8 +14,8 @@
 
 script_V38668-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38668.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38668.sh
+    - cwd: /root
 
 {% set distCAD = '/etc/init/control-alt-delete.conf' %}
 {% set overrideCAD = '/etc/init/control-alt-delete.override' %}
@@ -23,29 +23,29 @@ script_V38668-describe:
 {% if not salt['file.file_exists'](overrideCAD) %}
 notify_V38668-override:
   cmd.run:
-  - name: 'echo "Creating ''{{ overrideCAD }}''"'
+    - name: 'echo "Creating ''{{ overrideCAD }}''"'
 
 copy_V38668-override:
   file.copy:
-  - source: '{{ distCAD }}'
-  - cwd: /root
-  - name: '{{ overrideCAD }}'
+    - source: '{{ distCAD }}'
+    - cwd: /root
+    - name: '{{ overrideCAD }}'
 
 edit_V38668-override:
   file.replace:
-  - name: '{{ overrideCAD }}'
-  - pattern: '\/sbin.*now'
-  - repl: '/bin/logger -p kern.crit '
+    - name: '{{ overrideCAD }}'
+    - pattern: '\/sbin.*now'
+    - repl: '/bin/logger -p kern.crit '
 
 {% else %}
 notify_V38668-override:
   cmd.run:
-  - name: 'echo "Nothing to do: {{ overrideCAD }} already exists."'
+    - name: 'echo "Nothing to do: {{ overrideCAD }} already exists."'
 
 {% endif %}
 # file_V38668_managed:
 #   file.managed:
-#   - name: /etc/init/control-alt-delete.override
-#   - source: salt://STIGbyID/cat1/files/V38668.txt
-  - cwd: /root
-#   - force: True
+#     - name: /etc/init/control-alt-delete.override
+#     - source: salt://STIGbyID/cat1/files/V38668.txt
+#     - cwd: /root
+#     - force: True

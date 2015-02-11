@@ -16,9 +16,9 @@
 
 script_V38458-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38458.sh
+    - source: salt://STIGbyID/cat2/files/V38458.sh
 
 file_38458:
   file.managed:
-  - name: /etc/group
-  - user: root
+    - name: /etc/group
+    - user: root

@@ -16,14 +16,14 @@
 
 script_V38606-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38606.sh
+    - source: salt://STIGbyID/cat2/files/V38606.sh
 
 {% if salt['pkg.version']('tftp-server') %}
 svc_V38606-tfptd:
   service.disabled:
-  - name: 'tftp-server'
+    - name: 'tftp-server'
 {% endif %}
 
 pkg_V38606-tftpd:
   pkg.purged:
-  - name: 'tftp-server'
+    - name: 'tftp-server'

@@ -17,20 +17,20 @@
 
 script_V38532-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38532.sh
+    - source: salt://STIGbyID/cat2/files/V38532.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.secure_redirects') %}
 file_V38532-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^net.ipv4.conf.default.secure_redirects.*$'
-  - repl: 'net.ipv4.conf.default.secure_redirects = 0'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^net.ipv4.conf.default.secure_redirects.*$'
+    - repl: 'net.ipv4.conf.default.secure_redirects = 0'
 {% else %}
 file_V38532-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ' '
-    - '# Disable ICMPv4 secure redirect packtes'
-    - 'net.ipv4.conf.default.secure_redirects = 0'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ' '
+      - '# Disable ICMPv4 secure redirect packtes'
+      - 'net.ipv4.conf.default.secure_redirects = 0'
 {% endif %}

@@ -17,14 +17,14 @@
 
 script_V38574-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38574.sh
+    - source: salt://STIGbyID/cat2/files/V38574.sh
 
 # Update /etc/sysconfig/authconfig
 file_V38574-repl:
   file.replace:
-  - name: /etc/sysconfig/authconfig
-  - pattern: '^PASSWDALGORITHM.*$'
-  - repl: 'PASSWDALGORITHM=sha512'
+    - name: /etc/sysconfig/authconfig
+    - pattern: '^PASSWDALGORITHM.*$'
+    - repl: 'PASSWDALGORITHM=sha512'
 
 # Update pam_unix.so settings in /etc/pam.d/system-auth
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
@@ -33,7 +33,7 @@ file_V38574-repl:
 {% if not salt['file.file_exists'](checkFile) %}
 cmd_V38482-linkSysauth:
   cmd.run:
-  - name: '/usr/sbin/authconfig --update'
+    - name: '/usr/sbin/authconfig --update'
 {% endif %}
 
 {% if salt['file.search'](checkFile, ' pam_unix.so ') %}
@@ -41,22 +41,20 @@ cmd_V38482-linkSysauth:
   {% if salt['file.search'](checkFile, ' ' + parmName) %}
 set_V38574-sha512:
   cmd.run:
-  - name: 'echo "Passwords already require SHA512 encryption"'
+    - name: 'echo "Passwords already require SHA512 encryption"'
   # If set to md5, switch to sha512
   {% elif salt['file.search'](checkFile, '^[ 	]*password[ 	]*sufficient[ 	]*pam_unix.so.* md5 ') %}
 set_V38574-sha512:
   file.replace:
-  - name: {{ checkFile }}
-  - pattern: ' md5 '
-  - repl: ' {{ parmName }} '
+    - name: {{ checkFile }}
+    - pattern: ' md5 '
+    - repl: ' {{ parmName }} '
   # Tack on sha512 token if necessary
   {% else %}
 set_V38574-sha512:
   file.replace:
-  - name: {{ checkFile }}
-  - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
-  - repl: '\g<srctok> {{ parmName }}'
+    - name: {{ checkFile }}
+    - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
+    - repl: '\g<srctok> {{ parmName }}'
   {% endif %}
 {% endif %}
-
-

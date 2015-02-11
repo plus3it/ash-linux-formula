@@ -18,7 +18,7 @@
 
 script_V38623-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38623.sh
+    - source: salt://STIGbyID/cat2/files/V38623.sh
 
 {% set cfgFile = '/etc/rsyslog.conf' %}
 
@@ -64,25 +64,25 @@ script_V38623-describe:
     {% if logFile[0] == '/' %}
 notify_V38623-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "Setting owner of {{ logFile }} to root."'
+    - name: 'echo "Setting owner of {{ logFile }} to root."'
 
 owner_V38623-{{ logFacility }}:
   file.managed:
-  - name: '{{ logFile }}'
-  - mode: '0600'
-  - replace: false
+    - name: '{{ logFile }}'
+    - mode: '0600'
+    - replace: false
 
     {% else %}
 {% set logFile = logFile[1:] %}
 notify_V38623-{{ logFacility }}:
   cmd.run:
-  - name: 'echo "Setting owner of {{ logFile }} to root."'
+    - name: 'echo "Setting owner of {{ logFile }} to root."'
 
 owner_V38623-{{ logFacility }}:
   file.managed:
-  - name: '{{ logFile }}'
-  - user: root
-  - replace: false
+    - name: '{{ logFile }}'
+    - user: root
+    - replace: false
 
     {% endif %}
   {% endif %}

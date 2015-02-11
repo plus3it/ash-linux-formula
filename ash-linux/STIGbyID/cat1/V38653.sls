@@ -11,18 +11,18 @@
 
 script_V38653-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38653.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38653.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('net-snmp') %}
 file_snmpd:
   file.comment:
-  - name: /etc/snmp/snmpd.conf
-  - regex: ^[a-z].* public
-  - char: '## '
-  - unless: 'grep -v "^#" /etc/snmp/snmpd.conf | grep public'
+    - name: /etc/snmp/snmpd.conf
+    - regex: ^[a-z].* public
+    - char: '## '
+    - unless: 'grep -v "^#" /etc/snmp/snmpd.conf | grep public'
 {% else %}
 file_snmpd:
   cmd.run:
-  - name: 'echo "No relevant findings possible: the ''net-snmp'' package is not installed"'
+    - name: 'echo "No relevant findings possible: the ''net-snmp'' package is not installed"'
 {% endif %}

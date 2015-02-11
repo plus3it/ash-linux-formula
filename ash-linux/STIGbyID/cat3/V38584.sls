@@ -16,22 +16,22 @@
 
 script_V38584-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38584.sh
+    - source: salt://STIGbyID/cat3/files/V38584.sh
 
 {% if salt['pkg.version']('xinetd') %}
 svc_V38584-xinetdEnabled:
   service.disabled:
-  - name: 'xinetd'
+    - name: 'xinetd'
 
 svc_V38584-xinetdRunning:
- service.dead:
-  - name: 'xinetd'
+  service.dead:
+    - name: 'xinetd'
 
 pkg_V38584-remove:
   pkg.purged:
-  - name: 'xinetd'
+    - name: 'xinetd'
 {% else %}
 notice_V38584-notPresent:
-   cmd.run:
-   - name: 'echo "The xinetd subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The xinetd subsystem is not installed"'
 {% endif %}

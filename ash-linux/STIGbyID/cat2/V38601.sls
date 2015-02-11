@@ -18,22 +18,22 @@
 
 script_V38601-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38601.sh
+    - source: salt://STIGbyID/cat2/files/V38601.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.send_redirects')
  %}
 file_V38601-repl:
   file.replace:
-  - name: '/etc/sysctl.conf'
-  - pattern: '^net.ipv4.conf.all.send_redirects.*$'
-  - repl: 'net.ipv4.conf.all.send_redirects = 0'
+    - name: '/etc/sysctl.conf'
+    - pattern: '^net.ipv4.conf.all.send_redirects.*$'
+    - repl: 'net.ipv4.conf.all.send_redirects = 0'
 {% else %}
 file_V38601-append:
   file.append:
-  - name: '/etc/sysctl.conf'
-  - text:
-    - ' '
-    - '# Disable sedning ICMP redirects (per STIG V-38601)'
-    - 'net.ipv4.conf.all.send_redirects = 0'
+    - name: '/etc/sysctl.conf'
+    - text:
+      - ' '
+      - '# Disable sedning ICMP redirects (per STIG V-38601)'
+      - 'net.ipv4.conf.all.send_redirects = 0'
 {% endif %}
 

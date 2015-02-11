@@ -17,10 +17,10 @@
 
 script_V38553-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38553.sh
+    - source: salt://STIGbyID/cat2/files/V38553.sh
 
 service_V38553:
   service:
-  - name: ip6tables
-  - running
-  - enable: True
+    - name: ip6tables
+    - running
+    - enable: True

@@ -16,11 +16,10 @@
 
 script_V38470-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38470.sh
+    - source: salt://STIGbyID/cat2/files/V38470.sh
 
 file_V38470:
   file.replace:
-  - name: /etc/audit/auditd.conf
-  - pattern: "^space_left_action =.*"
-  - repl: "space_left_action = email"
-
+    - name: /etc/audit/auditd.conf
+    - pattern: "^space_left_action =.*"
+    - repl: "space_left_action = email"

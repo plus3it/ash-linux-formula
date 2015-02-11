@@ -14,16 +14,16 @@
 
 script_V38674-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38674.sh
+    - source: salt://STIGbyID/cat2/files/V38674.sh
 
 {% if salt['file.search']('/etc/inittab', '^id:5:') %}
 cmd_V38674-x11warn:
   cmd.run:
-  - name: 'echo "Default run-level enables X11. Will be disabled at next system-boot."'
+    - name: 'echo "Default run-level enables X11. Will be disabled at next system-boot."'
 {% endif %}
 file_V38674-repl:
   file.replace:
-  - name: '/etc/inittab'
-  - pattern: '^id:.*$'
-  - repl: 'id:3:initdefault:'
+    - name: '/etc/inittab'
+    - pattern: '^id:.*$'
+    - repl: 'id:3:initdefault:'
 

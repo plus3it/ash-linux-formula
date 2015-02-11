@@ -12,8 +12,8 @@
 
 script_V38589-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38589.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38589.sh
+    - cwd: /root
 
 # See if the telnet server package is even installed...
 {% if salt['pkg.version']('telnet-server') %}
@@ -21,25 +21,25 @@ script_V38589-describe:
   {% if salt['service.enabled']('telnet') %}
 svc_V38589-telnetDisabled:
   service.disabled:
-  - name: 'telnet'
+    - name: 'telnet'
 
 svc_V38589-telnetDead:
- service.dead:
-  - name: 'telnet'
+  service.dead:
+    - name: 'telnet'
 
 notice_V38589-disableTelnet:
   cmd.run:
-  - name: 'echo "The ''telnet'' service has been disabled"'
-  - unless: svc_V38589-telnetDisabled
+    - name: 'echo "The ''telnet'' service has been disabled"'
+    - unless: svc_V38589-telnetDisabled
   # If installed but disabled, make a note of it
   {% else %}
 notice_V38589-disableTelnet:
   cmd.run:
-  - name: 'echo "The ''telnet'' service already disabled"'
+    - name: 'echo "The ''telnet'' service already disabled"'
   {% endif %}
 # Otherwise, just notify that telnet service isn't even present
 {% else %}
 notice_V38589-disableTelnet:
   cmd.run:
-  - name: 'echo "The ''telnet-server'' package is not installed"'
+    - name: 'echo "The ''telnet-server'' package is not installed"'
 {% endif %}

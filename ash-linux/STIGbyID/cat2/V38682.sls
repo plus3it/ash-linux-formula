@@ -16,21 +16,21 @@
 
 script_V38682-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38682.sh
+    - source: salt://STIGbyID/cat2/files/V38682.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/bluetooth.conf') %}
 file-V38682-touchRules:
   file.touch:
-  - name: '/etc/modprobe.d/bluetooth.conf'
+    - name: '/etc/modprobe.d/bluetooth.conf'
 {% endif %}
 
 file_V38682-appendBTblacklist:
   file.append:
-  - name: /etc/modprobe.d/bluetooth.conf
-  - text: 'install bluetooth /bin/false'
+    - name: /etc/modprobe.d/bluetooth.conf
+    - text: 'install bluetooth /bin/false'
 
 file_V38682-appendNPFblacklist:
   file.append:
-  - name: /etc/modprobe.d/bluetooth.conf
-  - text: 'install net-pf-31 /bin/false'
+    - name: /etc/modprobe.d/bluetooth.conf
+    - text: 'install net-pf-31 /bin/false'
 

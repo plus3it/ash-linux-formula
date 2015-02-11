@@ -17,16 +17,16 @@
 
 script_V38512-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38512.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat2/files/V38512.sh
+    - cwd: /root
 
 pkg_V38512:
   pkg.installed:
-  - name: iptables
+    - name: iptables
 
 service_V38512:
   service.running:
-  - name: iptables
-  - enable: True
-  - require:
-    - pkg: pkg_V38512
+    - name: iptables
+    - enable: True
+    - require:
+      - pkg: pkg_V38512

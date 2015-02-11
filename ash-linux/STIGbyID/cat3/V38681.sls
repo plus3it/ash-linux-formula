@@ -16,14 +16,14 @@
 
 script_V38681-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38681.sh
+    - source: salt://STIGbyID/cat3/files/V38681.sh
 
 {% for user in salt['user.getent']('') %}
 {% set ID = user['name'] %}
 {% if not salt['file.search']('/etc/group', ':' + user['gid']|string() + ':' ) %}
 notify_V38681-{{ ID }}:
   cmd.run:
-  - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'
+    - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'
 {% endif %}
 {% endfor %}
 

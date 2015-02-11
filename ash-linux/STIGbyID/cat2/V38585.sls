@@ -17,13 +17,11 @@
 
 script_V38585-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38585.sh
+    - source: salt://STIGbyID/cat2/files/V38585.sh
 
 # Conditional replace or append
 {% if not salt['file.search']('/boot/grub/grub.conf', '^password --encrypted "$6') %}
 cmd_V38585-notice:
   cmd.run:
-  - name: 'echo "GRUB not password-protected with SHA512 password: manual remediation required"'
+    - name: 'echo "GRUB not password-protected with SHA512 password: manual remediation required"'
 {% endif %}
-
-

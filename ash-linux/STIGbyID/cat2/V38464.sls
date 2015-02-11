@@ -16,11 +16,10 @@
 
 script_V38464-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38464.sh
+    - source: salt://STIGbyID/cat2/files/V38464.sh
 
 file_V38464:
   file.replace:
-  - name: /etc/audit/auditd.conf
-  - pattern: "^disk_error_action =.*"
-  - repl: "disk_error_action = HALT"
-
+    - name: /etc/audit/auditd.conf
+    - pattern: "^disk_error_action =.*"
+    - repl: "disk_error_action = HALT"

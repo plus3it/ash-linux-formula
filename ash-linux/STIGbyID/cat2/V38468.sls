@@ -16,11 +16,10 @@
 
 script_V38468-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38468.sh
+    - source: salt://STIGbyID/cat2/files/V38468.sh
 
 file_V38468:
   file.replace:
-  - name: /etc/audit/auditd.conf
-  - pattern: "^disk_full_action =.*"
-  - repl: "disk_full_action = HALT"
-
+    - name: /etc/audit/auditd.conf
+    - pattern: "^disk_full_action =.*"
+    - repl: "disk_full_action = HALT"

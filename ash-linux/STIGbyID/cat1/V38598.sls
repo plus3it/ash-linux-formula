@@ -12,8 +12,8 @@
 
 script_V38598-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38598.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38598.sh
+    - cwd: /root
 
 {% set rSvcName = 'rexec' %}
 
@@ -23,25 +23,25 @@ script_V38598-describe:
   {% if salt['service.enabled'](rSvcName) %}
 svc_V38598-{{ rSvcName }}Disabled:
   service.disabled:
-  - name: '{{ rSvcName }}'
+    - name: '{{ rSvcName }}'
 
 svc_V38598-{{ rSvcName }}Dead:
- service.dead:
-  - name: '{{ rSvcName }}'
+  service.dead:
+    - name: '{{ rSvcName }}'
 
 notice_V38598-disable{{ rSvcName }}:
   cmd.run:
-  - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
-  - unless: svc_V38598-{{ rSvcName }}Disabled
+    - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
+    - unless: svc_V38598-{{ rSvcName }}Disabled
   # If installed but disabled, make a note of it
   {% else %}
 notice_V38598-disable{{ rSvcName }}:
   cmd.run:
-  - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
+    - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
   {% endif %}
 # Otherwise, just notify that rsh service isn't even present
 {% else %}
 notice_V38598-disable{{ rSvcName }}:
   cmd.run:
-  - name: 'echo "The ''rsh-server'' package is not installed"'
+    - name: 'echo "The ''rsh-server'' package is not installed"'
 {% endif %}

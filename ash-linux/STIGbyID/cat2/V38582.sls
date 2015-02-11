@@ -19,10 +19,10 @@
 
 script_V38582-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38582.sh
+    - source: salt://STIGbyID/cat2/files/V38582.sh
 
 {% if salt['pkg.version']('xinetd') %}
 svc_V38582-xinetd:
   service.disabled:
-  - name: 'xinetd'
+    - name: 'xinetd'
 {% endif %}

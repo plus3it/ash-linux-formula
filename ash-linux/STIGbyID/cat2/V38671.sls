@@ -16,8 +16,8 @@
 
 script_V38671-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38671.sh
+    - source: salt://STIGbyID/cat2/files/V38671.sh
 
 pkg_V38671-remove:
   pkg.purged:
-  - name: 'sendmail'
+    - name: 'sendmail'

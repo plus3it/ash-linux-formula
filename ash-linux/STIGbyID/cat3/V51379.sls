@@ -16,10 +16,9 @@
 
 script_V51379-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V51379.sh
+    - source: salt://STIGbyID/cat3/files/V51379.sh
 
 # Need to replace this with custom module...
 script_V51379-Verfiy:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V51379-helper.sh
-
+    - source: salt://STIGbyID/cat3/files/V51379-helper.sh

@@ -16,7 +16,7 @@
 
 script_V38656-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38656.sh
+    - source: salt://STIGbyID/cat3/files/V38656.sh
 
 # If the Samba config files are installed...
 {% if salt['pkg.version']('samba-common') %}
@@ -25,21 +25,21 @@ script_V38656-describe:
   {% if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') or salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
 paramSet_V38656-clientSigning:
   file.replace:
-  - name: '/etc/samba/smb.conf'
-  - pattern: 'client signing[ 	]=.*$'
-  - repl: 'client signing = mandatory'
+    - name: '/etc/samba/smb.conf'
+    - pattern: 'client signing[ 	]=.*$'
+    - repl: 'client signing = mandatory'
   {% else %}
   # ...otherwise, set a value (append immediately after [global]
   # stanza's header
 paramSet_V38656-clientSigning:
   file.replace:
-  - name: '/etc/samba/smb.conf'
-  - pattern: '^(?P<srctok>^\[global\]$)'
-  - repl: '\g<srctok>\n\n# client signing set per STIG-ID V-38656\n\tclient signing = mandatory'
+    - name: '/etc/samba/smb.conf'
+    - pattern: '^(?P<srctok>^\[global\]$)'
+    - repl: '\g<srctok>\n\n# client signing set per STIG-ID V-38656\n\tclient signing = mandatory'
   {% endif %}
 # If the Samba config files are not installed...
 {% else %}
 paramSet_V38656-clientSigning:
   cmd.run:
-  - name: 'echo "No relevant findings: Samba configuration components not installed"'
+    - name: 'echo "No relevant findings: Samba configuration components not installed"'
 {% endif %}

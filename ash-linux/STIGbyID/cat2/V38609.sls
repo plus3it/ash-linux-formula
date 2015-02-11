@@ -15,14 +15,14 @@
 
 script_V38609-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38609.sh
+    - source: salt://STIGbyID/cat2/files/V38609.sh
 
 {% if salt['pkg.version']('tftp-server') %}
 svc_V38609-tfptd:
   service.disabled:
-  - name: 'tftp-server'
+    - name: 'tftp-server'
 {% endif %}
 
 cmd_V38609-tfptd:
   cmd.run:
-  - name: 'echo "TFTP service not installed"'
+    - name: 'echo "TFTP service not installed"'

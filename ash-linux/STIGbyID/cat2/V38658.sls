@@ -16,21 +16,21 @@
 
 script_V38658-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38658.sh
+    - source: salt://STIGbyID/cat2/files/V38658.sh
 
 {% if salt['file.search']('/etc/pam.d/system-auth-ac', 'password[ 	]*sufficient[ 	]*pam_unix.so') and not salt['file.search']('/etc/pam.d/system-auth-ac', 'password[ 	]*sufficient[ 	]*pam_unix.so.*remember=24') %}
 file_V38658-repl:
   file.replace:
-  - name: '/etc/pam.d/system-auth-ac'
-  - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
-  - repl: '\g<srctok> remember=24'
+    - name: '/etc/pam.d/system-auth-ac'
+    - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
+    - repl: '\g<srctok> remember=24'
 {% else %}
 status_V38658-reuseParm:
   cmd.run:
-  - name: 'echo "Re-use parameter already set"'
+    - name: 'echo "Re-use parameter already set"'
 {% endif %}
 
 link_v38658:
   file.symlink:
-  - name: '/etc/pam.d/system-auth'
-  - target: '/etc/pam.d/system-auth-ac'
+    - name: '/etc/pam.d/system-auth'
+    - target: '/etc/pam.d/system-auth-ac'

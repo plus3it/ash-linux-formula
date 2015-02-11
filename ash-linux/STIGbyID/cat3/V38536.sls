@@ -18,7 +18,7 @@
 
 script_V38536-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38536.sh
+    - source: salt://STIGbyID/cat3/files/V38536.sh
 
 {% set auditCfg = '/etc/audit/audit.rules' %}
 {% set groupFile = '/etc/group' %}
@@ -36,99 +36,98 @@ script_V38536-describe:
 {% if salt['file.search'](auditCfg, groupRule) %}
 file_V38536-auditRules_group:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](auditCfg, groupFile) %}
 file_V38536-auditRules_group:
   file.replace:
-  - name: '{{ auditCfg }}'
-  - pattern: '^.*{{ groupFile }}.*$'
-  - repl: '{{ groupRule }}'
+    - name: '{{ auditCfg }}'
+    - pattern: '^.*{{ groupFile }}.*$'
+    - repl: '{{ groupRule }}'
 {% else %}
 file_V38536-auditRules_group:
   file.append:
-  - name: '{{ auditCfg }}'
-  - text:
-    - '# Monitor {{ groupFile }} for changes (per STIG-ID V-38536)'
-    - '{{ groupRule }}'
+    - name: '{{ auditCfg }}'
+    - text:
+      - '# Monitor {{ groupFile }} for changes (per STIG-ID V-38536)'
+      - '{{ groupRule }}'
 {% endif %}
 
 # Monitoring of /etc/passwd file
 {% if salt['file.search'](auditCfg, passwdRule) %}
 file_V38536-auditRules_passwd:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](auditCfg, passwdFile) %}
 file_V38536-auditRules_passwd:
   file.replace:
-  - name: '{{ auditCfg }}'
-  - pattern: '^.*{{ passwdFile }}.*$'
-  - repl: '{{ passwdRule }}'
+    - name: '{{ auditCfg }}'
+    - pattern: '^.*{{ passwdFile }}.*$'
+    - repl: '{{ passwdRule }}'
 {% else %}
 file_V38536-auditRules_passwd:
   file.append:
-  - name: '{{ auditCfg }}'
-  - text:
-    - '# Monitor {{ passwdFile }} for changes (per STIG-ID V-38536)'
-    - '{{ passwdRule }}'
+    - name: '{{ auditCfg }}'
+    - text:
+      - '# Monitor {{ passwdFile }} for changes (per STIG-ID V-38536)'
+      - '{{ passwdRule }}'
 {% endif %}
 
 # Monitoring of /etc/gshadow file
 {% if salt['file.search'](auditCfg, gshadowRule) %}
 file_V38536-auditRules_gshadow:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](auditCfg, gshadowFile) %}
 file_V38536-auditRules_gshadow:
   file.replace:
-  - name: '{{ auditCfg }}'
-  - pattern: '^.*{{ gshadow }}.*$'
-  - repl: '{{ gshadowRule }}'
+    - name: '{{ auditCfg }}'
+    - pattern: '^.*{{ gshadow }}.*$'
+    - repl: '{{ gshadowRule }}'
 {% else %}
 file_V38536-auditRules_gshadow:
   file.append:
-  - name: '{{ auditCfg }}'
-  - text:
-    - '# Monitor {{ gshadowFile }} for changes (per STIG-ID V-38536)'
-    - '{{ gshadowRule }}'
+    - name: '{{ auditCfg }}'
+    - text:
+      - '# Monitor {{ gshadowFile }} for changes (per STIG-ID V-38536)'
+      - '{{ gshadowRule }}'
 {% endif %}
 
 # Monitoring of /etc/shadow file
 {% if salt['file.search'](auditCfg, shadowRule) %}
 file_V38536-auditRules_shadow:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](auditCfg, shadowFile) %}
 file_V38536-auditRules_shadow:
   file.replace:
-  - name: '{{ auditCfg }}'
-  - pattern: '^.*{{ shadowFile }}.*$'
-  - repl: '{{ shadowRule }}'
+    - name: '{{ auditCfg }}'
+    - pattern: '^.*{{ shadowFile }}.*$'
+    - repl: '{{ shadowRule }}'
 {% else %}
 file_V38536-auditRules_shadow:
   file.append:
-  - name: '{{ auditCfg }}'
-  - text:
-    - '# Monitor {{ shadowFile }} for changes (per STIG-ID V-38536)'
-    - '{{ shadowRule }}'
+    - name: '{{ auditCfg }}'
+    - text:
+      - '# Monitor {{ shadowFile }} for changes (per STIG-ID V-38536)'
+      - '{{ shadowRule }}'
 {% endif %}
 
 # Monitoring of /etc/security/opasswd file
 {% if salt['file.search'](auditCfg, opasswdRule) %}
 file_V38536-auditRules_opasswd:
   cmd.run:
-  - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'echo "Appropriate audit rule already in place"'
 {% elif salt['file.search'](auditCfg, opasswdFile) %}
 file_V38536-auditRules_opasswd:
   file.replace:
-  - name: '{{ auditCfg }}'
-  - pattern: '^.*{{ opasswd }}.*$'
-  - repl: '{{ opasswdRule }}'
+    - name: '{{ auditCfg }}'
+    - pattern: '^.*{{ opasswd }}.*$'
+    - repl: '{{ opasswdRule }}'
 {% else %}
 file_V38536-auditRules_opasswd:
   file.append:
-  - name: '{{ auditCfg }}'
-  - text:
-    - '# Monitor {{ opasswdFile }} for changes (per STIG-ID V-38536)'
-    - '{{ opasswdRule }}'
+    - name: '{{ auditCfg }}'
+    - text:
+      - '# Monitor {{ opasswdFile }} for changes (per STIG-ID V-38536)'
+      - '{{ opasswdRule }}'
 {% endif %}
-

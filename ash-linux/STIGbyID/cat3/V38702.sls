@@ -18,7 +18,7 @@
 
 script_V38702-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38702.sh
+    - source: salt://STIGbyID/cat3/files/V38702.sh
 
 # Check to see if vsftpd service is installed
 {% if salt['pkg.version']('vsftpd') %}
@@ -31,80 +31,80 @@ script_V38702-describe:
   {% if salt['file.search'](vsftpdConf, '^' + logEnable + '=YES') %}
 file_V38702-xferLog:
   cmd.run:
-  - name: 'echo "The {{ logEnable }} option is already appropriately set"'
+    - name: 'echo "The {{ logEnable }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
   {% elif salt['file.search'](vsftpdConf, '^' + logEnable + '=NO') %}
 file_V38702-xferLog:
   file.replace:
-  - name: {{ vsftpdConf }}
-  - pattern: '^{{ logEnable }}.*$'
-  - repl: '{{ logEnable }}=YES'
+    - name: {{ vsftpdConf }}
+    - pattern: '^{{ logEnable }}.*$'
+    - repl: '{{ logEnable }}=YES'
 
   # ...if not defined at all
   {% else  %}
 file_V38702-xferLog:
   file.append:
-  - name: {{ vsftpdConf }}
-  - text:
-    - ' '
-    - '# Enable transfer-logging (per STIG V-38702)'
-    - '{{ logEnable }}=YES'
+    - name: {{ vsftpdConf }}
+    - text:
+      - ' '
+      - '# Enable transfer-logging (per STIG V-38702)'
+      - '{{ logEnable }}=YES'
   {% endif %}
 
   # ...and see if standard-logging is explicitly disabled
   {% if salt['file.search'](vsftpdConf, '^' + logFormat + '=NO') %}
 file_V38702-logFmt:
   cmd.run:
-  - name: 'echo "The {{ logFormat }} option is already appropriately set"'
+    - name: 'echo "The {{ logFormat }} option is already appropriately set"'
 
   # ...set it to disabled if already explicitly enabled
   {% elif salt['file.search'](vsftpdConf, '^' + logFormat + '=YES') %}
 file_V38702-logFmt:
   file.replace:
-  - name: {{ vsftpdConf }}
-  - pattern: '^{{ logFormat }}.*$'
-  - repl: '{{ logFormat }}=NO'
+    - name: {{ vsftpdConf }}
+    - pattern: '^{{ logFormat }}.*$'
+    - repl: '{{ logFormat }}=NO'
 
   # ...if not defined at all
   {% else  %}
 file_V38702-logFmt:
   file.append:
-  - name: {{ vsftpdConf }}
-  - text:
-    - ' '
-    - '# Enable verbose logging (per STIG V-38702)'
-    - '{{ logFormat }}=YES'
+    - name: {{ vsftpdConf }}
+    - text:
+      - ' '
+      - '# Enable verbose logging (per STIG V-38702)'
+      - '{{ logFormat }}=YES'
   {% endif %}
 
   # ...and see if verbose-logging is already enabled
   {% if salt['file.search'](vsftpdConf, '^' + logVerbosity + '=YES') %}
 file_V38702-logVerbose:
   cmd.run:
-  - name: 'echo "The {{ logVerbosity }} option is already appropriately set"'
+    - name: 'echo "The {{ logVerbosity }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
   {% elif salt['file.search'](vsftpdConf, '^' + logVerbosity + '=NO') %}
 file_V38702-logVerbose:
   file.replace:
-  - name: {{ vsftpdConf }}
-  - pattern: '^{{ logVerbosity }}.*$'
-  - repl: '{{ logVerbosity }}=YES'
+    - name: {{ vsftpdConf }}
+    - pattern: '^{{ logVerbosity }}.*$'
+    - repl: '{{ logVerbosity }}=YES'
 
   # ...if not defined at all
   {% else  %}
 file_V38702-logVerbose:
   file.append:
-  - name: {{ vsftpdConf }}
-  - text:
-    - ' '
-    - '# Enable transfer-logging (per STIG V-38702)'
-    - '{{ logVerbosity }}=YES'
+    - name: {{ vsftpdConf }}
+    - text:
+      - ' '
+      - '# Enable transfer-logging (per STIG V-38702)'
+      - '{{ logVerbosity }}=YES'
   {% endif %}
 
 # If not installed, call out as much...
 {% else  %}
 file_V38702-modify:
   cmd.run:
-  - name: 'echo "FTP (vsftpd} service not installed"'
+    - name: 'echo "FTP (vsftpd} service not installed"'
 {% endif %}

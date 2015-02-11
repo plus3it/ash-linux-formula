@@ -11,19 +11,19 @@
 
 script_V38491-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38491.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38491.sh
+    - cwd: /root
 
 {% set hostsEquiv = '/etc/hosts.equiv' %}
 
 {% if salt['file.file_exists'](hostsEquiv) %}
 file_V38491-hostsEquiv:
   file.absent:
-  - name: {{ hostsEquiv }}
+    - name: {{ hostsEquiv }}
 {% else %}
 file_V38491-hostsEquiv:
   cmd.run:
-  - name: 'echo "No ''{{ hostsEquiv }}'' file found"'
+    - name: 'echo "No ''{{ hostsEquiv }}'' file found"'
 {% endif %}
 
 # Iterate locally-managed users to look for .rhosts files
@@ -34,13 +34,13 @@ file_V38491-hostsEquiv:
 {% if salt['file.file_exists'](userRhost) %}
 notify-{{ userName }}:
   cmd.run: 
-  - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..." ; exit 1'
+    - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..." ; exit 1'
 cmd_V38491-{{ userRhost }}_remove:
   file.absent: 
-  - name: '{{ userRhost }}'
+    - name: '{{ userRhost }}'
 {% else %}
 notify-{{ userName }}:
   cmd.run: 
-  - name: 'echo "Info: User ''{{ userName }}'' does not have an ''.rhosts'' file."'
+    - name: 'echo "Info: User ''{{ userName }}'' does not have an ''.rhosts'' file."'
 {% endif %}
 {% endfor %}

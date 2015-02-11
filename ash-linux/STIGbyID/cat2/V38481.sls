@@ -16,19 +16,18 @@
 
 script_V38481-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38481.sh
+    - source: salt://STIGbyID/cat2/files/V38481.sh
 
 cmd_V38481-chkSubscribe:
   cmd.run:
-  - name: 'echo "Subscribed to yum service"'
-  - unless: 'yum repolist | grep "repolist: 0"'
+    - name: 'echo "Subscribed to yum service"'
+    - unless: 'yum repolist | grep "repolist: 0"'
 
 cmd_V38481-lastUpdate:
   cmd.run:
-  - name: "printf 'System last updated: ' ; rpm -q `rpm -qa -last | awk 'END {print $1}'` --qf '%{installtime:date}\n'"
-  - unless: 'yum repolist | grep "repolist: 0"'
+    - name: "printf 'System last updated: ' ; rpm -q `rpm -qa -last | awk 'END {print $1}'` --qf '%{installtime:date}\n'"
+    - unless: 'yum repolist | grep "repolist: 0"'
 
 pkg_V38481-upgrades:
   module.run:
-  - name: pkg.list_upgrades
-
+    - name: pkg.list_upgrades

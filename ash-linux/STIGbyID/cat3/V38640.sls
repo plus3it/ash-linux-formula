@@ -13,19 +13,18 @@
 
 script_V38640-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38640.sh
+    - source: salt://STIGbyID/cat3/files/V38640.sh
 
 {% if salt['pkg.version']('abrt') %}
 svc_V38640-abrtdEnabled:
   service.disabled:
-  - name: 'abrtd'
+    - name: 'abrtd'
 
 svc_V38640-abrtdRunning:
- service.dead:
-  - name: 'abrtd'
+  service.dead:
+    - name: 'abrtd'
 {% else %}
 notice_V38640-notPresent:
-   cmd.run:
-   - name: 'echo "The ABRT subsystem is not installed"'
+  cmd.run:
+    - name: 'echo "The ABRT subsystem is not installed"'
 {% endif %}
-

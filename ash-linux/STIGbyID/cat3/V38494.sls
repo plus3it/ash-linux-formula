@@ -12,16 +12,16 @@
 
 script_V38494-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat3/files/V38494.sh
+    - source: salt://STIGbyID/cat3/files/V38494.sh
 
 {% if salt['file.search']('/etc/securetty','^ttyS') %}
 replace_V38494-serialTTY:
   file.replace:
-  - name: /etc/securetty
-  - pattern: '^ttyS.*$'
-  - repl: ''
+    - name: /etc/securetty
+    - pattern: '^ttyS.*$'
+    - repl: ''
 {% else %}
 replace_V38494-serialTTY:
   cmd.run:
-  - name: 'echo "No serial console entries in /etc/securetty"'
+    - name: 'echo "No serial console entries in /etc/securetty"'
 {% endif %}

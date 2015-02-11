@@ -17,16 +17,16 @@
 
 script_V38680-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38680.sh
+    - source: salt://STIGbyID/cat2/files/V38680.sh
 
 {% if salt['file.file_exists']('/etc/audit/auditd.conf') %}
 file_V38680-repl:
   file.replace:
-  - name: '/etc/audit/auditd.conf'
-  - pattern: '^action_mail_acct.*$'
-  - repl: 'action_mail_acct = root'
+    - name: '/etc/audit/auditd.conf'
+    - pattern: '^action_mail_acct.*$'
+    - repl: 'action_mail_acct = root'
 {% else %}
 warn_V38680:
   cmd.run:
-  - name: 'echo "The audit config file (/etc/audit/auditd.conf) does not exist"'
+    - name: 'echo "The audit config file (/etc/audit/auditd.conf) does not exist"'
 {% endif %}

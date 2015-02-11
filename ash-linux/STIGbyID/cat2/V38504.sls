@@ -17,9 +17,9 @@
 
 script_V38504-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38504.sh
+    - source: salt://STIGbyID/cat2/files/V38504.sh
 
 file_V38504:
   file.managed:
-  - name: /etc/shadow
-  - mode: 0000
+    - name: /etc/shadow
+    - mode: 0000

@@ -14,17 +14,17 @@
 
 script_V38587-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat1/files/V38587.sh
-  - cwd: /root
+    - source: salt://STIGbyID/cat1/files/V38587.sh
+    - cwd: /root
 
 {% set chkPkg = 'telnet-server' %}
 
 {% if salt['pkg.version'](chkPkg) %}
 pkg_V38587-removeTelnet:
   pkg.removed:
-  - name: '{{ chkPkg }}'
+    - name: '{{ chkPkg }}'
 {% else %}
 pkg_V38587-removeTelnet:
   cmd.run:
-  - name: 'echo "The ''{{ chkPkg }}'' package is not installed"'
+    - name: 'echo "The ''{{ chkPkg }}'' package is not installed"'
 {% endif %}

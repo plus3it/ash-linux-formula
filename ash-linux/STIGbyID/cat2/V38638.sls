@@ -17,15 +17,15 @@
 
 script_V38638.g-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38638.g.sh
+    - source: salt://STIGbyID/cat2/files/V38638.g.sh
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V38638-autoLock:
   cmd.run:
-  - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/lock_enabled true 
+    - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/lock_enabled true 
 {% else %}
 notify_V38638:
   cmd.run:
-  - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
+    - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {% endif %}
 

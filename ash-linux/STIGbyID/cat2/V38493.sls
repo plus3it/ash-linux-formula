@@ -16,10 +16,9 @@
 
 script_V38493-describe:
   cmd.script:
-  - source: salt://STIGbyID/cat2/files/V38493.sh
+    - source: salt://STIGbyID/cat2/files/V38493.sh
 
 directory_V38493:
   file.directory:
-  - name: /var/log/audit
-  - mode: 700
-
+    - name: /var/log/audit
+    - mode: 700
