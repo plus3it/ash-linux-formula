@@ -78,13 +78,13 @@ repository and a copy of the EPEL 6 repository, it is critical that appropriate
 bootstrap script.
 
 - Optional (one of):
-    - git and related RPMs [Already installed if this package was fetched via 
+  - git and related RPMs [Already installed if this package was fetched via 
 `git`]
-    - wget
-    - curl
-    - CIFS client
-    - NFS client
-    - FTP client
+  - wget
+  - curl
+  - CIFS client
+  - NFS client
+  - FTP client
 - A masterless salt configuration. This is due to the path references to the 
 included tools/utilities/content. A later version will look into caching these 
 from a salt master.
@@ -134,8 +134,8 @@ https://fedoraproject.org/wiki/EPEL) repositories:
 This README assumes that the Salt packages have been downloaded via the `git` 
 commandline-utility's 'clone' operation. This will create an 
 "ash-linux-formula" subdirectory within the directory it is run from. It is 
-assumed that this bundle will also be made available via TAR or 'cpio' archive 
-- each should similarly result in the creation of an "ash-linux-formula" 
+assumed that this bundle will also be made available via TAR or 'cpio' archive -
+ each should similarly result in the creation of an "ash-linux-formula" 
 subdirectory somewhere on the host system.
 
 Navigate into the "ash-linux-formula" directory. Within this directory is a 
