@@ -29,7 +29,7 @@ program is managed through [NIST's Information Technology Laboratory group](
 http://www.nist.gov/itl/) .
 
 The SCAP-recommended tests and remediations have been verified to implement the
- refereneced guidances. This verification has resulted in some deviances from 
+ referenced guidances. This verification has resulted in some deviances from 
 the authoritative guidances. The deviances fall into three primary categories:
 * Loosening settings that would result in a system not sustainably manageable 
 in an enterprise-scale system deployment (e.g., automated account-lockouts are 
@@ -45,7 +45,7 @@ the more-secure of settings that are prescribed with more than one option or
 fixing bugs in the formal guidances.
 
 As this Salt-based framework is adopted for wider use, additional security 
-layers will be made availabe. It is expected that these extentions will include
+layers will be made available. It is expected that these extensions will include
  security layers to meet the [DISA IAVMs](
 https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip)
  and agency-specific policy-overlays.
@@ -54,7 +54,7 @@ https://powhatan.iiie.disa.mil/stigs/downloads/zip/FOUO_RedHat_6_V1R8_IAVM.zip)
 # Installation
 
 It is expected that these utilities will be installed primarily within 
-environments that have access to RPM repositores homed on network- or 
+environments that have access to RPM repositories homed on network- or 
 media-based shares. While a stub-repo will be included in the archive 
 containing these utilities, it is generally recommended to use a fully-updated 
 RPM repository to install dependencies from.
@@ -62,7 +62,7 @@ RPM repository to install dependencies from.
 
 ##Dependencies
 
-This archive includes a bootstrapping script. This script is desinged almost 
+This archive includes a bootstrapping script. This script is designed almost 
 exclusively for use on internet-connected systems (or ones with transparent 
 web-proxying configured):
 
@@ -148,13 +148,13 @@ filter can be used to suppress some of the less-meaningful output produced by a
  run of the Salt packages).
 
 The `policyrun.sh` script may be left within and invoked from its default 
-installation directory or moved eslewhere within the host system's 
+installation directory or moved elsewhere within the host system's 
 filesystem-hierarchy. This script is designed that it should work correctly 
 wherever it's installed or invoked from.
 
 The *ash-linux* formula does not currently support configuration via Salt's 
 "pillar" functionality. Currently-expected deployment profiles did not 
-necessitate the use of pillar to govern application-behavior beyond that 
+necessitate the use of pillar to govern application-behaviour beyond that 
 available through the "run-all" or "individual-run" invocation methods. As this
  solution gains greater adoption and specific use-cases are identified, the 
 *ash-linux* formulae will be updated to leverage Salt's "pillar" functionality 
@@ -199,7 +199,7 @@ part of this archive. To run in this mode, execute: `runpolicy.sh -v
 logged output. The script will display all output to the screen and log all of 
 the remediation-related steps to its log file.
 
-Runs of multiple individual tests can be accomplishe by declaring multiple '-v 
+Runs of multiple individual tests can be accomplished by declaring multiple '-v 
 <Vulnerability ID>' pairs (e.g., `policyrun.sh -v V38466 -v V38586 -v V38491`).
 
 ###Usage-note for non-default SaltStack installation-locations:
