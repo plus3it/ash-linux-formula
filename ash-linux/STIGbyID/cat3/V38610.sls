@@ -16,7 +16,7 @@
 
 script_V38610-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38610.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38610.sh
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax') %}
   {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax 0') %}

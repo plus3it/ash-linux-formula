@@ -19,7 +19,7 @@
 
 script_V38684-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38684.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38684.sh
 
 {% set CHANGED = 0 %}
 

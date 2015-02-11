@@ -11,7 +11,7 @@
 
 script_V38516-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38516.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38516.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/rds.conf') %}
 file-V38516-touchRules:

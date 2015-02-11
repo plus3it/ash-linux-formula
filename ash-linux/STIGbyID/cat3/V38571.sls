@@ -17,7 +17,7 @@
 
 script_V38571-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38571.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38571.sh
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 {% set parmName = 'lcredit' %}

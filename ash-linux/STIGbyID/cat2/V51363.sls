@@ -17,7 +17,7 @@
 
 script_V51363-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V51363.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V51363.sh
 
 # Verify that the reboot system-state is acceptable
 {% if salt['file.search']('/etc/selinux/config', '^SELINUX=enforcing') %}

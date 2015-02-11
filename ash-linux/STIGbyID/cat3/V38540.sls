@@ -12,7 +12,7 @@
 
 script_V38540-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38540.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38540.sh
 
 ######################################################################
 # Will probably want to look at method to do all the edits in one pass:

@@ -11,7 +11,7 @@
 
 script_V38607-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38607.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38607.sh
 
 {% set sshConfigFile = '/etc/ssh/sshd_config' %}
 

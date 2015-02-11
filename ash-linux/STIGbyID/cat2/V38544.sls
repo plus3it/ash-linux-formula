@@ -18,7 +18,7 @@
 
 script_V38544-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38544.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38544.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.rp_filter') %}
 file_V38544-repl:

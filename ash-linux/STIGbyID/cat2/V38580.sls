@@ -17,7 +17,7 @@
 ############################################################
 script_V38580-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38580.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38580.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
 file_V38580-appendModchk:

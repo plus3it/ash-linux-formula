@@ -17,7 +17,7 @@
 
 script_V38535-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38535.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38535.sh
 
 {% if salt['sysctl.get']('net.ipv4.icmp_echo_ignore_broadcasts') == '1' %}
 sysctl_V38535-noRedirects:

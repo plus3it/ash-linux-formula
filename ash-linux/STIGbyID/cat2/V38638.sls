@@ -17,7 +17,7 @@
 
 script_V38638.g-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38638.g.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38638.g.sh
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V38638-autoLock:

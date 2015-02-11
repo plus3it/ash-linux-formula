@@ -17,7 +17,7 @@
 
 script_V38659-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38659.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38659.sh
 
 notify_V38659-NotApplicable:
   cmd.run:

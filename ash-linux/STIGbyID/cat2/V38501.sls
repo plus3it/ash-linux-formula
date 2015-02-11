@@ -16,7 +16,7 @@
 
 script_V38501-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38501.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38501.sh
 
 #################################################
 ## Consult cat3/V38482.sls for handling-method ##

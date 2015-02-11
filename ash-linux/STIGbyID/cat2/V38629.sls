@@ -17,7 +17,7 @@
 
 script_V38629-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38629.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38629.sh
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V38629-idleConfig:

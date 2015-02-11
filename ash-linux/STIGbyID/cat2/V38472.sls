@@ -17,7 +17,7 @@
 
 script_V38472-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38472.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38472.sh
 
 file_V38472-bin:
   file.directory:

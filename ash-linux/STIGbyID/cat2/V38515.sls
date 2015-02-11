@@ -16,7 +16,7 @@
 
 script_V38515-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38515.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38515.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/sctp.conf') %}
 file-V38515-touchRules:

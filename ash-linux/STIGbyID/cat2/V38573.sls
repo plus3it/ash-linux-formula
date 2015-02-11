@@ -16,7 +16,7 @@
 
 script_V38573-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38573.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38573.sh
 
 {% set pamFiles = [
 	'/etc/pam.d/system-auth-ac',

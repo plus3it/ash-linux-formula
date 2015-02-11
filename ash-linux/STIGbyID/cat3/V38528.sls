@@ -18,7 +18,7 @@
 
 script_V38528-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38528.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38528.sh
 
 {% if salt['sysctl.get']('net.ipv4.conf.all.log_martians') == '1' %}
 sysctl_V38528-logMartians:

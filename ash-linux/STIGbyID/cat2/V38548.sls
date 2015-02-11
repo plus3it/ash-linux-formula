@@ -15,7 +15,7 @@
 
 script_V38548-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38548.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38548.sh
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv6.conf.default.accept_redirects') %}
 file_V38548-repl:

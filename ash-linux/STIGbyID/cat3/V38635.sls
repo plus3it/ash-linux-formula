@@ -14,7 +14,7 @@
 
 script_V38635-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38635.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38635.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
   {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules') %}

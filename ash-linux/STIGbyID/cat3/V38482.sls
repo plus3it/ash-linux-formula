@@ -11,7 +11,7 @@
 
 script_V38482-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38482.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38482.sh
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 {% set parmName = 'dcredit' %}

@@ -29,7 +29,7 @@
 
 script_V51369-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V51369.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V51369.sh
 
 {% set selConfig = '/etc/selinux/config' %}
 {% set selLink = '/etc/sysconfig/selinux' %}

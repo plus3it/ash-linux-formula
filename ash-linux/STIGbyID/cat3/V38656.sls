@@ -16,7 +16,7 @@
 
 script_V38656-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38656.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38656.sh
 
 # If the Samba config files are installed...
 {% if salt['pkg.version']('samba-common') %}

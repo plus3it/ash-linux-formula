@@ -12,7 +12,7 @@
  
 script_V38522-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38522.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38522.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
   {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S settimeofday -k audit_time_rules') %}

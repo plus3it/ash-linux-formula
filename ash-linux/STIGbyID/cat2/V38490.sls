@@ -16,7 +16,7 @@
 
 script_V38490-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38490.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38490.sh
 
 {% if salt['file.file_exists']('/etc/modprobe.conf') %}
   {% if salt['file.search']('/etc/modprobe.conf', 'usb-storage') %}

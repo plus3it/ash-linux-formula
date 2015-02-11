@@ -15,7 +15,7 @@
 
 script_V38555-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38555.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38555.sh
 
 service_V38555:
   service:

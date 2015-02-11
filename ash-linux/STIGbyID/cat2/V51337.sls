@@ -17,7 +17,7 @@
 
 script_V51337-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V51337.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V51337.sh
 
 #########################################
 # Ensure SELinux is active at kernel load

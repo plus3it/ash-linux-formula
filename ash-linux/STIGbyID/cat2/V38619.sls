@@ -17,7 +17,7 @@
 
 script_V38619-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38619.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38619.sh
 
 {% for user in salt['user.getent']('') %}
   {% set ID = user['name'] %}

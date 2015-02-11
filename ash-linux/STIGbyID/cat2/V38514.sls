@@ -16,7 +16,7 @@
 
 script_V38514-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38514.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38514.sh
 
 {% if not salt['file.file_exists']('/etc/modprobe.d/dccp.conf') %}
 file-V38514-touchRules:

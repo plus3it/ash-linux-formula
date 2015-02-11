@@ -17,7 +17,7 @@
 
 script_V38680-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38680.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38680.sh
 
 {% if salt['file.file_exists']('/etc/audit/auditd.conf') %}
 file_V38680-repl:

@@ -13,7 +13,7 @@
 
 script_V38541-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38541.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38541.sh
 
 # Monitoring of SELinux MAC config
 {% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/selinux/ -p wa -k MAC-policy') %}

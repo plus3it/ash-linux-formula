@@ -16,7 +16,7 @@
 
 script_CCE-26762-5-describe:
   cmd.script:
-    - source: salt://SCAPonly/low/files/CCE-26762-5.sh
+    - source: salt://ash-linux/SCAPonly/low/files/CCE-26762-5.sh
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure

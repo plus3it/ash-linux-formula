@@ -19,7 +19,7 @@
 
 script_V51875-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V51875.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V51875.sh
 
 # Ensure that authconfig has been run prior to trying to update the PAM files
 cmd_V51875-linkSysauth:

@@ -12,7 +12,7 @@
 
 script_V38598-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38598.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38598.sh
 
 {% set rSvcName = 'rexec' %}
 

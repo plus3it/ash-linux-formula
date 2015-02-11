@@ -17,7 +17,7 @@
 
 script_V38469-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38469.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38469.sh
 
 # Define list of binary directories to search
 {% set checkBinDirs = [
@@ -41,7 +41,7 @@ notify_V38469-{{ binDir }}:
 # Check (and fix as necessary) library
 strip_V38469-{{ binDir }}:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38469-helper.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38469-helper.sh
     - args: {{ binDir }}
 
 {% endfor %}

@@ -19,7 +19,7 @@
 
 script_V38572-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38572.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38572.sh
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 {% set parmName = 'difok' %}

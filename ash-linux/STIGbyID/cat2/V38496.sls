@@ -16,7 +16,7 @@
 
 script_V38496-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38496.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38496.sh
 
 notify_V38496-userScan:
   cmd.run:

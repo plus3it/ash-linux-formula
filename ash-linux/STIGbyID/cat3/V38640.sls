@@ -13,7 +13,7 @@
 
 script_V38640-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38640.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38640.sh
 
 {% if salt['pkg.version']('abrt') %}
 svc_V38640-abrtdEnabled:

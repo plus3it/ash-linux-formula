@@ -17,7 +17,7 @@
 
 script_V54381-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V54381.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V54381.sh
 
 {% set checkFile = '/etc/audit/auditd.conf' %}
 {% set auditParm = 'admin_space_left_action' %}

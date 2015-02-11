@@ -11,7 +11,7 @@
 
 script_V38677-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38677.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38677.sh
 
 {% set exportFile = '/etc/exports' %}
 {% set badOpt = 'insecure_locks' %}
@@ -19,7 +19,7 @@ script_V38677-describe:
 {% if salt['file.search'](exportFile, badOpt) %}
 script_V38677-helper:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38677-helper.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38677-helper.sh
 {#
   {% if salt['file.search'](exportFile, ',' + insecure_locks) %}
 fix_V38677-secondaryOpt:

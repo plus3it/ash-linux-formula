@@ -16,7 +16,7 @@
 
 script_V38691-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38691.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38691.sh
 
 {% if salt['file.file_exists']('/etc/init.d/bluetooth') %}
 # Ensure bluetooth service is disabled and stopped

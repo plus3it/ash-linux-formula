@@ -18,7 +18,7 @@
 
 script_V38698-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38698.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38698.sh
 
 notice_V38698:
   cmd.run:

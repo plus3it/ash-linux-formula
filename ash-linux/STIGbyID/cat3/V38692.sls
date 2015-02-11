@@ -17,7 +17,7 @@
 
 script_V38692-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat3/files/V38692.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38692.sh
 
 {% set checkFile = '/etc/default/useradd' %}
 {% set parmName = 'INACTIVE' %}

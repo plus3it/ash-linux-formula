@@ -11,7 +11,7 @@
 
 script_V38653-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat1/files/V38653.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V38653.sh
 
 {% if salt['pkg.version']('net-snmp') %}
 file_snmpd:

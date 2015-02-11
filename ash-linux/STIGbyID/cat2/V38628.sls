@@ -18,7 +18,7 @@
 
 script_V38628-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38628.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38628.sh
 
 {% if not salt['pkg.version']('auditd') %}
 pkg_V38628-audit:

@@ -16,7 +16,7 @@
 
 script_V38503-describe:
   cmd.script:
-    - source: salt://STIGbyID/cat2/files/V38503.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38503.sh
 
 file_V38503:
   file.managed:
