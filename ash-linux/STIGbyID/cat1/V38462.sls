@@ -13,10 +13,10 @@ script_V38462-describe:
     - source: salt://ash-linux/STIGbyID/cat1/files/V38462.sh
 
 {% set fileList = [
-	'/etc/rpmrc',
-	'/usr/lib/rpm/rpmrc',
-	'/usr/lib/rpm/redhat/rpmrc',
-	'/root/.rpmrc',
+    '/etc/rpmrc',
+    '/usr/lib/rpm/rpmrc',
+    '/usr/lib/rpm/redhat/rpmrc',
+    '/root/.rpmrc',
 ] %}
 {% for checkFile in fileList %}
 {% if salt['file.file_exists'](checkFile) %}
