@@ -19,7 +19,7 @@ diag_out() {
 
 diag_out "----------------------------------"
 diag_out "STIG Finding ID: V-38664"
-diag_out "  Verify that the user ownerships
+diag_out "  Verify that the user ownerships"
 diag_out "  set within the audit RPM are"
 diag_out "  the user ownerships in place on"
 diag_out "  the running system"
