@@ -2,6 +2,6 @@
 
 {% for filename in mode_0700_files %}
 {{ filename }}:
-   file.directory:
-     - mode: 0700
+  file.directory:
+    - mode: 0700
 {% endfor %}
