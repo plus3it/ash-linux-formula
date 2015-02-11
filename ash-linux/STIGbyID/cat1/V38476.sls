@@ -20,4 +20,6 @@ cmd_V38476:
     - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Red Hat, Inc. (release key 2)"'
   {% elif grains['os'] == 'CentOS' %}
     - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "CentOS 6 Official Signing Key"'
+  {% elif grains['os'] == 'Amazon' %}
+    - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Amazon Linux AMI (GA) <linux-security@amazon.com>'
   {% endif %}
