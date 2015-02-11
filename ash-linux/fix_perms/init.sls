@@ -1,11 +1,11 @@
 # Offload lists to reduce enumeration-overhead
 include:
-  - fix_perms/0400_mode
-  - fix_perms/0444_mode
-  - fix_perms/0600_mode
-  - fix_perms/0640_mode
-  - fix_perms/0700_mode
-  - fix_perms/0750_mode
+  - ash-linux.fix_perms.0400_mode
+  - ash-linux.fix_perms.0444_mode
+  - ash-linux.fix_perms.0600_mode
+  - ash-linux.fix_perms.0640_mode
+  - ash-linux.fix_perms.0700_mode
+  - ash-linux.fix_perms.0750_mode
 
 # Singleton...
 0744_auditdInit:

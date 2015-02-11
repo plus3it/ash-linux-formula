@@ -1,4 +1,4 @@
 include:
-  - STIGbyID/cat1
-  - STIGbyID/cat2
-  - STIGbyID/cat3
+  - ash-linux.STIGbyID.cat1
+  - ash-linux.STIGbyID.cat2
+  - ash-linux.STIGbyID.cat3

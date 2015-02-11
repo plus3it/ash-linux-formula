@@ -15,7 +15,7 @@
 ############################################################
 
 include:
-  - STIGbyID/cat2/V38481
+  - ash-linux.STIGbyID.cat2.V38481
 
 {% set updatePairs = salt['pkg.list_upgrades']('name') %}
 
