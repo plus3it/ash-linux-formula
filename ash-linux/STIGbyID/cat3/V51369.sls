@@ -56,12 +56,13 @@ symlink_V51369-selinxCfg:
     - target: {{ selConfig }}
 {% endif %}
 
-{% if salt['file.search'](selConfig, '^' + selType + '=') %}
-  {% if salt['file.search'](selConfig, '^' + selType + '=' + typeMode) %}
+{% if salt['file.file_exists'](selConfig) %}
+  {% if salt['file.search'](selConfig, '^' + selType + '=') %}
+    {% if salt['file.search'](selConfig, '^' + selType + '=' + typeMode) %}
 set_V51369-selType:
   cmd.run:
     - name: 'echo "The SELinux ''{{ selType }}'' parameter already set to ''{{ typeMode }}''"'
-  {% else %}
+    {% else %}
 set_V51369-selType:
   file.replace:
     - name: {{ selConfig }}
@@ -71,8 +72,8 @@ set_V51369-selType:
 touch_V51369-relabel:
   file.touch:
     - name: '/.autorelabel'
-  {% endif %}
-{% else %}
+    {% endif %}
+  {% else %}
 set_V51369-selType:
   file.append:
     - name: {{ selConfig }}
@@ -81,4 +82,5 @@ set_V51369-selType:
 touch_V51369-relabel:
   file.touch:
     - name: '/.autorelabel'
+  {% endif %}
 {% endif %}

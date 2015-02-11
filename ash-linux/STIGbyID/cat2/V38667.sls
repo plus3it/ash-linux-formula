@@ -29,7 +29,8 @@ sel_V38667:
 {% endif %}
 
 # Verify that the reboot system-state is acceptable
-{% if salt['file.search']('/etc/sysconfig/selinux', '^SELINUX=disabled') %}
+{% if salt['file.file_exists']('/etc/sysconfig/selinux') %}
+  {% if salt['file.search']('/etc/sysconfig/selinux', '^SELINUX=disabled') %}
 file_V38667-enableSEL:
   file.replace:
     - name: '/etc/sysconfig/selinux'
@@ -40,11 +41,12 @@ status_v38667:
   cmd.run:
     - name: 'echo "NOTICE: SELinux found disabled. Changing to \"Permissive\". Reboot required to take effect"'
 
-{% else %}
+  {% else %}
 status_v38667:
   cmd.run:
     - name: 'echo "Info: SELinux already enabled to at least a level of Permissive"'
 
+  {% endif %}
 {% endif %}
 
 # Make sure AIDE is installed
