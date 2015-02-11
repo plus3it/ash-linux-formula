@@ -20,5 +20,5 @@ cmd_V38476:
   {% elif grains['os'] == 'CentOS' %}
     - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "CentOS 6 Official Signing Key"'
   {% elif grains['os'] == 'Amazon' %}
-    - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Amazon Linux AMI (GA) <linux-security@amazon.com>'
+    - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Amazon Linux AMI (GA) <linux-security@amazon.com>"'
   {% endif %}
