@@ -20,12 +20,13 @@ script_V51363-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V51363.sh
 
 # Verify that the reboot system-state is acceptable
-{% if salt['file.search']('/etc/selinux/config', '^SELINUX=enforcing') %}
+{% if salt['file.file_exists']('/etc/selinux/config') %}
+  {% if salt['file.search']('/etc/selinux/config', '^SELINUX=enforcing') %}
 msg_V51363-modeSet:
   cmd.run:
     - name: 'echo "Info: Current SELinux mode is Enforcing. Nothing to change"'
-{% else %}
-  {% if salt['file.search']('/etc/selinux/config', '^SELINUX=permissive') %}
+  {% else %}
+    {% if salt['file.search']('/etc/selinux/config', '^SELINUX=permissive') %}
 msg_V51363-bootSet:
   cmd.run:
     - name: 'echo "Current SELinux mode is permissive. Setting to Enforcing for next boot"'
@@ -38,15 +39,16 @@ sel_V51363-modeSet:
 msg_V51363-chgModeSet:
   cmd.run:
     - name: 'echo "Current SELinux mode is permissive. Changing to Enforcing"'
-  {% elif salt['file.search']('/etc/selinux/config', '^SELINUX=disabled') %}
+    {% elif salt['file.search']('/etc/selinux/config', '^SELINUX=disabled') %}
 msg_V51363-bootSet:
   cmd.run:
     - name: 'echo "Current SELinux mode is disabled. Setting to Enforcing for next boot"'
-  {% endif %}
+    {% endif %}
 
 file_V51363-enableSEL:
   file.replace:
     - name: '/etc/selinux/config'
     - pattern: '^SELINUX=.*'
     - repl: 'SELINUX=enforcing'
+  {% endif %}
 {% endif %}
