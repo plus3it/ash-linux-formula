@@ -18,6 +18,7 @@
 script_V38497-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38497.sh
+  - cwd: /root
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 

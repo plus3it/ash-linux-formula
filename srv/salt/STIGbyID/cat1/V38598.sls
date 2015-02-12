@@ -13,6 +13,7 @@
 script_V38598-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38598.sh
+  - cwd: /root
 
 {% set rSvcName = 'rexec' %}
 

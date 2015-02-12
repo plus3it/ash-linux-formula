@@ -11,6 +11,7 @@
 script_V38462-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38462.sh
+  - cwd: /root
 
 {% set fileList = [
 	'/etc/rpmrc',

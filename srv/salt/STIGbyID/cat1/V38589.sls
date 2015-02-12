@@ -13,6 +13,7 @@
 script_V38589-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38589.sh
+  - cwd: /root
 
 # See if the telnet server package is even installed...
 {% if salt['pkg.version']('telnet-server') %}

@@ -15,6 +15,7 @@
 script_V38666-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38666.sh
+  - cwd: /root
 
 # Will need to update with correct package-name
 {% set MSFEpkg = 'MSFElinux' %}

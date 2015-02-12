@@ -14,6 +14,7 @@
 script_V38701-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38701.sh
+  - cwd: /root
 
 {% if salt['pkg.version']('tftp-server') %}
 file_V38701:

@@ -15,6 +15,7 @@
 script_V38587-describe:
   cmd.script:
   - source: salt://STIGbyID/cat1/files/V38587.sh
+  - cwd: /root
 
 {% set chkPkg = 'telnet-server' %}
 
