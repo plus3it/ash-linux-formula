@@ -18,6 +18,7 @@
 script_V38512-describe:
   cmd.script:
   - source: salt://STIGbyID/cat2/files/V38512.sh
+  - cwd: /root
 
 pkg_V38512:
   pkg.installed:
