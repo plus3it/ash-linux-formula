@@ -17,53 +17,47 @@
 #
 ############################################################
 
-script_V38550-describe:
+{% set stig_id = '38550' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38550.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+
+{%- set usertypes = {
+    'selDACusers' : { 'search_string' : ' fchmodat -F auid>=500 ',
+                      'rule' : '-a always,exit -F arch=b64 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod',
+                    },
+    'selDACroot'  : { 'search_string' : ' fchmodat .*auid=0 ',
+                      'rule' : '-a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod',
+                    },
+} %}
+{%- set audit_cfg_file = '/etc/audit/audit.rules' %}
 
 # Monitoring of SELinux DAC config
-{% if grains['cpuarch'] == 'x86_64' %}
-# ...for unprivileged users
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod') %}
-file_V38550-auditRules_selDACusers:
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- for usertype,audit_options in usertypes.items() %}
+    {%- if not salt['cmd.run']('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmodat -F auid>=500 ') %}
-file_V38550-auditRules_selDACusers:
+    {%- elif not salt['cmd.run']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.* fchmodat -F auid>=500 .*$'
-    - repl: '-a always,exit -F arch=b64 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod'
-  {% else %}
-file_V38550-auditRules_selDACusers:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ audit_options['search_string'] }}.*$'
+    - repl: '{{ audit_options['rule'] }}'
+    {%- else %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor for SELinux DAC changes (per STIG-ID V-38550)'
-      - '-a always,exit -F arch=b64 -S fchmodat -F auid>=500 -F auid!=4294967295 -k perm_mod'
-  {% endif %}
-
-# ...for root user
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod') %}
-file_V38550-auditRules_selDACroot:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' fchmodat .*auid=0 ') %}
-file_V38550-auditRules_selDACroot:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.* fchmodat .*auid=0 .*$'
-    - repl: '-a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod'
-  {% else %}
-file_V38550-auditRules_selDACroot:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor for SELinux DAC changes (per STIG-ID V-38550)'
-      - '-a always,exit -F arch=b64 -S fchmodat -F auid=0 -k perm_mod'
-  {% endif %}
-{% else %}
-file_V38550-auditRules_selDAC:
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor for SELinux DAC changes (per STIG-ID V-{{ stig_id }})
+        {{ audit_options['rule'] }}
+    {%- endif %}
+  {%- endfor %}
+{%- else %}
+file_V{{ stig_id }}-auditRules_selDAC:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}

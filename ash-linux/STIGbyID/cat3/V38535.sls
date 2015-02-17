@@ -15,16 +15,18 @@
 #
 ############################################################
 
-script_V38535-describe:
+{% set stig_id = '38535' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38535.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 {% if salt['sysctl.get']('net.ipv4.icmp_echo_ignore_broadcasts') == '1' %}
-sysctl_V38535-noRedirects:
+sysctl_V{{ stig_id }}-noRedirects:
   cmd.run:
     - name: 'echo "System already ignores ICMPv4 packets sent to a broadcast address"'
 {% else %}
-sysctl_V38535-noRedirects:
+sysctl_V{{ stig_id }}-noRedirects:
   sysctl.present:
     - name: 'net.ipv4.icmp_echo_ignore_broadcasts'
     - value: '1'

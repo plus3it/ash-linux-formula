@@ -15,19 +15,22 @@
 #  NIST SP 800-53 Revision 4 :: AU-12 c
 #
 ############################################################
-script_V38580-describe:
+
+{% set stig_id = '38580' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38580.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
-file_V38580-appendModchk:
+file_V{{ stig_id }}-appendModchk:
   file.append:
     - name: /etc/audit/audit.rules
-    - text:
-      - ' '
-      - '# Monitor dynamic kernel module (un)load (per STIG-ID V-38580/RHEL-06-000202)'
-      - '-w /sbin/insmod -p x -k modules'
-      - '-w /sbin/rmmod -p x -k modules'
-      - '-w /sbin/modprobe -p x -k modules'
-      - '-a always,exit -F arch=b64 -S init_module -S delete_module -k modules'
+    - text: |
+        
+        # Monitor dynamic kernel module (un)load (per STIG-ID V-{{ stig_id }}/RHEL-06-000202)
+        -w /sbin/insmod -p x -k modules
+        -w /sbin/rmmod -p x -k modules
+        -w /sbin/modprobe -p x -k modules
+        -a always,exit -F arch=b64 -S init_module -S delete_module -k modules
 {% endif %}

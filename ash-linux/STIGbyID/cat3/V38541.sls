@@ -11,26 +11,33 @@
 #
 ############################################################
 
-script_V38541-describe:
+{% set stig_id = '38541' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38541.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 # Monitoring of SELinux MAC config
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/selinux/ -p wa -k MAC-policy') %}
-file_V38541-auditRules_selMAC:
+{%- set audit_path = '/etc/selinux/' %}
+{%- set rule = '-w ' + audit_path + ' -p wa -k MAC-policy' %}
+{%- set audit_cfg_file = '/etc/audit/audit.rules' %}
+
+{%- if not salt['cmd.run']('grep -c -E -e "' + rule + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_selMAC:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/selinux/') %}
-file_V38541-auditRules_selMAC:
+{%- elif not salt['cmd.run']('grep -c -E -e "' + audit_path + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_selMAC:
   file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*/etc/selinux/.*$'
-    - repl: '-w /etc/selinux/ -p wa -k MAC-policy'
-{% else %}
-file_V38541-auditRules_selMAC:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ audit_path }}.*$'
+    - repl: '{{ rule }}'
+{%- else %}
+file_V{{ stig_id }}-auditRules_selMAC:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor /etc/selinux/ for changes (per STIG-ID V-38541)'
-      - '-w /etc/selinux/ -p wa -k MAC-policy'
-{% endif %}
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor {{ audit_path }} for changes (per STIG-ID V-{{ stig_id }})
+        {{ rule }}
+{%- endif %}

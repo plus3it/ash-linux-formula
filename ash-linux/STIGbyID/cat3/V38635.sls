@@ -12,31 +12,37 @@
 #
 ############################################################
 
-script_V38635-describe:
+{% set stig_id = '38635' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38635.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules') %}
-file_V38635-auditTime:
+  {% set audit_syscall = '-S adjtimex' %}
+  {% set pattern = '-a always,exit -F arch=b64 ' + audit_syscall + ' -k audit_time_rules' %}
+  {% set filename = '/etc/audit/audit.rules' %}
+  {% if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
+file_V{{ stig_id }}-auditTime:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', 'S adjtimex ') %}
-file_V38635-auditTime:
+  {% elif not salt['cmd.run']('grep -c -E -e "' + audit_syscall + '" ' + filename ) == '0' %}
+file_V{{ stig_id }}-auditTime:
   file.replace:
     - name: '/etc/audit/audit.rules'
-    - pattern: '^.*S adjtimex .*$'
-    - repl: '-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules'
+    - pattern: '^.*{{ audit_syscall }}.*$'
+    - repl: '{{ pattern }}'
   {% else %}
-file_V38635-auditTime:
+file_V{{ stig_id }}-auditTime:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Log all file deletions (per  V-38635)'
-      - '-a always,exit -F arch=b64 -S adjtimex -k audit_time_rules'
+    - name: '{{ filename }}'
+    - text: |
+        
+        # Log all changes to system time (per  V-{{ stig_id }})
+        {{ pattern }}
   {% endif %}
 {% else %}
-file_V38635-auditTime:
+file_V{{ stig_id }}-auditTime:
     cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}

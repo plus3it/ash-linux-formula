@@ -17,29 +17,32 @@
 #
 ############################################################
 
-script_V38530-describe:
+{% set stig_id = '38530' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38530.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 {% set auditRules = '/etc/audit/audit.rules' %}
 {% set checkFile = '/etc/localtime' %}
 {% set newRule = '-w ' + checkFile + ' -p wa -k audit_time_rules' %}
 
-{% if salt['file.search'](auditRules, newRule) %}
-file_auditRules:
+{% if not salt['cmd.run']('grep -c -E -e "' + newRule + '" ' + auditRules ) == '0' %}
+file_V{{ stig_id }}_auditRules:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search'](auditRules, checkFile) %}
-file_auditRules:
+{% elif not salt['cmd.run']('grep -c -E -e "' + checkFile + '" ' + auditRules ) == '0' %}
+file_V{{ stig_id }}_auditRules:
   file.replace:
     - name: '{{ auditRules }}'
     - pattern: '{{ checkFile }}'
     - repl: '{{ newRule }}'
 {% else %}
-file_auditRules:
+file_V{{ stig_id }}_auditRules:
   file.append:
     - name: '{{ auditRules }}'
-    - text:
-      - '# Monitor {{ checkFile }} for changes (per STIG-ID V-38530)'
-      - '{{ newRule }}'
+    - text: |
+        
+        # Monitor {{ checkFile }} for changes (per STIG-ID V-{{ stig_id }})
+        {{ newRule }}
 {% endif %}

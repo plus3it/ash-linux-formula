@@ -10,91 +10,53 @@
 #
 ############################################################
 
-script_V38566-describe:
+{% set stig_id = '38566' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38566.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+
+{%- set usertypes = {
+    'selEACCESusers' : { 'search_string' : 'EACCES -F auid>=500 ',
+                         'rule' : '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access',
+                       },
+    'selEPERMusers'  : { 'search_string' : 'EPERM -F auid>=500 ',
+                         'rule' : '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access',
+                       },
+    'selEACCESroot'  : { 'search_string' : 'EACCES -F auid=0 ',
+                         'rule' : '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access',
+                       },
+    'selEPERMroot'   : { 'search_string' : 'EPERM -F auid=0 ',
+                         'rule' : '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access',
+                       },
+} %}
+{%- set audit_cfg_file = '/etc/audit/audit.rules' %}
 
 # Monitoring of SELinux DAC config
-{% if grains['cpuarch'] == 'x86_64' %}
-# ...for unprivileged users
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access') %}
-file_V38566-auditRules_selEACCESusers:
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- for usertype,audit_options in usertypes.items() %}
+    {%- if not salt['cmd.run']('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', 'EACCES -F auid>=500 ') %}
-file_V38566-auditRules_selEACCESusers:
+    {%- elif not salt['cmd.run']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*EACCES -F auid>=500 .*$'
-    - repl: '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access'
-  {% else %}
-file_V38566-auditRules_selEACCESusers:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ audit_options['search_string'] }}.*$'
+    - repl: '{{ audit_options['rule'] }}'
+    {%- else %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor for SELinux DAC changes (per STIG-ID V-38566)'
-      - '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access'
-  {% endif %}
-
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access') %}
-file_V38566-auditRules_selEPERMusers:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', 'EPERM -F auid>=500 ') %}
-file_V38566-auditRules_selEPERMusers:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*EPERM -F auid>=500 .*$'
-    - repl: '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access'
-  {% else %}
-file_V38566-auditRules_selEPERMusers:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor for SELinux DAC changes (per STIG-ID V-38566)'
-      - '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=500 -F auid!=4294967295 -k access'
-  {% endif %}
-
-# ...for root user
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access') %}
-file_V38566-auditRules_selEACCESroot:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', 'EACCES -F auid=0') %}
-file_V38566-auditRules_selEACCESroot:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*EACCES -F auid=0.*$'
-    - repl: '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access'
-  {% else %}
-file_V38566-auditRules_selEACCESroot:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor for SELinux DAC changes (per STIG-ID V-38566)'
-      - '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access'
-  {% endif %}
-
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access') %}
-file_V38566-auditRules_selEPERMroot:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', 'EPERM -F auid=0') %}
-file_V38566-auditRules_selEPERMroot:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*EPERM -F auid=0.*$'
-    - repl: '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access'
-  {% else %}
-file_V38566-auditRules_selEPERMroot:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor for SELinux DAC changes (per STIG-ID V-38566)'
-      - '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access'
-  {% endif %}
-{% else %}
-file_V38566-auditRules_selEACCES:
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor for SELinux DAC changes (per STIG-ID V-{{ stig_id }})
+        {{ audit_options['rule'] }}
+    {%- endif %}
+  {%- endfor %}
+{%- else %}
+file_V{{ stig_id }}-auditRules_selEACCES_EPERM:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}

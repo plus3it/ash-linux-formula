@@ -11,9 +11,11 @@
 #
 ############################################################
 
-script_V38567-describe:
+{% set stig_id = '38567' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38567.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 ########################################################################
 # Will need to rewrite this as a set of modules/functions
@@ -24,6 +26,6 @@ script_V38567-describe:
 # NOTE: Current 'helper' script will blow up if there are spaces in the 
 # suid/sgid filenames
 ########################################################################
-script_V38567-helper:
+script_V{{ stig_id }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38567-helper.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}-helper.sh

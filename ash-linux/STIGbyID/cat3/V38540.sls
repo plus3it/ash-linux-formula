@@ -10,131 +10,69 @@
 #
 ############################################################
 
-script_V38540-describe:
+{% set stig_id = '38540' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38540.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 ######################################################################
 # Will probably want to look at method to do all the edits in one pass:
 # Current method limits rollback capability
 ######################################################################
 
-{% if grains['cpuarch'] == 'x86_64' %}
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications') %}
-file_V38540-settimeofday:
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- set pattern = '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications' %}
+  {%- set filename = '/etc/audit/audit.rules' %}
+  {%- if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
+file_V{{ stig_id }}-sethostname_setdomainname:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
-  {% else %}
-file_V38540-settimeofday:
+  {%- else %}
+file_V{{ stig_id }}-sethostname_setdomainname:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Audit all network configuration modifications (per STIG-ID V-38540)'
-      - '-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications'
-  {% endif %}
-{% else %}
-file_V38540-settimeofday:
+    - name: '{{ filename }}'
+    - text: |
+        
+        # Audit all network configuration modifications (per STIG-ID V-{{ stig_id }})
+        {{ pattern }}
+  {%- endif %}
+{%- else %}
+file_V{{ stig_id }}-sethostname_setdomainname:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}
 
-# Monitoring of /etc/issue file
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/issue -p wa -k audit_network_modifications') %}
-file_V38540-auditRules_issue:
+# Monitoring of networking files and directories
+{%- set files = [
+    '/etc/issue',
+    '/etc/issue.net',
+    '/etc/hosts',
+    '/etc/sysconfig/network',
+    '/etc/sysconfig/network-scripts/',
+] %}
+{%- set audit_cfg_file = '/etc/audit/audit.rules' %}
+{%- set audit_options = '-w /etc/issue -p wa -k audit_network_modifications' %}
+
+{%- for file in files %}
+  {%- set rule = '-w ' + file + ' ' + audit_options %}
+  {%- if not salt['cmd.run']('grep -c -E -e "' + rule + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ file }}:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/issue') %}
-file_V38540-auditRules_issue:
+  {%- elif not salt['cmd.run']('grep -c -E -e "' + file + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ file }}:
   file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*/etc/issue.*$'
-    - repl: '-w /etc/issue -p wa -k audit_network_modifications'
-{% else %}
-file_V38540-auditRules_issue:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ file }}.*$'
+    - repl: '{{ rule }}'
+  {%- else %}
+file_V{{ stig_id }}-auditRules_{{ file }}:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor /etc/issue for changes (per STIG-ID V-38540)'
-      - '-w /etc/issue -p wa -k audit_network_modifications'
-{% endif %}
-
-# Monitoring of /etc/issue.net file
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/issue.net -p wa -k audit_network_modifications') %}
-file_V38540-auditRules_issueNet:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/issue.net') %}
-file_V38540-auditRules_issueNet:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*/etc/issue.net.*$'
-    - repl: '-w /etc/issue.net -p wa -k audit_network_modifications'
-{% else %}
-file_V38540-auditRules_issueNet:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor /etc/issue.net for changes (per STIG-ID V-38540)'
-      - '-w /etc/issue.net -p wa -k audit_network_modifications'
-{% endif %}
-
-# Monitoring of /etc/hosts file
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/hosts -p wa -k audit_network_modifications') %}
-file_V38540-auditRules_hosts:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/hosts') %}
-file_V38540-auditRules_hosts:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*/etc/hosts.*$'
-    - repl: '-w /etc/hosts -p wa -k audit_network_modifications'
-{% else %}
-file_V38540-auditRules_hosts:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor /etc/hosts for changes (per STIG-ID V-38540)'
-      - '-w /etc/hosts -p wa -k audit_network_modifications'
-{% endif %}
-
-# Monitoring of /etc/sysconfig/network file
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/sysconfig/network -p wa -k audit_network_modifications') %}
-file_V38540-auditRules_sysconfigNetwork:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/sysconfig/network') %}
-file_V38540-auditRules_sysconfigNetwork:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*/etc/sysconfig/network.*$'
-    - repl: '-w /etc/sysconfig/network -p wa -k audit_network_modifications'
-{% else %}
-file_V38540-auditRules_sysconfigNetwork:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor /etc/sysconfig/network for changes (per STIG-ID V-38540)'
-      - '-w /etc/sysconfig/network -p wa -k audit_network_modifications'
-{% endif %}
-
-
-# Monitoring of /etc/sysconfig/network-scripts/ directory
-{% if salt['file.search']('/etc/audit/audit.rules', '-w /etc/sysconfig/network-scripts/ -p wa -k audit_network_modifications') %}
-file_V38540-auditRules_sysconfigNetworkScripts:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-{% elif salt['file.search']('/etc/audit/audit.rules', '/etc/sysconfig/network-scripts/') %}
-file_V38540-auditRules_sysconfigNetworkScripts:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*/etc/sysconfig/network-scripts/.*$'
-    - repl: '-w /etc/sysconfig/network-scripts/ -p wa -k audit_network_modifications'
-{% else %}
-file_V38540-auditRules_sysconfigNetworkScripts:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor /etc/sysconfig/network-scripts/ for changes (per STIG-ID V-38540)'
-      - '-w /etc/sysconfig/network-scripts/ -p wa -k audit_network_modifications'
-{% endif %}
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor {{ file }} for changes (per STIG-ID V-{{ stig_id }})
+        {{ rule }}
+  {%- endif %}
+{%- endfor %}

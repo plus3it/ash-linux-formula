@@ -12,53 +12,47 @@
 #
 ############################################################
 
-script_V38568-describe:
+{% set stig_id = '38568' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38568.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+
+{%- set usertypes = {
+    'MountUsers' : { 'search_string' : ' mount -F auid>=500 ',
+                      'rule' : '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export',
+                    },
+    'MountRoot'  : { 'search_string' : ' mount .*auid=0 ',
+                      'rule' : '-a always,exit -F arch=b64 -S mount -F auid=0 -k export',
+                    },
+} %}
+{%- set audit_cfg_file = '/etc/audit/audit.rules' %}
 
 # Monitoring of mount actions
-{% if grains['cpuarch'] == 'x86_64' %}
-# ...for unprivileged users
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export') %}
-file_V38568-auditRules_Mount:
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- for usertype,audit_options in usertypes.items() %}
+    {%- if not salt['cmd.run']('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' mount -F auid>=500 ') %}
-file_V38568-auditRules_Mount:
+    {%- elif not salt['cmd.run']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.* mount -F auid>=500 .*$'
-    - repl: '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export'
-  {% else %}
-file_V38568-auditRules_Mount:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ audit_options['search_string'] }}.*$'
+    - repl: '{{ audit_options['rule'] }}'
+    {%- else %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor filesystem mount actions (per STIG-ID V-38568)'
-      - '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export'
-  {% endif %}
-
-# ...for root user
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S mount -F auid=0 -k export') %}
-file_V38568-auditRulesMountRoot:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', ' mount .*auid=0 ') %}
-file_V38568-auditRulesMountRoot:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.* mount .*auid=0 .*$'
-    - repl: '-a always,exit -F arch=b64 -S mount -F auid=0 -k export'
-  {% else %}
-file_V38568-auditRulesMountRoot:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Monitor filesystem mount actions (per STIG-ID V-38568)'
-      - '-a always,exit -F arch=b64 -S mount -F auid=0 -k export'
-  {% endif %}
-{% else %}
-file_V38568-auditRules_Mount:
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor filesystem mount actions (per STIG-ID V-{{ stig_id }})
+        {{ audit_options['rule'] }}
+    {%- endif %}
+  {%- endfor %}
+{%- else %}
+file_V{{ stig_id }}-auditRules_Mount:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}

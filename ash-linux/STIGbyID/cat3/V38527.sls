@@ -12,25 +12,30 @@
 #
 ############################################################
  
-script_V38527-describe:
+{%- set stig_id = '38527' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38527.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 {% if grains['cpuarch'] == 'x86_64' %}
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S clock_settime -k audit_time_rules') %}
-file_V38527-settimeofday:
+  {% set pattern = '-a always,exit -F arch=b64 -S clock_settime -k audit_time_rules' %}
+  {% set filename = '/etc/audit/audit.rules' %}
+  {% if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
+file_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
   {% else %}
-file_V38527-settimeofday:
+file_V{{ stig_id }}-settimeofday:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Audit all system time-modifications via clock_settime (per STIG-ID V-38527)'
-      - '-a always,exit -F arch=b64 -S clock_settime -k audit_time_rules'
+    - name: '{{ filename }}'
+    - text: |
+        
+        # Audit all system time-modifications via clock_settime (per STIG-ID V-{{ stig_id }})
+        {{ pattern }}
   {% endif %}
 {% else %}
-file_V38527-settimeofday:
+file_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}

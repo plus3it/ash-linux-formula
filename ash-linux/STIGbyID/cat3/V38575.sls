@@ -16,53 +16,47 @@
 #
 ############################################################
 
-script_V38575-describe:
+{% set stig_id = '38575' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38575.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+
+{%- set usertypes = {
+    'selDACusers' : { 'search_string' : ' arch=b64.*unlink.*auid>=500 ',
+                      'rule' : '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete',
+                    },
+    'selDACroot'  : { 'search_string' : ' arch=b64.*unlink.*auid=0 ',
+                      'rule' : '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete',
+                    },
+} %}
+{%- set audit_cfg_file = '/etc/audit/audit.rules' %}
 
 # Monitoring of SELinux DAC config
-{% if grains['cpuarch'] == 'x86_64' %}
-# ...for unprivileged users
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete') %}
-file_V38575-auditRules_selusers:
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- for usertype,audit_options in usertypes.items() %}
+    {%- if not salt['cmd.run']('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete') %}
-file_V38575-auditRules_selusers:
+    {%- elif not salt['cmd.run']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*arch=b64.*unlink.*auid>=500.*$'
-    - repl: '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete'
-  {% else %}
-file_V38575-auditRules_selusers:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ audit_options['search_string'] }}.*$'
+    - repl: '{{ audit_options['rule'] }}'
+    {%- else %}
+file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Log all file deletions (per  V-38575)'
-      - '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete'
-  {% endif %}
-
-# ...for root user
-  {% if salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete') %}
-file_V38575-auditRules_selroot:
-  cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif salt['file.search']('/etc/audit/audit.rules', '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete') %}
-file_V38575-auditRules_selroot:
-  file.replace:
-    - name: '/etc/audit/audit.rules'
-    - pattern: '^.*arch=b64.*unlink.*auid=0.*$'
-    - repl: '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete'
-  {% else %}
-file_V38575-auditRules_selroot:
-  file.append:
-    - name: '/etc/audit/audit.rules'
-    - text:
-      - '# Log all file deletions (per  V-38575)'
-      - '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete'
-  {% endif %}
-{% else %}
-file_V38575-auditRules_sel:
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor for SELinux DAC changes (per STIG-ID V-{{ stig_id }})
+        {{ audit_options['rule'] }}
+    {%- endif %}
+  {%- endfor %}
+{%- else %}
+file_V{{ stig_id }}-auditRules_selDAC:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}
