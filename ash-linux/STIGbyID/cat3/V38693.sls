@@ -14,46 +14,64 @@
 #
 ############################################################
 
-script_V38693-describe:
+{% set stig_id = '38693' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38693.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 {% set checkFile = '/etc/pam.d/system-auth-ac' %}
 {% set parmName = 'maxrepeat' %}
 
-{% if not salt['file.file_exists'](checkFile) %}
-cmd_V38693-linkSysauth:
+{% if salt['file.file_exists'](checkFile) %}
+#system-auth-ac exists
+  {% if not salt['cmd.run']('grep -c -E -e "[ \t]' + parmName + '=3[ \t]*" ' + checkFile ) == '0' %}
+#maxrepeat already set to 3
+cmd_V38693-maxrepeat_setThree:
+  cmd.run:
+    - name: 'echo "Passwords'' repeating characters already capped at ''3'' (per STIG ID V-38693)"'
+  {% else %}
+#maxrepeat not yet set to 3; add the parameter, or update it if the parameter is set to a bad value
+maxrepeat_V{{ stig_id }}-setThree:
+  file.replace:
+    - name : {{ checkFile }}
+    - pattern: '{{ parmName }}=[-]?[\S]*'
+    - repl: '{{ parmName }}=3'
+maxrepeat_add_V{{ stig_id }}-setThree:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^(?P<tok_pass>password[ \t]*.*pam_cracklib.so.*)'
+    - repl: '\g<tok_pass> {{ parmName }}=3'
+    - onlyif: 
+      - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ checkFile }}) -eq 0'
+cmd_V38693-maxrepeat_setThree:
+  cmd.run:
+    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-38693)"'
+  {% endif %}
+{% else %}
+#system-auth-ac does not exist; make sure authconfig is installed and run authconfig --update
+pkg_V{{ stig_id }}:
+  pkg.installed:
+    - name: authconfig
+cmd_V{{ stig_id }}-linkSysauth:
   cmd.run:
     - name: '/usr/sbin/authconfig --update'
-{% endif %}
-
-# Check if pam_cracklib is configured for use...
-{% if salt['file.search'](checkFile, ' pam_cracklib.so ') %}
-  # ...and maxrepeat is defined at '3'
-  {% if salt['file.search'](checkFile, ' ' + parmName + '=3[ ]*') %}
-maxrepeat_V38693-setThree:
+    - require:
+      - pkg: pkg_V{{ stig_id }}
+#set maxrepeat to 3
+maxrepeat_V{{ stig_id }}-setThree:
+  file.replace:
+    - name : {{ checkFile }}
+    - pattern: '{{ parmName }}=[-]?[\S]*'
+    - repl: '{{ parmName }}=3'
+maxrepeat_add_V{{ stig_id }}-setThree:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^(?P<tok_pass>password[ \t]*.*pam_cracklib.so.*)'
+    - repl: '\g<tok_pass> {{ parmName }}=3'
+    - onlyif: 
+      - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ checkFile }}) -eq 0'
+cmd_V38693-maxrepeat_setThree:
   cmd.run:
-    - name: 'echo "Passwords'' repeating characters already capped at ''3''"'
-  # Change existing positive maxrepeat value to 3
-  {% elif salt['file.search'](checkFile, ' ' + parmName + '=[0-9][0-9]*[ ]*') %}
-maxrepeat_V38693-setThree:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '{{ parmName }}=[0-9][0-9]*'
-    - repl: '{{ parmName }}=3'
-  # Change existing negative maxrepeat value to 3
-  {% elif salt['file.search'](checkFile, ' ' + parmName + '=-[0-9][0-9]*[ ]*') %}
-maxrepeat_V38693-setThree:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '{{ parmName }}=-[0-9][0-9]*'
-    - repl: '{{ parmName }}=3'
-  {% else %}
-# Tack on maxrepeat of '3' if necessary
-maxrepeat_V38693-setThree:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
-    - repl: '\g<srctok> {{ parmName }}=3'
-  {% endif %}
+    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-38693)"'
 {% endif %}
