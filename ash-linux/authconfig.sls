@@ -38,9 +38,9 @@ file_system-auth-ac:
     - require:
       - cmd: cmd_authconfig
 
-file_system-auth-ac:
+file_password-auth-ac:
   file.managed:
-    - name: /etc/pam.d/system-auth-ac
+    - name: /etc/pam.d/password-auth-ac
     - backup: minion
     - require:
       - cmd: cmd_authconfig
