@@ -27,9 +27,9 @@ script_V{{ stig_id }}-describe:
 #system-auth-ac exists
   {% if not salt['cmd.run']('grep -c -E -e "[ \t]' + parmName + '=3[ \t]*" ' + checkFile ) == '0' %}
 #maxrepeat already set to 3
-cmd_V38693-maxrepeat_setThree:
+notify_V{{ stig_id }}-maxrepeat_setThree:
   cmd.run:
-    - name: 'echo "Passwords'' repeating characters already capped at ''3'' (per STIG ID V-38693)"'
+    - name: 'echo "Passwords'' repeating characters already capped at ''3'' (per STIG ID V-{{ stig_id }})"'
   {% else %}
 #maxrepeat not yet set to 3; add the parameter, or update it if the parameter is set to a bad value
 maxrepeat_V{{ stig_id }}-setThree:
@@ -44,9 +44,9 @@ maxrepeat_add_V{{ stig_id }}-setThree:
     - repl: '\g<tok_pass> {{ parmName }}=3'
     - onlyif: 
       - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ checkFile }}) -eq 0'
-cmd_V38693-maxrepeat_setThree:
+notify_V{{ stig_id }}-maxrepeat_setThree:
   cmd.run:
-    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-38693)"'
+    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'
   {% endif %}
 {% else %}
 #system-auth-ac does not exist; make sure authconfig is installed and run authconfig --update
@@ -71,7 +71,7 @@ maxrepeat_add_V{{ stig_id }}-setThree:
     - repl: '\g<tok_pass> {{ parmName }}=3'
     - onlyif: 
       - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ checkFile }}) -eq 0'
-cmd_V38693-maxrepeat_setThree:
+notify_V{{ stig_id }}-maxrepeat_setThree:
   cmd.run:
-    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-38693)"'
+    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'
 {% endif %}
