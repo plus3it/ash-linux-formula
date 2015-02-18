@@ -16,6 +16,9 @@
 
 {% set stig_id = '38573' %}
 
+include:
+  - ash-linux.authconfig
+
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
@@ -32,12 +35,6 @@ script_V{{ stig_id }}-describe:
 {% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 {% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 
-# Ensure that authconfig has been run prior to trying to update the PAM files
-cmd_V{{ stig_id }}-linkSysauth:
-  cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-    - unless: 'test -f /etc/pam.d/system-auth-ac'
-
 # Iterate files to alter...
 {% for checkFile in pamFiles %}
 
@@ -45,6 +42,7 @@ cmd_V{{ stig_id }}-linkSysauth:
 notify_V{{ stig_id }}-{{ checkFile }}_exists:
   cmd.run:
     - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
+    
     {% if not salt['file.search'](checkFile, preAuth) %}
 notify_V{{ stig_id }}-{{ checkFile }}_noPreauth:
   cmd.run:
@@ -53,6 +51,7 @@ The following PAM directive:\n\n{{ preAuth }}\n\n
 is missing in {{ checkFile }} file. The targeted\n
 security-behavior is probably not present.\n"'
     {% endif %}
+
   {% else %}
 notify_V{{ stig_id }}-{{ checkFile }}_exists:
   cmd.run:
@@ -68,6 +67,7 @@ notify_V{{ stig_id }}-{{ checkFile }}_deviance:
   cmd.run:
     - name: 'echo "STIG prescribes indefinite-lock; utility implements {{ lockTO }}s lock"'
   {% endif %}
+
 {% endfor %}
 
 notify_V{{ stig_id }}-docError:
