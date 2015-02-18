@@ -14,13 +14,15 @@
 #
 ############################################################
 
-script_V38573-describe:
+{% set stig_id = '38573' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38573.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
 {% set pamFiles = [
-	'/etc/pam.d/system-auth-ac',
-	'/etc/pam.d/password-auth-ac'
+    '/etc/pam.d/system-auth-ac',
+    '/etc/pam.d/password-auth-ac'
   ]
 %}
 
@@ -31,7 +33,7 @@ script_V38573-describe:
 {% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 
 # Ensure that authconfig has been run prior to trying to update the PAM files
-cmd_V38573-linkSysauth:
+cmd_V{{ stig_id }}-linkSysauth:
   cmd.run:
     - name: '/usr/sbin/authconfig --update'
     - unless: 'test -f /etc/pam.d/system-auth-ac'
@@ -40,11 +42,11 @@ cmd_V38573-linkSysauth:
 {% for checkFile in pamFiles %}
 
   {% if salt['file.search'](checkFile, pamMod) %}
-notify_V38573-{{ checkFile }}_exists:
+notify_V{{ stig_id }}-{{ checkFile }}_exists:
   cmd.run:
     - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
     {% if not salt['file.search'](checkFile, preAuth) %}
-notify_V38573-{{ checkFile }}_noPreauth:
+notify_V{{ stig_id }}-{{ checkFile }}_noPreauth:
   cmd.run:
     - name: 'printf "** Note **\n
 The following PAM directive:\n\n{{ preAuth }}\n\n
@@ -52,23 +54,23 @@ is missing in {{ checkFile }} file. The targeted\n
 security-behavior is probably not present.\n"'
     {% endif %}
   {% else %}
-notify_V38573-{{ checkFile }}_exists:
+notify_V{{ stig_id }}-{{ checkFile }}_exists:
   cmd.run:
     - name: 'echo "{{ pamMod }} absent in {{ checkFile }}"'
 
-insert_V38573-{{ checkFile }}_faillock:
+insert_V{{ stig_id }}-{{ checkFile }}_faillock:
   file.replace:
     - name: {{ checkFile }}
     - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
     - repl: '{{ preAuth }}\n\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
 
-notify_V38573-{{ checkFile }}_deviance:
+notify_V{{ stig_id }}-{{ checkFile }}_deviance:
   cmd.run:
     - name: 'echo "STIG prescribes indefinite-lock; utility implements {{ lockTO }}s lock"'
   {% endif %}
 {% endfor %}
 
-notify_V38573-docError:
+notify_V{{ stig_id }}-docError:
   cmd.run:
     - name: 'printf "
 ************\n
