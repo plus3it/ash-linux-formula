@@ -16,6 +16,9 @@
 
 {% set stig_id = '38693' %}
 
+include:
+  - ash-linux.authconfig
+
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
@@ -49,16 +52,9 @@ notify_V{{ stig_id }}-maxrepeat_setThree:
     - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'
   {% endif %}
 {% else %}
-#system-auth-ac does not exist; make sure authconfig is installed and run authconfig --update
-pkg_V{{ stig_id }}:
-  pkg.installed:
-    - name: authconfig
-cmd_V{{ stig_id }}-linkSysauth:
-  cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-    - require:
-      - pkg: pkg_V{{ stig_id }}
-#set maxrepeat to 3
+#system-auth-ac did not exist when jinja templated the file; system-auth-ac 
+#will be configured by authconfig.sls in the include statement. Continue to 
+#set maxrepeat to 3.
 maxrepeat_V{{ stig_id }}-setThree:
   file.replace:
     - name : {{ checkFile }}
