@@ -14,60 +14,53 @@
 #
 ############################################################
 
-{% set stig_id = '38693' %}
-
 include:
   - ash-linux.authconfig
+
+{%- set stig_id = '38693' %}
+{%- set checkFile = '/etc/pam.d/system-auth-ac' %}
+{%- set parmName = 'maxrepeat' %}
+
+#define macro to set maxrepeat to '3'
+{%- macro maxrepeat_template(stig_id, file, param_name) %}
+maxrepeat_V{{ stig_id }}-setThree:
+  file.replace:
+    - name : {{ file }}
+    - pattern: '{{ param_name }}=[-]?[\S]*'
+    - repl: '{{ param_name }}=3'
+maxrepeat_add_V{{ stig_id }}-setThree:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '^(?P<tok_pass>password[ \t]*.*pam_cracklib.so.*)'
+    - repl: '\g<tok_pass> {{ param_name }}=3'
+    - onlyif: 
+      - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ file }}) -eq 0'
+notify_V{{ stig_id }}-maxrepeat_setThree:
+  cmd.run:
+    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'
+{%- endmacro %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
-{% set checkFile = '/etc/pam.d/system-auth-ac' %}
-{% set parmName = 'maxrepeat' %}
-
-{% if salt['file.file_exists'](checkFile) %}
+{%- if salt['file.file_exists'](checkFile) %}
 #system-auth-ac exists
-  {% if not salt['cmd.run']('grep -c -E -e "[ \t]' + parmName + '=3[ \t]*" ' + checkFile ) == '0' %}
+  {%- if not salt['cmd.run']('grep -c -E -e "[ \t]' + parmName + '=3[ \t]*" ' + checkFile ) == '0' %}
 #maxrepeat already set to 3
 notify_V{{ stig_id }}-maxrepeat_setThree:
   cmd.run:
     - name: 'echo "Passwords'' repeating characters already capped at ''3'' (per STIG ID V-{{ stig_id }})"'
-  {% else %}
-#maxrepeat not yet set to 3; add the parameter, or update it if the parameter is set to a bad value
-maxrepeat_V{{ stig_id }}-setThree:
-  file.replace:
-    - name : {{ checkFile }}
-    - pattern: '{{ parmName }}=[-]?[\S]*'
-    - repl: '{{ parmName }}=3'
-maxrepeat_add_V{{ stig_id }}-setThree:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^(?P<tok_pass>password[ \t]*.*pam_cracklib.so.*)'
-    - repl: '\g<tok_pass> {{ parmName }}=3'
-    - onlyif: 
-      - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ checkFile }}) -eq 0'
-notify_V{{ stig_id }}-maxrepeat_setThree:
-  cmd.run:
-    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'
-  {% endif %}
-{% else %}
+  {%- else %}
+#maxrepeat not yet set to 3; 
+#use the macro to add the parameter, or update it if the parameter is set to a bad value
+{{ maxrepeat_template(stig_id, checkFile, parmName) }}
+
+  {%- endif %}
+{%- else %}
 #system-auth-ac did not exist when jinja templated the file; system-auth-ac 
-#will be configured by authconfig.sls in the include statement. Continue to 
-#set maxrepeat to 3.
-maxrepeat_V{{ stig_id }}-setThree:
-  file.replace:
-    - name : {{ checkFile }}
-    - pattern: '{{ parmName }}=[-]?[\S]*'
-    - repl: '{{ parmName }}=3'
-maxrepeat_add_V{{ stig_id }}-setThree:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^(?P<tok_pass>password[ \t]*.*pam_cracklib.so.*)'
-    - repl: '\g<tok_pass> {{ parmName }}=3'
-    - onlyif: 
-      - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ checkFile }}) -eq 0'
-notify_V{{ stig_id }}-maxrepeat_setThree:
-  cmd.run:
-    - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'
-{% endif %}
+#will be configured by authconfig.sls in the include statement. 
+#Use the macro to set maxrepeat to 3.
+{{ maxrepeat_template(stig_id, checkFile, parmName) }}
+
+{%- endif %}
