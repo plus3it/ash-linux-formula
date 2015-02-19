@@ -68,12 +68,18 @@ notify_CCE-26778-1-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount...\n"'
 
-remount_CCE-26778-1-{{ mountPoint }}:
-  module.run:
-    - name: 'mount.remount'
-    - m_name: '{{ mountPoint }}'
+# "file.managed" should work, but we have to use cmd.run, for now
+fstab_CCE-26778-1-{{ mountPoint }}-backup:
+  cmd.run:
+    - name: 'cp /etc/fstab /etc/fstab.`date "+%Y%m%d%H%M"`'
+
+fstab_CCE-26778-1-{{ mountPoint }}:
+  mount.mounted:
+    - name: '{{ mountPoint }}'
     - device: '{{ remountDev }}'
-    - opts: '{{ optString }}'
     - fstype: '{{ fsType }}'
+    - opts: '{{ optString }}'
+    - mount: True
+    - unless: fstab_CCE-26778-1-{{ mountPoint }}-backup
 
 {% endif %}
