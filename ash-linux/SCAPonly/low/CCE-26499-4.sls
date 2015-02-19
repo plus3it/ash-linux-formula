@@ -70,12 +70,12 @@ fstab_CCE-26499-4-{{ mountPoint }}-backup:
 
 fstab_CCE-26499-4-{{ mountPoint }}:
   mount.mounted:
-  - name: '{{ mountPoint }}'
-  - device: '{{ remountDev }}'
-  - fstype: '{{ fsType }}'
-  - opts: '{{ optString }}'
-  - mount: True
-  - unless: fstab_CCE-26499-4-{{ mountPoint }}-backup
+    - name: '{{ mountPoint }}'
+    - device: '{{ remountDev }}'
+    - fstype: '{{ fsType }}'
+    - opts: '{{ optString }}'
+    - mount: True
+    - unless: fstab_CCE-26499-4-{{ mountPoint }}-backup
 
     {% endif %}
   {% endif %} 
