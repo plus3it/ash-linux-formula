@@ -63,13 +63,20 @@ notify_CCE-26499-4-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
+# "file.managed" should work, but we have to use cmd.run, for now
+fstab_CCE-26499-4-{{ mountPoint }}-backup:
+  cmd.run:
+  - name: 'cp /etc/fstab /etc/fstab.`date "+%Y%m%d%H%M"`'
+
 fstab_CCE-26499-4-{{ mountPoint }}:
-  module.run:
-    - name: 'mount.set_fstab'
-    - m_name: '{{ mountPoint }}'
-    - device: '{{ remountDev }}'
-    - opts: '{{ optString }}'
-    - fstype: '{{ fsType }}'
+  mount.mounted:
+  - name: '{{ mountPoint }}'
+  - device: '{{ remountDev }}'
+  - fstype: '{{ fsType }}'
+  - opts: '{{ optString }}'
+  - mount: True
+  - unless: fstab_CCE-26499-4-{{ mountPoint }}-backup
+
     {% endif %}
   {% endif %} 
 {% endif %}
