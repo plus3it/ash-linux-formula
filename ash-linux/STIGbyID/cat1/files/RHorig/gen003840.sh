@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ######################################################################
 #By Tummy a.k.a Vincent C. Passaro		                     #
 #Vincent[.]Passaro[@]gmail[.]com				     #
@@ -8,7 +8,7 @@
 #|  Version |   Change Information  |      Author        |    Date    |
 #|__________|_______________________|____________________|____________|
 #|    1.0   |   Initial Script      | Vincent C. Passaro | 20-oct-2011|
-#|	    |   Creation	    |                    |            |
+#|	        |   Creation    	    |                    |            |
 #|__________|_______________________|____________________|____________|
 #######################DISA INFORMATION###############################
 #Group ID (Vulid): V-4688
