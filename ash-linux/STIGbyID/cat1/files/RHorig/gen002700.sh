@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## (GEN002700: CAT I) (Previously – G095) The SA will ensure audit data files
 ## have permissions of 640, or more restrictive.
