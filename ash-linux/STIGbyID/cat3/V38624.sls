@@ -21,7 +21,7 @@ pkg_V38624-logrotate:
     - name: 'logrotate'
 {% endif %}
 
-{% if salt['file.search']('/var/log/cron', ' logrotate$') %}
+{% if salt['file.file_exists']('/var/log/cron') and salt['file.search']('/var/log/cron', ' logrotate$') %}
 msg_V38624-status:
   cmd.run:
     - name: 'echo "Logrotate service already configured to run"'
