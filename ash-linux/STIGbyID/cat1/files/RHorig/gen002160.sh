@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## (GEN002160: CAT I) (Previously – G072) The SA will ensure no shell has the 
 ## suid bit set.
