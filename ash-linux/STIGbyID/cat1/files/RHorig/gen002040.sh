@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## (GEN002040: CAT I) The SA will ensure .rhosts, .shosts, hosts.equiv, nor
 ## shosts.equiv are used, unless justified and documented with the IAO.
