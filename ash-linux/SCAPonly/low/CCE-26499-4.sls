@@ -66,7 +66,7 @@ notify_CCE-26499-4-{{ mountPoint }}-fixFstab:
 # "file.managed" should work, but we have to use cmd.run, for now
 fstab_CCE-26499-4-{{ mountPoint }}-backup:
   cmd.run:
-  - name: 'cp /etc/fstab /etc/fstab.`date "+%Y%m%d%H%M"`'
+    - name: 'cp /etc/fstab /etc/fstab.`date "+%Y%m%d%H%M"`'
 
 fstab_CCE-26499-4-{{ mountPoint }}:
   mount.mounted:
