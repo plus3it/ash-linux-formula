@@ -30,86 +30,14 @@ script_{{ scapId }}-describe:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-
-#####################################################################
-# Later EL6 are secure-by-default. However, many security tools
-# don't care about "secure-by-default" settings, So we need to
-# ensure that the config file contains the expected setting-string.
-#
-
-# Ensure file {{ checkFile }} exists
-{%- if salt['file.file_exists'](checkFile) %}
-
-TEST-{{ scapId }}:
-  cmd.run:
-    - name: 'echo "{{ checkFile }} exists"'
-
-  # See if *a* value is set in {{ checkFile }}
-  {%- if salt['file.search'](checkFile, parmName) %}
-    # See if *correct* value is set in {{ checkFile }}
-    {%- if salt['file.search'](checkFile, '^' + parmName + ' = 0') %}
-
-notify_{{ scapId }}-{{ param_name }}:
-  cmd.run:
-    - name: 'echo "{{ notify_nochange }}"'
-
-    {%- else %}
-
-notify_{{ scapId }}-{{ param_name }}:
-  cmd.run:
-    - name: 'echo "{{ notify_change }}"'
-
-# OVERRIDE CURRENT VALUE
-
-    {%- endif %}
-
-  {%- else %}
-
-notify_{{ scapId }}-{{ param_name }}:
-  cmd.run:
-    - name: 'echo "{{ parmName }} does not exist in {{ checkFile }}"'
-
-append_{{ scapId }}-{{ parmName }}:
+comment_{{ scapId }}-{{ parmName }}:
   file.append:
     - name: '{{ checkFile }}'
-    - text: |
-        # Explicitly setting {{ parmName }} per SCAP-ID: {{ scapId }}
-        {{ parmName }} = 0
-
-  {%- endif %}
-
-# This should *NEVER* match
-{%- else %}
-
-touch__{{ scapId }}-{{ checkFile }}:
-  file.managed:
-    - name: '{{ checkFile }}'
-    - mode: '0600'
-    - user: 'root'
-    - group: 'root'
-
-append_{{ scapId }}-{{ parmName }}:
-  file.append:
-    - name: '{{ checkFile }}'
-    - text: |
-        # Explicitly setting {{ parmName }} per SCAP-ID: {{ scapId }}
-        {{ parmName }} = 0
-    - unless: 'touch__{{ scapId }}-{{ checkFile }}'
-
-{%- endif %}
-
-#
-#####################################################################
-
-
-#####################################################################
-# Handle run-time/in-memory verification or setting of {{ parmName }}
+    - text: '# Added {{ parmName }} define per SCAP-ID: {{ scapId }}'
+    - unless: 'grep "{{ parmName }}[ 	]=[ 	]0" {{ checkFile }}'
 
 # Might want to use sysctl.present to do this and replace all of the above
 setting_{{ scapId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '0'
-#
-#####################################################################
-
