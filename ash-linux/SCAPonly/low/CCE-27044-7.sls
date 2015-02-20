@@ -36,7 +36,6 @@ comment_{{ scapId }}-{{ parmName }}:
     - text: '# Added {{ parmName }} define per SCAP-ID: {{ scapId }}'
     - unless: 'grep "{{ parmName }}[ 	]=[ 	]0" {{ checkFile }}'
 
-# Might want to use sysctl.present to do this and replace all of the above
 setting_{{ scapId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
