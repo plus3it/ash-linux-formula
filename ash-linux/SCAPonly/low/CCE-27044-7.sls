@@ -18,26 +18,98 @@
 #
 #################################################################
 
-script_CCE-27044-7-describe:
+{%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
+{%- set scapId = 'CCE-27044-7' %}
+{%- set checkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'fs.suid_dumpable' %}
+{%- set notify_change = '''{{ parmName }}'' value set to ''0''' %}
+{%- set notify_nochange = '''{{ parmName }}'' value already set to ''0''' %}
+
+script_{{ scapId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/SCAPonly/low/files/CCE-27044-7.sh
+    - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-########################################
-## RECOMMENDED REMEDIATION (from SCAP)
-########################################
-## # Set runtime for fs.suid_dumpable
-## #
-## sysctl -q -n -w fs.suid_dumpable=0
-## 
-## #
-## # If fs.suid_dumpable present in /etc/sysctl.conf, change value to "0"
-## #	else, add "fs.suid_dumpable = 0" to /etc/sysctl.conf
-## #
-## if grep --silent ^fs.suid_dumpable /etc/sysctl.conf ; then
-## 	sed -i 's/^fs.suid_dumpable.*/fs.suid_dumpable = 0/g' /etc/sysctl.conf
-## else
-## 	echo "" >> /etc/sysctl.conf
-## 	echo "# Set fs.suid_dumpable to 0 per security requirements" >> /etc/sysctl.conf
-## 	echo "fs.suid_dumpable = 0" >> /etc/sysctl.conf
-## fi
+
+#####################################################################
+# Later EL6 are secure-by-default. However, many security tools
+# don't care about "secure-by-default" settings, So we need to
+# ensure that the config file contains the expected setting-string.
+#
+
+# Ensure file {{ checkFile }} exists
+{%- if salt['file.file_exists'](checkFile) %}
+
+TEST-{{ scapId }}:
+  cmd.run:
+    - name: 'echo "{{ checkFile }} exists"'
+
+  # See if *a* value is set in {{ checkFile }}
+  {%- if salt['file.search'](checkFile, parmName) %}
+    # See if *correct* value is set in {{ checkFile }}
+    {%- if salt['file.search'](checkFile, '^' + parmName + ' = 0') %}
+
+notify_{{ scapId }}-{{ param_name }}:
+  cmd.run:
+    - name: 'echo "{{ notify_nochange }}"'
+
+    {%- else %}
+
+notify_{{ scapId }}-{{ param_name }}:
+  cmd.run:
+    - name: 'echo "{{ notify_change }}"'
+
+# OVERRIDE CURRENT VALUE
+
+    {%- endif %}
+
+  {%- else %}
+
+notify_{{ scapId }}-{{ param_name }}:
+  cmd.run:
+    - name: 'echo "{{ parmName }} does not exist in {{ checkFile }}"'
+
+append_{{ scapId }}-{{ parmName }}:
+  file.append:
+    - name: '{{ checkFile }}'
+    - text: |
+        # Explicitly setting {{ parmName }} per SCAP-ID: {{ scapId }}
+        {{ parmName }} = 0
+
+  {%- endif %}
+
+# This should *NEVER* match
+{%- else %}
+
+touch__{{ scapId }}-{{ checkFile }}:
+  file.managed:
+    - name: '{{ checkFile }}'
+    - mode: '0600'
+    - user: 'root'
+    - group: 'root'
+
+append_{{ scapId }}-{{ parmName }}:
+  file.append:
+    - name: '{{ checkFile }}'
+    - text: |
+        # Explicitly setting {{ parmName }} per SCAP-ID: {{ scapId }}
+        {{ parmName }} = 0
+    - unless: 'touch__{{ scapId }}-{{ checkFile }}'
+
+{%- endif %}
+
+#
+#####################################################################
+
+
+#####################################################################
+# Handle run-time/in-memory verification or setting of {{ parmName }}
+
+# Might want to use sysctl.present to do this and replace all of the above
+setting_{{ scapId }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '0'
+#
+#####################################################################
+
