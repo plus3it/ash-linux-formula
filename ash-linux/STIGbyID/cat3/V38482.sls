@@ -20,8 +20,8 @@ include:
 {%- set notify_nochange = 'Passwords already require at least one digit.' %}
 
 {%- macro set_pam_param(stig_id, file, param, value, notify_text) %}
-# Change existing {{ param_name }} with positive integer value to minus-1
-replace_V{{ stig_id }}-{{ param_name }}:
+# Change existing {{ param }} with positive integer value to minus-1
+replace_V{{ stig_id }}-{{ param }}:
   file.replace:
     - name: {{ file }}
     - pattern: '{{ param }}=[0-9][0-9]*'
@@ -30,7 +30,7 @@ replace_V{{ stig_id }}-{{ param_name }}:
       - 'grep -E -e " {{ param }}=[0-9][0-9]*[ ]*" {{ file }}'
 
 # Tack on {{ param }} of {{ value }} if necessary
-add_V{{ stig_id }}-{{ param_name }}:
+add_V{{ stig_id }}-{{ param }}:
   file.replace:
     - name: {{ file }}
     - pattern: '^(?P<srctok>password[ \t]*requisite[ \t]*pam_cracklib.so.*$)'
@@ -38,7 +38,7 @@ add_V{{ stig_id }}-{{ param_name }}:
     - onlyif:
       - 'grep -v -E -e " {{ param }}=" {{ file }}'
 
-notify_V{{ stig_id }}-{{ param_name }}:
+notify_V{{ stig_id }}-{{ param }}:
   cmd.run:
     - name: 'echo "{{ notify_text }}"'
 {%- endmacro %}
