@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Group ID (Vulid): V-910
 # Group Title: Run Control Scripts World Writable Scripts

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## (GEN004580: CAT I) (Previously – G647) The SA will ensure .forward files 
 ## are not used.

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## (GEN001400: CAT I) (Previously – G047) The SA will ensure the owner of the 
 ## /etc/passwd and /etc/shadow files (or equivalent) is root.

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ######################################################################
 #By Tummy a.k.a Vincent C. Passaro		                     #
 #Vincent[.]Passaro[@]gmail[.]com				     #

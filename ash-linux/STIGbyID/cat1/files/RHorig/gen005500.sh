@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 ## (GEN005500: CAT I) (Previously – G701) The IAO and SA will ensure SSH 
 ## Protocol version 1 is not used, nor will Protocol version 1 compatibility 
