@@ -14,23 +14,58 @@
 #
 ############################################################
 
-script_V38658-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38658.sh
+include:
+  - ash-linux.authconfig
 
-{% if salt['file.search']('/etc/pam.d/system-auth-ac', 'password[ 	]*sufficient[ 	]*pam_unix.so') and not salt['file.search']('/etc/pam.d/system-auth-ac', 'password[ 	]*sufficient[ 	]*pam_unix.so.*remember=24') %}
-file_V38658-repl:
+{%- set stig_id = '38658' %}
+{%- set pam_cfg_file = '/etc/pam.d/system-auth' %}
+{%- set pam_parameter = 'remember' %}
+{%- set pam_param_value = '24' %}
+
+#define macro to configure the pam module in a file
+{%- macro pam_remember_password(stig_id, file, param, value) %}
+file_V{{ stig_id }}-repl:
   file.replace:
-    - name: '/etc/pam.d/system-auth-ac'
-    - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
-    - repl: '\g<srctok> remember=24'
-{% else %}
-status_V38658-reuseParm:
-  cmd.run:
-    - name: 'echo "Re-use parameter already set"'
-{% endif %}
+    - name: '{{ file }}'
+    - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
+    - repl: '\g<srctok> {{ param }}={{ value }}'
+    - onlyif:
+      - 'grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so" {{ file }}'
+      - 'grep -v -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}={{ value }}" {{ file }}'
 
-link_v38658:
-  file.symlink:
-    - name: '/etc/pam.d/system-auth'
-    - target: '/etc/pam.d/system-auth-ac'
+notify_V{{ stig_id }}-reuseParm:
+  cmd.run:
+    - name: 'echo "Password re-use parameter (remember) set to {{ value }} (per STIG ID V-{{ stig_id }})."'
+{%- endmacro %}
+
+script_V{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+
+{%- if salt['file.file_exists'](pam_cfg_file) %}
+
+#file {{ pam_cfg_file }} exists
+
+  {%- if salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*{{ pam_parameter }}={{ pam_param_value }}') %}
+
+#'remember' parameter already configured
+notify_V{{ stig_id }}-reuseParm:
+  cmd.run:
+    - name: 'echo "Password re-use parameter (remember) already set to {{ param_value }} (per STIG ID V-{{ stig_id }})."'
+
+  {%- else %}
+
+#'remember' parameter not yet configured
+#use macro to set the parameter
+{{ pam_remember_password(stig_id, pam_cfg_file, pam_parameter, pam_param_value) }}
+
+  {%- endif %}
+
+{%- else %}
+
+#file did not exist when jinja templated the file; file will be configured 
+#by authconfig.sls in the include statement. 
+#use macro to set the parameter
+{{ pam_remember_password(stig_id, pam_cfg_file, pam_parameter, pam_param_value) }}
+
+{%- endif %}

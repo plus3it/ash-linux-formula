@@ -15,46 +15,82 @@
 #
 ############################################################
 
-script_V38574-describe:
+include:
+  - ash-linux.authconfig
+
+{%- set stig_id = '38574' %}
+
+# Update pam_unix.so settings in /etc/pam.d/system-auth
+{%- set checkFile = '/etc/pam.d/system-auth-ac' %}
+{%- set hash_type = 'sha512' %}
+
+{%- macro enforce_passwordhash(stig_id, file, hash_type) %}
+replace_md5_V{{ stig_id }}-{{ hash_type }}:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: ' md5'
+    - repl: ' {{ hash_type }}'
+    - onlyif: 'grep -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*"'
+
+set_V{{ stig_id }}-{{ hash_type }}:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
+    - repl: '\g<srctok> {{ hash_type }}'
+    - onlyif:
+      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*"'
+      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* {{ hash_type }}.*"'
+
+notify_V{{ stig_id }}-{{ hash_type }}:
+  cmd.run:
+    - name: 'echo "Password hash set to {{ hash_type }} (per STIG ID V-{{ stig_id }})"'
+{%- endmacro %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38574.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
 # Update /etc/sysconfig/authconfig
-file_V38574-repl:
+file_V{{ stig_id }}-repl:
   file.replace:
     - name: /etc/sysconfig/authconfig
     - pattern: '^PASSWDALGORITHM.*$'
-    - repl: 'PASSWDALGORITHM=sha512'
+    - repl: 'PASSWDALGORITHM={{ hash_type }}'
 
-# Update pam_unix.so settings in /etc/pam.d/system-auth
-{% set checkFile = '/etc/pam.d/system-auth-ac' %}
-{% set parmName = 'sha512' %}
+{%- if salt['file.file_exists'](checkFile) %}
 
-{% if not salt['file.file_exists'](checkFile) %}
-cmd_V38482-linkSysauth:
-  cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-{% endif %}
+#file {{ checkFile }} exists
 
-{% if salt['file.search'](checkFile, ' pam_unix.so ') %}
-  # See if SHA512 already set
-  {% if salt['file.search'](checkFile, ' ' + parmName) %}
-set_V38574-sha512:
+  {%- if salt['file.search'](checkFile, ' pam_unix.so ') %}
+
+#pam_unix.so found in /etc/pam.d/system-auth-ac
+
+    {%- if salt['file.search'](checkFile, ' ' + hash_type) %}
+
+#{{ hash_type }} already set
+set_V{{ stig_id }}-sha512:
   cmd.run:
     - name: 'echo "Passwords already require SHA512 encryption"'
-  # If set to md5, switch to sha512
-  {% elif salt['file.search'](checkFile, '^[ 	]*password[ 	]*sufficient[ 	]*pam_unix.so.* md5 ') %}
-set_V38574-sha512:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: ' md5 '
-    - repl: ' {{ parmName }} '
-  # Tack on sha512 token if necessary
-  {% else %}
-set_V38574-sha512:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^(?P<srctok>password[ 	]*sufficient[ 	]*pam_unix.so.*$)'
-    - repl: '\g<srctok> {{ parmName }}'
-  {% endif %}
-{% endif %}
+
+    {%- else %}
+
+#{{ hash_type }} not found
+#use macro to ensure the required hash type is in place
+{{ enforce_passwordhash(stig_id, checkFile, hash_type) }}
+
+    {%- endif %}
+
+  {%- else %}
+  
+#pam_unix.so not found in /etc/pam.d/system-auth-ac; do nothing
+
+  {%- endif %}
+
+{%- else %}
+
+#file did not exist when jinja templated the file; file will be configured 
+#by authconfig.sls in the include statement.
+#use macro to ensure the required hash type is in place
+{{ enforce_passwordhash(stig_id, checkFile, hash_type) }}
+
+{%- endif %}

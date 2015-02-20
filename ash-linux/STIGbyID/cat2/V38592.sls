@@ -15,61 +15,92 @@
 #
 ############################################################
 
-script_V38592-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38592.sh
+include:
+  - ash-linux.authconfig
 
-#################################################
-## Consult cat3/V38482.sls for handling-method ##
-#################################################
+{%- set stig_id = '38592' %}
 
-{% set pamFiles = [
-	'/etc/pam.d/system-auth-ac',
-	'/etc/pam.d/password-auth-ac'
+{%- set pamFiles = [
+    '/etc/pam.d/system-auth-ac',
+    '/etc/pam.d/password-auth-ac'
   ]
 %}
 
-{% set pamMod = 'pam_faillock.so' %}
-{% set lockTO = '900' %}
-{% set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 unlock_time=' + lockTO %}
-{% set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
-{% set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
+{%- set pamMod = 'pam_faillock.so' %}
+{%- set lockTO = '900' %}
+{%- set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 unlock_time=' + lockTO %}
+{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
+{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
 
-# Ensure that authconfig has been run prior to trying to update the PAM files
-cmd_V38592-linkSysauth:
+#define macro to configure the pam module in a file
+{%- macro pammod_template(stig_id, file, pam_module, preauth, authfail, authsucc, lock_timeout) %}
+notify_V{{ stig_id }}-{{ file }}_exists:
   cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-    - unless: 'test -f /etc/pam.d/system-auth-ac'
+    - name: 'echo "{{ pam_module }} was absent in {{ file }}"'
+
+insert_V{{ stig_id }}-{{ file }}_faillock:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '^(?P<srctok>auth[ \t]*[a-z]*[ \t]*pam_unix.so.*$)'
+    - repl: '{{ preauth }}\n\g<srctok>\n{{ authfail }}\n{{ authsucc }}'
+
+notify_V{{ stig_id }}-{{ file }}_deviance:
+  cmd.run:
+    - name: 'echo "STIG prescribes indefinite-lock; utility implements {{ lock_timeout }}s lock"'
+{%- endmacro %}
+
+script_V{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
 # Iterate files to alter...
-{% for checkFile in pamFiles %}
+{%- for checkFile in pamFiles %}
 
-  {% if salt['file.search'](checkFile, pamMod) %}
-notify_V38592-{{ checkFile }}_exists:
+  {%- if salt['file.file_exists'](checkFile) %}
+#file {{ checkFile }} exists
+
+    {%- if salt['file.search'](checkFile, pamMod) %}
+#module {{ pamMod }} already present in file
+notify_V{{ stig_id }}-{{ checkFile }}_exists:
   cmd.run:
     - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
-    {% if not salt['file.search'](checkFile, preAuth) %}
-notify_V38592-{{ checkFile }}_noPreauth:
+
+      {%- if not salt['file.search'](checkFile, preAuth) %}
+#missing preAuth check; notify but do not modify
+notify_V{{ stig_id }}-{{ checkFile }}_noPreauth:
   cmd.run:
     - name: 'printf "** Note **\n
-The following PAM directive:\n\n{{ preAuth }}\n\n
-is missing in {{ checkFile }} file. The targeted\n
-security-behavior is probably not present.\n"'
-    {% endif %}
-  {% else %}
-notify_V38592-{{ checkFile }}_exists:
-  cmd.run:
-    - name: 'echo "{{ pamMod }} absent in {{ checkFile }}"'
+TL;DR: Manual inspection and remediation will be \n
+required to determine whether the PAM directive \n
+is configured properly per the system's \n
+requirements. \n\n
+The PAM module {{ pamMod }} has been configured\n
+on this system, but is not currently using the \n
+prescribed PAM directive:\n\n{{ preAuth }}\n\n
+This means another mechanism (other than this \n
+utility) has configured this directive. To avoid \n
+overwriting what may have been desired behavior \n
+this utility will not modify this directive. \n
+However, the security-behavior required by the \n
+STIG is probably not present. "'
+      {%- endif %}
 
-insert_V38592-{{ checkFile }}_faillock:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^(?P<srctok>auth[ 	]*[a-z]*[ 	]*pam_unix.so.*$)'
-    - repl: '{{ preAuth }}\n\g<srctok>\n{{ authFail }}\n{{ authSucc }}'
-  {% endif %}
-{% endfor %}
+    {%- else %}
+#pamMod not yet present in file
+#Use macro to add necessary rules
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
 
-notify_V38592-docError:
+    {%- endif %}
+  {%- else %}
+#file did not exist when jinja templated the file; file will be configured 
+#by authconfig.sls in the include statement. 
+#Use macro to add necessary rules
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
+
+  {%- endif %}
+{%- endfor %}
+
+notify_V{{ stig_id }}-docError:
   cmd.run:
     - name: 'printf "
 ************\n
