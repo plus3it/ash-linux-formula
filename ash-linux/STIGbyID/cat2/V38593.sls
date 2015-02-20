@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38593
-# Finding ID:	V-38593
-# Version:	RHEL-06-000073
+# Rule ID:              set_system_login_banner
+# Finding ID:		V-38593
+# Version:		RHEL-06-000073
+# SCAP Security ID:     CCE-26974-6
 # Finding Level:	Medium
 #
 #     The Department of Defense (DoD) login banner must be displayed 
