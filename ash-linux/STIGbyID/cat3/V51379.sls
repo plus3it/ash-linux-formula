@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-51379
-# Finding ID:	V-51379
-# Version:	RHEL-06-000025
+# Rule ID:		selinux_all_devicefiles_labeled
+# Finding ID:		V-51379
+# Version:		RHEL-06-000025
+# SCAP: Security ID:	CCE-26774-0
 # Finding Level:	Low
 #
 #     All device files must be monitored by the system Linux Security 
