@@ -10,37 +10,67 @@
 #
 ############################################################
 
-script_V38569-describe:
+include:
+  - ash-linux.authconfig
+
+{%- set stig_id = '38569' %}
+{%- set checkFile = '/etc/pam.d/system-auth-ac' %}
+{%- set param_name = 'ucredit' %}
+{%- set param_value = '-1' %}
+{%- set notify_change = 'Forced passwords to require at least one uppercase letter.' %}
+{%- set notify_nochange = 'Passwords already require at least one uppercase letter.' %}
+
+{%- macro set_pam_param(stig_id, file, param, value, notify_text) %}
+# Change existing {{ param_name }} with positive integer value to minus-1
+replace_V{{ stig_id }}-{{ param_name }}:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '{{ param }}=[0-9][0-9]*'
+    - repl: '{{ param }}={{ value }}'
+    - onlyif:
+      - 'grep -E -e " {{ param }}=[0-9][0-9]*[ ]*" {{ file }}'
+
+# Tack on {{ param }} of {{ value }} if necessary
+add_V{{ stig_id }}-{{ param_name }}:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '^(?P<srctok>password[ \t]*requisite[ \t]*pam_cracklib.so.*$)'
+    - repl: '\g<srctok> {{ param }}={{ value }}'
+    - onlyif:
+      - 'grep -v -E -e " {{ param }}=" {{ file }}'
+
+notify_V{{ stig_id }}-{{ param_name }}:
+  cmd.run:
+    - name: 'echo "{{ notify_text }}"'
+{%- endmacro %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38569.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
-{% set checkFile = '/etc/pam.d/system-auth-ac' %}
-{% set parmName = 'ucredit' %}
+{%- if salt['file.file_exists'](checkFile) %}
 
-{% if not salt['file.file_exists'](checkFile) %}
-cmd_V38569-linkSysauth:
+#file {{ checkFile }} exists
+
+  {%- if salt['file.search'](checkFile, ' ' + param_name + '=-[0-9][0-9]*[ ]*') %}
+
+#parameter {{ param_name }} already set to a negative value
+notify_V{{ stig_id }}-{{ param_name }}:
   cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-{% endif %}
+    - name: 'echo "{{ notify_nochange }}"'
 
-{% if salt['file.search'](checkFile, ' pam_cracklib.so ') %}
-  {% if salt['file.search'](checkFile, ' ' + parmName + '=[0-9][0-9]*[ ]*') %}
-# Change existing ucredit with positive integer value to minus-1
-ucredit_V38569-minusOne:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '{{ parmName }}=[0-9][0-9]*'
-    - repl: '{{ parmName }}=-1'
-  {% elif salt['file.search'](checkFile, ' ' + parmName + '=-[0-9][0-9]*[ ]*') %}
-ucredit_V38569-minusOne:
-  cmd.run:
-    - name: 'echo "Passwords already require at least one uppercase letter"'
-  {% else %}
-# Tack on ucredit value of minus-1 if necessary
-ucredit_V38569-minusOne:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^(?P<srctok>password[ 	]*requisite[ 	]*pam_cracklib.so.*$)'
-    - repl: '\g<srctok> {{ parmName }}=-1'
-  {% endif %}
-{% endif %}
+  {%- else %}
+#parameter {{ param_name }} not set, or not set correctly
+#use macro to set {{ param_name }}
+{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}
+
+  {%- endif %}
+
+{%- else %}
+
+#file did not exist when jinja templated the file; file will be configured 
+#by authconfig.sls in the include statement. 
+#use macro to set the parameter
+{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}
+
+{%- endif %}

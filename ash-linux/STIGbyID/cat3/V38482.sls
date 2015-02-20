@@ -16,10 +16,12 @@ include:
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'dcredit' %}
 {%- set param_value = '-1' %}
+{%- set notify_change = 'Forced passwords to require at least one digit.' %}
+{%- set notify_nochange = 'Passwords already require at least one digit.' %}
 
-{%- macro set_pam_param(stig_id, file, param, value) %}
+{%- macro set_pam_param(stig_id, file, param, value, notify_text) %}
 # Change existing {{ param_name }} with positive integer value to minus-1
-replace_dcredit_V{{ stig_id }}-minusOne:
+replace_V{{ stig_id }}-{{ param_name }}:
   file.replace:
     - name: {{ file }}
     - pattern: '{{ param }}=[0-9][0-9]*'
@@ -27,18 +29,18 @@ replace_dcredit_V{{ stig_id }}-minusOne:
     - onlyif:
       - 'grep -E -e " {{ param }}=[0-9][0-9]*[ ]*" {{ file }}'
 
-# Tack on {{ param }} of minus-1 if necessary
-add_dcredit_V{{ stig_id }}-minusOne:
+# Tack on {{ param }} of {{ value }} if necessary
+add_V{{ stig_id }}-{{ param_name }}:
   file.replace:
     - name: {{ file }}
     - pattern: '^(?P<srctok>password[ \t]*requisite[ \t]*pam_cracklib.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
     - onlyif:
-      - 'grep -v -E -e " {{ param }}=[0-9][0-9]*[ ]*" {{ file }}'
+      - 'grep -v -E -e " {{ param }}=" {{ file }}'
 
-notify_V{{ stig_id }}-minusOne:
+notify_V{{ stig_id }}-{{ param_name }}:
   cmd.run:
-    - name: 'echo "Forced passwords to require at least one digit."'
+    - name: 'echo "{{ notify_text }}"'
 {%- endmacro %}
 
 script_V{{ stig_id }}-describe:
@@ -51,15 +53,15 @@ script_V{{ stig_id }}-describe:
 
   {%- if salt['file.search'](checkFile, ' ' + param_name + '=-[0-9][0-9]*[ ]*') %}
 
-notify_V{{ stig_id }}-minusOne:
+notify_V{{ stig_id }}-{{ param_name }}:
   cmd.run:
-    - name: 'echo "Passwords already require at least one digit"'
+    - name: 'echo "{{ notify_nochange }}"'
 
   {%- else %}
 
 #Passwords not yet set to require one digit
 #use macro to set the parameter
-{{ set_pam_param(stig_id, checkFile, param_name, param_value) }}
+{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_changed) }}
 
   {%- endif %}
 
@@ -68,6 +70,6 @@ notify_V{{ stig_id }}-minusOne:
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #use macro to set the parameter
-{{ set_pam_param(stig_id, checkFile, param_name, param_value) }}
+{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_changed) }}
 
 {%- endif %}
