@@ -60,6 +60,7 @@ notify_V{{ stig_id }}-{{ param_name }}:
     - name: 'echo "{{ notify_nochange }}"'
 
   {%- else %}
+
 #parameter {{ param_name }} not set, or not set correctly
 #use macro to set {{ param_name }}
 {{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}

@@ -53,13 +53,14 @@ script_V{{ stig_id }}-describe:
 
   {%- if salt['file.search'](checkFile, ' ' + param_name + '=-[0-9][0-9]*[ ]*') %}
 
+#parameter {{ param_name }} already set to a negative value
 notify_V{{ stig_id }}-{{ param_name }}:
   cmd.run:
     - name: 'echo "{{ notify_nochange }}"'
 
   {%- else %}
 
-#Passwords not yet set to require one digit
+#parameter {{ param_name }} not set, or not set correctly
 #use macro to set the parameter
 {{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_changed) }}
 
