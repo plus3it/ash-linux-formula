@@ -3,6 +3,9 @@
 # This Salt test/lockdown implements a SCAP item that has not yet been
 # merged into the DISA-published STIGS
 #
+# Rule ID:
+# - sysctl_fs_suid_dumpable
+#
 # Security identifiers:
 # - CCE-27044-7.sls
 #
