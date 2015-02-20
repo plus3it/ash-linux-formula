@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38684
-# Finding ID:	V-38684
-# Version:	RHEL-06-000319
+# Rule ID:		accounts_max_concurrent_login_sessions
+# Finding ID:		V-38684
+# Version:		RHEL-06-000319
+# SCAP Security ID:	CCE-27457-1
 # Finding Level:	Low
 #
 #     The system must limit users to 10 simultaneous system logins, or a 
