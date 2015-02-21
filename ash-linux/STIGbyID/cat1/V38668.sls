@@ -12,40 +12,27 @@
 #
 ###########################################################################
 
-script_V38668-describe:
+{%- set stig_id = '38668' %}
+{%- set overrideCAD = '/etc/init/control-alt-delete.override' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38668.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.sh
     - cwd: /root
 
-{% set distCAD = '/etc/init/control-alt-delete.conf' %}
-{% set overrideCAD = '/etc/init/control-alt-delete.override' %}
+file_V{{ stig_id }}_managed:
+   file.managed:
+     - name: '{{ overrideCAD }}'
+     - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.txt
+     - cwd: /root
+     - replace: False
 
-{% if not salt['file.file_exists'](overrideCAD) %}
-notify_V38668-override:
-  cmd.run:
-    - name: 'echo "Creating ''{{ overrideCAD }}''"'
-
-copy_V38668-override:
-  file.copy:
-    - source: '{{ distCAD }}'
-    - cwd: /root
-    - name: '{{ overrideCAD }}'
-
-edit_V38668-override:
+edit_V{{ stig_id }}-override:
   file.replace:
     - name: '{{ overrideCAD }}'
-    - pattern: '\/sbin.*now'
-    - repl: '/bin/logger -p kern.crit '
-
-{% else %}
-notify_V38668-override:
-  cmd.run:
-    - name: 'echo "Nothing to do: {{ overrideCAD }} already exists."'
-
-{% endif %}
-# file_V38668_managed:
-#   file.managed:
-#     - name: /etc/init/control-alt-delete.override
-#     - source: salt://ash-linux/STIGbyID/cat1/files/V38668.txt
-#     - cwd: /root
-#     - force: True
+    - pattern: '\/sbin.*now '
+    - repl: '/bin/logger -p security.info '
+    - require:
+      - file: file_V{{ stig_id }}_managed
+    - onlyif:
+      - 'test -f {{ overrideCAD }}'

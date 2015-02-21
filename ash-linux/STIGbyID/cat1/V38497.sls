@@ -15,22 +15,21 @@
 #
 ##########################################################################
 
-script_V38497-describe:
+include:
+  - ash-linux.authconfig
+
+{%- set stig_id = '38497' %}
+{%- set checkFile = '/etc/pam.d/system-auth-ac' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38497.sh
+    - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.sh
     - cwd: /root
 
-{% set checkFile = '/etc/pam.d/system-auth-ac' %}
-
-# If authconfig has never been run, run it
-cmd_V38497-linkSysauth:
-  cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-    - unless: 'test -f {{ checkFile }}'
-
-file_V38497-sysauth_ac:
+file_V{{ stig_id }}-sysauth_ac:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: " nullok"
     - repl: ""
-    - unles: cmd_V38497-linkSysauth
+    - onlyif: 
+      - 'test -f {{ checkFile }}'

@@ -14,23 +14,31 @@
 #
 ############################################################
 
-script_V38682-describe:
+{%- set stig_id = '38682' %}
+{%- set file = '/etc/modprobe.d/bluetooth.conf' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38682.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
-{% if not salt['file.file_exists']('/etc/modprobe.d/bluetooth.conf') %}
-file-V38682-touchRules:
+file-V{{ stig_id }}-touchRules:
   file.touch:
-    - name: '/etc/modprobe.d/bluetooth.conf'
-{% endif %}
+    - name: '{{ file }}'
 
-file_V38682-appendBTblacklist:
+file_V{{ stig_id }}-appendBTblacklist:
   file.append:
-    - name: /etc/modprobe.d/bluetooth.conf
+    - name: '{{ file }}'
     - text: 'install bluetooth /bin/false'
+    - require:
+      - file: file-V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test -f {{ file }}'
 
-file_V38682-appendNPFblacklist:
+file_V{{ stig_id }}-appendNPFblacklist:
   file.append:
-    - name: /etc/modprobe.d/bluetooth.conf
+    - name: '{{ file }}'
     - text: 'install net-pf-31 /bin/false'
-
+    - require:
+      - file: file-V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test -f {{ file }}'

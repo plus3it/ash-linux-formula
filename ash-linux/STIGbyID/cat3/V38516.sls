@@ -9,27 +9,40 @@
 #
 ############################################################
 
-script_V38516-describe:
+{%- set stig_id = '38516' %}
+{%- set file = '/etc/modprobe.d/rds.conf' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38516.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
-{% if not salt['file.file_exists']('/etc/modprobe.d/rds.conf') %}
-file-V38516-touchRules:
+{%- if not salt['file.file_exists']('{{ file }}') %}
+
+file-V{{ stig_id }}-touchRules:
   file.touch:
-    - name: '/etc/modprobe.d/rds.conf'
+    - name: '{{ file }}'
 
-file_V38516-appendBlacklist:
+file_V{{ stig_id }}-appendBlacklist:
   file.append:
-    - name: /etc/modprobe.d/rds.conf
+    - name: '{{ file }}'
     - text: 'install rds /bin/false'
-{% elif salt['file.search']('/etc/modprobe.d/rds.conf', '^install rds /bin/false') %}
-file_V38516-appendBlacklist:
+    - require:
+      - file: file-V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test {{ file }}'
+
+{%- elif salt['file.search']('{{ file }}', '^install rds /bin/false') %}
+
+file_V{{ stig_id }}-appendBlacklist:
    cmd.run:
-     - name: 'echo "RDS already blacklisted in /etc/modprobe.d/rds.conf"'
-{% elif salt['file.file_exists']('/etc/modprobe.d/rds.conf') %}
-file_V38516-appendBlacklist:
+     - name: 'echo "RDS already blacklisted in {{ file }}"'
+
+{%- elif salt['file.file_exists']('{{ file }}') %}
+
+file_V{{ stig_id }}-appendBlacklist:
   file.replace:
-    - name: /etc/modprobe.d/rds.conf
-    - pattern: '^.*install[ 	]rds.*$'
+    - name: '{{ file }}
+    - pattern: '^.*install[ \t]rds.*$'
     - repl: 'install rds /bin/false'
-{% endif %}
+
+{%- endif %}

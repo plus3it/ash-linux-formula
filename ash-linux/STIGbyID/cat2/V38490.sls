@@ -14,44 +14,54 @@
 #
 ############################################################
 
-script_V38490-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38490.sh
+{%- set stig_id = '38490' %}
+{%- set file_modprobe = '/etc/modprobe.conf' %}
+{%- set file_modprobe_usb = '/etc/modprobe.d/usb.conf' %}
+{%- set file_99usb_rules = '/etc/udev/rules.d/99-usb.rules' %}
+{%- set file_modprobe_blacklist = '/etc/modprobe.d/blacklist.conf' %}
 
-{% if salt['file.file_exists']('/etc/modprobe.conf') %}
-  {% if salt['file.search']('/etc/modprobe.conf', 'usb-storage') %}
-file_V38490-replModprobe:
+script_V{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+
+{% if salt['file.file_exists']('{{ file_modprobe }}') %}
+file_V{{ stig_id }}-replModprobe:
   file.replace:
     - name: /etc/modprobe.conf
     - pattern: "install usb-storage .*$"
     - repl: "install usb-storage /bin/true"
-  {% endif %}
+    - onlyif:
+      - 'grep -E -e "usb-storage" {{ file_modprobe }}'
 {% else %}
-  {% if not salt['file.file_exists']('/etc/modprobe.d/usb.conf') %}
-file-V38490-touchUSBconf:
+file_V{{ stig_id }}-touchUSBconf:
   file.touch:
-    - name: '/etc/modprobe.d/usb.conf'
-  {% endif %}
-file_V38490-appendUSBconf:
+    - name: '{{ file_modprobe_usb }}'
+file_V{{ stig_id }}-appendUSBconf:
   file.append:
-    - name: '/etc/modprobe.d/usb.conf'
+    - name: '{{ file_modprobe_usb }}'
     - text: 'install usb-storage /bin/true'
+    - require:
+      - file: file_V{{ stig_id }}-touchUSBconf
+    - onlyif:
+      - 'test -f {{ file_modprobe_usb }}'
 {% endif %}
 
-{% if not salt['file.file_exists']('/etc/udev/rules.d/99-usb.rules') %}
-file-V38490-touchRules:
+file_V{{ stig_id }}-touchRules:
   file.touch:
-    - name: '/etc/udev/rules.d/99-usb.rules'
-{% endif %}
+    - name: '{{ file_99usb_rules }}'
 
-file_V38490-appendRules:
+file_V{{ stig_id }}-appendRules:
   file.append:
-    - name: /etc/udev/rules.d/99-usb.rules
+    - name: '{{ file_99usb_rules }}'
     - text: 'ACTION=="add|change", BUS=="usb", SUBSYSTEMS=="usb", DRIVERS=="usb", OPTIONS:="ignore_device"'
+    - require:
+      - file: file_V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test -f {{ file_99usb_rules }}'
 
-{% if salt['file.file_exists']('/etc/modprobe.d/blacklist.conf') %}
-file_V38490-appendBlacklist:
+file_V{{ stig_id }}-appendBlacklist:
   file.append:
-    - name: /etc/modprobe.d/blacklist.conf
+    - name: '{{ file_modprobe_blacklist }}'
     - text: 'blacklist usb_storage'
-{% endif %}
+    - onlyif:
+      - 'test -f {{ file_modprobe_blacklist }}'

@@ -14,17 +14,22 @@
 #
 ############################################################
 
-script_V38515-describe:
+{%- set stig_id = '38515' %}
+{%- set file = '/etc/modprobe.d/sctp.conf' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38515.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
-{% if not salt['file.file_exists']('/etc/modprobe.d/sctp.conf') %}
-file-V38515-touchRules:
+file-V{{ stig_id }}-touchRules:
   file.touch:
-    - name: '/etc/modprobe.d/sctp.conf'
-{% endif %}
+    - name: '{{ file }}'
 
-file_V38515-appendBlacklist:
+file_V{{ stig_id }}-appendBlacklist:
   file.append:
-    - name: /etc/modprobe.d/sctp.conf
+    - name: '{{ file }}'
     - text: 'install sctp /bin/false'
+    - require:
+      - file: file-V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test -f {{ file }}'

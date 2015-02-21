@@ -49,6 +49,10 @@ file_V38655-appendUSBconf:
   file.append:
     - name: {{ usbConf }}
     - text: 'install usb-storage /bin/true'
+    - require:
+      - file: file-V38655-touchUSBconf
+    - onlyif:
+      - 'test -f {{ usbConf }}'
 {% endif %}
 
 ####################################################################

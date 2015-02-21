@@ -43,6 +43,8 @@ insert_V{{ stig_id }}-{{ file }}_faillock:
     - name: {{ file }}
     - pattern: '^(?P<srctok>auth[ \t]*[a-z]*[ \t]*pam_unix.so.*$)'
     - repl: '{{ preauth }}\n\g<srctok>\n{{ authfail }}\n{{ authsucc }}'
+    - onlyif:
+      - 'grep -v -E -e "{{ pam_module }}" {{ file }}'
 
 notify_V{{ stig_id }}-{{ file }}_deviance:
   cmd.run:

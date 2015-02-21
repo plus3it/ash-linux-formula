@@ -28,13 +28,15 @@ maxrepeat_V{{ stig_id }}-setThree:
     - name : {{ file }}
     - pattern: '{{ param_name }}=[-]?[\S]*'
     - repl: '{{ param_name }}=3'
+    - onlyif: 
+      - 'grep -E -e "pam_cracklib.so.*{{ param_name }}=[-]?[\S]*" {{ file }}'
 maxrepeat_add_V{{ stig_id }}-setThree:
   file.replace:
     - name: {{ file }}
     - pattern: '^(?P<tok_pass>password[ \t]*.*pam_cracklib.so.*)'
     - repl: '\g<tok_pass> {{ param_name }}=3'
     - onlyif: 
-      - 'test $(grep -c -E -e "pam_cracklib.so.*maxrepeat.*" {{ file }}) -eq 0'
+      - 'grep -v -E -e "pam_cracklib.so.*{{ param_name }}.*" {{ file }}'
 notify_V{{ stig_id }}-maxrepeat_setThree:
   cmd.run:
     - name: 'echo "Passwords'' repeating characters set to ''3'' (per STIG ID V-{{ stig_id }})"'

@@ -62,7 +62,7 @@ notify_V{{ stig_id }}-{{ param_name }}:
 
 #parameter {{ param_name }} not set, or not set correctly
 #use macro to set the parameter
-{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_changed) }}
+{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}
 
   {%- endif %}
 
@@ -71,6 +71,6 @@ notify_V{{ stig_id }}-{{ param_name }}:
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #use macro to set the parameter
-{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_changed) }}
+{{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}
 
 {%- endif %}

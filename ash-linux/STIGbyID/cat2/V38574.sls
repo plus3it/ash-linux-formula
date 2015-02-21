@@ -30,7 +30,7 @@ replace_md5_V{{ stig_id }}-{{ hash_type }}:
     - name: {{ checkFile }}
     - pattern: ' md5'
     - repl: ' {{ hash_type }}'
-    - onlyif: 'grep -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*"'
+    - onlyif: 'grep -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*" {{ file }}'
 
 set_V{{ stig_id }}-{{ hash_type }}:
   file.replace:
@@ -38,8 +38,8 @@ set_V{{ stig_id }}-{{ hash_type }}:
     - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
     - repl: '\g<srctok> {{ hash_type }}'
     - onlyif:
-      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*"'
-      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* {{ hash_type }}.*"'
+      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*" {{ file }}'
+      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* {{ hash_type }}.*" {{ file }}'
 
 notify_V{{ stig_id }}-{{ hash_type }}:
   cmd.run:
@@ -56,6 +56,8 @@ file_V{{ stig_id }}-repl:
     - name: /etc/sysconfig/authconfig
     - pattern: '^PASSWDALGORITHM.*$'
     - repl: 'PASSWDALGORITHM={{ hash_type }}'
+    - onlyif:
+      - 'test -f /etc/sysconfig/authconfig'
 
 {%- if salt['file.file_exists'](checkFile) %}
 

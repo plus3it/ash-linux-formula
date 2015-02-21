@@ -14,17 +14,22 @@
 #
 ############################################################
 
-script_V38514-describe:
+{%- set stig_id = '38514' %}
+{%- set file = '/etc/modprobe.d/dccp.conf' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38514.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
-{% if not salt['file.file_exists']('/etc/modprobe.d/dccp.conf') %}
-file-V38514-touchRules:
+file-V{{ stig_id }}-touchRules:
   file.touch:
-    - name: '/etc/modprobe.d/dccp.conf'
-{% endif %}
+    - name: '{{ file }}'
 
-file_V38514-appendBlacklist:
+file_V{{ stig_id }}-appendBlacklist:
   file.append:
-    - name: /etc/modprobe.d/dccp.conf
+    - name: '{{ file }}'
     - text: 'install dccp /bin/false'
+    - require:
+      - file: file-V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test -f {{ file }}'

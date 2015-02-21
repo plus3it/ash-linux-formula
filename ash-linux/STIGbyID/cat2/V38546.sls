@@ -14,17 +14,22 @@
 #
 ############################################################
 
-script_V38546-describe:
+{%- set stig_id = '38546' %}
+{%- set file = '/etc/modprobe.d/disabled.conf' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38546.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
-{% if not salt['file.file_exists']('/etc/modprobe.d/disabled.conf') %}
-file-V38546-touchRules:
+file-V{{ stig_id }}-touchRules:
   file.touch:
-    - name: '/etc/modprobe.d/disabled.conf'
-{% endif %}
+    - name: '{{ file }}'
 
-file_V38546-appendBlacklist:
+file_V{{ stig_id }}-appendBlacklist:
   file.append:
-    - name: /etc/modprobe.d/disabled.conf
+    - name: '{{ file }}'
     - text: 'options ipv6 disable=1'
+    - require:
+      - file: file-V{{ stig_id }}-touchRules
+    - onlyif:
+      - 'test -f {{ file }}'
