@@ -12,48 +12,54 @@
 #
 ############################################################
 
-script_V38666-describe:
+{%- set stig_id = '38666' %}
+# Will need to update with correct package-name
+{%- set MSFEpkg = 'MSFElinux' %}
+{%- set NAIdir = '/opt/NAI/LinuxShield/engine/dat' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38666.sh
+    - source: salt://{{ sls.split('.')[:-1] | join('/') }}/files/V{{ stig_id }}.sh
     - cwd: /root
 
-# Will need to update with correct package-name
-{% set MSFEpkg = 'MSFElinux' %}
-{% set NAIdir = '/opt/NAI/LinuxShield/engine/dat' %}
+{%- if salt['pkg.version'](MSFEpkg) %}
 
 # If MSFE is installed, check the 'freshness' of its scan dbs and history
-{% if salt['pkg.version'](MSFEpkg) %}
 
 # The following is an ugly hack. Need to replace the following checks 
 # with SaltStatck's "file.lstat" module. Can pull the 'st_mtime' 
 # attribute then compare to system's current time in seconds
 # (e.g., `date '+%s'`) 
 
-cmd_V38666-scanChck:
+cmd_V{{ stig_id }}-scanChck:
   cmd.run:
     - name: 'find {{ NAIdir }} -type f -mtime -7 -name avvscan.dat > /tmp/age ; test -s /tmp/age'
 
-cmd_V38666-namesChck:
+cmd_V{{ stig_id }}-namesChck:
   cmd.run:
     - name: 'find {{ NAIdir }} -type f -mtime -7 -name avvnames.dat > /tmp/age ; test -s /tmp/age'
 
-cmd_V38666-cleanChck:
+cmd_V{{ stig_id }}-cleanChck:
   cmd.run:
     - name: 'find {{ NAIdir }} -type f -mtime -7 -name avvclean.dat > /tmp/age ; test -s /tmp/age'
 
+{%- else %}
+
 # If not installed, see if it's available in the Yum repos
-{% else %}
-pkg_V38666:
+pkg_V{{ stig_id }}:
   pkg.installed:
     - name: '{{ MSFEpkg }}'
 
-  {% if salt['pkg.version'](MSFEpkg) %}
-notify_V38666-instStat:
+notify_V{{ stig_id }}-installed:
   cmd.run:
     - name: 'echo "Installed HBSS package"'
-  {% else %}
-notify_V38666-instStat:
+    - onlyif:
+      - 'test $(rpm -qa | grep "{{ MSFEpkg }}")'
+
+notify_V{{ stig_id }}-notfound:
   cmd.run:
     - name: 'printf "** WARNING **\n  Could neither find installed HBSS\n  package nor install one.\n"'
-  {% endif %}
-{% endif %}
+    - unless:
+      - 'test $(rpm -qa | grep "{{ MSFEpkg }}")'
+
+{%- endif %}
