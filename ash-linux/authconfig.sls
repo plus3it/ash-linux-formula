@@ -12,7 +12,7 @@ file_system-auth:
     - require:
       - pkg: pkg_authconfig
     - unless:
-      - 'test -f /etc/pam.d/system-auth-ac'
+      - 'test -h /etc/pam.d/system-auth'
 
 file_password-auth:
   file.managed:
@@ -21,7 +21,7 @@ file_password-auth:
     - require:
       - pkg: pkg_authconfig
     - unless:
-      - 'test -f /etc/pam.d/password-auth-ac'
+      - 'test -h /etc/pam.d/password-auth'
 
 cmd_authconfig:
   cmd.run:
@@ -30,8 +30,8 @@ cmd_authconfig:
       - file: file_system-auth
       - file: file_password-auth
     - unless:
-      - 'test -f /etc/pam.d/system-auth-ac'
-      - 'test -f /etc/pam.d/password-auth-ac'
+      - 'test -h /etc/pam.d/system-auth'
+      - 'test -h /etc/pam.d/password-auth'
 
 file_system-auth-ac:
   file.managed:
