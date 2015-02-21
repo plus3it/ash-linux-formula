@@ -29,7 +29,7 @@ file_V{{ stig_id }}-appendBlacklist:
     - require:
       - file: file-V{{ stig_id }}-touchRules
     - onlyif:
-      - 'test {{ file }}'
+      - 'test -f {{ file }}'
 
 {%- elif salt['file.search']('{{ file }}', '^install rds /bin/false') %}
 
@@ -37,7 +37,7 @@ file_V{{ stig_id }}-appendBlacklist:
    cmd.run:
      - name: 'echo "RDS already blacklisted in {{ file }}"'
 
-{%- elif salt['file.file_exists']('{{ file }}') %}
+{%- else %}
 
 file_V{{ stig_id }}-appendBlacklist:
   file.replace:
