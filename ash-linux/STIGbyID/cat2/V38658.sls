@@ -18,20 +18,28 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '38658' %}
-{%- set pam_cfg_file = '/etc/pam.d/system-auth' %}
+{%- set pam_cfg_file = '/etc/pam.d/system-auth-ac' %}
 {%- set pam_parameter = 'remember' %}
 {%- set pam_param_value = '24' %}
 
 #define macro to configure the pam module in a file
 {%- macro pam_remember_password(stig_id, file, param, value) %}
-file_V{{ stig_id }}-repl:
+replace_V{{ stig_id }}-{{ param }}:
+  file.replace:
+    - name: '{{ file }}'
+    - pattern: ' {{ param }}=[-]?[\S]*'
+    - repl: ' {{ param }}={{ value }}'
+    - onlyif:
+      - 'grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=[\S]*" {{ file }}'
+      - 'test $(grep -c -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}={{ value }}" {{ file }}) -eq 0'
+
+add_V{{ stig_id }}-{{ param }}:
   file.replace:
     - name: '{{ file }}'
     - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
-    - onlyif:
-      - 'grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so" {{ file }}'
-      - 'grep -v -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}={{ value }}" {{ file }}'
+    - unless:
+      - 'grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=" {{ file }}'
 
 notify_V{{ stig_id }}-reuseParm:
   cmd.run:
