@@ -7,7 +7,7 @@
 # - sysctl_fs_suid_dumpable
 #
 # Security identifiers:
-# - CCE-27044-7.sls
+# - CCE-27044-7
 #
 # Rule Summary: Disable core dumps for SUID programs
 #
