@@ -20,3 +20,10 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+#===============
+#Personal git ignore settings
+#===============
+
+.sh text eol=lf
+.txt text eol=lf
