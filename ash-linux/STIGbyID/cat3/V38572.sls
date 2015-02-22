@@ -32,7 +32,7 @@ include:
 replace_V{{ stig_id }}-{{ param }}:
   file.replace:
     - name: {{ file }}
-    - pattern: '{{ param }}=[-]?[\S]*'
+    - pattern: '{{ param }}=[\S]*'
     - repl: '{{ param }}={{ value }}'
     - onlyif:
       - 'grep -E -e " {{ param }}=[-]?[0-9]*[\s]*" {{ file }}'
