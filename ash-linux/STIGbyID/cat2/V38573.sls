@@ -43,7 +43,7 @@ insert_V{{ stig_id }}-{{ file }}_faillock:
     - pattern: '^(?P<srctok>auth[ \t]*[a-z]*[ \t]*pam_unix.so.*$)'
     - repl: '{{ preauth }}\n\g<srctok>\n{{ authfail }}\n{{ authsucc }}'
     - onlyif:
-      - 'grep -v -E -e "{{ pam_module }}" {{ file }}'
+      - 'test $(grep -c -E -e "{{ pam_module }}" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-{{ file }}_deviance:
   cmd.run:
@@ -57,16 +57,24 @@ script_V{{ stig_id }}-describe:
 # Iterate files to alter...
 {%- for checkFile in pamFiles %}
 
-  {%- if salt['file.file_exists'](checkFile) %}
+  {%- if not salt['file.file_exists'](checkFile) %}
+
+#file did not exist when jinja templated the file; file will be configured 
+#by authconfig.sls in the include statement. 
+#Use macro to add necessary rules
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
+
+  {%- elif not salt['file.search'](checkFile, pamMod) %}
+
 #file {{ checkFile }} exists
+#{{ pamMod }} not yet present in file
+#Use macro to add necessary rules
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
 
-    {%- if salt['file.search'](checkFile, pamMod) %}
-#module {{ pamMod }} already present in file
-notify_V{{ stig_id }}-{{ checkFile }}_exists:
-  cmd.run:
-    - name: 'printf "{{ pamMod }} already present in {{ checkFile }}\nSee remediation-note that follows for further caveats\n"'
+  {%- elif not salt['file.search'](checkFile, preAuth) %}
 
-      {%- if not salt['file.search'](checkFile, preAuth) %}
+#file {{ checkFile }} exists
+#{{ pamMod }} present in file
 #missing preAuth check; notify but do not modify
 notify_V{{ stig_id }}-{{ checkFile }}_noPreauth:
   cmd.run:
@@ -84,19 +92,15 @@ overwriting what may have been desired behavior \n
 this utility will not modify this directive. \n
 However, the security-behavior required by the \n
 STIG is probably not present. "'
-      {%- endif %}
 
-    {%- else %}
-#pamMod not yet present in file
-#Use macro to add necessary rules
-{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
-
-    {%- endif %}
   {%- else %}
-#file did not exist when jinja templated the file; file will be configured 
-#by authconfig.sls in the include statement. 
-#Use macro to add necessary rules
-{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
+
+#file {{ checkFile }} exists
+#module {{ pamMod }} already present in file
+#preAuth rule already present in file
+notify_V{{ stig_id }}-{{ checkFile }}_exists:
+  cmd.run:
+    - name: 'printf "{{ pamMod }} already present in {{ checkFile }} with correct ruleset."'
 
   {%- endif %}
 {%- endfor %}
