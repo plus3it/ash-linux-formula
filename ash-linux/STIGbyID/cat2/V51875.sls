@@ -17,44 +17,60 @@
 #
 #################################################################
 
-script_V51875-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V51875.sh
+include:
+  - ash-linux.authconfig
 
-# Ensure that authconfig has been run prior to trying to update the PAM files
-cmd_V51875-linkSysauth:
+{%- set stig_id = '51875' %}
+{%- set pamFile = '/etc/pam.d/system-auth-ac' %}
+{%- set pamMod = 'pam_lastlog.so' %}
+{%- set failNotice = 'session     required      pam_lastlog.so showfailed' %}
+
+{%- macro set_pam_rule(stig_id, file, module, rule) %}
+update_V{{ stig_id }}-{{ module }}:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '^(session[ \t]*.*{{ module }}[ \t]*[\S]*)'
+    - repl: '{{ rule }}'
+    - onlyif:
+      - 'grep -E -e "{{ module }}" {{ file }}'
+      - 'test $(grep -c -E -e "{{ module }} showfailed" {{ file }}) -eq 0'
+
+add_V{{ stig_id }}-{{ module }}:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '^(?P<srctok>session[ \t]*.*pam_limits.so.*$)'
+    - repl: '\g<srctok>\n{{ rule }}'
+    - unless:
+      - 'grep -E -e "{{ module }}" {{ file }}'
+
+notify_V{{ stig_id }}-{{ module }}:
   cmd.run:
-    - name: '/usr/sbin/authconfig --update'
-    - unless: 'test -f /etc/pam.d/system-auth-ac'
+    - name: 'printf "Adding {{ module }} with ''showfailed'' option in {{ file }}\n"'
+{%- endmacro %}
 
-{% set pamFile = '/etc/pam.d/system-auth-ac' %}
-{% set pamMod = 'pam_lastlog.so' %}
-{% set failNotice = 'session     required      pam_lastlog.so showfailed' %}
+script_V{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
+{%- if not salt['file.file_exists'](pamFile) %}
+#file did not exist when jinja templated the file; file will be configured 
+#by authconfig.sls in the include statement. 
+#use macro to set the parameter
+{{ set_pam_rule(stig_id, pamFile, pamMod, failNotice) }}
 
-{% if salt['file.search'](pamFile, pamMod) %}
+{%- elif not salt['file.search'](pamFile, pamMod + ' showfailed') %}
 
-   {% if salt['file.search'](pamFile, pamMod + ' showfailed') %}
-notify_V51875-{{ pamFile }}:
+#file {{ pamMod }} exists
+#{{ pamMod }} showfailed is not present
+#use macro to set the parameter
+{{ set_pam_rule(stig_id, pamFile, pamMod, failNotice) }}
+
+{%- else %}
+
+#file {{ pamMod }} exists
+#{{ pamMod }} showfailed already present
+notify_V{{ stig_id }}-{{ pamMod }}:
   cmd.run:
     - name: 'printf "{{ pamMod }} already configured for ''showfailed'' in {{ pamFile }}\n"'
-   {% else %}
-insert_V51875-{{ pamFile }}:
-  file.replace:
-    - name: {{ pamFile }}
-    - pattern: '^(session[ 	]*[a-z]*[ 	]*pam_lastlog.so[ 	][a-z]*)'
-    - repl: '{{ failNotice }}'
-  {% endif %}
-{% else %}
 
-notify_V51875-{{ pamFile }}:
-  cmd.run:
-    - name: 'printf "Adding {{ pamMod }} with ''showfailed'' option in {{ pamFile }}\n"'
-
-insert_V51875-{{ pamFile }}:
-  file.replace:
-    - name: {{ pamFile }}
-    - pattern: '^(?P<srctok>session[ 	]*[a-z]*[ 	]*pam_limits.so.*$)'
-    - repl: '\g<srctok>\n{{ failNotice }}'
-
-{% endif %}
+{%- endif %}

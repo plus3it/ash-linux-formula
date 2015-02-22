@@ -50,30 +50,27 @@ script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
-{%- if salt['file.file_exists'](pam_cfg_file) %}
-
-#file {{ pam_cfg_file }} exists
-
-  {%- if salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value ~ '[\s]*') %}
-
-#'remember' parameter already configured
-notify_V{{ stig_id }}-reuseParm:
-  cmd.run:
-    - name: 'echo "Password re-use parameter ({{ pam_parameter }}) already set to {{ pam_param_value }} (per STIG ID V-{{ stig_id }})."'
-
-  {%- else %}
-
-#'remember' parameter not yet configured
-#use macro to set the parameter
-{{ pam_remember_password(stig_id, pam_cfg_file, pam_parameter, pam_param_value) }}
-
-  {%- endif %}
-
-{%- else %}
+{%- if not salt['file.file_exists'](pam_cfg_file) %}
 
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #use macro to set the parameter
 {{ pam_remember_password(stig_id, pam_cfg_file, pam_parameter, pam_param_value) }}
+
+
+{%- elif not salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value ~ '[\s]*') %}
+
+#file {{ pam_cfg_file }} exists
+#'remember' parameter not yet configured
+#use macro to set the parameter
+{{ pam_remember_password(stig_id, pam_cfg_file, pam_parameter, pam_param_value) }}
+
+{%- else %}
+
+#file {{ pam_cfg_file }} exists
+#'remember' parameter already configured
+notify_V{{ stig_id }}-reuseParm:
+  cmd.run:
+    - name: 'echo "Password re-use parameter ({{ pam_parameter }}) already set to {{ pam_param_value }} (per STIG ID V-{{ stig_id }})."'
 
 {%- endif %}

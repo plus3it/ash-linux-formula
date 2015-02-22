@@ -35,7 +35,7 @@ replace_V{{ stig_id }}-{{ param }}:
     - pattern: '{{ param }}=[\S]*'
     - repl: '{{ param }}={{ value }}'
     - onlyif:
-      - 'grep -E -e "[ \t]*{{ param }}=[-]?[0-9]*[\s]*" {{ file }}'
+      - 'grep -E -e "[ \t]*{{ param }}=" {{ file }}'
       - 'test $(grep -c -E -e "[ \t]*{{ param }}={{ value }}[\s]*" {{ file }}) -eq 0'
 
 # Tack on {{ param }} of {{ value }} if necessary
@@ -45,7 +45,7 @@ add_V{{ stig_id }}-{{ param }}:
     - pattern: '^(?P<srctok>password[ \t]*requisite[ \t]*pam_cracklib.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
     - unless:
-      - 'grep -E -e " {{ param }}=" {{ file }}'
+      - 'grep -E -e "[ \t]*{{ param }}=" {{ file }}'
 
 notify_V{{ stig_id }}-{{ param }}:
   cmd.run:

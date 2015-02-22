@@ -27,19 +27,19 @@ include:
 {%- macro enforce_passwordhash(stig_id, file, hash_type) %}
 replace_md5_V{{ stig_id }}-{{ hash_type }}:
   file.replace:
-    - name: {{ checkFile }}
+    - name: {{ file }}
     - pattern: ' md5'
     - repl: ' {{ hash_type }}'
-    - onlyif: 'grep -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*" {{ file }}'
+    - onlyif: 'grep -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5[\s]*" {{ file }}'
 
-set_V{{ stig_id }}-{{ hash_type }}:
+add_V{{ stig_id }}-{{ hash_type }}:
   file.replace:
-    - name: {{ checkFile }}
+    - name: {{ file }}
     - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
     - repl: '\g<srctok> {{ hash_type }}'
     - onlyif:
-      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5.*" {{ file }}'
-      - 'grep -v -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* {{ hash_type }}.*" {{ file }}'
+      - 'test $(grep -c -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5[\s]*" {{ file }}) -eq 0'
+      - 'test $(grep -c -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* {{ hash_type }}[\s]" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-{{ hash_type }}:
   cmd.run:
