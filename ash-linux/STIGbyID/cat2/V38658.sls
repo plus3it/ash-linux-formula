@@ -54,7 +54,7 @@ script_V{{ stig_id }}-describe:
 
 #file {{ pam_cfg_file }} exists
 
-  {%- if salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value) %}
+  {%- if salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value ~ '[\s]*') %}
 
 #'remember' parameter already configured
 notify_V{{ stig_id }}-reuseParm:
