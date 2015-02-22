@@ -32,10 +32,11 @@ include:
 replace_V{{ stig_id }}-{{ param }}:
   file.replace:
     - name: {{ file }}
-    - pattern: '{{ param }}=[-]?[0-9][0-9]*'
+    - pattern: '{{ param }}=[-]?[\S]*'
     - repl: '{{ param }}={{ value }}'
     - onlyif:
-      - 'grep -E -e " {{ param }}=[-]?[0-9][0-9]*[ ]*" {{ file }}'
+      - 'grep -E -e " {{ param }}=[-]?[0-9]*[\s]*" {{ file }}'
+      - 'test $(grep -c -E -e "[ \t]*{{ param }}={{ value }}[\s]*" {{ file }}) -eq 0'
 
 # Tack on {{ param }} of {{ value }} if necessary
 add_V{{ stig_id }}-{{ param }}:
@@ -43,8 +44,8 @@ add_V{{ stig_id }}-{{ param }}:
     - name: {{ file }}
     - pattern: '^(?P<srctok>password[ \t]*requisite[ \t]*pam_cracklib.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
-    - onlyif:
-      - 'grep -v -E -e " {{ param }}=" {{ file }}'
+    - unless:
+      - 'grep -E -e " {{ param }}=" {{ file }}'
 
 notify_V{{ stig_id }}-{{ param }}:
   cmd.run:
@@ -59,7 +60,7 @@ script_V{{ stig_id }}-describe:
 
 #file {{ checkFile }} exists
 
-  {%- if salt['file.search'](checkFile, ' ' + param_name + '={{ param_value }}') %}
+  {%- if salt['file.search'](checkFile, ' ' + param_name + '=' + param_value + '[\s]*') %}
 
 #parameter {{ param_name }} already set to a negative value
 notify_V{{ stig_id }}-{{ param_name }}:
