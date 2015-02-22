@@ -54,12 +54,12 @@ script_V{{ stig_id }}-describe:
 
 #file {{ pam_cfg_file }} exists
 
-  {%- if salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*{{ pam_parameter }}={{ pam_param_value }}') %}
+  {%- if salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value) %}
 
 #'remember' parameter already configured
 notify_V{{ stig_id }}-reuseParm:
   cmd.run:
-    - name: 'echo "Password re-use parameter (remember) already set to {{ param_value }} (per STIG ID V-{{ stig_id }})."'
+    - name: 'echo "Password re-use parameter ({{ pam_parameter }}) already set to {{ pam_param_value }} (per STIG ID V-{{ stig_id }})."'
 
   {%- else %}
 
