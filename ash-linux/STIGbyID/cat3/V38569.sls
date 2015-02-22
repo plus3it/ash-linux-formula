@@ -29,7 +29,7 @@ replace_V{{ stig_id }}-{{ param }}:
     - repl: '{{ param }}={{ value }}'
     - onlyif:
       - 'grep -E -e "[ \t]+{{ param }}=" {{ file }}'
-      - 'test $(grep -c -E -e "[ \t]+{{ param }}={{ value }}[\s]*" {{ file }}) -eq 0'
+      - 'test $(grep -c -E -e "[ \t]+{{ param }}={{ value }}[\s]+" {{ file }}) -eq 0'
 
 # Tack on {{ param }} of {{ value }} if necessary
 add_V{{ stig_id }}-{{ param }}:
@@ -37,8 +37,8 @@ add_V{{ stig_id }}-{{ param }}:
     - name: {{ file }}
     - pattern: '^(?P<srctok>password[ \t]*requisite[ \t]*pam_cracklib.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
-    - unless:
-      - 'grep -E -e "[ \t]+{{ param }}=" {{ file }}'
+    - onlyif:
+      - 'test $(grep -c -E -e "[ \t]+{{ param }}=" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-{{ param }}:
   cmd.run:
@@ -56,7 +56,7 @@ script_V{{ stig_id }}-describe:
 #use macro to set the parameter
 {{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}
 
-{%- elif not salt['file.search'](checkFile, '[ \t]+' + param_name + '=-[1-9]+[\s]*') %}
+{%- elif not salt['file.search'](checkFile, '[ \t]+' + param_name + '=-[1-9]+[\s]+') %}
 
 #file {{ checkFile }} exists
 #parameter {{ param_name }} not set, or not set correctly
