@@ -27,7 +27,7 @@ include:
 replace_V{{ stig_id }}-{{ param }}:
   file.replace:
     - name: '{{ file }}'
-    - pattern: ' {{ param }}=[-]?[\S]*'
+    - pattern: ' {{ param }}=[\S]*'
     - repl: ' {{ param }}={{ value }}'
     - onlyif:
       - 'grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=[\S]*" {{ file }}'
