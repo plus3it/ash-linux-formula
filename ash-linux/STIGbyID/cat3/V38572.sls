@@ -35,7 +35,7 @@ replace_V{{ stig_id }}-{{ param }}:
     - pattern: '{{ param }}=[\S]*'
     - repl: '{{ param }}={{ value }}'
     - onlyif:
-      - 'grep -E -e " {{ param }}=[-]?[0-9]*[\s]*" {{ file }}'
+      - 'grep -E -e "[ \t]*{{ param }}=[-]?[0-9]*[\s]*" {{ file }}'
       - 'test $(grep -c -E -e "[ \t]*{{ param }}={{ value }}[\s]*" {{ file }}) -eq 0'
 
 # Tack on {{ param }} of {{ value }} if necessary
