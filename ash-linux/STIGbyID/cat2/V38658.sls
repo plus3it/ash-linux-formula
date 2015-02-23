@@ -38,8 +38,8 @@ add_V{{ stig_id }}-{{ param }}:
     - name: '{{ file }}'
     - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
-    - unless:
-      - 'grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=" {{ file }}'
+    - onlyif:
+      - 'test $(grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-reuseParm:
   cmd.run:
