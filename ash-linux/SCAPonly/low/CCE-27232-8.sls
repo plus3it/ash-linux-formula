@@ -35,5 +35,5 @@ comment_{{ scapId }}-{{ proto }}:
     - name: '{{ checkFile }}'
     - regex: '^{{ proto }}'
     - backup: '.bak-{{ proto }}'
-    - unless: 'grep "^{{ proto }}" {{ checkFile }}'
+    - onlyif: 'grep "^{{ proto }}" {{ checkFile }}'
 {% endfor %}
