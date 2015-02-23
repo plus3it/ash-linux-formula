@@ -82,7 +82,7 @@ notify_V{{ stig_id }}-{{ checkFile }}_noPreauth:
     - name: 'printf "** Note **\n
 TL;DR: Manual inspection and remediation will be \n
 required to determine whether the PAM directive \n
-is configured properly per the system's \n
+is configured properly per the system''s \n
 requirements. \n\n
 The PAM module {{ pamMod }} has been configured\n
 on this system, but is not currently using the \n
