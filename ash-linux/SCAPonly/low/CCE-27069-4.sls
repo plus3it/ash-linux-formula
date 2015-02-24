@@ -18,7 +18,7 @@
 #################################################################
 
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
-{%- set scapId = 'CCE-27232-8' %}
+{%- set scapId = 'CCE-27069-4' %}
 {%- set checkFile = '/etc/netconfig' %}
 {%- set checkPat = [ 'udp6', 'tcp6' ] %}
 {%- set notify_change = '''{{ svcName }}'' has been enabled' %}

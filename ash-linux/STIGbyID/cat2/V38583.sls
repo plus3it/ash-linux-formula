@@ -14,43 +14,41 @@
 #
 ############################################################
 
-script_V38583-describe:
+{%- set stig_id = 'V38583' %}
+{%- set grubFiles = ['grub.conf', 'menu.lst'] %}
+
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38583.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/{{ stig_id }}.sh
     - cwd: '/root'
 
-{% if salt['file.file_exists']('/boot/grub/grub.conf') %}
-file_V38583-bootGrubGrub:
+file_{{ stig_id }}-bootGrubGrub:
   file.managed:
     - name: '/boot/grub/grub.conf'
     - mode: 0600
 
-file_V38583-etcGrub:
+file_{{ stig_id }}-etcGrub:
   file.symlink:
     - name: '/etc/grub.conf'
     - target: '/boot/grub/grub.conf'
-{% elif salt['file.file_exists']('/boot/grub.conf') %}
-file_V38583-hardlink:
-  module.run:
-    - name: 'file.link'
-    - src: '/boot/grub.conf'
-    - path: '/boot/grub/grub.conf'
 
-file_V38583-etcGrub:
+file_{{ stig_id }}-menuLst:
   file.symlink:
-    - name: '/etc/grub.conf'
-    - target: '/boot/grub/grub.conf'
-{% endif %}
+    - name: '/boot/grub/menu.lst'
+    - target: './grub.conf'
 
-{% if not salt['file.file_exists']('/boot/grub.conf') %}
-file_V38583-hardlink:
-  module.run:
-    - name: 'file.link'
-    - src: '/boot/grub/grub.conf'
-    - path: '/boot/grub.conf'
 
-file_V38583-bootGrub:
-  file.managed:
-    - name: '/boot/grub/grub.conf'
-    - mode: 0600
+# Any grub.conf or menu.lst that exists in "/boot" are superfluous
+{%- for chkFile in grubFiles %}
+{%- if salt['file.file_exists']('/boot/' + chkFile) %}
+notify_{{ stig_id }}-{{ chkFile }}:
+  cmd.run:
+    - name: 'printf "
+*********************************************\n
+* NOTE: /boot/{{ chkFile }} is superfluous. Remove\n
+*       file to prevent unexpected behaviors.\n
+*********************************************\n
+" >&2 && exit 1'
 {% endif %}
+{%- endfor %}
+
