@@ -50,7 +50,7 @@ then
       fi
    done
 else
-   printf "***********************************************\n* Note: No RPM-owned files with questionable \n*       permissions were found\n***********************************************\n
-"
+   printf "***********************************************\n* Note: No RPM-owned files with questionable \n*       permissions were found\n***********************************************\n"
+fi
    
 exit ${RESULT}
