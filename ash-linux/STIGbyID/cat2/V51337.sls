@@ -15,22 +15,26 @@
 #
 #############################################################################
 
-script_V51337-describe:
+{%- set stig_id = '51337' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V51337.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
 
 #########################################
 # Ensure SELinux is active at kernel load
-{% if salt['file.search']('/boot/grub/grub.conf', 'kernel.*selinux=0') %}
+{%- if salt['file.search']('/boot/grub/grub.conf', 'kernel.*selinux=0') %}
 
-file_V51337-repl:
+file_V{{ stig_id }}-repl:
   file.replace:
     - name: '/boot/grub/grub.conf'
     - pattern: ' selinux=0'
     - repl: ''
 
-{% else %}
-status_V51337:
+{%- else %}
+
+status_V{{ stig_id }}:
   cmd.run:
     - name: 'echo "SELinux not disabled in GRUB"'
+
 {% endif %}

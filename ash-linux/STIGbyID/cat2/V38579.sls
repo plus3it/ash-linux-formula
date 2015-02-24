@@ -13,37 +13,42 @@
 #
 ############################################################
 
-script_V38579-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38579.sh
+{%- set stig_id = '38579' %}
 
-{% if salt['file.file_exists']('/boot/grub/grub.conf') %}
-file_V38579-bootGrubGrub:
+script_V{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+
+{%- if salt['file.file_exists']('/boot/grub/grub.conf') %}
+
+file_V{{ stig_id }}-bootGrubGrub:
   file.managed:
     - name: '/boot/grub/grub.conf'
     - user: root
 
-file_V38579-etcGrub:
+file_V{{ stig_id }}-etcGrub:
   file.symlink:
     - name: '/etc/grub.conf'
     - target: '/boot/grub/grub.conf'
-{% elif salt['file.file_exists']('/boot/grub.conf') %}
-file_V38579-hardlink:
+
+{%- elif salt['file.file_exists']('/boot/grub.conf') %}
+
+file_V{{ stig_id }}-hardlink:
   module.run:
     - name: 'file.link'
     - src: '/boot/grub.conf'
     - path: '/boot/grub/grub.conf'
 
-file_V38579-etcGrub:
+file_V{{ stig_id }}-etcGrub:
   file.symlink:
     - name: '/etc/grub.conf'
     - target: '/boot/grub/grub.conf'
-{% endif %}
 
-{% if not salt['file.file_exists']('/boot/grub.conf') %}
-file_V38579-hardlink:
+{%- endif %}
+
+file_V{{ stig_id }}-hardlink:
   module.run:
     - name: 'file.link'
     - src: '/boot/grub/grub.conf'
     - path: '/boot/grub.conf'
-{% endif %}
+    - unless: 'test -e /boot/grub.conf'

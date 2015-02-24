@@ -16,21 +16,25 @@
 #
 ############################################################
 
-script_V38438-describe:
+{%- set stig_id = '38438' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38438.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
 
 # Enable audit at kernel load
 {% if salt['file.search']('/boot/grub/grub.conf', 'kernel') and not salt['file.search']('/boot/grub/grub.conf', 'kernel.*audit=1') %}
 
-file_V38438-repl:
+file_V{{ stig_id }}-repl:
   file.replace:
     - name: '/boot/grub/grub.conf'
     - pattern: '(?P<srctok>kernel.*$)'
     - repl: '\g<srctok> audit=1'
 
 {% else %}
-status_V38438:
+
+status_V{{ stig_id }}:
   cmd.run:
     - name: 'echo "Auditing already enabled at boot"'
+
 {% endif %}
