@@ -18,6 +18,7 @@
 script_V51363-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V51363.sh
+    - cwd: '/root'
 
 # Verify that the reboot system-state is acceptable
 {% if salt['file.file_exists']('/etc/selinux/config') %}

@@ -18,6 +18,7 @@
 script_V38529-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38529.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.accept_source_route') %}
 file_V38529-repl:

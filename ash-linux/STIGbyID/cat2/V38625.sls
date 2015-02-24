@@ -20,6 +20,7 @@
 script_V38625-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38625.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('pam_ldap') and salt['file.search']('/etc/pam_ldap.conf', '^ssl') %}
 file_V38625-repl:

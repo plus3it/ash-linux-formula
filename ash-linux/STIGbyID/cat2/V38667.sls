@@ -21,6 +21,7 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - cwd: '/root'
 
 # Alter the running system-state
 {%- if salt['pkg.version']('policycoreutils-python') %}

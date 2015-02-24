@@ -19,6 +19,7 @@
 script_V38700-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38700.sh
+    - cwd: '/root'
 
 notice_V38700:
   cmd.run:

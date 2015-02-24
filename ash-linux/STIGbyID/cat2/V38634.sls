@@ -19,6 +19,7 @@
 script_V38634-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38634.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('audit') and salt['file.search']('/etc/audit/auditd.conf', '^max_log_file_action') %}
 file_V38634-repl:

@@ -17,6 +17,7 @@
 script_V57569-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V57569.sh
+    - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
 {% set mountPoint = '/tmp' %}

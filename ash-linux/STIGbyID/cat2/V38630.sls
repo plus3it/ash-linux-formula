@@ -20,6 +20,7 @@
 script_V38630-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38630.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V38630-idleConfig:

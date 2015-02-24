@@ -19,6 +19,7 @@
 script_V38597-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38597.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/sysctl.conf', 'kernel.exec-shield') %}
 file_V38597-repl:

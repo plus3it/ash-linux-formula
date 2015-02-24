@@ -18,6 +18,7 @@
 script_V51391-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V51391.sh
+    - cwd: '/root'
 
 # See if AIDE package is installed
 {% if salt['pkg.version']('aide') %}

@@ -20,7 +20,9 @@
 script_V38520-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38520.sh
+    - cwd: '/root'
 
 script_V38520-helper:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38520-helper.sh
+    - cwd: '/root'

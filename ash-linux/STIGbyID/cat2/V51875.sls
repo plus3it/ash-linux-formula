@@ -51,6 +51,7 @@ notify_V{{ stig_id }}-{{ module }}:
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - cwd: '/root'
 
 {%- if not salt['file.file_exists'](pamFile) %}
 #file did not exist when jinja templated the file; file will be configured 

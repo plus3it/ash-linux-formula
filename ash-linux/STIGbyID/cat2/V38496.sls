@@ -17,6 +17,7 @@
 script_V38496-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38496.sh
+    - cwd: '/root'
 
 notify_V38496-userScan:
   cmd.run:

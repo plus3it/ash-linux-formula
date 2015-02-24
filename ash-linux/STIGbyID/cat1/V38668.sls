@@ -21,11 +21,11 @@ script_V{{ stig_id }}-describe:
     - cwd: /root
 
 file_V{{ stig_id }}_managed:
-   file.managed:
-     - name: '{{ overrideCAD }}'
-     - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.txt
-     - cwd: /root
-     - replace: False
+  file.managed:
+    - name: '{{ overrideCAD }}'
+    - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.txt
+    - cwd: /root
+    - replace: False
 
 edit_V{{ stig_id }}-override:
   file.replace:

@@ -16,6 +16,7 @@
 script_V38609-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38609.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('tftp-server') %}
 svc_V38609-tfptd:

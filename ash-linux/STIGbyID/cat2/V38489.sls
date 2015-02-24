@@ -15,6 +15,7 @@
 script_V38489-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38489.sh
+    - cwd: '/root'
 
 pkg_V38489:
   pkg.installed:

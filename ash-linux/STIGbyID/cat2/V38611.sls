@@ -17,6 +17,7 @@
 script_V38611-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38611.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^IgnoreRhosts')
  %}

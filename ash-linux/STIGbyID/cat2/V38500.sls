@@ -19,6 +19,11 @@
 {% set noprivInfo = salt['user.info']('nobody') %}
 {% set noprivId = noprivInfo['uid'] %}
 
+script_V38500-describe:
+  cmd.script:
+    - source: salt://ash-linux/STIGbyID/cat2/files/V38500.sh
+    - cwd: '/root'
+
 {% for user in salt['user.list_users']() %}
   {% set userInfo = salt['user.info'](user) %}
   {% set userId = userInfo['uid'] %}

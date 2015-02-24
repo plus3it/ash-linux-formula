@@ -18,6 +18,7 @@
 script_V38539-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38539.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.tcp_syncookies') %}
 file_V38539-repl:

@@ -18,6 +18,7 @@
 script_V38596-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38596.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/sysctl.conf', '^kernel.randomize_va_space')
  %}

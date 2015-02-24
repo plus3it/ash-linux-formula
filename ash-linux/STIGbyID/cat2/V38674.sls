@@ -15,6 +15,7 @@
 script_V38674-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38674.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/inittab', '^id:5:') %}
 cmd_V38674-x11warn:

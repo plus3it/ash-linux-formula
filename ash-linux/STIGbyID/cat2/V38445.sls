@@ -14,6 +14,7 @@
 script_V38445-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38445.sh
+    - cwd: '/root'
 
 notify_V38445-status:
   cmd.run:

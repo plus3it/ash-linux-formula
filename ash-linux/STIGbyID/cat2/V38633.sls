@@ -18,6 +18,7 @@
 script_V38633-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38633.sh
+    - cwd: '/root'
 
 {% set auditConf = '/etc/audit/auditd.conf' %}
 {% set logParm = 'max_log_file' %}

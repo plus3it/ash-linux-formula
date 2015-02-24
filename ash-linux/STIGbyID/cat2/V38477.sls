@@ -18,6 +18,7 @@
 script_V38477-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38477.sh
+    - cwd: '/root'
 
 file_V38477:
   file.replace:

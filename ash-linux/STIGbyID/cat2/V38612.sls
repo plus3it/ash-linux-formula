@@ -17,6 +17,7 @@
 script_V38612-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38612.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^HostbasedAuthentication')
  %}

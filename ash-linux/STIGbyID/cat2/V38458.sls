@@ -17,6 +17,7 @@
 script_V38458-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38458.sh
+    - cwd: '/root'
 
 file_38458:
   file.managed:

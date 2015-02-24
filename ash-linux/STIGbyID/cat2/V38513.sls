@@ -18,6 +18,7 @@
 script_V38513-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38513.sh
+    - cwd: '/root'
 
 {% if salt['file.file_exists']('/etc/sysconfig/iptables') %}
 file_V38513-repl:

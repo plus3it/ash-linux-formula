@@ -17,6 +17,7 @@
 script_V38448-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38448.sh
+    - cwd: '/root'
 
 {% set checkFile = '/etc/gshadow' %}
 {% if salt['file.get_group'](checkFile) == 'root' %}

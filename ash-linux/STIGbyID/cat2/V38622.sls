@@ -17,6 +17,7 @@
 script_V38622-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38622.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('postfix') and salt['file.search']('/etc/postfix/main.cf', '^inet_interfaces') %}
 file_V38622-repl:

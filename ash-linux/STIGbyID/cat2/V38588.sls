@@ -17,6 +17,7 @@
 script_V38588-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38588.sh
+    - cwd: '/root'
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/sysconfig/init', '^PROMPT') %}

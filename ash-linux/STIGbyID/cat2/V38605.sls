@@ -16,6 +16,7 @@
 script_V38605-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38605.sh
+    - cwd: '/root'
 
 {% if not salt['pkg.version']('cronie') %}
 pkg_V38605-cronie:

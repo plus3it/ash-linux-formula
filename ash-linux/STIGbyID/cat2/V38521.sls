@@ -20,6 +20,7 @@
 script_V38521-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38521.sh
+    - cwd: '/root'
 
 # Only look for rsyslog configuration if rsyslog is installed
 {% if salt['pkg.version']('rsyslog') %}
