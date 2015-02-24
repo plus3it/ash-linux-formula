@@ -15,7 +15,7 @@
 ############################################################
 
 {%- set stig_id = 'V38583' %}
-{%- set grubFiles = ['grub.conf', 'menu.lst' ]
+{%- set grubFiles = ['grub.conf', 'menu.lst'] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

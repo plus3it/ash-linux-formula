@@ -34,7 +34,6 @@ file_{{ stig_id }}-etcGrub:
 file_{{ stig_id }}-menuLst:
   file.symlink:
     - name: '/boot/grub/menu.lst'
-#   - target: '/boot/grub/grub.conf'
     - target: './grub.conf'
 
 # Any grub.conf or menu.lst that exists in "/boot" are superfluous
