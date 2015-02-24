@@ -18,6 +18,7 @@
 script_V38469-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38469.sh
+    - cwd: '/root'
 
 # Define list of binary directories to search
 {% set checkBinDirs = [
@@ -42,6 +43,7 @@ notify_V38469-{{ binDir }}:
 strip_V38469-{{ binDir }}:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38469-helper.sh
+    - cwd: '/root'
     - args: {{ binDir }}
 
 {% endfor %}

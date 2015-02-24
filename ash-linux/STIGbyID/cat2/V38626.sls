@@ -18,6 +18,7 @@
 script_V38626-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38626.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('pam_ldap') and salt['file.search']('/etc/pam_ldap.conf', '^tls_cacert') %}
 file_V38626-replCertdir:

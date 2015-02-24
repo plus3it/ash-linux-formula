@@ -18,6 +18,7 @@
 script_V38532-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38532.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.secure_redirects') %}
 file_V38532-repl:

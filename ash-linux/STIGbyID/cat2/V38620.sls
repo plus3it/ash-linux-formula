@@ -20,6 +20,7 @@
 script_V38620-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38620.sh
+    - cwd: '/root'
 
 {% if not salt['pkg.version']('ntp') %}
 pkg_V38620-ntp:

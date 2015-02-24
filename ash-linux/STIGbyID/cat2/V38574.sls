@@ -49,6 +49,7 @@ notify_V{{ stig_id }}-{{ hash_type }}:
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - cwd: '/root'
 
 # Update /etc/sysconfig/authconfig
 file_V{{ stig_id }}-repl:

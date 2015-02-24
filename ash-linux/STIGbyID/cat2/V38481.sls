@@ -17,6 +17,7 @@
 script_V38481-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38481.sh
+    - cwd: '/root'
 
 cmd_V38481-chkSubscribe:
   cmd.run:

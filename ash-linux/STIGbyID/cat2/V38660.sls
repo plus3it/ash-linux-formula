@@ -18,6 +18,7 @@
 script_V38660-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38660.sh
+    - cwd: '/root'
 
 {% if not salt['pkg.version']('net-snmp') %}
 cmd_V38660-notice:

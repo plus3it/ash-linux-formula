@@ -18,6 +18,7 @@
 script_V38688-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38688.sh
+    - cwd: '/root'
 
 # Make sure GDM is installed and enable GDM login banners
 {% if salt['pkg.version']('gdm') %}

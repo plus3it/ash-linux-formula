@@ -20,6 +20,7 @@
 script_V38582-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38582.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('xinetd') %}
 svc_V38582-xinetd:

@@ -19,6 +19,7 @@
 script_V38615-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38615.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^Banner')
  %}

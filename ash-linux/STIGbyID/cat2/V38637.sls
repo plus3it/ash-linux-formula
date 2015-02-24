@@ -14,7 +14,9 @@
 script_V38637-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38637.sh
+    - cwd: '/root'
 
 script_V38637-tamperCheck:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38637-helper.sh
+    - cwd: '/root'

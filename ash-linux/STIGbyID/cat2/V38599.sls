@@ -19,6 +19,7 @@
 script_V38599-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38599.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('nordugrid-arc-gridftpd') %}
 cmd_V38599-NotImplemented:

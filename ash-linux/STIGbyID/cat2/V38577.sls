@@ -18,6 +18,7 @@
 script_V38577-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38577.sh
+    - cwd: '/root'
 
 # Conditional replace or append
 {% if salt['file.search']('/etc/libuser.conf', '^crypt_style') %}

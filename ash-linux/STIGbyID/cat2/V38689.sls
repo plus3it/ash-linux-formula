@@ -28,6 +28,7 @@
 script_V38689-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38689.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('gdm') %}
   {% if salt['file.file_exists']('/etc/issue') %}

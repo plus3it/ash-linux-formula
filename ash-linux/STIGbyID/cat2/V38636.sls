@@ -19,6 +19,7 @@
 script_V38636-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38636.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('audit') and salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
 file_V38636-repl:

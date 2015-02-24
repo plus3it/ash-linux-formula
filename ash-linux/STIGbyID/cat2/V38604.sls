@@ -17,6 +17,7 @@
 script_V38604-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38604.sh
+    - cwd: '/root'
 
 {% if salt['pkg.version']('ypbind') %}
 svc_V38604-ypbind:

@@ -20,6 +20,7 @@
 script_V38696-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38696.sh
+    - cwd: '/root'
 
 notice_V38696:
   cmd.run:

@@ -17,6 +17,7 @@
 script_V38443-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38443.sh
+    - cwd: '/root'
 
 {% if salt['file.get_user']('/etc/gshadow') == 'root' %}
 notify_V38443-ownership:

@@ -18,6 +18,7 @@
 script_V38679-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38679.sh
+    - cwd: '/root'
 
 {% set netCfgRoot = '/etc/sysconfig/network-scripts/ifcfg-' %}
 

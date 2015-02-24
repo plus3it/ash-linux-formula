@@ -18,6 +18,7 @@
 script_V38585-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38585.sh
+    - cwd: '/root'
 
 # Conditional replace or append
 {% if not salt['file.search']('/boot/grub/grub.conf', '^password --encrypted "$6') %}

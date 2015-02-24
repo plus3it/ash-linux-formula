@@ -31,6 +31,7 @@
 script_V38593-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38593.sh
+    - cwd: '/root'
 
 file_V38593-etcIssue:
   file.managed:

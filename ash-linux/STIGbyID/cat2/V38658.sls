@@ -49,6 +49,7 @@ notify_V{{ stig_id }}-reuseParm:
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - cwd: '/root'
 
 {%- if not salt['file.file_exists'](pam_cfg_file) %}
 

@@ -19,6 +19,7 @@
 script_V38560-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38560.sh
+    - cwd: '/root'
 
 service_V38560:
   service:

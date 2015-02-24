@@ -18,6 +18,7 @@
 script_V38600-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38600.sh
+    - cwd: '/root'
 
 {% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.send_redirects')
  %}

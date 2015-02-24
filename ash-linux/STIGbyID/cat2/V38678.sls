@@ -18,6 +18,7 @@
 script_V38678-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38678.sh
+    - cwd: '/root'
 
 {% set auditConf = '/etc/audit/auditd.conf' %}
 {% set logParm = 'space_left' %}

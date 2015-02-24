@@ -18,6 +18,7 @@
 script_V38465-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38465.sh
+    - cwd: '/root'
 
 # Define list of library directories to search
 {% set checkLibDirs = [
@@ -40,6 +41,7 @@ notify_V38465-{{ libDir }}:
 strip_V38465-{{ libDir }}:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38465-helper.sh
+    - cwd: '/root'
     - args: {{ libDir }}
 
 {% endfor %}

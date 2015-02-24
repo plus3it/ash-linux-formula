@@ -19,10 +19,12 @@
 script_V38664-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38664.sh
+    - cwd: '/root'
 
 # NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
 script_V38664-helper:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38664-helper.sh
+    - cwd: '/root'
 
