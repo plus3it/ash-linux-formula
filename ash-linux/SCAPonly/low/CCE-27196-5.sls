@@ -24,6 +24,7 @@
 
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set scapId = 'CCE-26731-0' %}
+{%- set stigId = 'V-38655' %}
 {%- set parmName = 'net.ipv6.conf.default.accept_ra' %}
 {%- set notify_change = 'In-memory configuration of ''{{ parmName }}'' not disab
 led' %}
@@ -33,7 +34,7 @@ script_{{ scapId }}-describe:
   cmd.run:
     - name: 'printf "
 *************************************************\n
-* NOTE: This SCAP-ID already covered by handler *\n
-*       for STIG-ID V-38655                     *\n
+* NOTE: {{ scapId }} already covered by handler *\n
+*       for STIG-ID {{ stigId }}                     *\n
 *************************************************\n"'
 
