@@ -17,6 +17,8 @@
 ############################################################################
 
 {%- set stig_id = '38667' %}
+{%- set selCfgFile = '/etc/sysconfig/selinux' %}
+{%- set grubCfgFile = '/boot/grub/grub.conf' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
@@ -34,13 +36,13 @@ sel_V{{ stig_id }}:
 {%- endif %}
 
 # Verify that the reboot system-state is acceptable
-{%- if salt['file.file_exists']('/etc/sysconfig/selinux') %}
+{%- if salt['file.file_exists'](selCfgFile) %}
 
-  {%- if salt['file.search']('/etc/sysconfig/selinux', '^SELINUX=disabled') %}
+  {%- if salt['file.search'](selCfgFile, '^SELINUX=disabled') %}
 
 file_V{{ stig_id }}-enableSEL:
   file.replace:
-    - name: '/etc/sysconfig/selinux'
+    - name: '{{ selCfgFile }}'
     - pattern: '^SELINUX=disabled'
     - repl: '^SELINUX=permissive'
 
@@ -74,17 +76,22 @@ svc_V{{ stig_id }}-auditRunning:
 
 #############################
 # Enable audit at kernel load
-{%- if salt['file.search']('/boot/grub/grub.conf', 'kernel') and not salt['file.search']('/boot/grub/grub.conf', 'kernel.*audit=1') %}
+{%- if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*audit=1') %}
 
-file_V{{ stig_id }}-repl:
+file_V{{ stig_id }}-audit:
   file.replace:
-    - name: '/boot/grub/grub.conf'
+    - name: '{{ grubCfgFile }}'
     - pattern: '(?P<srctok>kernel.*$)'
     - repl: '\g<srctok> audit=1'
 
+notify_V{{ stig_id }}-audit:
+  cmd.run:
+    - name: 'printf "Note: Enabled audit at IPL via addition of\n      ''audit=1'' to {{ grubCfgFile }}\n"'
+    - unless: 'file_V{{ stig_id }}-audit'
+
 {%- else %}
 
-status_V{{ stig_id }}:
+notify_V{{ stig_id }}-audit:
   cmd.run:
     - name: 'echo "Auditing already enabled at boot"'
 
