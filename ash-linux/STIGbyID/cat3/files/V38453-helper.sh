@@ -17,7 +17,8 @@
 #
 ############################################################
 
-RPMFILES=`rpm -Va | awk '$1 ~ /'^......G'/ && $2 != "c"' | sed 's/^.*[ 	]\//\//'`
+VRFOPTS="--nodeps --nofiles --noscripts --nodigest --nosignature --nolinkto --nofiledigest --nosize --nouser --nomtime --nomode --nordev --nocaps"
+RPMFILES=`rpm -Va ${VRFOPTS} | awk '$1 ~ /'^......G'/ && $2 != "c"' | sed 's/^.*[ 	]\//\//'`
 
 if [ "${RPMFILES}" == "" ]
 then

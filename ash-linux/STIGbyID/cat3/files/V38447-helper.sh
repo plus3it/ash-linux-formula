@@ -4,7 +4,9 @@
 # - need to eventually replace with a native Salt/python module
 #
 ############################################################################
-RPMFILES=` rpm -Va | awk '$1 ~ /^..5/ && $2 != "c"' | sed 's/^.*[ 	]\//\//'`
+
+VRFOPTS="--nofiles --noscripts --nolinkto --nosize --nouser --nogroup --nomtime --nomode --nordev --nocaps"
+RPMFILES=`rpm -Va ${VRFOPTS} | awk '$1 ~ /^..5/ && $2 != "c"' | sed 's/^.*[ 	]\//\//'`
 
 if [ "${RPMFILES}" == "" ]
 then
