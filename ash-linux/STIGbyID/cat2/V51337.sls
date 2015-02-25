@@ -15,26 +15,35 @@
 #
 #############################################################################
 
-{%- set stig_id = '51337' %}
+{%- set stig_id = 'V51337' %}
+{%- set chkFile = '/boot/grub/grub.conf' %}
+{%- set parmSet = 'selinux=0' %}
 
-script_V{{ stig_id }}-describe:
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/{{ stig_id }}.sh
     - cwd: '/root'
 
 #########################################
 # Ensure SELinux is active at kernel load
-{%- if salt['file.search']('/boot/grub/grub.conf', 'kernel.*selinux=0') %}
+{%- if salt['file.search'](chkFile, 'kernel.*selinux=0') %}
 
-file_V{{ stig_id }}-repl:
+file_{{ stig_id }}-repl:
   file.replace:
-    - name: '/boot/grub/grub.conf'
+    - name: '{{ chkFile }}'
     - pattern: ' selinux=0'
-    - repl: ''
+    - repl: ' selinux=1'
 
 {%- else %}
 
-status_V{{ stig_id }}:
+file_{{ stig_id }}-repl:
+  file.replace:
+    - name: '{{ chkFile }}'
+    - pattern: '^(?P<srctok>.*kernel.*$)'
+    - repl: '\g<srctok> selinux=1'
+    - unless: 'grep "kernel.*selinux=1" {{ chkFile }}'
+
+status_{{ stig_id }}:
   cmd.run:
     - name: 'echo "SELinux not disabled in GRUB"'
 
