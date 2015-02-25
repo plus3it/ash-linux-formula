@@ -4,13 +4,17 @@
 # Security identifiers:
 # - CCE-26499-4
 #
-# Rule Summary: Set 'nosuid' option on '/tmp' partition
+# Rule Summary: Set 'nodev' option on '/tmp' partition
 #
-# Rule Text: The nosuid mount option can be used to prevent execution of 
-#            setuid programs in /tmp. The suid/sgid permissions should 
-#            not be required in these world-writable directories. Add 
-#            the nosuid option to the fourth column of /etc/fstab for 
-#            the line which controls mounting of /tmp.
+# Rule Text: The nodev mount option can be used to prevent device files 
+#            from being created in /tmp. Legitimate character and block 
+#            devices should not exist within temporary directories like 
+#            /tmp. Add the nodev option to the fourth column of 
+#            /etc/fstab for the line which controls mounting of /tmp.
+#
+#            The only legitimate location for device files is the /dev 
+#            directory located on the root partition. The only exception 
+#            to this is chroot jails.
 #
 #################################################################
 
@@ -34,18 +38,18 @@ notify_{{ scapId }}:
 {% else %}
   # Grab the option-list for mount
   {% set optList = mountStruct['opts'] %}
-  # See if the mount has the 'nosuid' option set
-  {% if 'nosuid' in optList %}
+  # See if the mount has the 'nodev' option set
+  {% if 'nodev' in optList %}
 notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
-    - name: 'echo "''{{ mountPoint }}'' mounted with ''nosuid'' option"'
+    - name: 'echo "''{{ mountPoint }}'' mounted with ''nodev'' option"'
   {% else %}
 notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
-    - name: 'echo "''{{ mountPoint }}'' not mounted with ''nosuid'' option:"'
+    - name: 'echo "''{{ mountPoint }}'' not mounted with ''nodev'' option:"'
 
-# Remount with "nosuid" option added/set
-  {% set optString = 'nosuid,' + ','.join(optList) %}
+# Remount with "nodev" option added/set
+  {% set optString = 'nodev,' + ','.join(optList) %}
   {% set remountDev = mountStruct['alt_device'] %}
   {% set fsType = mountStruct['fstype'] %}
 notify_{{ scapId }}-{{ mountPoint }}-remount:
