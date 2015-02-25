@@ -73,26 +73,3 @@ svc_V{{ stig_id }}-auditEnabled:
 svc_V{{ stig_id }}-auditRunning:
   service.running:
     - name: 'auditd'
-
-#############################
-# Enable audit at kernel load
-{%- if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*audit=1') %}
-
-file_V{{ stig_id }}-audit:
-  file.replace:
-    - name: '{{ grubCfgFile }}'
-    - pattern: '(?P<srctok>kernel.*$)'
-    - repl: '\g<srctok> audit=1'
-
-notify_V{{ stig_id }}-audit:
-  cmd.run:
-    - name: 'printf "Note: Enabled audit at IPL via addition of\n      ''audit=1'' to {{ grubCfgFile }}\n"'
-    - unless: 'file_V{{ stig_id }}-audit'
-
-{%- else %}
-
-notify_V{{ stig_id }}-audit:
-  cmd.run:
-    - name: 'echo "Auditing already enabled at boot"'
-
-{%- endif %}
