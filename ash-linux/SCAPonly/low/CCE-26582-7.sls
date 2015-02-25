@@ -22,47 +22,69 @@
 
 {%- set scapId = 'CCE-26582-7' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
-{%- set mountPoint = '/tmp' %}
+{%- set srcMntPt = '/tmp' %}
+{%- set dstMntPt = '/var/tmp' %}
 
+# Announce module intent
 script_{{ scapId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-#   /tmp:
-#       ----------
-#       alt_device:
-#           tmpfs
-#       device:
-#           tmpfs
-#       fstype:
-#           tmpfs
-#       opts:
-#           - rw
-#           - rootcontext=system_u:object_r:tmp_t:s0
-#           - seclabel
-#           - nosuid
-#           - nodev
-#           - noexec
-#           - relatime
-
-
-{%- if salt['mount.is_mounted'](mountPoint) %}
+# Ensure that '/tmp' is already its own filesystem
+{%- if salt['mount.is_mounted'](srcMntPt) %}
 
   # Ingest list of mounted filesystesm into a searchable-structures
   {%- set activeMntStream = salt['mount.active']('extended=true') %}
-  {%- set mountStruct = activeMntStream[mountPoint] %}
-  {%- set fsType = mountStruct['fstype'] %}
+  {%- set srcMntStruct = activeMntStream[srcMntPt] %}
+  {%- set fsType = srcMntStruct['fstype'] %}
 
-notify_{{ scapId }}-{{ mountPoint }}_ownMount:
+notify_{{ scapId }}-{{ srcMntPt }}_ownMount:
   cmd.run:
-    - name: 'echo "''{{ mountPoint }}'' is its own filesystem"'
+    - name: 'echo "''{{ srcMntPt }}'' is its own filesystem"'
+
+  # We don't want {{ dstMntPt }} to bind-mount {{ srcMntPt }} if
+  # {{ srcMntPt }} is a non-persistent fstype
+  {%- if fsType == 'tmpfs' %}
+notify_{{ scapId }}-donothing:
+  cmd.run:
+    - name: 'printf "
+*******************************************\n
+* The {{ srcMntPt }} filesystem is a non-persistent *\n
+* fstype. Will not convert {{ dstMntPt }} to a  *\n
+* bind-mount of {{ srcMntPt }}                      *\n
+*******************************************\n
+"'
+    {%- else %}
+
+mount_{{ scapId }}-{{ dstMntPt }}_bind:
+  mount.mounted:
+    - name: '/var/tmp'
+    - device: '/tmp'
+    - opts: 'bind'
+    - fstype: 'ext4'
+    - persist: 'True'
+
+    {%- if salt['mount.is_mounted'](dstMntPt) %}
+
+notify_{{ scapId }}-{{ dstMntPt }}_ownMount:
+  cmd.run:
+    - name: 'echo "''{{ dstMntPt }}'' is also its own filesystem"'
+
+    {%- else %}
+
+notify_{{ scapId }}-{{ dstMntPt }}_ownMount:
+  cmd.run:
+    - name: 'echo "''{{ dstMntPt }}'' is not a filesystem"'
+
+    {%- endif %}
+  {%- endif %}
 
 {%- else %}
 
-notify_{{ scapId }}-{{ mountPoint }}_ownMount:
+notify_{{ scapId }}-{{ srcMntPt }}_ownMount:
   cmd.run:
-    - name: 'echo "''{{ mountPoint }}'' is not its own filesystem"'
+    - name: 'echo "''{{ srcMntPt }}'' is not its own filesystem"'
 
 {%- endif %}
 
