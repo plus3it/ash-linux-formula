@@ -59,6 +59,6 @@ then
    echo "******************************************"
    echo "* No files with questionable permissions *"
    echo "******************************************"
-echo
+fi
    
 exit ${RESULT}
