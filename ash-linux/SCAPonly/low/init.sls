@@ -1,0 +1,11 @@
+include:
+  - ash-linux.SCAPonly.low.CCE-26499-4
+  - ash-linux.SCAPonly.low.CCE-26762-5
+  - ash-linux.SCAPonly.low.CCE-26768-2
+  - ash-linux.SCAPonly.low.CCE-26778-1
+  - ash-linux.SCAPonly.low.CCE-26991-0
+  - ash-linux.SCAPonly.low.CCE-27044-7
+  - ash-linux.SCAPonly.low.CCE-27069-4
+  - ash-linux.SCAPonly.low.CCE-27164-3
+  - ash-linux.SCAPonly.low.CCE-27221-1
+  - ash-linux.SCAPonly.low.CCE-27232-8
