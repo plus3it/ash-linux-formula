@@ -37,7 +37,7 @@ script_{{ scapId }}-describe:
   # Ingest list of mounted filesystesm into a searchable-structures
   {%- set activeMntStream = salt['mount.active']('extended=true') %}
   {%- set srcMntStruct = activeMntStream[srcMntPt] %}
-  {%- set fsType = srcMntStruct['fstype'] %}
+  {%- set srcFsType = srcMntStruct['fstype'] %}
 
 notify_{{ scapId }}-{{ srcMntPt }}_ownMount:
   cmd.run:
@@ -45,7 +45,8 @@ notify_{{ scapId }}-{{ srcMntPt }}_ownMount:
 
   # We don't want {{ dstMntPt }} to bind-mount {{ srcMntPt }} if
   # {{ srcMntPt }} is a non-persistent fstype
-  {%- if fsType == 'tmpfs' %}
+  {%- if srcFsType == 'tmpfs' %}
+
 notify_{{ scapId }}-donothing:
   cmd.run:
     - name: 'printf "
@@ -55,36 +56,53 @@ notify_{{ scapId }}-donothing:
 * bind-mount of {{ srcMntPt }}                      *\n
 *******************************************\n
 "'
+
+  # If {{ srcMntPt }} is a persistent fstype, move keep trucking
+  {%- else %}
+
+    # If {{ dstMntPt }} is already a mounted volume, we probably
+    # shouldn't mess with it
+    {%- if salt['mount.is_mounted'](dstMntPt) %}
+
+notify_{{ scapId }}-{{ dstMntPt }}_ownMount:
+  cmd.run:
+    - name: 'printf "
+*******************************************\n
+* The {{ dstMntPt }} hierarchy is already on    *\n
+* its own mount-point. It would be        *\n
+* dangerous to summarily change this.     *\n
+*******************************************\n
+"'
+
+    # Since {{ dstMntPt }} is not a mounted volume, go ahead
+    # And change it to a bind-mount
     {%- else %}
+
+notify_{{ scapId }}-{{ dstMntPt }}_bind:
+  cmd.run:
+    - name: 'echo "Bind-mounting ''{{ dstMntPt }}'' to {{ srcMntPt }}"'
 
 mount_{{ scapId }}-{{ dstMntPt }}_bind:
   mount.mounted:
     - name: '/var/tmp'
     - device: '/tmp'
     - opts: 'bind'
-    - fstype: 'ext4'
+    - fstype: '{{ srcFsType }}'
     - persist: 'True'
 
-    {%- if salt['mount.is_mounted'](dstMntPt) %}
-
-notify_{{ scapId }}-{{ dstMntPt }}_ownMount:
-  cmd.run:
-    - name: 'echo "''{{ dstMntPt }}'' is also its own filesystem"'
-
-    {%- else %}
-
-notify_{{ scapId }}-{{ dstMntPt }}_ownMount:
-  cmd.run:
-    - name: 'echo "''{{ dstMntPt }}'' is not a filesystem"'
-
+    # End our testing of {{ dstMntPt }} suitability
     {%- endif %}
+
+  # End our testing of {{ srcMntPt }}'s fstype-suitability
   {%- endif %}
 
+# If '/tmp' is not its own mount, this whole exercise is moot
 {%- else %}
 
 notify_{{ scapId }}-{{ srcMntPt }}_ownMount:
   cmd.run:
     - name: 'echo "''{{ srcMntPt }}'' is not its own filesystem"'
 
+# End testing for whether {{ srcMntPt }} is its own filesystem
 {%- endif %}
 
