@@ -17,6 +17,7 @@
 ############################################################
 
 {%- set stig_id = '38438' %}
+{%- set grubCfgFile = '/boot/grub/grub.conf' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
@@ -24,13 +25,18 @@ script_V{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Enable audit at kernel load
-{% if salt['file.search']('/boot/grub/grub.conf', 'kernel') and not salt['file.search']('/boot/grub/grub.conf', 'kernel.*audit=1') %}
+{% if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*audit=1') %}
 
 file_V{{ stig_id }}-repl:
   file.replace:
-    - name: '/boot/grub/grub.conf'
+    - name: '{{ grubCfgFile }}'
     - pattern: '(?P<srctok>kernel.*$)'
     - repl: '\g<srctok> audit=1'
+
+notify_V{{ stig_id }}-audit:
+  cmd.run:
+    - name: 'printf "Note: Enabled audit at IPL via addition of\n      ''audit=1'' to {{ grubCfgFile }}\n"'
+    - unless: 'file_V{{ stig_id }}-audit'
 
 {% else %}
 
