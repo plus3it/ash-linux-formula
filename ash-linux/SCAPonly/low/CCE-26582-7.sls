@@ -22,9 +22,47 @@
 
 {%- set scapId = 'CCE-26582-7' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
+{%- set mountPoint = '/tmp' %}
 
 script_{{ scapId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
+
+#   /tmp:
+#       ----------
+#       alt_device:
+#           tmpfs
+#       device:
+#           tmpfs
+#       fstype:
+#           tmpfs
+#       opts:
+#           - rw
+#           - rootcontext=system_u:object_r:tmp_t:s0
+#           - seclabel
+#           - nosuid
+#           - nodev
+#           - noexec
+#           - relatime
+
+
+{%- if salt['mount.is_mounted'](mountPoint) %}
+
+  # Ingest list of mounted filesystesm into a searchable-structures
+  {%- set activeMntStream = salt['mount.active']('extended=true') %}
+  {%- set mountStruct = activeMntStream[mountPoint] %}
+  {%- set fsType = mountStruct['fstype'] %}
+
+notify_{{ scapId }}-{{ mountPoint }}_ownMount:
+  cmd.run:
+    - name: 'echo "''{{ mountPoint }}'' is its own filesystem"'
+
+{%- else %}
+
+notify_{{ scapId }}-{{ mountPoint }}_ownMount:
+  cmd.run:
+    - name: 'echo "''{{ mountPoint }}'' is not its own filesystem"'
+
+{%- endif %}
 
