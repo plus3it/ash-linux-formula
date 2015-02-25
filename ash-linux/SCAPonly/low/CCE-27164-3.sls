@@ -19,6 +19,7 @@
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set scapId = 'CCE-27164-3' %}
 {%- set parmName = 'net.ipv6.conf.default.accept_ra' %}
+{%- set checkFile = '/etc/sysctl.conf' %}
 {%- set notify_change = 'In-memory configuration of ''{{ parmName }}'' not disabled' %}
 {%- set notify_nochange = '''{{ parmName }}'' already disabled' %}
 
@@ -35,7 +36,7 @@ notify_{{ scapId }}-state:
 notify_{{ scapId }}-state:
   cmd.run:
     - name: 'echo "{{ notify_change }}"'
-{% fi %}
+{% endif %}
 
 comment_{{ scapId }}-{{ parmName }}:
   file.append:
@@ -47,4 +48,3 @@ setting_{{ scapId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '0'
-

@@ -13,36 +13,39 @@
 #
 ###########################################################################
 
-script_CCE-27221-1-describe:
+{%- set scapId = 'CCE-27221-1' %}
+{%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
+
+script_{{ scapId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/SCAPonly/low/files/CCE-27221-1.sh
+    - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
 {% set TargFile = '/etc/sysconfig/prelink' %}
 
 {% if salt['pkg.version']('prelink') %}
   {% if salt['file.search'](TargFile, '^PRELINKING=') %}
-file_CCE-27221-1-alter:
+file_{{ scapId }}-alter:
   file.replace:
     - name: '{{ TargFile }}'
     - pattern: '^PRELINKING=.*'
     - repl: 'PRELINKING=no'
   {% else %}
-file_CCE-27221-1-alter:
+file_{{ scapId }}-alter:
   file.append:
     - name: '{{ TargFile }}'
     - text: 'PRELINKING=no'
   {% endif %}
 {% else %}
-notify_CCE-27221-1:
+notify_{{ scapId }}:
   cmd.run:
     - name: 'echo "NOTICE: the prelink utilities not installed. Applying precautionary remediation."'
-file_CCE-27221-1-touch:
+file_{{ scapId }}-touch:
   file.touch:
     - name: '{{ TargFile }}'
-file_CCE-27221-1-alter:
+file_{{ scapId }}-alter:
   file.append:
     - name: '{{ TargFile }}'
     - text: 'PRELINKING=no'
-    - unless: file_CCE-27221-1-touch
+    - unless: file_{{ scapId }}-touch
 {% endif %}

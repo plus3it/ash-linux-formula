@@ -14,9 +14,12 @@
 #
 #################################################################
 
-script_CCE-26762-5-describe:
+{%- set scapId = 'CCE-26762-5' %}
+{%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
+
+script_{{ scapId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/SCAPonly/low/files/CCE-26762-5.sh
+    - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
@@ -25,7 +28,7 @@ script_CCE-26762-5-describe:
 {% set mountStruct = activeMntStream[mountPoint] %}
 
 {% if not mountPoint in activeMntStream %}
-notify_CCE-26762-5:
+notify_{{ scapId }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
 {% else %}
@@ -33,11 +36,11 @@ notify_CCE-26762-5:
   {% set optList = mountStruct['opts'] %}
   # See if the mount has the 'nosuid' option set
   {% if 'nosuid' in optList %}
-notify_CCE-26762-5-{{ mountPoint }}:
+notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' mounted with ''nosuid'' option"'
   {% else %}
-notify_CCE-26762-5-{{ mountPoint }}:
+notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' not mounted with ''nosuid'' option:"'
 
@@ -45,11 +48,11 @@ notify_CCE-26762-5-{{ mountPoint }}:
   {% set optString = 'nosuid,' + ','.join(optList) %}
   {% set remountDev = mountStruct['alt_device'] %}
   {% set fsType = mountStruct['fstype'] %}
-notify_CCE-26762-5-{{ mountPoint }}-remount:
+notify_{{ scapId }}-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount...\n"'
 
-remount_CCE-26762-5-{{ mountPoint }}:
+remount_{{ scapId }}-{{ mountPoint }}:
   module.run:
     - name: 'mount.remount'
     - m_name: '{{ mountPoint }}'
@@ -59,23 +62,23 @@ remount_CCE-26762-5-{{ mountPoint }}:
 
     # Update fstab (if necessary)
     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
-notify_CCE-26762-5-{{ mountPoint }}-fixFstab:
+notify_{{ scapId }}-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
 # "file.managed" should work, but we have to use cmd.run, for now
-fstab_CCE-26762-5-{{ mountPoint }}-backup:
+fstab_{{ scapId }}-{{ mountPoint }}-backup:
   cmd.run:
     - name: 'cp /etc/fstab /etc/fstab.`date "+%Y%m%d%H%M"`'
 
-fstab_CCE-26762-5-{{ mountPoint }}:
+fstab_{{ scapId }}-{{ mountPoint }}:
   mount.mounted:
     - name: '{{ mountPoint }}'
     - device: '{{ remountDev }}'
     - fstype: '{{ fsType }}'
     - opts: '{{ optString }}'
     - mount: True
-    - unless: fstab_CCE-26762-5-{{ mountPoint }}-backup
+    - unless: fstab_{{ scapId }}-{{ mountPoint }}-backup
 
     {% endif %}
   {% endif %} 
