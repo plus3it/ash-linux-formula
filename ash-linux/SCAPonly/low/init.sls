@@ -1,11 +1,22 @@
 include:
+  - ash-linux.SCAPonly.low.CCE-26486-1
   - ash-linux.SCAPonly.low.CCE-26499-4
+  - ash-linux.SCAPonly.low.CCE-26582-7
+  - ash-linux.SCAPonly.low.CCE-26622-1
+  - ash-linux.SCAPonly.low.CCE-26720-3
+  - ash-linux.SCAPonly.low.CCE-26731-0
   - ash-linux.SCAPonly.low.CCE-26762-5
   - ash-linux.SCAPonly.low.CCE-26768-2
+  - ash-linux.SCAPonly.low.CCE-26774-0
   - ash-linux.SCAPonly.low.CCE-26778-1
+  - ash-linux.SCAPonly.low.CCE-26883-9
+  - ash-linux.SCAPonly.low.CCE-26974-6
   - ash-linux.SCAPonly.low.CCE-26991-0
+  - ash-linux.SCAPonly.low.CCE-26993-6
   - ash-linux.SCAPonly.low.CCE-27044-7
   - ash-linux.SCAPonly.low.CCE-27069-4
   - ash-linux.SCAPonly.low.CCE-27164-3
+  - ash-linux.SCAPonly.low.CCE-27196-5
   - ash-linux.SCAPonly.low.CCE-27221-1
   - ash-linux.SCAPonly.low.CCE-27232-8
+  - ash-linux.SCAPonly.low.CCE-27457-1
