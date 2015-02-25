@@ -22,6 +22,7 @@
 #
 #################################################################
 RESULT=0
+FOUND=0
 
 # Locate files with questionable modes
 printf "Checking for files with bad permissions... "
@@ -37,6 +38,7 @@ then
    do
       if [ -f ${CHECK} ]
       then
+         FOUND=1
          RPMOWNS=`rpm -qf ${CHECK}`
          printf "Resetting perms on ${CHECK}... "
          rpm --setperms ${RPMOWNS}
@@ -49,8 +51,14 @@ then
          fi
       fi
    done
-else
-   printf "***********************************************\n* Note: No RPM-owned files with questionable \n*       permissions were found\n***********************************************\n"
 fi
+
+# Lets say if we've failed to find weird permissions
+if [ ${FOUND} -eq 0 ]
+then
+   echo "******************************************"
+   echo "* No files with questionable permissions *"
+   echo "******************************************"
+echo
    
 exit ${RESULT}
