@@ -15,14 +15,44 @@
 #
 ############################################################
 
-script_V38585-describe:
+{%- set stig_id = 'V38585' %}
+{%- set chkFile = '/boot/grub/grub.conf' %}
+{%- set grubPasswd = '$6$THISISNOTAVALIDCRPYTSTRING' %}
+
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38585.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/{{ stig_id }}.sh
     - cwd: '/root'
 
-# Conditional replace or append
-{% if not salt['file.search']('/boot/grub/grub.conf', '^password --encrypted "$6') %}
-cmd_V38585-notice:
+# Check for compliant (SHA512) GRUB password - alert if not set
+{%- if salt['file.search'](chkFile, '^password --encrypted \$6') %}
+
+notify_{{ stig_id }}-wontFix:
   cmd.run:
-    - name: 'echo "GRUB not password-protected with SHA512 password: manual remediation required"'
-{% endif %}
+    - name: 'echo "GRUB password already set using valid encryption-algorithm"'
+
+{%- else %}
+
+  # If this is an Amazon HVM, we can feel free to set a GRUB password
+  #   (no console means won't matter if the value is valid
+  #   or overridden)
+  {%- if salt['grains.get']('productname') == 'HVM domU' %}
+
+insert_{{ stig_id }}-grubPasswd:
+  file.replace:
+    - name: '{{ chkFile }}'
+    - pattern: '^(?P<srctok>timeout=.*)'
+    - repl: '\g<srctok>\npassword --encrypted {{ grubPasswd }}'
+
+  {%- else %}
+
+notify_{{ stig_id }}-wontFix:
+  cmd.run:
+    - name: 'printf "
+*****************************************************\n
+* GRUB not password-protected with SHA512-encrypted\n
+*      password: MANUAL REMEDIATION REQUIRED\n
+*****************************************************\n" >&2 && exit 1'
+
+  {%- endif %}
+{%- endif %}
