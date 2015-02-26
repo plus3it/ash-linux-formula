@@ -5,7 +5,7 @@
 # - 
 #
 # Security identifiers:
-# - CCE-26974-6
+# - CCE-26993-6
 #
 # Rule Summary: 
 #
