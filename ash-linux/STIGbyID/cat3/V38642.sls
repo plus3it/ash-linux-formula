@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38642
-# Finding ID:	V-38642
-# Version:	RHEL-06-000346
+# Rule ID:		umask_for_daemons
+# Finding ID:		V-38642
+# Version:		RHEL-06-000346
+# SCAP ID:		CCE-27031-4
 # Finding Level:	Low
 #
 #     The system default umask for daemons must be 027 or 022. The umask 
