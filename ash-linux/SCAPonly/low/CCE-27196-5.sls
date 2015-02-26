@@ -2,10 +2,10 @@
 # merged into the DISA-published STIGS
 #
 # Rule ID:
-# - rpm_verify_permissions
+# - mount_option_noexec_removable_partitions
 #
 # Security identifiers:
-# - CCE-26731-0
+# - CCE-27196-5
 #
 # Rule Summary: Add noexec Option to Removable Media Partitions
 #
@@ -23,7 +23,7 @@
 #################################################################
 
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
-{%- set scapId = 'CCE-26731-0' %}
+{%- set scapId = 'CCE-27196-5' %}
 {%- set stigId = 'V-38655' %}
 {%- set parmName = 'net.ipv6.conf.default.accept_ra' %}
 {%- set notify_change = 'In-memory configuration of ''{{ parmName }}'' not disab
