@@ -15,7 +15,8 @@
 
 {%- set scapId = 'CCE-26670-0' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
-{%- set moduleConf = '/etc/modprobe.d/jffs2.conf' %}
+{%- set fsDrv = 'jffs2' %}
+{%- set moduleConf = '/etc/modprobe.d/' + fsDrv + '.conf' %}
 
 script_{{ scapId }}-describe:
   cmd.script:
@@ -25,7 +26,8 @@ script_{{ scapId }}-describe:
 append_{{ scapId }}-directive:
   file.append:
     - name: '{{ moduleConf }}'
+    - mode: '0644'
     - text: |
         # Added per SCAP-ID {{ scapId }}
-        install jffs2 /bin/false
-    - unless: 'grep jffs2 {{ moduleConf }}'
+        install {{ fsDrv }} /bin/false
+    - unless: 'grep {{ fsDrv }} {{ moduleConf }}'

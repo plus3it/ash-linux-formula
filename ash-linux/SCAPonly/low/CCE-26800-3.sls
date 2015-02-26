@@ -15,7 +15,8 @@
 
 {%- set scapId = 'CCE-26800-3' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
-{%- set moduleConf = '/etc/modprobe.d/hfs.conf' %}
+{%- set fsDrv = 'hfs' %}
+{%- set moduleConf = '/etc/modprobe.d/' + fsDrv + '.conf' %}
 
 script_{{ scapId }}-describe:
   cmd.script:
@@ -25,7 +26,8 @@ script_{{ scapId }}-describe:
 append_{{ scapId }}-directive:
   file.append:
     - name: '{{ moduleConf }}'
+    - mode: '0644'
     - text: |
         # Added per SCAP-ID {{ scapId }}
-        install hfs /bin/false
-    - unless: 'grep hfs {{ moduleConf }}'
+        install {{ fsDrv }} /bin/false
+    - unless: 'grep {{ fsDrv }} {{ moduleConf }}'
