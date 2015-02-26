@@ -2,7 +2,7 @@
 # merged into the DISA-published STIGS
 #
 # Security identifiers:
-# - CCE-26544-7
+# - CCE-26800-3
 #
 # Rule ID: kernel_module_hfs_disabled
 #
@@ -13,7 +13,7 @@
 #
 #################################################################
 
-{%- set scapId = 'CCE-26544-7' %}
+{%- set scapId = 'CCE-26800-3' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set moduleConf = '/etc/modprobe.d/hfs.conf' %}
 
