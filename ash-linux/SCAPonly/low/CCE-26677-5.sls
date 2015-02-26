@@ -2,7 +2,7 @@
 # merged into the DISA-published STIGS
 #
 # Security identifiers:
-# - CCE-26677-5.sls
+# - CCE-26677-5
 #
 # Rule ID: kernel_module_udf_disabled
 #
@@ -13,7 +13,7 @@
 #
 #################################################################
 
-{%- set scapId = 'CCE-26677-5.sls' %}
+{%- set scapId = 'CCE-26677-5' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set fsDrv = 'udf' %}
 {%- set moduleConf = '/etc/modprobe.d/' + fsDrv + '.conf' %}
