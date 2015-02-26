@@ -26,6 +26,6 @@ append_{{ scapId }}-directive:
   file.append:
     - name: '{{ moduleConf }}'
     - text: |
-        # Added per SCAP-ID CCE-26340-0
+        # Added per SCAP-ID {{ scapId }}
         install cramfs /bin/false
     - unless: 'grep cramfs {{ moduleConf }}'

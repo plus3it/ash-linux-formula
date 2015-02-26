@@ -26,6 +26,6 @@ append_{{ scapId }}-directive:
   file.append:
     - name: '{{ moduleConf }}'
     - text: |
-        # Added per SCAP-ID CCE-26544-7
+        # Added per SCAP-ID {{ scapId }}
         install freevxfs /bin/false
     - unless: 'grep freevxfs {{ moduleConf }}'
