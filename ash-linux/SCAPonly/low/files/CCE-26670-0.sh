@@ -1,3 +1,5 @@
+#!/bin/sh
+#
 # This Salt test/lockdown implements a SCAP item that has not yet been
 # merged into the DISA-published STIGS
 #
