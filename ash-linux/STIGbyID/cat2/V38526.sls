@@ -2,7 +2,7 @@
 # Rule ID:		sysctl_net_ipv4_conf_all_secure_redirects
 # Finding ID:		V-38526
 # Version:		RHEL-06-000086
-# SCAP Identifier:	CCE-26854-0
+# SCAP Security ID:	CCE-26854-0
 # Finding Level:	Medium
 #
 #     The system must not accept ICMPv4 secure redirect packets on any 

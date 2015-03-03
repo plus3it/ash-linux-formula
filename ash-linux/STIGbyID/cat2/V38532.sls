@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38532
-# Finding ID:	V-38532
-# Version:	RHEL-06-000090
+# Rule ID:		sysctl_net_ipv4_conf_default_secure_redirects
+# Finding ID:		V-38532
+# Version:		RHEL-06-000090
+# SCAP Security ID:	CCE-26831-8
 # Finding Level:	Medium
 #
 #     The system must not accept ICMPv4 secure redirect packets by default. 

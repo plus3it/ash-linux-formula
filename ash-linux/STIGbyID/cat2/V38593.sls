@@ -2,7 +2,7 @@
 # Rule ID:              set_system_login_banner
 # Finding ID:		V-38593
 # Version:		RHEL-06-000073
-# SCAP Security ID:     CCE-26974-6
+# SCAP Security ID:	CCE-26974-6
 # Finding Level:	Medium
 #
 #     The Department of Defense (DoD) login banner must be displayed 
