@@ -17,7 +17,6 @@ script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
     - cwd: /root
-    - cwd: /root
 
 ########################################################################
 # Will need to rewrite this as a set of modules/functions
@@ -31,5 +30,4 @@ script_V{{ stig_id }}-describe:
 script_V{{ stig_id }}-helper:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}-helper.sh
-    - cwd: /root
     - cwd: /root

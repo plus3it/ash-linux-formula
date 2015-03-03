@@ -20,11 +20,9 @@ script_V51379-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V51379.sh
     - cwd: /root
-    - cwd: /root
 
 # Need to replace this with custom module...
 script_V51379-Verfiy:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V51379-helper.sh
-    - cwd: /root
     - cwd: /root
