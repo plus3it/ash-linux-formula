@@ -27,7 +27,7 @@
 
 script_V38655-describe:
   cmd.script:
-   - source: salt://ash-linux/STIGbyID/cat3/files/V38655.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/V38655.sh
     - cwd: /root
 
 ####################################
