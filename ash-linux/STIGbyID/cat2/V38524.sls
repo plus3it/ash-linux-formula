@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38524
-# Finding ID:	V-38524
-# Version:	RHEL-06-000084
+# Rule ID:		sysctl_net_ipv4_conf_all_accept_redirects
+# Finding ID:		V-38524
+# Version:		RHEL-06-000084
+# SCAP Secuirty ID: 	CCE-27027-2
 # Finding Level:	Medium
 #
 #     The system must not accept ICMPv4 redirect packets on any interface. 
@@ -14,23 +16,39 @@
 #
 ############################################################
 
-script_V38524-describe:
+{%- set stig_id = 'V38524' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.conf.all.accept_redirects' %}
+
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38524.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.accept_redirects') %}
-file_V38524-repl:
-  file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.conf.all.accept_redirects.*$'
-    - repl: 'net.ipv4.conf.all.accept_redirects = 0'
-{% else %}
-file_V38524-append:
-  file.append:
-    - name: '/etc/sysctl.conf'
-    - text:
-      - ' '
-      - '# Disable ICMPv4 redirect packtes'
-      - 'net.ipv4.conf.all.accept_redirects = 0'
+# Purely infomational - we're going to force the value, any way,
+# via 'sysctl.present' since it forces entry in {{ checkFile }}
+{% if salt['sysctl.get']('parmName') == '0' %}
+sysctl_V{{ stig_id }}-noRedirects:
+  cmd.run:
+    - name: 'printf "NOTE: In-memory configuration already disables\n      sending of ICMPv4 redirects for all interfaces\n"'
 {% endif %}
+
+# This should *NEVER* be needed on a normal system
+create_V{{ stig_id }}-{{ checkFile }}:
+  file.managed:
+  - name: '{{ checkFile }}'
+  - onlyif: 'test -f {{ checkFile }}'
+
+# Need to run the next two because security scanners often 
+# don't understand "secure by default" settings
+comment_V{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ checkFile }}'
+    - text: '# Added {{ parmName }} define per STIG-ID: {{ stig_id }}'
+    - unless: 'grep "{{ parmName }}[    ]=[     ]0" {{ checkFile }}'
+
+setting_V{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '0'
