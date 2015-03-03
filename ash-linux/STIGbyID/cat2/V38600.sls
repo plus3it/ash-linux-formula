@@ -2,7 +2,7 @@
 # Rule ID:              sysctl_net_ipv4_conf_default_send_redirects
 # Finding ID:		V-38600
 # Version:		RHEL-06-000080
-# SCAP Secuirty ID:	CCE-27001-7
+# SCAP Security ID:	CCE-27001-7
 # Finding Level:	Medium
 #
 #     The system must not send ICMPv4 redirects by default. Sending ICMP 

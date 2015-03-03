@@ -2,7 +2,7 @@
 # Rule ID:		sysctl_ipv4_all_send_redirects
 # Finding ID:		V-38601
 # Version:		RHEL-06-000081
-# SCAP Secuirty ID:	CCE-27004-1
+# SCAP Security ID:	CCE-27004-1
 # Finding Level:	Medium
 #
 #     The system must not send ICMPv4 redirects from any interface. Sending 

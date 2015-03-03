@@ -2,7 +2,7 @@
 # Rule ID:		selinux_all_devicefiles_labeled
 # Finding ID:		V-51379
 # Version:		RHEL-06-000025
-# SCAP: Security ID:	CCE-26774-0
+# SCAP Security ID:	CCE-26774-0
 # Finding Level:	Low
 #
 #     All device files must be monitored by the system Linux Security 

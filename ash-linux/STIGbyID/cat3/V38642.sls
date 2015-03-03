@@ -2,7 +2,7 @@
 # Rule ID:		umask_for_daemons
 # Finding ID:		V-38642
 # Version:		RHEL-06-000346
-# SCAP ID:		CCE-27031-4
+# SCAP Security ID:	CCE-27031-4
 # Finding Level:	Low
 #
 #     The system default umask for daemons must be 027 or 022. The umask 
