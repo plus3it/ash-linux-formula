@@ -32,17 +32,21 @@
 
 script_{{ scapId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38619.sh
+    - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-{% for user in salt['user.getent']('') %}
-  {% set ID = user['name'] %}
-  {% set homeDir = user['home'] %}
+{%- for user in salt['user.getent']('') %}
+  {%- set userId = user['name'] %}
+  {%- set Uid = user['uid'] %}
+  {%- set homeDir = user['home'] %}
 
-modeset_{{ scapId }}-{{ ID }}:
+  # Only change things if it's not a system account
+  {%- if Uid >= 500 or '/home/' in homeDir %}
+modeset_{{ scapId }}-{{ userId }}:
   file.directory:
     - name: '{{ homeDir }}'
-    - user: '{{ ID }}'
-    - mode: '0700
+    - user: '{{ userId }}'
+    - mode: '0700'
+  {%- endif %}
 
-{% endfor %}
+{%- endfor %}
