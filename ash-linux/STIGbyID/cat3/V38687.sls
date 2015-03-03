@@ -17,6 +17,7 @@
 script_V38687-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38687.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('openswan') %}
 notify_V38687-openSwan:

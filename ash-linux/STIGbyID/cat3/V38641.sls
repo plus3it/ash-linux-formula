@@ -14,6 +14,7 @@
 script_V38641-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38641.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('at') %}
 svc_V38641-atdEnabled:

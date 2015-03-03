@@ -18,8 +18,12 @@
 script_V38454-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38454.sh
+    - cwd: /root
+    - cwd: /root
 
 # Probably need to replace this with custom module...
 script_V38454-Verfiy:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38454-helper.sh
+    - cwd: /root
+    - cwd: /root

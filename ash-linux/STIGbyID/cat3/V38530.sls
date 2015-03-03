@@ -22,6 +22,7 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - cwd: /root
 
 {% set auditRules = '/etc/audit/audit.rules' %}
 {% set checkFile = '/etc/localtime' %}

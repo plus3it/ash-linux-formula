@@ -19,6 +19,7 @@
 script_V38650-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38650.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('iputils') %}
 svc_V38650-rdiscEnabled:

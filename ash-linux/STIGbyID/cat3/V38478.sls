@@ -19,6 +19,7 @@
 script_V38478-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38478.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('rhnsd') %}
 # Ensure rhnsd service is disabled and stopped

@@ -16,6 +16,7 @@
 script_V38683-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38683.sh
+    - cwd: /root
 
 cmd_V38683-userDupeChk:
   cmd.run:

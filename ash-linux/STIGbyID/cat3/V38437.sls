@@ -26,6 +26,7 @@
 script_V38437-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38437.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('autofs') %}
 svc_V38437-autofsEnabled:

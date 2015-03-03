@@ -13,6 +13,7 @@
 script_V38676-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38676.sh
+    - cwd: /root
 
 {% if not salt['pkg.version']('xorg-x11-server-common') %}
 notify_V38676-noPostfix:

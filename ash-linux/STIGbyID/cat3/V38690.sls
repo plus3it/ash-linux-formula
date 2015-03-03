@@ -19,6 +19,7 @@
 script_V38690-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38690.sh
+    - cwd: /root
 
 notify_V38690-generic:
   cmd.run:

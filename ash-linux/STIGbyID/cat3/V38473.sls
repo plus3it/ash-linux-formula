@@ -18,6 +18,7 @@
 script_V38473-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38473.sh
+    - cwd: /root
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but

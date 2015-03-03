@@ -15,6 +15,7 @@
 script_V38642-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38642.sh
+    - cwd: /root
 
 {% if salt['file.search']('/etc/init.d/functions', '^umask') %}
   {% if salt['file.search']('/etc/init.d/functions', '^umask 027') %}

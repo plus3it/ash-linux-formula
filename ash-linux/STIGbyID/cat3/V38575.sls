@@ -21,6 +21,7 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - cwd: /root
 
 {%- set usertypes = {
     'selDACusers' : { 'search_string' : ' arch=b64.*unlink.*auid>=500 ',

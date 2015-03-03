@@ -15,6 +15,7 @@
 script_V38648-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38648.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('qpid-cpp-server') %}
 svc_V38648-qpiddEnabled:

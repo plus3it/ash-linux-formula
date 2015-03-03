@@ -21,6 +21,7 @@
 script_V38697-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38697.sh
+    - cwd: /root
 
 # STIG specifies a fix for an indeterminate list. The following only 
 # addresses the Linux default directories /tmp, /var/tmp and /dev/shm.

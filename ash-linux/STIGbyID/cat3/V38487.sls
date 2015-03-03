@@ -14,6 +14,8 @@
 script_V38487-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38487.sh
+    - cwd: /root
+    - cwd: /root
 
 ##############################################################################
 # Need to do this with a custom module. Use:
@@ -25,3 +27,5 @@ script_V38487-describe:
 script_V38487-fixGpgChk:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38487-helper.sh
+    - cwd: /root
+    - cwd: /root

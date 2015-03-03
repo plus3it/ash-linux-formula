@@ -22,6 +22,7 @@
 script_V38684-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38684.sh
+    - cwd: /root
 
 {% if salt['file.search']('/etc/security/limits.conf','hard[ 	]*maxlogins') %}
 

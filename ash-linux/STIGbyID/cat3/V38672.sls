@@ -17,6 +17,7 @@
 script_V38672-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38672.sh
+    - cwd: /root
 
 {% set svcName = 'netconsole' %}
 

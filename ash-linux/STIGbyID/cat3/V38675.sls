@@ -19,6 +19,7 @@
 script_V38675-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38675.sh
+    - cwd: /root
 
 {% if salt['file.search']('/etc/security/limits.conf','hard[ 	]*core') %}
 

@@ -14,6 +14,7 @@
 script_V38640-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38640.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('abrt') %}
 svc_V38640-abrtdEnabled:

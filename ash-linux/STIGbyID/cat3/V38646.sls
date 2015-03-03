@@ -14,6 +14,7 @@
 script_V38646-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38646.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('oddjob') %}
 svc_V38646-oddjobdEnabled:

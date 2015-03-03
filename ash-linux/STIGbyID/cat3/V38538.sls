@@ -16,6 +16,7 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - cwd: /root
 
 {% set auditCfg = '/etc/audit/audit.rules' %}
 {% set audit_options = '-p wa -k audit_account_changes' %}

@@ -17,6 +17,7 @@
 script_V38681-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38681.sh
+    - cwd: /root
 
 {% for user in salt['user.getent']('') %}
 {% set ID = user['name'] %}

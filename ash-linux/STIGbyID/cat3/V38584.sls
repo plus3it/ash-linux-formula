@@ -17,6 +17,7 @@
 script_V38584-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38584.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('xinetd') %}
 svc_V38584-xinetdEnabled:

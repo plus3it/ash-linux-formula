@@ -17,6 +17,7 @@
 script_V38608-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38608.sh
+    - cwd: /root
 
 {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval') %}
   {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval 900') %}

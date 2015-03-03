@@ -15,6 +15,7 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - cwd: /root
 
 {% if grains['cpuarch'] == 'x86_64' %}
   {% set pattern = '-a always,exit -F arch=b64 -S settimeofday -k audit_time_rules' %}

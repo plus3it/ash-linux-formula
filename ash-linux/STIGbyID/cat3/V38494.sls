@@ -13,6 +13,7 @@
 script_V38494-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38494.sh
+    - cwd: /root
 
 {% if salt['file.search']('/etc/securetty','^ttyS') %}
 replace_V38494-serialTTY:

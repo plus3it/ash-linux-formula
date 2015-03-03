@@ -13,6 +13,7 @@
 script_V38525-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38525.sh
+    - cwd: /root
 
 {% if grains['cpuarch'] == 'x86_64' %}
 file_V38525-settimeofday:

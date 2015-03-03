@@ -17,6 +17,7 @@
 script_V38590-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38590.sh
+    - cwd: /root
 
 pkg_V38590-screen:
   pkg.installed:

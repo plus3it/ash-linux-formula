@@ -12,8 +12,12 @@
 script_V38480-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38480.sh
+    - cwd: /root
+    - cwd: /root
 
 # Super-ugly: gotta spiff later
 script_V38480-helper:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38480-helper.sh
+    - cwd: /root
+    - cwd: /root

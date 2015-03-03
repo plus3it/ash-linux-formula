@@ -14,6 +14,7 @@
 script_V38644-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38644.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('ntpdate') %}
 svc_V38644-ntpdateEnabled:

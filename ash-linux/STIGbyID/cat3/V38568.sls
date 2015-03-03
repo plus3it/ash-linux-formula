@@ -17,6 +17,7 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - cwd: /root
 
 {%- set usertypes = {
     'MountUsers' : { 'search_string' : ' mount -F auid>=500 ',

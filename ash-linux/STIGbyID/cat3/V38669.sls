@@ -17,6 +17,7 @@
 script_V38669-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38669.sh
+    - cwd: /root
 
 {% set wantedPkg = 'postfix' %}
 

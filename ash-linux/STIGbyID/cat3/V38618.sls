@@ -13,6 +13,7 @@
 script_V38618-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38618.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('avahi') %}
 svc_V38618-avahiDisabled:

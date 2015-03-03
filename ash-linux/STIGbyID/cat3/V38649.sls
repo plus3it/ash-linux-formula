@@ -14,6 +14,7 @@
 script_V38649-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38649.sh
+    - cwd: /root
 
 {% if salt['file.search']('/etc/csh.cshrc', '^[ 	]*umask') %}
 file_V38649-configSet:

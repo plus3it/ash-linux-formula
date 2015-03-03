@@ -18,6 +18,7 @@
 script_V38474-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38474.sh
+    - cwd: /root
 
 {% if salt['pkg.version']('gdm') %}
 cmd_V38474-setNoUserlist:
