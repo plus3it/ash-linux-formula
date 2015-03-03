@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38601
-# Finding ID:	V-38601
-# Version:	RHEL-06-000081
+# Rule ID:		sysctl_ipv4_all_send_redirects
+# Finding ID:		V-38601
+# Version:		RHEL-06-000081
+# SCAP Secuirty ID:	CCE-27004-1
 # Finding Level:	Medium
 #
 #     The system must not send ICMPv4 redirects from any interface. Sending 
@@ -15,26 +17,31 @@
 #
 ############################################################
 
+{% set stig_id = 'V38601' %}
+{% set scapId = 'CCE-27004-1' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.conf.all.send_redirects' %}
 
-script_V38601-describe:
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38601.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.send_redirects')
+{% if salt['file.search']('/etc/sysctl.conf', parmName)
  %}
-file_V38601-repl:
+file_{{ stig_id }}-repl:
   file.replace:
     - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.conf.all.send_redirects.*$'
-    - repl: 'net.ipv4.conf.all.send_redirects = 0'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 0'
 {% else %}
-file_V38601-append:
+file_{{ stig_id }}-append:
   file.append:
     - name: '/etc/sysctl.conf'
     - text:
       - ' '
       - '# Disable sending ICMP redirects (per STIG V-38601)'
-      - 'net.ipv4.conf.all.send_redirects = 0'
+      - '{{ parmName }} = 0'
 {% endif %}
 
