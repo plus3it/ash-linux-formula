@@ -20,7 +20,7 @@
 #################################################################
 
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
-{%- set scapId = 'CCE-26801-1'
+{%- set scapId = 'CCE-26801-1' %}
 {%- set stigId = 'V-38521' %}
 {%- set parmName = 'net.ipv6.conf.default.accept_ra' %}
 {%- set notify_change = 'In-memory configuration of ''{{ parmName }}'' not disab
