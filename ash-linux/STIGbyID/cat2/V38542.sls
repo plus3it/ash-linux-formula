@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38542
-# Finding ID:	V-38542
-# Version:	RHEL-06-000096
+# Rule ID:		sysctl_net_ipv4_conf_all_rp_filter
+# Finding ID:		V-38542
+# Version:		RHEL-06-000096
+# SCAP Security ID:	CCE-26979-5
 # Finding Level:	Medium
 #
 #     The system must use a reverse-path filter for IPv4 network traffic 
@@ -16,23 +18,41 @@
 #
 ############################################################
 
-script_V38542-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38542.sh
-    - cwd: '/root'
+{%- set stig_id = 'V38542' %}
+{%- set scapId = 'CCE-26979-5' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.conf.all.rp_filter' %}
+{%- set parmVal = '1' %}
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.rp_filter') %}
-file_V38542-repl:
-  file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.conf.all.rp_filter.*$'
-    - repl: 'net.ipv4.conf.all.rp_filter = 1'
-{% else %}
-file_V38542-append:
-  file.append:
-    - name: '/etc/sysctl.conf'
-    - text:
-      - ' '
-      - '# Enable reverse-path filtering (per STIG V-38542)'
-      - 'net.ipv4.conf.all.rp_filter = 1'
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+# Purely infomational - we're going to force the value, any way,
+# via 'sysctl.present' since it forces entry in {{ checkFile }}
+{% if salt['sysctl.get'](parmName) == parmVal %}
+sysctl_{{ stig_id }}-noRedirects:
+  cmd.run:
+    - name: 'printf "NOTE: In-memory configuration already enables\n      reverse path-filtering on all interfaces\n"'
 {% endif %}
+
+# This should *NEVER* be needed on a normal system
+create_{{ stig_id }}-{{ checkFile }}:
+  file.managed:
+  - name: '{{ checkFile }}'
+  - onlyif: 'test -f {{ checkFile }}'
+
+# Need to run the next two because security scanners often 
+# don't understand "secure by default" settings
+comment_{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ checkFile }}'
+    - text: '# Added {{ parmName }} define per STIG-ID: {{ stig_id }}'
+    - unless: 'grep "{{ parmName }}[    ]=[     ]{{ parmVal }}" {{ checkFile }}'
+
+setting_{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '{{ parmVal }}'
