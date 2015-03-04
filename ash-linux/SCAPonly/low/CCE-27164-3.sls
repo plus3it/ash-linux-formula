@@ -19,6 +19,7 @@
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set scapId = 'CCE-27164-3' %}
 {%- set parmName = 'net.ipv6.conf.default.accept_ra' %}
+{%- set parmVal = '0' %}
 {%- set checkFile = '/etc/sysctl.conf' %}
 {%- set notify_change = 'In-memory configuration of ''{{ parmName }}'' not disabled' %}
 {%- set notify_nochange = '''{{ parmName }}'' already disabled' %}
@@ -28,7 +29,7 @@ script_{{ scapId }}-describe:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-{% if salt['sysctl.get'](parmName) == '0' %}
+{% if salt['sysctl.get'](parmName) == parmVal %}
 notify_{{ scapId }}-state:
   cmd.run:
     - name: 'echo "{{ notify_nochange }}"'
@@ -42,9 +43,9 @@ comment_{{ scapId }}-{{ parmName }}:
   file.append:
     - name: '{{ checkFile }}'
     - text: '# Added {{ parmName }} define per SCAP-ID: {{ scapId }}'
-    - unless: 'grep "{{ parmName }}[    ]=[     ]0" {{ checkFile }}'
+    - unless: 'grep "{{ parmName }}[    ]=[     ]{{ parmVal }}" {{ checkFile }}'
 
 setting_{{ scapId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
-    - value: '0'
+    - value: '{{ parmVal }}'
