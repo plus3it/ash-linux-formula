@@ -1,4 +1,4 @@
-# This Salt test/lockdown implements a SCAP item that has not yet been
+# This Salt test/lockdown implements a SCAP item that has already been
 # merged into the DISA-published STIGS
 #
 # Rule ID:
