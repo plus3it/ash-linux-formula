@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38521
-# Finding ID:	V-38521
-# Version:	RHEL-06-000137
+# Rule ID:		rsyslog_send_messages_to_logserver
+# Finding ID:		V-38521
+# Version:		RHEL-06-000137
+# SCAP Security ID:	CCE-26801-1
 # Finding Level:	Medium
 #
 #     The operating system must support the requirement to centrally manage 
@@ -17,40 +19,45 @@
 #
 ############################################################
 
-script_V38521-describe:
+{%- set stig_id = 'V38521' %}
+{%- set scapId = 'CCE-26801-1' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/rsyslog.conf' %}
+
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38521.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
 # Only look for rsyslog configuration if rsyslog is installed
 {% if salt['pkg.version']('rsyslog') %}
 
   # Check if UDP-logging to loghost
-  {% if salt['file.search']('/etc/rsyslog.conf', '\*\.\*[ 	]*@[a-z0-9]') %}
-notify_V38521-extLogging:
+  {% if salt['file.search'](checkFile, '\*\.\*[ 	]*@[a-z0-9]') %}
+notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "Info: System is configured to do UDP-based logging to an\n\texternal host"'
 
   # Check if TCP-logging to loghost
-  {% elif salt['file.search']('/etc/rsyslog.conf', '^\*\.\*[ 	]*@@[a-z0-9]') %}
-notify_V38521-extLogging:
+  {% elif salt['file.search'](checkFile, '^\*\.\*[ 	]*@@[a-z0-9]') %}
+notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "Info: System is configured to do TCP-based logging to an\n\texternal host"'
 
   # Check if RELP-logging to loghost
-  {% elif salt['file.search']('/etc/rsyslog.conf', '^\*\.\*[ 	]*:omrelp:[a-z0-9]') %}
-notify_V38521-extLogging:
+  {% elif salt['file.search'](checkFile, '^\*\.\*[ 	]*:omrelp:[a-z0-9]') %}
+notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "Info: System is configured to do RELP-based logging to an\n\texternal host\n"'
 
   # No remote-logging configured
   {% else %}
-notify_V38521-extLogging:
+notify_{{ stig_id }}-extLogging:
   cmd.run:
-    - name: 'printf "WARNING: System does not appear to be configured to log\n\tto an external host.\n" ; exit 1'
+    - name: 'printf "*********************************************************\n* WARNING: System does not appear to be configured to log\n*\tto an external host.\n*********************************************************\n" >&2 ; exit 1'
   {% endif %}
 {% else %}
-notify_V38521-extLogging:
+notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "NOTICE: The ''rsyslog'' service is not installed.\n\tUnable to test for remote-logging"'
 {% endif %}
