@@ -11,18 +11,41 @@
 #
 ############################################################
 
-script_V38537-describe:
+{%- set stig_id = 'V38537' %}
+{%- set scapId = 'CCE-26993-6' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set checkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.icmp_ignore_bogus_error_responses' %}
+{%- set parmVal = '1' %}
+
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38537.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{% if salt['sysctl.get']('net.ipv4.icmp_ignore_bogus_error_responses') == '1' %}
-sysctl_V38537-noRedirects:
+# Purely infomational - we're going to force the value, any way,
+# via 'sysctl.present' since it forces entry in {{ checkFile }}
+{% if salt['sysctl.get'](parmName) == parmVal %}
+sysctl_{{ stig_id }}-noRedirects:
   cmd.run:
-    - name: 'echo "System already ignores bogus ICMPv4 error responses"'
-{% else %}
-sysctl_V38537-noRedirects:
-  sysctl.present:
-    - name: 'net.ipv4.icmp_ignore_bogus_error_responses'
-    - value: '1'
+    - name: 'printf "NOTE: In-memory configuration already disables\n      responding to ICMPv4 broadcast echo\n      requests\n"'
 {% endif %}
+
+# This should *NEVER* be needed on a normal system
+create_{{ stig_id }}-{{ checkFile }}:
+  file.managed:
+  - name: '{{ checkFile }}'
+  - onlyif: 'test -f {{ checkFile }}'
+
+# Need to run the next two because security scanners often 
+# don't understand "secure by default" settings
+comment_{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ checkFile }}'
+    - text: '# Added {{ parmName }} define per STIG-ID: {{ stig_id }}'
+    - unless: 'grep "{{ parmName }}[    ]=[     ]{{ parmVal }}" {{ checkFile }}'
+
+setting_{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '{{ parmVal }}'
