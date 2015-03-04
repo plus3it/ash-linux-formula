@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38543
-# Finding ID:	V-38543
-# Version:	RHEL-06-000184
+# Rule ID:		audit_rules_dac_modification_chmod
+# Finding ID:		V-38543
+# Version:		RHEL-06-000184
+# SCAP Security ID:	CCE-26280-8
 # Finding Level:	Low
 #
 #     The audit system must be configured to audit all discretionary access 
@@ -12,11 +14,12 @@
 #
 ############################################################
 
-{% set stig_id = '38543' %}
+{%- set stig_id = '38543' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 {%- set usertypes = {
