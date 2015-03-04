@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38540
-# Finding ID:	V-38540
-# Version:	RHEL-06-000182
+# Rule ID:		audit_network_modifications
+# Finding ID:		V-38540
+# Version:		RHEL-06-000182
+# SCAP Identifier:	CCE-26648-6
 # Finding Level:	Low
 #
 #     The audit system must be configured to audit modifications to the 
@@ -10,11 +12,12 @@
 #
 ############################################################
 
-{% set stig_id = '38540' %}
+{%- set stig_id = '38540' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 ######################################################################
