@@ -11,43 +11,49 @@
 #
 ############################################################
 
-{% set stig_id = '38538' %}
-
-script_V{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
-    - cwd: /root
-
-{% set auditCfg = '/etc/audit/audit.rules' %}
-{% set audit_options = '-p wa -k audit_account_changes' %}
-
-{% set files = [
-    '/etc/group',
-    '/etc/passwd',
-    '/etc/security/opasswd',
-    '/etc/shadow',
-    '/etc/gshadow',
+{%- set stig_id = 'V38538' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set audRulCfg = '/etc/audit/audit.rules' %}
+{%- set auditRule = '-p wa -k audit_account_changes' %}
+{%- set checkFiles = [
+  '/etc/passwd',
+  '/etc/group',
+  '/etc/shadow',
+  '/etc/gshadow',
+  '/etc/security/opasswd',
 ] %}
 
-{% for file in files %}
-  {% set rule = '-w ' + file + ' ' + audit_options %}
-  {% if not salt['cmd.run']('grep -c -E -e "' + rule + '" ' + auditCfg ) == '0' %}
-file_V{{ stig_id }}-auditRules_{{ file }}:
+# Output a action description
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+# Iterate each file in {{ checkFiles }}
+{%- for checkFile in checkFiles %}
+  {%- set fullRule = '-w' + ' ' + checkFile + ' ' + auditRule %}
+
+  # If the rule already exists in the file, verbatim:
+  # Do nothing but call out that fact
+  {%- if not salt['cmd.run']('grep -c -E -e "' + fullRule + '" ' + audRulCfg ) == '0' %}
+
+rule_{{ stig_id }}-{{ checkFile }}:
   cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
-  {% elif not salt['cmd.run']('grep -c -E -e "' + file + '" ' + auditCfg ) == '0' %}
-file_V{{ stig_id }}-auditRules_{{ file }}:
-  file.replace:
-    - name: '{{ auditCfg }}'
-    - pattern: '^.*{{ file }}.*$'
-    - repl: '{{ rule }}'
-  {% else %}
-file_V{{ stig_id }}-auditRules_{{ file }}:
+    - name: 'echo "STIG-specified audit rule already in place"'
+
+  # If it doesn't exist, add it (with a comment)
+  {%- else %}
+
+rule_{{ stig_id }}-{{ checkFile }}:
   file.append:
-    - name: '{{ auditCfg }}'
+    - name: '{{ audRulCfg }}'
     - text: |
-        
-        # Monitor {{ file }} for changes (per STIG-ID V-{{ stig_id }})
-        {{ rule }}
-  {% endif %}
-{% endfor %}
+
+        # Monitor {{ checkFile }} for changes (per STIG-ID {{ stig_id }})
+        {{ fullRule }}
+
+  # End our main logic-branching
+  {%- endif %}
+
+# End iteration of file list
+{%- endfor %}
