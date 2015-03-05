@@ -2,10 +2,10 @@
 # merged into the DISA-published STIGS
 #
 # Rule ID:
-# - audit_rules_dac_modification_chown
+# - audit_rules_dac_modification_fchmod
 #
 # Security identifiers:
-# - CCE-26974-6
+# - CCE-27173-4
 #
 # Rule Summary: Record Events that Modify the System's Discretionary
 #               Access Controls
@@ -16,7 +16,7 @@
 
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set scapId = 'CCE-27173-4' %}
-{%- set stigId = 'V-38545' %}
+{%- set stigId = 'V-38547' %}
 
 script_{{ scapId }}-describe:
   cmd.run:
