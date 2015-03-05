@@ -2,7 +2,7 @@
 # Rule ID:		audit_network_modifications
 # Finding ID:		V-38540
 # Version:		RHEL-06-000182
-# SCAP Identifier:	CCE-26648-6
+# SCAP Security ID:	CCE-26648-6
 # Finding Level:	Low
 #
 #     The audit system must be configured to audit modifications to the 
