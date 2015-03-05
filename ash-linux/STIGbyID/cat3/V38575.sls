@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38575
-# Finding ID:	V-38575
-# Version:	RHEL-06-000200
+# Rule ID:		audit_rules_file_deletion_events
+# Finding ID:		V-38575
+# Version:		RHEL-06-000200
+# SCAP Security ID:	CCE-26651-0
 # Finding Level:	Low
 #
 #     The audit system must be configured to audit user deletions of files 
