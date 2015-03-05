@@ -5,7 +5,7 @@
 # - umask_for_daemons
 #
 # Security identifiers:
-# - CCE-26974-6
+# - CCE-27031-4
 #
 # Rule Summary: Set Daemon Umask
 #
