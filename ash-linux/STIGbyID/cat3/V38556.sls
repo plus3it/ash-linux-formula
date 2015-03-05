@@ -1,6 +1,8 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38556
-# Finding ID:	V-38556
-# Version:	RHEL-06-000190
+# Rule ID:		audit_rules_dac_modification_fremovexattr
+# Finding ID:		V-38556
+# Version:		RHEL-06-000190
+# SCAP Security ID:	CCE-27179-1
 # Finding Level:	Low
 #
 #     The audit system must be configured to audit all discretionary access 
