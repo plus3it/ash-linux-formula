@@ -1,6 +1,6 @@
 It is recommended that the system that will act as the hardening target be baselined against a commonly-accepted security profile. The most commonly used profile for DoD, IC or systems that wish to attain a similar level of hardening, are the DISA STIGs. As of the writing of this document, two profile-sets are available:
-- The one that comes with the 'scap-security-guide' RPM and installs to the host's "/usr/share/xml/scap/ssg/content" directory. In general, this will match up fairly closely to the one found on the DISA STIGS' ["Operating Systems - UNIX/Linux" page](http://iase.disa.mil/stigs/Documents/U_RedHat_6_V1R6_STIG.zip)
-- The one from the [DISA Benchmarks page](http://iase.disa.mil/stigs/Documents/U_RedHat_6_V1R6_STIG_SCAP_1-1_Benchmark.zip)
+- The one that comes with the 'scap-security-guide' RPM and installs to the host's "/usr/share/xml/scap/ssg/content" directory. In general, this will match up fairly closely to the one found on the DISA STIGS' ["Operating Systems - UNIX/Linux"](http://iase.disa.mil/stigs/Documents/U_RedHat_6_V1R6_STIG.zip) page.
+- The one from the [DISA Benchmarks](http://iase.disa.mil/stigs/Documents/U_RedHat_6_V1R6_STIG_SCAP_1-1_Benchmark.zip) page.
 
 
 If using the former, simply install the `scap-security-guide` RPM. If using the latter, grab and install the DISA benchmark profiles (the following assumes an internet-connected system: adjust your method to meet your deployment environment's capabilities). As root, execute something similar to the following:
