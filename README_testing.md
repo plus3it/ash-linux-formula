@@ -3,7 +3,7 @@ It is recommended that the system that will act as the hardening target be basel
 - The one from the (DISA Benchmarks page)[http://iase.disa.mil/stigs/Documents/U_RedHat_6_V1R6_STIG_SCAP_1-1_Benchmark.zip]
 
 
-If using the former, simply install the 'scap-security-guide' RPM. If using the latter, grab and install the DISA benchmark profiles (the following assumes an internet-connected system: adjust your method to meet your deployment environment's capabilities). As root, execute something similar to the following:
+If using the former, simply install the `scap-security-guide` RPM. If using the latter, grab and install the DISA benchmark profiles (the following assumes an internet-connected system: adjust your method to meet your deployment environment's capabilities). As root, execute something similar to the following:
 ~~~
 ( mkdir -p /opt/STIGs/RHEL6/v1r6 && cd /opt/STIGs/RHEL6/v1r6 && \
 wget http://iase.disa.mil/stigs/Documents/U_RedHat_6_V1R6_STIG_SCAP_1-1_Benchmark.zip && \
