@@ -33,27 +33,19 @@ script_{{ stig_id }}-describe:
 {%- for checkFile in checkFiles %}
   {%- set fullRule = '-w' + ' ' + checkFile + ' ' + auditRule %}
 
-  # If the rule already exists in the file, verbatim:
-  # Do nothing but call out that fact
-  {%- if not salt['cmd.run']('grep -c -E -e "' + fullRule + '" ' + audRulCfg ) == '0' %}
-
-rule_{{ stig_id }}-{{ checkFile }}:
+ruleExists_{{ stig_id }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "STIG-specified audit rule already in place"'
+    - onlyif: 'grep -c -E -e "{{ fullRule }}" {{ audRulCfg }}'
 
-  # If it doesn't exist, add it (with a comment)
-  {%- else %}
-
-rule_{{ stig_id }}-{{ checkFile }}:
+ruleAdd_{{ stig_id }}-{{ checkFile }}:
   file.append:
     - name: '{{ audRulCfg }}'
     - text: |
 
         # Monitor {{ checkFile }} for changes (per STIG-ID {{ stig_id }})
         {{ fullRule }}
-
-  # End our main logic-branching
-  {%- endif %}
+    - unless: 'grep -c -E -e "{{ fullRule }}" {{ audRulCfg }}'
 
 # End iteration of file list
 {%- endfor %}
