@@ -17,8 +17,8 @@
 #
 ############################################################
 
-{% set stig_id = 'V38601' %}
-{% set scapId = 'CCE-27004-1' %}
+{%- set stig_id = 'V38601' %}
+{%- set scapId = 'CCE-27004-1' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set checkFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.conf.all.send_redirects' %}
@@ -28,20 +28,16 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', parmName)
- %}
-file_{{ stig_id }}-repl:
-  file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^{{ parmName }}.*$'
-    - repl: '{{ parmName }} = 0'
-{% else %}
-file_{{ stig_id }}-append:
+comment_{{ stig_id }}-{{ parmName }}:
   file.append:
-    - name: '/etc/sysctl.conf'
-    - text:
-      - ' '
-      - '# Disable sending ICMP redirects (per STIG V-38601)'
-      - '{{ parmName }} = 0'
-{% endif %}
+    - name: '{{ checkFile }}'
+    - text: |
+        
+        # Added {{ parmName }} define per STIG-ID: {{ stig_id }}
+    - unless: 'grep "{{ parmName }}[    ]=[     ]0" {{ checkFile }}'
+
+setting_{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '0'
 
