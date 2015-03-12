@@ -27,31 +27,33 @@
 # more-restrictive 'mls' level may be substituted if the associated 
 # policy modules are installed.
 
-script_V51369-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V51369.sh
-    - cwd: /root
+{%- set stigId = 'V51369' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set selConfig = '/etc/selinux/config' %}
+{%- set selLink = '/etc/sysconfig/selinux' %}
+{%- set selType = 'SELINUXTYPE' %}
 
-{% set selConfig = '/etc/selinux/config' %}
-{% set selLink = '/etc/sysconfig/selinux' %}
-{% set selType = 'SELINUXTYPE' %}
+script_{{ stigId }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
+    - cwd: /root
 
 # Set SELINUXTYPE based on highest, installed policy-set
 {% if salt['pkg.version']('selinux-policy-mls') %}
   {% set typeMode = 'mls' %}
-notify_V51369-selWarn:
+notify_{{ stigId }}-selWarn:
   cmd.run:
     - name: 'printf "STIG only mandates ''targeted''\n   mode. Setting ''mls'' due to \n  presence of the associated policy-\n  modules. This may break many\n   things if ''SELINUX=enforcing''\n"'
 {% elif salt['pkg.version']('selinux-policy-targeted') %}
   {% set typeMode = 'targeted' %}
 {% else %}
-notify_V51369-selWarn:
+notify_{{ stigId }}-selWarn:
   cmd.run:
     - name: 'printf "STIG-compatible policy-modules not\n  installed. Install before\n  rebooting or system may fail\n  to properly restart."'
 {% endif %}
 
 {% if not salt['file.is_link'](selLink) %}
-symlink_V51369-selinxCfg:
+symlink_{{ stigId }}-selinxCfg:
   file.symlink:
     - name: {{ selLink }}
     - target: {{ selConfig }}
@@ -60,27 +62,27 @@ symlink_V51369-selinxCfg:
 {% if salt['file.file_exists'](selConfig) %}
   {% if salt['file.search'](selConfig, '^' + selType + '=') %}
     {% if salt['file.search'](selConfig, '^' + selType + '=' + typeMode) %}
-set_V51369-selType:
+set_{{ stigId }}-selType:
   cmd.run:
     - name: 'echo "The SELinux ''{{ selType }}'' parameter already set to ''{{ typeMode }}''"'
     {% else %}
-set_V51369-selType:
+set_{{ stigId }}-selType:
   file.replace:
     - name: {{ selConfig }}
     - pattern: '^{{ selType }}=.*$'
     - repl: '{{ selType }}={{ typeMode }}'
 
-touch_V51369-relabel:
+touch_{{ stigId }}-relabel:
   file.touch:
     - name: '/.autorelabel'
     {% endif %}
   {% else %}
-set_V51369-selType:
+set_{{ stigId }}-selType:
   file.append:
     - name: {{ selConfig }}
     - text: '{{ selType }}={{ typeMode }}'
 
-touch_V51369-relabel:
+touch_{{ stigId }}-relabel:
   file.touch:
     - name: '/.autorelabel'
   {% endif %}
