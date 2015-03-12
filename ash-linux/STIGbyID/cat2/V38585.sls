@@ -16,12 +16,13 @@
 ############################################################
 
 {%- set stig_id = 'V38585' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/boot/grub/grub.conf' %}
 {%- set grubPasswd = '$6$THISISNOTAVALIDCRPYTSTRING' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
 # Check for compliant (SHA512) GRUB password - alert if not set

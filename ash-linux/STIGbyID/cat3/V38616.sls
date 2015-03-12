@@ -9,29 +9,36 @@
 #
 ############################################################
 
-script_V38616-describe:
+{%- set stigId = 'V38616' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'PermitUserEnvironment' %}
+{%- set parmVal = 'no' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38616.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^PermitUserEnvironment') %}
-  {% if salt['file.search']('/etc/ssh/sshd_config', '^PermitUserEnvironment no') %}
-file_V38616-configSet:
+{% if salt['file.search'](cfgFile, '^' + parmName) %}
+  {% if salt['file.search'](cfgFile, '^' + parmName + ' ' + parmVal) %}
+file_{{ stigId }}-configSet:
   cmd.run:
-    - name: 'echo "PermitUserEnvironment already meets STIG-defined requirements"'
+    - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'
   {% else %}
-file_V38616-configSet:
+file_{{ stigId }}-configSet:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^PermitUserEnvironment.*$'
-    - repl: 'PermitUserEnvironment no'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} {{ parmVal }}'
   {% endif %}
 {% else %}
-file_V38616-configSet:
+file_{{ stigId }}-configSet:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text:
-      - ' '
-      - '# SSH service must not allow setting of user environment options (per STIG V-38616)'
-      - 'PermitUserEnvironment no'
+        
+        # SSH service must not allow setting of user environment options (per STIG V-38616)
+        {{ parmName }} {{ parmVal }}
+
 {% endif %}
