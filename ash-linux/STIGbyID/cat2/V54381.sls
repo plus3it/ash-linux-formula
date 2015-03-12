@@ -15,32 +15,34 @@
 #
 #################################################################
 
-script_V54381-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V54381.sh
-    - cwd: '/root'
-
+{%- set stigId = 'V54381' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {% set checkFile = '/etc/audit/auditd.conf' %}
 {% set auditParm = 'admin_space_left_action' %}
 
+script_{{ stigId }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
+    - cwd: '/root'
+
 {% if salt['file.search'](checkFile, '^' + auditParm) %}
   {% if salt['file.search'](checkFile, '^' + auditParm + ' = suspend') %}
-notify_V54381:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "{{ auditParm }} parameter already set in {{ checkFile }}"'
   {% else %}
-notify_V54381:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "{{ auditParm }} parameter set in {{ checkFile }} but not to recommended value (''suspend'')"'
 
-file_V54381:
+file_{{ stigId }}:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^{{ auditParm }} = .*'
     - repl: '{{ auditParm }} = suspend'
   {% endif %}
 {% else %}
-file_V54381:
+file_{{ stigId }}:
   file.append:
     - name: '{{ checkFile }}'
     - text: '{{ auditParm }} = suspend'
