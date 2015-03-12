@@ -22,8 +22,8 @@ include:
   - ash-linux.STIGbyID.cat2.V38475
   - ash-linux.STIGbyID.cat2.V38477
   - ash-linux.STIGbyID.cat2.V38479
-  - ash-linux.STIGbyID.cat2.V38481
   - ash-linux.STIGbyID.cat2.V38481-fix
+  - ash-linux.STIGbyID.cat2.V38481
   - ash-linux.STIGbyID.cat2.V38483
   - ash-linux.STIGbyID.cat2.V38484
   - ash-linux.STIGbyID.cat2.V38486
@@ -33,8 +33,11 @@ include:
   - ash-linux.STIGbyID.cat2.V38492
   - ash-linux.STIGbyID.cat2.V38493
   - ash-linux.STIGbyID.cat2.V38495
+  - ash-linux.STIGbyID.cat2.V38496
   - ash-linux.STIGbyID.cat2.V38498
   - ash-linux.STIGbyID.cat2.V38499
+  - ash-linux.STIGbyID.cat2.V38500
+  - ash-linux.STIGbyID.cat2.V38501
   - ash-linux.STIGbyID.cat2.V38502
   - ash-linux.STIGbyID.cat2.V38503
   - ash-linux.STIGbyID.cat2.V38504
@@ -139,3 +142,6 @@ include:
   - ash-linux.STIGbyID.cat2.V51337
   - ash-linux.STIGbyID.cat2.V51363
   - ash-linux.STIGbyID.cat2.V51391
+  - ash-linux.STIGbyID.cat2.V51875
+  - ash-linux.STIGbyID.cat2.V54381
+  - ash-linux.STIGbyID.cat2.V57569
