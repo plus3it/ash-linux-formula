@@ -19,40 +19,32 @@
 #
 ############################################################
 
-script_V38684-describe:
+{%- set stigId = 'V38684' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set limitsFile = '/etc/security/limits.conf' %}
+{%- set limitVal = '10' %}
+{%- set searchRoot = '\*[	 ]*hard[	 ]*maxlogins' %}
+{%- set searchPtn = searchRoot + '[	 ]*' + limitVal + '$' %}
+{%- set fixString = '*	hard	maxlogins	' + limitVal %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38684.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/security/limits.conf','hard[ 	]*maxlogins') %}
-
-  # Only report if proper setting already present
-  {% if salt['file.search']('/etc/security/limits.conf', '^\*[ 	]hard[ 	]*maxlogins[ 	]*10$') %}
-set_V38684-noCores:
-  cmd.run:
-    - name: 'echo "Users already limited to 10 interactive logins"'
-
-  # If proper value present but commented out, uncomment
-  {% elif salt['file.search']('/etc/security/limits.conf', '^#\*[ 	]hard[ 	]*maxlogins[ 	]*10$') %}
-set_V38684-noCores:
+# If correct setting is present but commented, uncomment it
+uncomment_{{ stigId }}-noCores:
   file.uncomment:
-    - name: '/etc/security/limits.conf'
-    - regex: '^\*[ 	]hard[ 	]*maxlogins[ 	]*.*$'
-    - text: '*	hard 	maxlogins	10'
+    - name: '{{ limitsFile }}'
+    - regex: '{{ searchPtn }}'
+    - onlyif: 'grep -E "#*{{ searchPtn }}" {{ limitsFile }}'
 
-  # If bad value present, change it
-  {% else %}
-set_V38684-noCores:
-  file.replace:
-    - name: '/etc/security/limits.conf'
-    - pattern: '^\*[ 	]hard[ 	]*maxlogins[ 	]*.*$'
-    - repl: '*	hard 	maxlogins	10'
-  {% endif %}
-
-# Append if no "hard maxlogins" value is found
-{% else %}
-set_V38684-noCores:
+# Otherwise, add it
+set_{{ stigId }}-noCores:
   file.append:
-    - name: '/etc/security/limits.conf'
-    - text: '*	hard	maxlogins	10'
-{% endif %}
+    - name: '{{ limitsFile }}'
+    - text: |
+        
+        # Disable process core dumps (per STIG {{ stigId }})
+        {{ fixString }}
+    - unless: 'grep -E "{{ searchPtn }}" {{ limitsFile }}'
