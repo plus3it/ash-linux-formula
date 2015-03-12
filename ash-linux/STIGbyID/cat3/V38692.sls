@@ -1,6 +1,7 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38692
-# Finding ID:	V-38692
-# Version:	RHEL-06-000334
+# Finding ID:		V-38692
+# Version:		RHEL-06-000334
+# SCAP Security ID:	CCE-27283-1
 # Finding Level:	Low
 #
 #     Accounts must be locked upon 35 days of inactivity. Disabling 
