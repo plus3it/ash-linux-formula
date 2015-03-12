@@ -16,40 +16,39 @@
 #
 ############################################################
 
-script_V38675-describe:
+{%- set stigId = 'V38675' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set limitsFile = '/etc/security/limits.conf' %}
+{%- set limitVal = '0' %}
+{%- set searchRoot = '\*[	 ]*hard[	 ]*core' %}
+{%- set searchPtn = searchRoot + '[	 ]*' + limitVal + '$' %}
+{%- set fixString = '\*	hard	core	' + limitVal %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38675.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/security/limits.conf','hard[ 	]*core') %}
-
-  # Only report if proper setting already present
-  {% if salt['file.search']('/etc/security/limits.conf', '^\*[ 	]hard[ 	]*core[ 	]*0$') %}
-set_V38675-noCores:
-  cmd.run:
-    - name: 'echo "Process core dumps already disabled"'
-
-  # If proper value present but commented out, uncomment
-  {% elif salt['file.search']('/etc/security/limits.conf', '^#\*[ 	]hard[ 	]*core[ 	]*0$') %}
-set_V38675-noCores:
+# If correct setting is present but commented, uncomment it
+uncomment_{{ stigId }}-noCores:
   file.uncomment:
-    - name: '/etc/security/limits.conf'
-    - regex: '^\*[ 	]hard[ 	]*core[ 	]*.*$'
-    - text: '*	hard 	core	0'
+    - name: '{{ limitsFile }}'
+    - regex: '{{ searchPtn }}'
+    - onlyif: 'grep -E "#*{{ searchPtn }}" {{ limitsFile }}'
 
-  # If bad value present, change it
-  {% else %}
-set_V38675-noCores:
-  file.replace:
-    - name: '/etc/security/limits.conf'
-    - pattern: '^\*[ 	]hard[ 	]*core[ 	]*.*$'
-    - repl: '*	hard 	core	0'
-  {% endif %}
-# Append if no "hard core" value is found
-{% else %}
+# If incorrect setting is present, comment it out
+badset_{{ stigId }}-noCores:
+  file.comment:
+    - name: '{{ limitsFile }}'
+    - regex: '{{ searchRoot }}[	 ]*[1-9]'
+    - onlyif: 'grep -E "^{{ searchRoot }}[ 	]*[1-9]" {{ limitsFile }}'
 
-set_V38675-noCores:
+# Otherwise, add it
+set_{{ stigId }}-noCores:
   file.append:
-    - name: '/etc/security/limits.conf'
-    - text: '*	hard	core	0'
-{% endif %}
+    - name: '{{ limitsFile }}'
+    - text: |
+        
+        # Disable process core dumps (per STIG {{ stigId }})
+        *	hard	core	0
+    - unless: 'grep -E "{{ searchPtn }}" {{ limitsFile }}'
