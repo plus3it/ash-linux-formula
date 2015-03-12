@@ -16,22 +16,26 @@
 #
 ############################################################
 
-script_V38615-describe:
+{%- set stigId = 'V38615' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38615.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^Banner')
+{% if salt['file.search'](cfgFile, '^Banner')
  %}
-file_V38615-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - pattern: '^Banner.*$'
     - repl: 'Banner /etc/issue'
 {% else %}
-file_V38615-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text:
       - ' '
       - '# SSH service must present DoD login banners (per STIG V-38615)'
