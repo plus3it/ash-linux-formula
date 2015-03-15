@@ -20,10 +20,11 @@
 ############################################################
 
 {%- set stig_id = '38558' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 {%- set usertypes = {
