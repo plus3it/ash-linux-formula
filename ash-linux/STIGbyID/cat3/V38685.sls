@@ -16,12 +16,15 @@
 #
 ############################################################
 
-script_V38685-describe:
+{%- set stigId = 'V38685' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38685.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-notify_V38685-generic:
+notify_{{ stigId }}-generic:
   cmd.run:
     - name: 'printf "******************************************\n** This is an informational test, only! **\n******************************************\nTest cannot auto-ID temporary accounts:\n  Each locally-managed user will be queried.\n  Expiry settings will be enumerated but not\n  modified\n"'
 
@@ -31,11 +34,11 @@ notify_V38685-generic:
   {% set ShadowData = salt['shadow.info'](ID) %}
 
   {% if ShadowData.expire == -1 %}
-notify_V38685-{{ ID }}:
+notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "Userid ''{{ ID }}'' is not set to expire"'
   {% else %}
-notify_V38685-{{ ID }}:
+notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "Userid ''{{ ID }}'' is set to expire [{{ ShadowData.expire }}]"'
   {% endif %}

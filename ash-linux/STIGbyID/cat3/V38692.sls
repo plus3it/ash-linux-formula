@@ -16,9 +16,12 @@
 #
 ############################################################
 
-script_V38692-describe:
+{%- set stigId = 'V38692' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38692.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% set checkFile = '/etc/default/useradd' %}
@@ -28,12 +31,12 @@ script_V38692-describe:
 {% if salt['file.search'](checkFile, '^' + parmName + '=') %}
   # ...Check if correct value
   {% if salt['file.search'](checkFile, '^' + parmName + '=35') %}
-set_V38692-inactive:
+set_{{ stigId }}-inactive:
   cmd.run:
     - name: 'echo "Account inactivity-lockout already set to 35 days"'
   # ...If not, set correct value
   {% else %}
-set_V38692-inactive:
+set_{{ stigId }}-inactive:
   file.replace:
     - name: {{ checkFile }}
     - pattern: '^{{ parmName }}=.*$'
@@ -43,13 +46,13 @@ set_V38692-inactive:
 {% else %}
   # ...See if an appropriate commented value exists
   {% if salt['file.search'](checkFile, '#[ 	]*' + parmName + '=35') %}
-set_V38692-inactive:
+set_{{ stigId }}-inactive:
   file.uncomment:
     - name: {{ checkFile }}
     - regex: '{{ parmName }}=35'
   # ...and append if necessary
   {% else %}
-set_V38692-inactive:
+set_{{ stigId }}-inactive:
   file.append:
     - name: {{ checkFile }}
     - text: '{{ parmName }}=35'
