@@ -14,20 +14,23 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+
+{%- set stigId = 'V38651' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
  
-script_V38651-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38651.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['file.search']('/etc/bashrc', '^[   ]*umask[ 	][0-9][0-9]') %}
-file_V38651-bashrcUmask:
+file_{{ stigId }}-bashrcUmask:
   file.replace:
     - name: '/etc/bashrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
     - repl: 'umask 077'
 {% else %}
-file_V38651-bashrcUmask:
+file_{{ stigId }}-bashrcUmask:
   file.append:
     - name: '/etc/bashrc'
     - text:
@@ -39,7 +42,7 @@ file_V38651-bashrcUmask:
 # If AT&T KSH is instelled...
 {% if salt['pkg.version']('ksh') %}
   {% if salt['file.search']('/etc/kshrc', '^[   ]*umask') %}
-file_V38651-kshrcUmask:
+file_{{ stigId }}-kshrcUmask:
   file.replace:
     - name: '/etc/kshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
@@ -47,7 +50,7 @@ file_V38651-kshrcUmask:
   {% endif %}
 
   {% if salt['file.search']('/etc/skel/.kshrc', '^[   ]*umask') %}
-file_V38651-kshrcUmaskSkel:
+file_{{ stigId }}-kshrcUmaskSkel:
   file.replace:
     - name: '/etc/skel/.kshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
@@ -59,7 +62,7 @@ file_V38651-kshrcUmaskSkel:
 # If BSD enhanced-KSH is instelled...
 {% if salt['pkg.version']('mksh') %}
   {% if salt['file.search']('/etc/mkshrc', '^[   ]*umask') %}
-file_V38651-mkshrcUmask:
+file_{{ stigId }}-mkshrcUmask:
   file.replace:
     - name: '/etc/mkshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
@@ -67,7 +70,7 @@ file_V38651-mkshrcUmask:
   {% endif %}
 
   {% if salt['file.search']('/etc/skel/.mkshrc', '^[   ]*umask') %}
-file_V38651-mkshrcUmaskSkel:
+file_{{ stigId }}-mkshrcUmaskSkel:
   file.replace:
     - name: '/etc/skel/.mkshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'

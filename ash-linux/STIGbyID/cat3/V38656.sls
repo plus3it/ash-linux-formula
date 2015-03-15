@@ -14,9 +14,12 @@
 #
 ############################################################
 
-script_V38656-describe:
+{%- set stigId = 'V38656' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38656.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # If the Samba config files are installed...
@@ -24,7 +27,7 @@ script_V38656-describe:
   # and the "client signing" option is already set to some value,
   # override as necessary
   {% if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') or salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
-paramSet_V38656-clientSigning:
+paramSet_{{ stigId }}-clientSigning:
   file.replace:
     - name: '/etc/samba/smb.conf'
     - pattern: 'client signing[ 	]=.*$'
@@ -32,7 +35,7 @@ paramSet_V38656-clientSigning:
   {% else %}
   # ...otherwise, set a value (append immediately after [global]
   # stanza's header
-paramSet_V38656-clientSigning:
+paramSet_{{ stigId }}-clientSigning:
   file.replace:
     - name: '/etc/samba/smb.conf'
     - pattern: '^(?P<srctok>^\[global\]$)'
@@ -40,7 +43,7 @@ paramSet_V38656-clientSigning:
   {% endif %}
 # If the Samba config files are not installed...
 {% else %}
-paramSet_V38656-clientSigning:
+paramSet_{{ stigId }}-clientSigning:
   cmd.run:
     - name: 'echo "No relevant findings: Samba configuration components not installed"'
 {% endif %}

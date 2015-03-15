@@ -25,9 +25,12 @@
 #
 ############################################################
 
-script_V38655-describe:
+{%- set stigId = 'V38655' %]
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38655.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 ####################################
@@ -39,21 +42,21 @@ script_V38655-describe:
 # Check if USB is enabled - notify if disabled
 {% if salt['file.file_exists'](usbConf) or salt['file.file_exists'](modprobConf) %}
   {% if salt['file.search'](usbConf, 'install usb-storage /bin/true') or salt['file.search'](modprobConf, 'install usb-storage /bin/true') %}
-notify_V38655-usbDisabled:
+notify_{{ stigId }}-usbDisabled:
   cmd.run:
     - name: 'echo "Mounting of USB devices disabled"'
   {% endif %}
 {% else %}
-file-V38655-touchUSBconf:
+file-{{ stigId }}-touchUSBconf:
   file.touch:
     - name: {{ usbConf }}
 
-file_V38655-appendUSBconf:
+file_{{ stigId }}-appendUSBconf:
   file.append:
     - name: {{ usbConf }}
     - text: 'install usb-storage /bin/true'
     - require:
-      - file: file-V38655-touchUSBconf
+      - file: file-{{ stigId }}-touchUSBconf
     - onlyif:
       - 'test -f {{ usbConf }}'
 {% endif %}
@@ -77,7 +80,7 @@ file_V38655-appendUSBconf:
 ######################################
 ## Check/fix fstab-managed mounts
 ######################################
-notify_V38655-fstabScan:
+notify_{{ stigId }}-fstabScan:
   cmd.run:
     - name: 'echo "Scanning for fstab-managed media devices..."'
 
@@ -96,20 +99,20 @@ notify_V38655-fstabScan:
 
 {% if fstabfsType in mediaFStypes %}
   {% if 'noexec' in fstabMountOpts %}
-notify_V38655-{{ fstabMount }}_fstabMntOpt:
+notify_{{ stigId }}-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
     - name: 'echo "Info: Mountpount ''{{ fstabMount }}'' has ''noexec'' option set"'
   {% else %}
 {% set remountDev = fstabMountStruct['device'] %}
 {% set optString = fstabMountOpts|join(' ') + ',noexec' %}
 
-notify_V38655-{{ fstabMount }}_fstabMntOpt:
+notify_{{ stigId }}-{{ fstabMount }}_fstabMntOpt:
   cmd.run:
     - name: 'printf "
 WARNING: Mountpount ''{{ fstabMount }} does not have\n
 ''noexec'' option set ...changing\n
 "'
-fstab_V38655-{{ fstabMount }}:
+fstab_{{ stigId }}-{{ fstabMount }}:
   module.run:
     - name: 'mount.set_fstab'
     - m_name: '{{ fstabMount }}'
@@ -125,7 +128,7 @@ fstab_V38655-{{ fstabMount }}:
 ####################################
 ## Check/fix active mounts
 ####################################
-notify_V38655-mountScan:
+notify_{{ stigId }}-mountScan:
   cmd.run:
     - name: 'echo "Scanning for mounted media devices..."'
 
@@ -152,26 +155,26 @@ notify_V38655-mountScan:
 
   # See if mounted filesystem is fstab-managed
   {% if mountPoint in fstabList %}
-crosscheck_V38655-{{ mountPoint }}:
+crosscheck_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'printf "Info: ''{{ mountPoint }}'' defined in /etc/fstab\n\n"'
   {% else %}
-crosscheck_V38655-{{ mountPoint }}:
+crosscheck_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
   {% endif %}
 
   # See if mounted filesystem has 'noexec' opton set
   {% if 'noexec' in mountOpts %}
-notify_V38655-{{ mountPoint }}_remount:
+notify_{{ stigId }}-{{ mountPoint }}_remount:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' has ''noexec'' option set"'
   {% else %}
-notify_V38655-{{ mountPoint }}_remount:
+notify_{{ stigId }}-{{ mountPoint }}_remount:
   cmd.run:
     - name: 'echo "NOTICE: ''{{ mountPoint }}'' does not have ''noexec'' option set ...remounting"'
 
-remount_V38655-{{ mountPoint }}:
+remount_{{ stigId }}-{{ mountPoint }}:
   module.run:
     - name: 'mount.remount'
     - m_name: '{{ mountPoint }}'
