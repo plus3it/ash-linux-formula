@@ -14,9 +14,12 @@
 #
 ############################################################
 
-script_V38672-describe:
+{%- set stigId = 'V38672' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38672.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% set svcName = 'netconsole' %}
@@ -24,37 +27,37 @@ script_V38672-describe:
 {% if salt['pkg.version']('initscripts') %}
 # Ensure netconsole service is disabled and deactivated
   {% if salt['service.enabled'](svcName) %}
-svc_V38672-{{ svcName }}Disabled:
+svc_{{ stigId }}-{{ svcName }}Disabled:
   service.disabled:
     - name: '{{ svcName }}'
-notify_V38672-{{ svcName }}Disabled:
+notify_{{ stigId }}-{{ svcName }}Disabled:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service has been disabled"'
   {% else %}
-notify_V38672-{{ svcName }}Disabled:
+notify_{{ stigId }}-{{ svcName }}Disabled:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service is already disabled"'
   {% endif %}
 
   {% if salt['service.status'](svcName) %}
-svc_V38672-{{ svcName }}Dead:
+svc_{{ stigId }}-{{ svcName }}Dead:
   service.dead:
     - name: '{{ svcName }}'
 
-notify_V38672-{{ svcName }}Dead:
+notify_{{ stigId }}-{{ svcName }}Dead:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service has been stopped"'
 
   {% else %}
  
-notify_V38672-{{ svcName }}Dead:
+notify_{{ stigId }}-{{ svcName }}Dead:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service is already stopped"'
 
   {% endif %}
 {% else %}
 
-notify_V38672-package:
+notify_{{ stigId }}-package:
   cmd.run:
     - name: 'echo "Parent package of {{ svcName }} not installed"'
 

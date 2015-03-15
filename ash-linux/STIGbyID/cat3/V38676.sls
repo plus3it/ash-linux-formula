@@ -10,13 +10,16 @@
 #
 ############################################################
 
-script_V38676-describe:
+{%- set stigId = 'V38676' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38676.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if not salt['pkg.version']('xorg-x11-server-common') %}
-notify_V38676-noPostfix:
+notify_{{ stigId }}-noPostfix:
   cmd.run:
     - name: 'echo "X Windows package not installed"'
 {% endif %}

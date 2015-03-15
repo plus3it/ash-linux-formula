@@ -13,11 +13,14 @@
 #
 ############################################################
 
-script_V38683-describe:
+{%- set stigId = 'V38683' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38683.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-cmd_V38683-userDupeChk:
+cmd_{{ stigId }}-userDupeChk:
   cmd.run:
     - name: '/usr/sbin/pwck -rq && echo "No duplicate user names found"'

@@ -14,15 +14,18 @@
 #
 ############################################################
 
-script_V38681-describe:
+{%- set stigId = 'V38681' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38681.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% for user in salt['user.getent']('') %}
 {% set ID = user['name'] %}
 {% if not salt['file.search']('/etc/group', ':' + user['gid']|string() + ':' ) %}
-notify_V38681-{{ ID }}:
+notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'
 {% endif %}
