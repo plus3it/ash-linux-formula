@@ -12,7 +12,7 @@
 #
 ############################################################
 
-{%- set stigId = '{{ stigId }}' %}
+{%- set stigId = 'V38642' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/init.d/functions' %}
 

@@ -15,7 +15,7 @@
 ############################################################
 
 {%- set stigId = 'V38610' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files/V38610' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'ClientAliveCountMax' %}
 
