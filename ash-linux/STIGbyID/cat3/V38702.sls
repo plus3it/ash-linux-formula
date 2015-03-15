@@ -50,10 +50,10 @@ file_{{ stigId }}-xferLog:
 file_{{ stigId }}-xferLog:
   file.append:
     - name: {{ vsftpdConf }}
-    - text:
-      - ' '
-      - '# Enable transfer-logging (per STIG V-38702)'
-      - '{{ logEnable }}=YES'
+    - text: |
+        
+        # Enable transfer-logging (per STIG V-38702)
+        {{ logEnable }}=YES
   {% endif %}
 
   # ...and see if standard-logging is explicitly disabled
@@ -75,10 +75,10 @@ file_{{ stigId }}-logFmt:
 file_{{ stigId }}-logFmt:
   file.append:
     - name: {{ vsftpdConf }}
-    - text:
-      - ' '
-      - '# Enable verbose logging (per STIG V-38702)'
-      - '{{ logFormat }}=YES'
+    - text: |
+        
+        # Enable verbose logging (per STIG V-38702)
+        {{ logFormat }}=YES
   {% endif %}
 
   # ...and see if verbose-logging is already enabled
@@ -100,10 +100,10 @@ file_{{ stigId }}-logVerbose:
 file_{{ stigId }}-logVerbose:
   file.append:
     - name: {{ vsftpdConf }}
-    - text:
-      - ' '
-      - '# Enable transfer-logging (per STIG V-38702)'
-      - '{{ logVerbosity }}=YES'
+    - text: |
+        
+        # Enable transfer-logging (per STIG V-38702)
+        {{ logVerbosity }}=YES
   {% endif %}
 
 # If not installed, call out as much...

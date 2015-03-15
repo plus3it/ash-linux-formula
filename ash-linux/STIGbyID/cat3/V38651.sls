@@ -33,10 +33,10 @@ file_{{ stigId }}-bashrcUmask:
 file_{{ stigId }}-bashrcUmask:
   file.append:
     - name: '/etc/bashrc'
-    - text:
-      - ' '
-      - '# Umask must be set to "077" (per STIG V-38651)'
-      - 'umask 077'
+    - text: |
+        
+        # Umask must be set to "077" (per STIG V-38651)
+        umask 077
 {% endif %}
 
 # If AT&T KSH is instelled...

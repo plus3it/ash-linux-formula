@@ -42,8 +42,8 @@ file_V38471-mkActive:
 file_V38471-mkActive:
   file.append:
     - name: '{{ syslogConf }}'
-    - text:
-      - ' '
-      - '# Audit records must be forwarded to the syslog service (per STIG-ID V-38471)'
-      - 'active = yes'
+    - text: |
+        
+        # Audit records must be forwarded to the syslog service (per STIG-ID V-38471)
+        active = yes
 {% endif %}

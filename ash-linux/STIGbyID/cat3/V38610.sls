@@ -35,8 +35,8 @@ file_V38610-configSet:
 file_V38610-configSet:
   file.append:
     - name: '/etc/ssh/sshd_config'
-    - text:
-      - ' '
-      - '# SSH service must set a session idle-timeout (per STIG V-38610)'
-      - 'ClientAliveCountMax 0'
+    - text: |
+        
+        # SSH service must set a session idle-timeout (per STIG V-38610)
+        ClientAliveCountMax 0
 {% endif %}

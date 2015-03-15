@@ -29,8 +29,8 @@ file_{{ stigId }}-configSet:
 file_{{ stigId }}-configSet:
   file.append:
     - name: '/etc/csh.cshrc'
-    - text:
-      - ' '
-      - '# Umask must be set to "077" (per STIG V-38649)'
-      - 'umask 077'
+    - text: |
+        
+        # Umask must be set to "077" (per STIG V-38649)
+        umask 077
 {% endif %}

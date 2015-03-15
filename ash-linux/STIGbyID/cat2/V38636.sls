@@ -31,9 +31,9 @@ file_V38636-repl:
 file_V38636-append:
   file.append:
     - name: '/etc/audit/auditd.conf'
-    - text:
-      - ' '
-      - '# system must retain enough rotated logs to meet local policy (per STIG V-38636)'
-      - 'num_logs = 5'
+    - text: |
+        
+        # system must retain enough rotated logs to meet local policy (per STIG V-38636)
+        num_logs = 5
 {% endif %}
 
