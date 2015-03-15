@@ -18,9 +18,12 @@
 #
 ############################################################
 
-script_V38697-describe:
+{%- set stigId = 'V38697' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38697.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # STIG specifies a fix for an indeterminate list. The following only 
@@ -34,22 +37,22 @@ script_V38697-describe:
 {% set dirVarTmp = '/var/tmp' %}
 
 {% if salt['file.check_perms'](dirTmp, '', 'root', 'root', '1777') %}
-directory_V38498-tmp:
+directory_{{ stigId }}-tmp:
   cmd.run:
     - name: 'echo "The ''{{ dirTmp }}'' directory already set to mode 1777"'
 {% else %}
-directory_V38498-tmp:
+directory_{{ stigId }}-tmp:
   file.directory:
     - name: {{ dirTmp }}
     - mode: 1777
 {% endif %}
 
 {% if salt['file.check_perms'](dirVarTmp, '', 'root', 'root', '1777') %}
-directory_V38498-varTmp:
+directory_{{ stigId }}-varTmp:
   cmd.run:
     - name: 'echo "The ''{{ dirVarTmp }}'' directory already set to mode 1777"'
 {% else %}
-directory_V38498-varTmp:
+directory_{{ stigId }}-varTmp:
   file.directory:
     - name: {{ dirVarTmp }}
     - mode: 1777
