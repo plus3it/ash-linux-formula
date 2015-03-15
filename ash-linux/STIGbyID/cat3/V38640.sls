@@ -11,21 +11,24 @@
 #
 ############################################################
 
-script_V38640-describe:
+{%- set stigId = 'V38640' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38640.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('abrt') %}
-svc_V38640-abrtdEnabled:
+svc_{{ stigId }}-abrtdEnabled:
   service.disabled:
     - name: 'abrtd'
 
-svc_V38640-abrtdRunning:
+svc_{{ stigId }}-abrtdRunning:
   service.dead:
     - name: 'abrtd'
 {% else %}
-notice_V38640-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The ABRT subsystem is not installed"'
 {% endif %}

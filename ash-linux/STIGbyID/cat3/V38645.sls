@@ -11,29 +11,33 @@
 #
 ############################################################
 
-script_V38645-describe:
+{%- set stigId = 'V38645' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set checkFile = '/etc/login.defs' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38645.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/login.defs', '^UMASK') %}
-  {% if salt['file.search']('/etc/login.defs', '^UMASK	077') %}
-file_V38645-configSet:
+{% if salt['file.search'](checkFile, '^UMASK') %}
+  {% if salt['file.search'](checkFile, '^UMASK	077') %}
+file_{{ stigId }}-configSet:
   file.replace:
-    - name: '/etc/login.defs'
+    - name: '{{ checkFile }}'
     - pattern: '^UMASK.*$'
     - repl: 'UMASK	077'
   {% else %}
-file_V38645-configSet:
+file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "Default user umask-setting already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
-file_V38645-configSet:
+file_{{ stigId }}-configSet:
   file.append:
-    - name: '/etc/login.defs'
+    - name: '{{ checkFile }}'
     - text:
-      - ' '
-      - '# Umask must be set to "077" (per STIG V-38645)'
-      - 'UMASK	077'
+        
+        # Umask must be set to "077" (per STIG V-38645)
+        UMASK	077
 {% endif %}

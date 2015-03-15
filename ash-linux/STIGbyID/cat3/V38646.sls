@@ -11,21 +11,24 @@
 #
 ############################################################
 
-script_V38646-describe:
+{%- set stigId = 'V38646' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38646.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('oddjob') %}
-svc_V38646-oddjobdEnabled:
+svc_{{ stigId }}-oddjobdEnabled:
   service.disabled:
     - name: 'oddjobd'
 
-svc_V38646-oddjobdRunning:
+svc_{{ stigId }}-oddjobdRunning:
   service.dead:
     - name: 'oddjobd'
 {% else %}
-notice_V38646-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The oddjob subsystem is not installed"'
 {% endif %}

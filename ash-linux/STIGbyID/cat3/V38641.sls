@@ -11,21 +11,24 @@
 #
 ############################################################
 
-script_V38641-describe:
+{%- set stigId = 'V38641' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38641.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('at') %}
-svc_V38641-atdEnabled:
+svc_{{ stigId }}-atdEnabled:
   service.disabled:
     - name: 'atd'
 
-svc_V38641-atdRunning:
+svc_{{ stigId }}-atdRunning:
   service.dead:
     - name: 'atd'
 {% else %}
-notice_V38641-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The at subsystem is not installed"'
 {% endif %}
