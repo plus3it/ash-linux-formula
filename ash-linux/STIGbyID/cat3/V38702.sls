@@ -16,9 +16,12 @@
 #
 ############################################################
 
-script_V38702-describe:
+{%- set stigId = 'V38702' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38702.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # Check to see if vsftpd service is installed
@@ -30,13 +33,13 @@ script_V38702-describe:
 
   # ...and see if transfer-logging is already enabled
   {% if salt['file.search'](vsftpdConf, '^' + logEnable + '=YES') %}
-file_V38702-xferLog:
+file_{{ stigId }}-xferLog:
   cmd.run:
     - name: 'echo "The {{ logEnable }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
   {% elif salt['file.search'](vsftpdConf, '^' + logEnable + '=NO') %}
-file_V38702-xferLog:
+file_{{ stigId }}-xferLog:
   file.replace:
     - name: {{ vsftpdConf }}
     - pattern: '^{{ logEnable }}.*$'
@@ -44,7 +47,7 @@ file_V38702-xferLog:
 
   # ...if not defined at all
   {% else  %}
-file_V38702-xferLog:
+file_{{ stigId }}-xferLog:
   file.append:
     - name: {{ vsftpdConf }}
     - text:
@@ -55,13 +58,13 @@ file_V38702-xferLog:
 
   # ...and see if standard-logging is explicitly disabled
   {% if salt['file.search'](vsftpdConf, '^' + logFormat + '=NO') %}
-file_V38702-logFmt:
+file_{{ stigId }}-logFmt:
   cmd.run:
     - name: 'echo "The {{ logFormat }} option is already appropriately set"'
 
   # ...set it to disabled if already explicitly enabled
   {% elif salt['file.search'](vsftpdConf, '^' + logFormat + '=YES') %}
-file_V38702-logFmt:
+file_{{ stigId }}-logFmt:
   file.replace:
     - name: {{ vsftpdConf }}
     - pattern: '^{{ logFormat }}.*$'
@@ -69,7 +72,7 @@ file_V38702-logFmt:
 
   # ...if not defined at all
   {% else  %}
-file_V38702-logFmt:
+file_{{ stigId }}-logFmt:
   file.append:
     - name: {{ vsftpdConf }}
     - text:
@@ -80,13 +83,13 @@ file_V38702-logFmt:
 
   # ...and see if verbose-logging is already enabled
   {% if salt['file.search'](vsftpdConf, '^' + logVerbosity + '=YES') %}
-file_V38702-logVerbose:
+file_{{ stigId }}-logVerbose:
   cmd.run:
     - name: 'echo "The {{ logVerbosity }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
   {% elif salt['file.search'](vsftpdConf, '^' + logVerbosity + '=NO') %}
-file_V38702-logVerbose:
+file_{{ stigId }}-logVerbose:
   file.replace:
     - name: {{ vsftpdConf }}
     - pattern: '^{{ logVerbosity }}.*$'
@@ -94,7 +97,7 @@ file_V38702-logVerbose:
 
   # ...if not defined at all
   {% else  %}
-file_V38702-logVerbose:
+file_{{ stigId }}-logVerbose:
   file.append:
     - name: {{ vsftpdConf }}
     - text:
@@ -105,7 +108,7 @@ file_V38702-logVerbose:
 
 # If not installed, call out as much...
 {% else  %}
-file_V38702-modify:
+file_{{ stigId }}-modify:
   cmd.run:
     - name: 'echo "FTP (vsftpd} service not installed"'
 {% endif %}

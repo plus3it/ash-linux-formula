@@ -16,13 +16,16 @@
 #
 ############################################################
 
-script_V51379-describe:
+{%- set stigId = 'V51379' %}
+{%- set helperLoc 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V51379.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # Need to replace this with custom module...
-script_V51379-Verfiy:
+script_{{ stigId }}-Verfiy:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V51379-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: /root
