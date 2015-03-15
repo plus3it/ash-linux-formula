@@ -10,22 +10,25 @@
 #
 ############################################################
 
-script_V38618-describe:
+{%- set stigId = 'V38618' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38618.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('avahi') %}
-svc_V38618-avahiDisabled:
+svc_{{ stigId }}-avahiDisabled:
   service.disabled:
     - name: 'avahi-daemon'
 
-svc_V38618-avahiRunning:
+svc_{{ stigId }}-avahiRunning:
   service.dead:
     - name: 'avahi-daemon'
 
 {% else %}
-notice_V38618-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The avahi subsystem is not installed"'
 {% endif %}
