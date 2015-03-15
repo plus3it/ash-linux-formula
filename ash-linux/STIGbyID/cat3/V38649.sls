@@ -11,19 +11,22 @@
 #
 ############################################################
 
-script_V38649-describe:
+{%- set stigId = 'V38649' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38649.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['file.search']('/etc/csh.cshrc', '^[ 	]*umask') %}
-file_V38649-configSet:
+file_{{ stigId }}-configSet:
   file.replace:
     - name: '/etc/csh.cshrc'
     - pattern: 'umask.*$'
     - repl: 'umask 077'
 {% else %}
-file_V38649-configSet:
+file_{{ stigId }}-configSet:
   file.append:
     - name: '/etc/csh.cshrc'
     - text:

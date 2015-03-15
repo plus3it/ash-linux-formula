@@ -10,19 +10,22 @@
 #
 ############################################################
 
-script_V38647-describe:
+{%- set stigId = 'V38647' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38647.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['file.search']('/etc/profile', '^[ 	]*umask') %}
-file_V38647-configSet:
+file_{{ stigId }}-configSet:
   file.replace:
     - name: '/etc/profile'
     - pattern: 'umask.*$'
     - repl: 'umask 077'
 {% else %}
-file_V38647-configSet:
+file_{{ stigId }}-configSet:
   file.append:
     - name: '/etc/profile'
     - text:

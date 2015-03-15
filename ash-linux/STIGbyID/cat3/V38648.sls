@@ -12,21 +12,24 @@
 #
 ############################################################
 
-script_V38648-describe:
+{%- set stigId = 'V38648' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38648.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('qpid-cpp-server') %}
-svc_V38648-qpiddEnabled:
+svc_{{ stigId }}-qpiddEnabled:
   service.disabled:
     - name: 'qpidd'
 
-svc_V38648-qpiddRunning:
+svc_{{ stigId }}-qpiddRunning:
   service.dead:
     - name: 'qpidd'
 {% else %}
-notice_V38648-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The qpid subsystem is not installed"'
 {% endif %}
