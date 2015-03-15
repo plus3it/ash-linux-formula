@@ -31,9 +31,9 @@ file_V38634-repl:
 file_V38634-append:
   file.append:
     - name: '/etc/audit/auditd.conf'
-    - text:
-      - ' '
-      - '# audit system must rotate logs (per STIG V-38634)'
-      - 'max_log_file_action = rotate'
+    - text: |
+        
+        # audit system must rotate logs (per STIG V-38634)
+        max_log_file_action = rotate
 {% endif %}
 

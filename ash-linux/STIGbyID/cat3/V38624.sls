@@ -10,34 +10,37 @@
 #
 ############################################################
 
-script_V38624-describe:
+{%- set stigId = 'V38624' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38624.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if not salt['pkg.version']('logrotate') %}
-V38624.sls:
-pkg_V38624-logrotate:
+{{ stigId }}.sls:
+pkg_{{ stigId }}-logrotate:
   pkg.installed:
     - name: 'logrotate'
 {% endif %}
 
 {% if salt['file.file_exists']('/var/log/cron') and salt['file.search']('/var/log/cron', ' logrotate$') %}
-msg_V38624-status:
+msg_{{ stigId }}-status:
   cmd.run:
     - name: 'echo "Logrotate service already configured to run"'
 {% else %}
   {% if not salt['file.file_exists']('/etc/cron.daily/logrotate') %}
-msg_V38624-status:
+msg_{{ stigId }}-status:
   cmd.run:
     - name: 'echo "Logrotate not correctly-installed. Correcting..."'
 
-pkg_V38624-logrotate:
+pkg_{{ stigId }}-logrotate:
   pkg.installed:
     - name: 'logrotate'
     - reinstall: 'True'
   {% else %}
-msg_V38624-status:
+msg_{{ stigId }}-status:
   cmd.run:
     - name: 'echo "Logrotate not found in cron log: manual verification required"'
   {% endif %}

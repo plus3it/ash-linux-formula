@@ -36,7 +36,7 @@ file_{{ stigId }}-configSet:
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ cfgFile }}'
-    - text:
+    - text: |
         
         # SSH service must not allow setting of user environment options (per STIG V-38616)
         {{ parmName }} {{ parmVal }}

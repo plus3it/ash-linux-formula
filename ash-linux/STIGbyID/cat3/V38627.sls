@@ -9,25 +9,28 @@
 #
 ############################################################
 
-script_V38627-describe:
+{%- set stigId = 'V38627' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38627.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('openldap-servers') %}
-svc_V38627-openldapEnabled:
+svc_{{ stigId }}-openldapEnabled:
   service.disabled:
     - name: 'slapd'
 
-svc_V38627-openldapRunning:
+svc_{{ stigId }}-openldapRunning:
   service.dead:
     - name: 'slapd'
 
-pkg_V38627-remove:
+pkg_{{ stigId }}-remove:
   pkg.removed:
     - name: 'openldap-servers'
 {% else %}
-notice_V38627-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The openldap-servers subsystem is not installed"'
 {% endif %}

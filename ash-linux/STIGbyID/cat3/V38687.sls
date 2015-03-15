@@ -14,22 +14,25 @@
 #
 ############################################################
 
-script_V38687-describe:
+{%- set stigId = 'V38687' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38687.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('openswan') %}
-notify_V38687-openSwan:
+notify_{{ stigId }}-openSwan:
   cmd.run:
     - name: 'echo "OpenSwan utilities already installed"'
 {% else %}
-installed_V38687-openSwan:
+installed_{{ stigId }}-openSwan:
   pkg.installed:
     - name: 'openswan'
 
-notify_V38687-openSwan:
+notify_{{ stigId }}-openSwan:
   cmd.run:
     - name: 'echo "Installed OpenSwan utilities"'
-    - unless: 'installed_V38687-openSwan'
+    - unless: 'installed_{{ stigId }}-openSwan'
 {% endif %}

@@ -12,29 +12,33 @@
 #
 ############################################################
 
-script_V38642-describe:
+{%- set stigId = 'V38642' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set checkFile = '/etc/init.d/functions' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38642.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/init.d/functions', '^umask') %}
-  {% if salt['file.search']('/etc/init.d/functions', '^umask 027') %}
-file_V38642-configSet:
+{% if salt['file.search'](checkFile, '^umask') %}
+  {% if salt['file.search'](checkFile, '^umask 027') %}
+file_{{ stigId }}-configSet:
   file.replace:
-    - name: '/etc/init.d/functions'
+    - name: '{{ checkFile }}'
     - pattern: '^umask.*$'
     - repl: 'umask 027'
   {% else %}
-file_V38642-configSet:
+file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "Daemon umask-setting already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
-file_V38642-configSet:
+file_{{ stigId }}-configSet:
   file.append:
-    - name: '/etc/init.d/functions'
-    - text:
-      - ' '
-      - '# Umask must be set to "022" or "027" (per STIG V-38642)'
-      - 'umask 027'
+    - name: '{{ checkFile }}'
+    - text: |
+        
+        # Umask must be set to "022" or "027" (per STIG V-38642)
+        umask 027
 {% endif %}

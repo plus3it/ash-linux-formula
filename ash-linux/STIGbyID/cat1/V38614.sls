@@ -10,27 +10,30 @@
 #
 ############################################################
 
-script_V38614-describe:
+{%- set stigId = 'V38614' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38614.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% set sshConfigFile = '/etc/ssh/sshd_config' %}
 
 {% if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords .*') %}
   {% if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords no') %}
-file_V38614:
+file_{{ stigId }}:
   cmd.run:
     - name: 'echo "Empty passwords already disabled in ''{{ sshConfigFile }}''"'
   {% else %}
-file_V38614:
+file_{{ stigId }}:
   file.replace:
     - name: '{{ sshConfigFile }}'
     - pattern: "^PermitEmptyPasswords .*"
     - repl: "PermitEmptyPasswords no"
   {% endif %}
 {% else %}
-file_V38614:
+file_{{ stigId }}:
   file.append:
     - name: '{{ sshConfigFile }}'
     - text:

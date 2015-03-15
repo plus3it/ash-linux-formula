@@ -8,9 +8,12 @@
 #
 ###########################################################################
 
-script_V38462-describe:
+{%- set stigId = 'V38462' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38462.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% set fileList = [
@@ -22,21 +25,21 @@ script_V38462-describe:
 {% for checkFile in fileList %}
 {% if salt['file.file_exists'](checkFile) %}
   {% if salt['file.search'](checkFile,'^nosignature') %}
-notify_V38462-{{ checkFile }}:
+notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'
 
-comment_V38462-{{ checkFile }}:
+comment_{{ stigId }}-{{ checkFile }}:
   file.comment:
     - name: '{{ checkFile }}'
     - regex: 'nosignature'
   {% else %}
-notify_V38462-{{ checkFile }}:
+notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "Info: ''nosignature'' option not set in ''{{ checkFile }}''"'
   {% endif %}
 {% else %}
-notify_V38462-{{ checkFile }}:
+notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "Info: Configuration-file ''{{ checkFile }}'' does not exist"'
 {% endif %}

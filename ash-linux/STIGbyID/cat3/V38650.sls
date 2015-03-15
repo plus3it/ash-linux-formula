@@ -15,22 +15,24 @@
 #  NIST SP 800-53 Revision 4 :: CM-7 b
 #
 ############################################################
+{%- set stigId = 'V38650' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 
-script_V38650-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38650.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('iputils') %}
-svc_V38650-rdiscEnabled:
+svc_{{ stigId }}-rdiscEnabled:
   service.disabled:
     - name: 'rdisc'
 
-svc_V38650-rdiscRunning:
+svc_{{ stigId }}-rdiscRunning:
   service.dead:
     - name: 'rdisc'
 {% else %}
-notice_V38650-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The rdisc subsystem is not installed"'
 {% endif %}

@@ -14,29 +14,34 @@
 #
 ############################################################
 
-script_V38610-describe:
+{%- set stigId = 'V38610' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set checkFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'ClientAliveCountMax' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38610.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax') %}
-  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveCountMax 0') %}
-file_V38610-configSet:
+{% if salt['file.search'](checkFile, '^' + parmName) %}
+  {% if salt['file.search'](checkFile, '^' + parmName + ' 0') %}
+file_{{ stigId }}-configSet:
   cmd.run:
-    - name: 'echo "ClientAliveCountMax already meets STIG-defined requirements"'
+    - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'
   {% else %}
-file_V38610-configSet:
+file_{{ stigId }}-configSet:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^ClientAliveCountMax.*$'
-    - repl: 'ClientAliveCountMax 0'
+    - name: '{{ checkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} 0'
   {% endif %}
 {% else %}
-file_V38610-configSet:
+file_{{ stigId }}-configSet:
   file.append:
-    - name: '/etc/ssh/sshd_config'
-    - text:
-      - ' '
-      - '# SSH service must set a session idle-timeout (per STIG V-38610)'
-      - 'ClientAliveCountMax 0'
+    - name: '{{ checkFile }}'
+    - text: |
+        
+        # SSH service must set a session idle-timeout (per STIG V-38610)
+        {{ parmName }} 0
 {% endif %}

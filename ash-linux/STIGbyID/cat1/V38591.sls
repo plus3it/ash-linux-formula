@@ -10,19 +10,21 @@
 #
 ############################################################
 
-script_V38591-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38591.sh
-    - cwd: /root
-
+{%- set stigId = 'V38591' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
 {% set chkPkg = 'rsh-server' %}
 
+script_{{ stigId }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
+    - cwd: /root
+
 {% if salt['pkg.version'](chkPkg) %}
-pkg_V38591-removeRsh:
+pkg_{{ stigId }}-removeRsh:
   pkg.removed:
     - name: '{{ chkPkg }}'
 {% else %}
-pkg_V38591-removeRsh:
+pkg_{{ stigId }}-removeRsh:
   cmd.run:
     - name: 'echo "The ''{{ chkPkg }}'' package is not installed"'
 {% endif %}

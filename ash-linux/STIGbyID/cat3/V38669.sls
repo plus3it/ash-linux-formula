@@ -14,45 +14,48 @@
 #
 ############################################################
 
-script_V38669-describe:
+{%- set stigId = 'V38669' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38669.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% set wantedPkg = 'postfix' %}
 
 {% if not salt['pkg.version'](wantedPkg) %}
-notify_V38669-noPostfix:
+notify_{{ stigId }}-noPostfix:
   cmd.run:
     - name: 'echo "Postfix not installed"'
   {% if salt['pkg.version']('sendmail') %}
-notify_V38669-sendmail:
+notify_{{ stigId }}-sendmail:
   cmd.run:
     - name: 'echo "Sendmail installed instead of postfix"'
   {% else %}
-notify_V38669-postfix:
+notify_{{ stigId }}-postfix:
   cmd.run:
     - name: 'echo "Attempting to install missing {{ wantedPkg }} package."'
 
-pkg_V38669-postfix:
+pkg_{{ stigId }}-postfix:
   pkg.installed:
     - name: '{{ wantedPkg }}'
 
-svc_V38669-postfixEnabled:
+svc_{{ stigId }}-postfixEnabled:
   service.enabled:
     - name: '{{ wantedPkg }}'
 
-svc_V38669-postfixRunning:
+svc_{{ stigId }}-postfixRunning:
   service.running:
     - name: '{{ wantedPkg }}'
   {% endif %}
 {% else %}
 # Ensure postfix service is enabled and running
-svc_V38669-postfixEnabled:
+svc_{{ stigId }}-postfixEnabled:
   service.enabled:
     - name: '{{ wantedPkg }}'
 
-svc_V38669-postfixRunning:
+svc_{{ stigId }}-postfixRunning:
   service.running:
     - name: '{{ wantedPkg }}'
 {% endif %}

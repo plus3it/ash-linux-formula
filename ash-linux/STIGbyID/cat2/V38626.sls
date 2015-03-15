@@ -37,18 +37,18 @@ file_V38626-replCertfile:
 file_V38626-appendCertdir:
   file.append:
     - name: '/etc/pam_ldap.conf'
-    - text:
-      - ' '
-      - '# LDAP TLS certificates must come from trusted CA (per STIG V-38626)'
-      - 'tls_cacertdir /etc/pki/tls/CA'
+    - text: |
+        
+        # LDAP TLS certificates must come from trusted CA (per STIG V-38626)
+        tls_cacertdir /etc/pki/tls/CA
 
 file_V38626-appendCertfile:
   file.append:
     - name: '/etc/pam_ldap.conf'
-    - text:
-      - ' '
-      - '# LDAP TLS certificates must come from trusted CA (per STIG V-38626)'
-      - 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
+    - text: |
+        
+        # LDAP TLS certificates must come from trusted CA (per STIG V-38626)
+        tls_cacertfile /etc/pki/tls/CA/cacert.pem
 
 {% elif not salt['pkg.version']('pam_ldap') %}
 cmd_V38626-notice:

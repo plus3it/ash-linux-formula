@@ -11,21 +11,24 @@
 #
 ############################################################
 
-script_V38644-describe:
+{%- set stigId = 'V38644' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38644.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('ntpdate') %}
-svc_V38644-ntpdateEnabled:
+svc_{{ stigId }}-ntpdateEnabled:
   service.disabled:
     - name: 'ntpdate'
 
-svc_V38644-ntpdateRunning:
+svc_{{ stigId }}-ntpdateRunning:
   service.dead:
     - name: 'ntpdate'
 {% else %}
-notice_V38644-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The ntpdate subsystem is not installed"'
 {% endif %}
