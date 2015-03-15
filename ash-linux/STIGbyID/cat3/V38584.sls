@@ -14,25 +14,29 @@
 #
 ############################################################
 
-script_V38584-describe:
+{%- set stigId = 'V38584' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set svcName = 'xinetd' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38584.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('xinetd') %}
-svc_V38584-xinetdEnabled:
+{% if salt['pkg.version'](svcName) %}
+svc_{{ stigId }}-{{ svcName }}Enabled:
   service.disabled:
-    - name: 'xinetd'
+    - name: '{{ svcName }}'
 
-svc_V38584-xinetdRunning:
+svc_{{ stigId }}-{{ svcName }}Running:
   service.dead:
-    - name: 'xinetd'
+    - name: '{{ svcName }}'
 
-pkg_V38584-remove:
+pkg_{{ stigId }}-remove:
   pkg.purged:
-    - name: 'xinetd'
+    - name: '{{ svcName }}'
 {% else %}
-notice_V38584-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
-    - name: 'echo "The xinetd subsystem is not installed"'
+    - name: 'echo "The {{ svcName }} subsystem is not installed"'
 {% endif %}
