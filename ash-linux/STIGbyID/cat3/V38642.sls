@@ -37,8 +37,8 @@ file_{{ stigId }}-configSet:
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ checkFile }}'
-    - text:
-      - ' '
-      - '# Umask must be set to "022" or "027" (per STIG V-38642)'
-      - 'umask 027'
+    - text: |
+        
+        # Umask must be set to "022" or "027" (per STIG V-38642)
+        umask 027
 {% endif %}

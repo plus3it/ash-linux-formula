@@ -30,8 +30,8 @@ file_V38523-repl:
 file_V38523-append:
   file.append:
     - name: '/etc/sysctl.conf'
-    - text:
-      - ''
-      - '# Disable source-routed packets'
-      - 'net.ipv4.conf.all.accept_source_route = 0'
+    - text: |
+        
+        # Disable source-routed packets
+        net.ipv4.conf.all.accept_source_route = 0
 {% endif %}
