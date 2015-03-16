@@ -18,43 +18,42 @@
 
 {%- set stigId = 'V38692' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{% set checkFile = '/etc/default/useradd' %}
+{% set parmName = 'INACTIVE' %}
+{% set parmVal = '35' %}
 
 script_{{ stigId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% set checkFile = '/etc/default/useradd' %}
-{% set parmName = 'INACTIVE' %}
-
-# If live 'INACTIVE' parameter is already set...
-{% if salt['file.search'](checkFile, '^' + parmName + '=') %}
-  # ...Check if correct value
-  {% if salt['file.search'](checkFile, '^' + parmName + '=35') %}
-set_{{ stigId }}-inactive:
+# Do nothing if value is already correct
+notify_{{ stigId }}-goodVal:
   cmd.run:
-    - name: 'echo "Account inactivity-lockout already set to 35 days"'
-  # ...If not, set correct value
-  {% else %}
-set_{{ stigId }}-inactive:
-  file.replace:
-    - name: {{ checkFile }}
-    - pattern: '^{{ parmName }}=.*$'
-    - repl: '{{ parmName }}=35'
-  {% endif %}
-# If no live 'INACTIVE' parameter is set...
-{% else %}
-  # ...See if an appropriate commented value exists
-  {% if salt['file.search'](checkFile, '#[ 	]*' + parmName + '=35') %}
-set_{{ stigId }}-inactive:
+    - name: 'echo "Account inactivity-lockout already set to {{ parmVal }} days"'
+    - onlyif: 'grep -E "^{{ parmName }}={{ parmVal }}" {{ checkFile }}'
+
+# Uncomment if a commented-out good value is available
+uncomment_{{ stigId }}-inactive:
   file.uncomment:
-    - name: {{ checkFile }}
-    - regex: '{{ parmName }}=35'
-  # ...and append if necessary
-  {% else %}
+    - name: '{{ checkFile }}'
+    - regex: '{{ parmName }}'
+    - unless: 'grep -E "^{{ parmName }}={{ parmVal }}" {{ checkFile }}'
+
+# Replace any current bad value
+repl_{{ stigId }}-inactive:
+  file.replace:
+    - name: '{{ checkFile }}'
+    - pattern: '^{{ parmName }}=.*$'
+    - repl: '^{{ parmName }}={{ parmVal }}'
+    - unless: 'grep -E "^{{ parmName }}={{ parmVal }}" {{ checkFile }}'
+
+# Add value if none present in other forms
 set_{{ stigId }}-inactive:
   file.append:
-    - name: {{ checkFile }}
-    - text: '{{ parmName }}=35'
-  {% endif %}
-{% endif %}
+    - name: '{{ checkFile }}'
+    - text: |
+        
+	# Set {{ parmName }} account-locking (per STIG-ID {{ stigId }})
+	{{ parmName }}={{ parmVal }}
+    - unless: 'grep -E "^{{ parmName }}={{ parmVal }}" {{ checkFile }}'
