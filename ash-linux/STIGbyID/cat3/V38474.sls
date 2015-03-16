@@ -15,17 +15,20 @@
 #
 ############################################################
 
-script_V38474-describe:
+{%- set stigId = 'V38474' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38474.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if salt['pkg.version']('gdm') %}
-cmd_V38474-setNoUserlist:
+cmd_{{ stigId }}-setNoUserlist:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome_settings_daemon/keybindings/screensaver "l"'
 {% else %}
-notify_V38474:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken
 )"'
