@@ -14,7 +14,7 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '38570' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files; %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'ocredit' %}
 {%- set param_value = '-1' %}
