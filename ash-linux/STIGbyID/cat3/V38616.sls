@@ -20,19 +20,18 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search'](cfgFile, '^' + parmName) %}
-  {% if salt['file.search'](cfgFile, '^' + parmName + ' ' + parmVal) %}
+{%- if salt['file.search'](cfgFile, '^' + parmName + ' ' + parmVal) %}
 file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'
-  {% else %}
-file_{{ stigId }}-configSet:
-  file.replace:
+{%- endif %}
+
+file{{ stigId }}-comment:
+  file.comment:
     - name: '{{ cfgFile }}'
-    - pattern: '^{{ parmName }}.*$'
-    - repl: '{{ parmName }} {{ parmVal }}'
-  {% endif %}
-{% else %}
+    - regex: '^{{ parmName }}'
+    - unless: 'grep -E "^{{ parmName }}" {{ cfgFile }} && grep -E "^{{ parmName }} {{ parmVal }}" {{ cfgFile }}'
+
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ cfgFile }}'
@@ -40,5 +39,4 @@ file_{{ stigId }}-configSet:
         
         # SSH service must not allow setting of user environment options (per STIG V-38616)
         {{ parmName }} {{ parmVal }}
-
-{% endif %}
+    - unles: 'grep -E "^{{ parmName }} {{ parmVal }}" {{ cfgFile }}'
