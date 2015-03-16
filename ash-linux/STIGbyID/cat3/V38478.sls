@@ -16,22 +16,26 @@
 #
 ############################################################
 
-script_V38478-describe:
+{%- set stigId = 'V38478' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set svcName = 'rhnsd' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38478.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('rhnsd') %}
-# Ensure rhnsd service is disabled and stopped
-svc_V38478-rhnsdDisabled:
+{% if salt['pkg.version'](svcName) %}
+# Ensure {{ svcName }} service is disabled and stopped
+svc_{{ stigId }}-{{ svcName }}Disabled:
   service.disabled:
-    - name: 'rhnsd'
+    - name: '{{ svcName }}'
 
-svc_V38478-rhnsdDead:
+svc_{{ stigId }}-{{ svcName }}Dead:
   service.dead:
-    - name: 'rhnsd'
+    - name: '{{ svcName }}'
 {% else %}
-cmd_V38478-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
-    - name: 'echo "RHNSD service not installed. No relevant findings possible."'
+    - name: 'echo "The {{ svcName }} service not installed. No relevant findings possible."'
 {% endif %}

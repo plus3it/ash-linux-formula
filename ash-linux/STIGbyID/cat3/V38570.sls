@@ -14,6 +14,7 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '38570' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'ocredit' %}
 {%- set param_value = '-1' %}
@@ -47,7 +48,7 @@ notify_V{{ stig_id }}-{{ param }}:
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 {%- if not salt['file.file_exists'](checkFile) %}

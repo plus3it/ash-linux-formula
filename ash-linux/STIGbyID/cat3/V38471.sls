@@ -14,32 +14,35 @@
 #
 ############################################################
 
-script_V38471-describe:
+{%- set stigId = 'V38471' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38471.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% set syslogConf = '/etc/audisp/plugins.d/syslog.conf' %}
 
 {% if salt['file.search'](syslogConf, 'active') %}
   {% if salt['file.search'](syslogConf, '^#.*active.*=.*yes') %}
-file_V38471-mkActive:
+file_{{ stigId }}-mkActive:
   file.uncomment:
     - name: '{{ syslogConf }}'
     - regex: 'active = yes'
   {% elif salt['file.search'](syslogConf, '^active.*=.*no') %}
-file_V38471-mkActive:
+file_{{ stigId }}-mkActive:
   file.replace:
     - name: '{{ syslogConf }}'
     - pattern: '^active.*=.*no'
     - repl: 'active = yes'
   {% elif salt['file.search'](syslogConf, '^.*active.*=.*yes') %}
-file_V38471-mkActive:
+file_{{ stigId }}-mkActive:
   cmd.run:
     - name: 'echo "Audit service already configured to forward logs to syslog service"'
   {% endif %}
 {% else %}
-file_V38471-mkActive:
+file_{{ stigId }}-mkActive:
   file.append:
     - name: '{{ syslogConf }}'
     - text: |

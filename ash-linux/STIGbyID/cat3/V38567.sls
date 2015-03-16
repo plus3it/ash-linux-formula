@@ -11,11 +11,12 @@
 #
 ############################################################
 
-{% set stig_id = '38567' %}
+{%- set stig_id = '38567' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 ########################################################################
@@ -29,5 +30,5 @@ script_V{{ stig_id }}-describe:
 ########################################################################
 script_V{{ stig_id }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}-helper.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}-helper.sh
     - cwd: /root

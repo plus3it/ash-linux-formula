@@ -11,9 +11,12 @@
 #
 ############################################################
 
-script_V38487-describe:
+{%- set stigId = 'V38487' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38487.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 ##############################################################################
@@ -23,7 +26,7 @@ script_V38487-describe:
 # - pkg.mod_repo
 # from /usr/lib/python2.6/site-packages/salt/modules/yumpkg.py as references
 ##############################################################################
-script_V38487-fixGpgChk:
+script_{{ stigId }}-fixGpgChk:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38487-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: /root

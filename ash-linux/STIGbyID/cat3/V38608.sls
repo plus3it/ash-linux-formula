@@ -14,36 +14,42 @@
 #
 ############################################################
 
-script_V38608-describe:
+{%- set stigId = 'V38608' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'ClientAliveInterval' %}
+{%- set parmVal = '900' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38608.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval') %}
-  {% if salt['file.search']('/etc/ssh/sshd_config', '^ClientAliveInterval 900') %}
-file_V38608-configSet:
+{% if salt['file.search'](cfgFile, '^' + parmName) %}
+  {% if salt['file.search'](cfgFile, '^' + parmName + ' ' + parmVal) %}
+file_{{ stigId }}-configSet:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^ClientAliveInterval.*$'
-    - repl: 'ClientAliveInterval 900'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} {{ parmVal }}'
   {% else %}
-file_V38608-configSet:
+file_{{ stigId }}-configSet:
   cmd.run:
-    - name: 'echo "ClientAliveInterval already meets STIG-defined requirements"'
+    - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'
   {% endif %}
 {% else %}
-file_V38608-configSet:
+file_{{ stigId }}-configSet:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text: |
         
         # SSH service must set a session idle-timeout (per STIG V-38608)
-        ClientAliveInterval 900
+        {{ parmName }} {{ parmVal }}
 {% endif %}
 
-svc_V38608-configChk:
+svc_{{ stigId }}-configChk:
   service:
     - name: sshd
     - running
     - watch:
-      - file: /etc/ssh/sshd_config
+      - file: '{{ cfgFile }}'

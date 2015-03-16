@@ -14,11 +14,15 @@
 #
 ############################################################
 
-script_V38590-describe:
+{%- set stigId = 'V38590' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set svcName = 'screen' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38590.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-pkg_V38590-screen:
+pkg_{{ stigId }}-{{ svcName }}:
   pkg.installed:
-    - name: 'screen'
+    - name: '{{ svcName }}'

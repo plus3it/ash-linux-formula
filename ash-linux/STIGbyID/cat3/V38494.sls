@@ -10,19 +10,24 @@
 #
 ############################################################
 
-script_V38494-describe:
+{%- set stigId = 'V38494' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set cfgFile = '/etc/securetty' %}
+{%- set srchPtn = 'ttyS' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38494.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/securetty','^ttyS') %}
-replace_V38494-serialTTY:
+{% if salt['file.search'](cfgFile,'^' + srchPtn) %}
+replace_{{ stigId }}-serialTTY:
   file.replace:
-    - name: /etc/securetty
-    - pattern: '^ttyS.*$'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ srchPtn }}.*$'
     - repl: ''
 {% else %}
-replace_V38494-serialTTY:
+replace_{{ stigId }}-serialTTY:
   cmd.run:
-    - name: 'echo "No serial console entries in /etc/securetty"'
+    - name: 'echo "No serial console entries in {{ cfgFile }}"'
 {% endif %}
