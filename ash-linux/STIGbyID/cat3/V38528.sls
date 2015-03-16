@@ -16,18 +16,23 @@
 #
 ############################################################
 
-script_V38528-describe:
+{%- set stigId = 'V38528' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set parmName = 'net.ipv4.conf.all.log_martians' %}
+{%- set parmVal = '1' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38528.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['sysctl.get']('net.ipv4.conf.all.log_martians') == '1' %}
-sysctl_V38528-logMartians:
+{% if salt['sysctl.get'](parmName) == parmVal %}
+sysctl_{{ stigId }}-logMartians:
   cmd.run:
     - name: 'echo "Logging of Martian packets already enabled"'
 {% else %}
-sysctl_V38528-logMartians:
+sysctl_{{ stigId }}-logMartians:
   sysctl.present:
-    - name: 'net.ipv4.conf.all.log_martians'
-    - value: '1'
+    - name: '{{ parmName }}'
+    - value: '{{ parmVal }}'
 {% endif %}

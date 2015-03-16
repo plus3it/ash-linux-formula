@@ -30,5 +30,5 @@ script_V{{ stig_id }}-describe:
 ########################################################################
 script_V{{ stig_id }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}-helper.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}-helper.sh
     - cwd: /root

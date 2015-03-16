@@ -10,17 +10,20 @@
 #
 ############################################################
 
-script_V38525-describe:
+{%- set stigId = 'V38525' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38525.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {% if grains['cpuarch'] == 'x86_64' %}
-file_V38525-settimeofday:
+file_{{ stigId }}-settimeofday:
   cmd.run:
     - name: 'echo "Not applicable to 64-bit systems: no changes made"'
 {% else %}
-file_V38525-settimeofday:
+file_{{ stigId }}-settimeofday:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
 {% endif %}

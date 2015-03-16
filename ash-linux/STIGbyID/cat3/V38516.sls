@@ -10,11 +10,12 @@
 ############################################################
 
 {%- set stig_id = '38516' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set file = '/etc/modprobe.d/rds.conf' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 {%- if not salt['file.file_exists']('{{ file }}') %}

@@ -14,18 +14,23 @@
 #
 ############################################################
 
-script_V38533-describe:
+{%- set stigId = 'V38533' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set parmName = 'net.ipv4.conf.default.accept_redirects' %}
+{%- set parmVal = '0' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38533.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['sysctl.get']('net.ipv4.conf.default.accept_redirects') == '0' %}
-sysctl_V38533-noRedirects:
+{% if salt['sysctl.get'](parmName) == parmVal %}
+sysctl_{{ stigId }}-noRedirects:
   cmd.run:
     - name: 'echo "System already configured to ignore ICMPv4 redirect messages"'
 {% else %}
-sysctl_V38533-noRedirects:
+sysctl_{{ stigId }}-noRedirects:
   sysctl.present:
-    - name: 'net.ipv4.conf.default.accept_redirects'
-    - value: '0'
+    - name: '{{ parmName }}'
+    - value: '{{ parmVal }}'
 {% endif %}
