@@ -9,13 +9,16 @@
 #
 ############################################################
 
-script_V38480-describe:
+{%- set stigId = 'V38480' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38480.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # Super-ugly: gotta spiff later
-script_V38480-helper:
+script_{{ stigId }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38480-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: /root
