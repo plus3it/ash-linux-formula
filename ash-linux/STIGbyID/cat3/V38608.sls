@@ -24,20 +24,15 @@ script_{{ stigId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
-
-{% if salt['file.search'](cfgFile, '^' + parmName) %}
-  {% if salt['file.search'](cfgFile, '^' + parmName + ' ' + parmVal) %}
-file_{{ stigId }}-configSet:
-  file.replace:
+  
+# Comment out existing defines if they're wrong
+file_{{ stigId }}-comment:
+  file.comment:
     - name: '{{ cfgFile }}'
-    - pattern: '^{{ parmName }}.*$'
-    - repl: '{{ parmName }} {{ parmVal }}'
-  {% else %}
-file_{{ stigId }}-configSet:
-  cmd.run:
-    - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'
-  {% endif %}
-{% else %}
+    - regex: '^{{ parmName }}'
+    - unless: 'grep -E "^{{ parmName }}" {{ cfgFile }} && grep -E "^{{ parmName }} {{ parmVal }}" {{ cfgFile }}'
+
+# Add ClientAliveInterval setting if valid value not present
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ cfgFile }}'
@@ -45,8 +40,9 @@ file_{{ stigId }}-configSet:
         
         # SSH service must set a session idle-timeout (per STIG V-38608)
         {{ parmName }} {{ parmVal }}
-{% endif %}
+    - unless: 'grep -E "^{{ parmName }} {{ parmVal }}" {{ cfgFile }}'
 
+# Restart service if there's been changes to sshd_config
 svc_{{ stigId }}-configChk:
   service:
     - name: sshd
