@@ -15,23 +15,34 @@
 #
 ############################################################
 
-script_V38523-describe:
+{%- set stigId = 'V38523' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.conf.all.accept_source_route' %}
+{%- set parmVal = '0' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38523.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.all.accept_source_route') %}
-file_V38523-repl:
-  file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.conf.all.accept_source_route.*$'
-    - repl: 'net.ipv4.conf.all.accept_source_route = 0'
-{% else %}
-file_V38523-append:
+# Purely informational - we're going to force the value, any way,
+# via 'sysctl.present' since it forces entry in {{ cfgFile }}
+{%- if salt['sysctl.get'](parmName) == parmVal %}
+sysctl_{{ stigId }}-inMemCheck:
+  cmd.run:
+    - name: 'printf "**************************************************\n* NOTE: In-memory configuration already disables *\n*       accepting source-routed packet requests  *\n**************************************************\n"'
+{%- endif %}
+
+# Next two needed because some security scanners do not understand
+# "secure by default" sysctl settings
+comment_{{ stigId }}-{{ parmName }}:
   file.append:
-    - name: '/etc/sysctl.conf'
-    - text: |
-        
-        # Disable source-routed packets
-        net.ipv4.conf.all.accept_source_route = 0
-{% endif %}
+    - name: '{{ cfgFile }}'
+    - text: '# Added {{ parmName }} (per STIG-ID {{ stigId }})'
+    - unless: 'grep "{{ parmName }}[	 ]=[	 ]{{ parmVal }}" {{ cfgFile }}'
+
+setting_{{ stigId }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '{{ parmVal }}'
