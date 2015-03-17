@@ -20,13 +20,13 @@ script_V38588-describe:
     - cwd: '/root'
 
 # Conditional replace or append
-{% if salt['file.search']('/etc/sysconfig/init', '^PROMPT') %}
+{%- if salt['file.search']('/etc/sysconfig/init', '^PROMPT') %}
 file_V38588-repl:
   file.replace:
     - name: '/etc/sysconfig/init'
     - pattern: '^PROMPT.*$'
     - repl: 'PROMPT=no' 
-{% else %}
+{%- else %}
 file_V38588-append:
   file.append:
     - name: '/etc/sysconfig/init'
@@ -34,4 +34,4 @@ file_V38588-append:
       - ' '
       - '# Disable interactive-booting of system (per STIG V-38588)'
       - 'PROMPT=no' 
-{% endif %}
+{%- endif %}

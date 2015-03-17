@@ -29,17 +29,17 @@ notify_{{ stigId }}-generic:
     - name: 'printf "******************************************\n** This is an informational test, only! **\n******************************************\nTest cannot auto-ID emergency accounts:\n  Each locally-managed user will be queried.\n  Expiry settings will be enumerated but not\n  modified\n"'
 
 # Generate a user-list to iterate
-{% for user in salt['user.getent']('') %}
-  {% set ID = user['name'] %}
-  {% set ShadowData = salt['shadow.info'](ID) %}
+{%- for user in salt['user.getent']('') %}
+  {%- set ID = user['name'] %}
+  {%- set ShadowData = salt['shadow.info'](ID) %}
 
-  {% if ShadowData.expire == -1 %}
+  {%- if ShadowData.expire == -1 %}
 notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "Userid ''{{ ID }}'' is not set to expire"'
-  {% else %}
+  {%- else %}
 notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "Userid ''{{ ID }}'' is set to expire [{{ ShadowData.expire }}]"'
-  {% endif %}
-{% endfor %}
+  {%- endif %}
+{%- endfor %}

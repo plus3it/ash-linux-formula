@@ -17,8 +17,8 @@
 #
 ############################################################
 
-{% set stig_id = '38600' %}
-{% set scapId = 'CCE-27001-7' %}
+{%- set stig_id = '38600' %}
+{%- set scapId = 'CCE-27001-7' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set checkFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.conf.default.send_redirects' %}
@@ -30,11 +30,11 @@ script_V38600-describe:
 
 # Purely infomational - we're going to force the value, any way,
 # via 'sysctl.present' since it forces entry in {{ checkFile }}
-{% if salt['sysctl.get']('parmName') == '0' %}
+{%- if salt['sysctl.get']('parmName') == '0' %}
 sysctl_V{{ stig_id }}-noRedirects:
   cmd.run:
     - name: 'printf "NOTE: In-memory configuration already disables\n      sending of ICMPv4 redirect packets\n"'
-{% endif %}
+{%- endif %}
 
 # This should *NEVER* be needed on a normal system
 create_V{{ stig_id }}-{{ checkFile }}:

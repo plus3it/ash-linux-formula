@@ -21,13 +21,13 @@ script_V38636-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38636.sh
     - cwd: '/root'
 
-{% if salt['pkg.version']('audit') and salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
+{%- if salt['pkg.version']('audit') and salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
 file_V38636-repl:
   file.replace:
     - name: '/etc/audit/auditd.conf'
     - pattern: '^num_logs.*$'
     - repl: 'num_logs = 5'
-{% elif salt['pkg.version']('audit') and not salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
+{%- elif salt['pkg.version']('audit') and not salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
 file_V38636-append:
   file.append:
     - name: '/etc/audit/auditd.conf'
@@ -35,5 +35,5 @@ file_V38636-append:
         
         # system must retain enough rotated logs to meet local policy (per STIG V-38636)
         num_logs = 5
-{% endif %}
+{%- endif %}
 

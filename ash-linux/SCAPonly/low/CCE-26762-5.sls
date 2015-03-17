@@ -23,31 +23,31 @@ script_{{ scapId }}-describe:
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set mountPoint = '/tmp' %}
-{% set activeMntStream = salt['mount.active']('extended=true') %}
-{% set mountStruct = activeMntStream[mountPoint] %}
+{%- set mountPoint = '/tmp' %}
+{%- set activeMntStream = salt['mount.active']('extended=true') %}
+{%- set mountStruct = activeMntStream[mountPoint] %}
 
-{% if not mountPoint in activeMntStream %}
+{%- if not mountPoint in activeMntStream %}
 notify_{{ scapId }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
-{% else %}
+{%- else %}
   # Grab the option-list for mount
-  {% set optList = mountStruct['opts'] %}
+  {%- set optList = mountStruct['opts'] %}
   # See if the mount has the 'nosuid' option set
-  {% if 'nosuid' in optList %}
+  {%- if 'nosuid' in optList %}
 notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' mounted with ''nosuid'' option"'
-  {% else %}
+  {%- else %}
 notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' not mounted with ''nosuid'' option:"'
 
 # Remount with "nosuid" option added/set
-  {% set optString = 'nosuid,' + ','.join(optList) %}
-  {% set remountDev = mountStruct['alt_device'] %}
-  {% set fsType = mountStruct['fstype'] %}
+  {%- set optString = 'nosuid,' + ','.join(optList) %}
+  {%- set remountDev = mountStruct['alt_device'] %}
+  {%- set fsType = mountStruct['fstype'] %}
 notify_{{ scapId }}-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount...\n"'
@@ -61,7 +61,7 @@ remount_{{ scapId }}-{{ mountPoint }}:
     - fstype: '{{ fsType }}'
 
     # Update fstab (if necessary)
-    {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+    {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_{{ scapId }}-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
@@ -80,6 +80,6 @@ fstab_{{ scapId }}-{{ mountPoint }}:
     - mount: True
     - unless: fstab_{{ scapId }}-{{ mountPoint }}-backup
 
-    {% endif %}
-  {% endif %} 
-{% endif %}
+    {%- endif %}
+  {%- endif %} 
+{%- endif %}

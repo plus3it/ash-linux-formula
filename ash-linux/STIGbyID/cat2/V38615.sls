@@ -25,14 +25,14 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{% if salt['file.search'](cfgFile, '^Banner')
+{%- if salt['file.search'](cfgFile, '^Banner')
  %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ cfgFile }}'
     - pattern: '^Banner.*$'
     - repl: 'Banner /etc/issue'
-{% else %}
+{%- else %}
 file_{{ stigId }}-append:
   file.append:
     - name: '{{ cfgFile }}'
@@ -40,5 +40,5 @@ file_{{ stigId }}-append:
       - ' '
       - '# SSH service must present DoD login banners (per STIG V-38615)'
       - 'Banner /etc/issue'
-{% endif %}
+{%- endif %}
 

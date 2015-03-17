@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('at') %}
+{%- if salt['pkg.version']('at') %}
 svc_{{ stigId }}-atdEnabled:
   service.disabled:
     - name: 'atd'
@@ -27,8 +27,8 @@ svc_{{ stigId }}-atdEnabled:
 svc_{{ stigId }}-atdRunning:
   service.dead:
     - name: 'atd'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The at subsystem is not installed"'
-{% endif %}
+{%- endif %}

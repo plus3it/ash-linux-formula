@@ -47,4 +47,4 @@ status_{{ stig_id }}:
   cmd.run:
     - name: 'echo "SELinux not disabled in GRUB"'
 
-{% endif %}
+{%- endif %}

@@ -19,7 +19,7 @@
 #
 ############################################################
 
-{% set stig_id = '38552' %}
+{%- set stig_id = '38552' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 
 script_V{{ stig_id }}-describe:

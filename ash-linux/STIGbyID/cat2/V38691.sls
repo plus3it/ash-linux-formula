@@ -19,7 +19,7 @@ script_V38691-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38691.sh
     - cwd: '/root'
 
-{% if salt['file.file_exists']('/etc/init.d/bluetooth') %}
+{%- if salt['file.file_exists']('/etc/init.d/bluetooth') %}
 # Ensure bluetooth service is disabled and stopped
 svc_V38691-bluetoothEnabled:
   service.disabled:
@@ -28,8 +28,8 @@ svc_V38691-bluetoothEnabled:
 svc_V38691-bluetoothRunning:
   service.dead:
    - name: 'bluetooth'
-{% else %}
+{%- else %}
 notice_V38691-noBTservice:
   cmd.run:
     - name: 'echo "Info: BlueTooth service not present."'
-{% endif %}
+{%- endif %}

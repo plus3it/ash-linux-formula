@@ -18,13 +18,13 @@ script_V38548-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38548.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv6.conf.default.accept_redirects') %}
+{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv6.conf.default.accept_redirects') %}
 file_V38548-repl:
   file.replace:
     - name: '/etc/sysctl.conf'
     - pattern: '^net.ipv6.conf.default.accept_redirects.*$'
     - repl: 'net.ipv6.conf.default.accept_redirects = 0'
-{% else %}
+{%- else %}
 file_V38548-append:
   file.append:
     - name: '/etc/sysctl.conf'
@@ -32,4 +32,4 @@ file_V38548-append:
       - ' '
       - '# Disable ICMPv6 redirects (per STIG V-38548)'
       - 'net.ipv6.conf.default.accept_redirects = 0'
-{% endif %}
+{%- endif %}

@@ -18,7 +18,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('avahi') %}
+{%- if salt['pkg.version']('avahi') %}
 svc_{{ stigId }}-avahiDisabled:
   service.disabled:
     - name: 'avahi-daemon'
@@ -27,8 +27,8 @@ svc_{{ stigId }}-avahiRunning:
   service.dead:
     - name: 'avahi-daemon'
 
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The avahi subsystem is not installed"'
-{% endif %}
+{%- endif %}

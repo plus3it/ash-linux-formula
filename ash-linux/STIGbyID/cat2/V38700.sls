@@ -25,34 +25,34 @@ notice_V38700:
   cmd.run:
     - name: 'echo "Implementation is system- and tenant-specific. This test will look for scheduled service in typical scheduler file locations. However, this tool cannot verify outside those locations or any frequencies discovered within those locations. **MANUAL VERIFICAION WILL BE REQUIRED.**"'
 
-{% if not salt['pkg.verify']('aide') %}
+{%- if not salt['pkg.verify']('aide') %}
 warn_V38700-aideConf:
   cmd.run:
     - name: 'echo "Package unmodified (AIDE has not been configured)"'
-{% endif %}
+{%- endif %}
 
-{% if not salt['file.search']('/etc/crontab', '/usr/sbin/aide') %}
+{%- if not salt['file.search']('/etc/crontab', '/usr/sbin/aide') %}
 msg_V38700-etcCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in /etc/crontab"'
-{% else %}
+{%- else %}
 msg_V38700-etcCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE found in /etc/crontab"'
-{% endif %}
+{%- endif %}
 
-{% if salt['file.file_exists']('/var/spool/cron/root') %}
-  {% if not salt['file.search']('/var/spool/cron/root', '/usr/sbin/aide') %}
+{%- if salt['file.file_exists']('/var/spool/cron/root') %}
+  {%- if not salt['file.search']('/var/spool/cron/root', '/usr/sbin/aide') %}
 msg_V38700-rootCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in root users crontab (/var/spool/cron/root)"'
-  {% else %}
+  {%- else %}
 msg_V38700-rootCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE found in root users crontab (/var/spool/cron/root)"'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 msg_V38700-rootCrontab:
   cmd.run:
     - name: 'echo "Info: root user has no crontab (/var/spool/cron/root)"'
-{% endif %}
+{%- endif %}

@@ -23,22 +23,22 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
-{% set ruleFile = '/etc/audit/audit.rules' %}
-{% set checkFile = '/etc/sudoers' %}
-{% set auditRule = '-w ' + checkFile + ' -p wa -k actions' %}
+{%- set ruleFile = '/etc/audit/audit.rules' %}
+{%- set checkFile = '/etc/sudoers' %}
+{%- set auditRule = '-w ' + checkFile + ' -p wa -k actions' %}
 
 # Monitoring of /etc/sudoers file
-{% if not salt['cmd.run']('grep -c -E -e "' + auditRule + '" ' + ruleFile ) == '0' %}
+{%- if not salt['cmd.run']('grep -c -E -e "' + auditRule + '" ' + ruleFile ) == '0' %}
 file_V{{ stig_id }}-auditRules_sudoers:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{% elif not salt['cmd.run']('grep -c -E -e "' + checkFile + '" ' + ruleFile ) == '0' %}
+{%- elif not salt['cmd.run']('grep -c -E -e "' + checkFile + '" ' + ruleFile ) == '0' %}
 file_V{{ stig_id }}-auditRules_sudoers:
   file.replace:
     - name: '{{ ruleFile }}'
     - pattern: '^.*{{ checkFile }}.*$'
     - repl: '{{ auditRule }}'
-{% else %}
+{%- else %}
 file_V{{ stig_id }}-auditRules_sudoers:
   file.append:
     - name: '{{ ruleFile }}'
@@ -46,4 +46,4 @@ file_V{{ stig_id }}-auditRules_sudoers:
         
         # Monitor {{ checkFile }} for changes (per STIG-ID V-{{ stig_id }})
         {{ auditRule }}
-{% endif %}
+{%- endif %}

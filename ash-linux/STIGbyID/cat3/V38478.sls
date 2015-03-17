@@ -25,7 +25,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version'](svcName) %}
+{%- if salt['pkg.version'](svcName) %}
 # Ensure {{ svcName }} service is disabled and stopped
 svc_{{ stigId }}-{{ svcName }}Disabled:
   service.disabled:
@@ -34,8 +34,8 @@ svc_{{ stigId }}-{{ svcName }}Disabled:
 svc_{{ stigId }}-{{ svcName }}Dead:
   service.dead:
     - name: '{{ svcName }}'
-{% else %}
+{%- else %}
 cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "The {{ svcName }} service not installed. No relevant findings possible."'
-{% endif %}
+{%- endif %}

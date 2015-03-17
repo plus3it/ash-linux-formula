@@ -23,34 +23,34 @@ script_{{ stigId }}-describe:
     - cwd: /root
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set activeMntStream = salt['mount.active']('extended=true') %}
+{%- set activeMntStream = salt['mount.active']('extended=true') %}
 
 # Iterate the structure by top-level key
-{% for mountPoint in activeMntStream.keys() %}
+{%- for mountPoint in activeMntStream.keys() %}
 
 # Unpack key values out to searchable dictionary
-{% set mountList = activeMntStream[mountPoint] %}
+{%- set mountList = activeMntStream[mountPoint] %}
 
 # Pull fstype value from key-value dictionary
-{% set fsType = mountList['fstype'] %}
+{%- set fsType = mountList['fstype'] %}
 
 # Perform action if mount-type is an SMB/CIFS-type
-{% if fsType == 'smb' or fsType == 'cifs' %}
+{%- if fsType == 'smb' or fsType == 'cifs' %}
 
 # Grab the option-list for targeted-mount(s)
-{% set optList = mountList['opts'] %}
+{%- set optList = mountList['opts'] %}
 
   # See if the mount has a client-signing option set
-  {% if 'sec=krb5i' in optList or 'sec=ntlmv2i' in optList or 'sec=ntlmsspi' in optList %}
+  {%- if 'sec=krb5i' in optList or 'sec=ntlmv2i' in optList or 'sec=ntlmsspi' in optList %}
 
     # See if using Kerberos v5 client-signing (PASSING CONDITION)
-    {% if 'sec=krb5i' in optList %}
+    {%- if 'sec=krb5i' in optList %}
 notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''krb5i'' client-signing option"'
 
     # See if using NTLM v2 client-signing (PASSING CONDITION)
-    {% elif 'sec=ntlmv2i' in optList %}
+    {%- elif 'sec=ntlmv2i' in optList %}
 notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmv2i'' client-signing option"'
@@ -58,14 +58,14 @@ notify_{{ stigId }}-{{ mountPoint }}:
     # See if using NTLM v2 client-signing encapsulated in Raw NTLMSSP message
     # (PASSING CONDITION - STIG only specifically enumerates use of NTLM v2
     # client-signing, but this is an extension to this option)
-    {% elif 'sec=ntlmsspi' in optList %}
+    {%- elif 'sec=ntlmsspi' in optList %}
 notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "CIFS mount {{ mountPoint }} mounted with ''ntlmsspi'' client-signing option"'
-    {% endif %}
+    {%- endif %}
 
   # No client-signing in use (FAILURE CONDITION)
-  {% else %}
+  {%- else %}
 notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'printf "
@@ -82,8 +82,8 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ## auto-remediation of CIFS mounts not using client-signing option
 ##
 ## # Remount with "sec=krb5i" option added/set
-##   {% set optString = 'sec=krb5i,' + ','.join(optList) %}
-##   {% set remountDev = mountList['alt_device'] %}
+##   {%- set optString = 'sec=krb5i,' + ','.join(optList) %}
+##   {%- set remountDev = mountList['alt_device'] %}
 ## notify_{{ stigId }}-{{ mountPoint }}-remount:
 ##   cmd.run:
 ##     - name: 'printf "\t* Attempting remount...\n"'
@@ -97,7 +97,7 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ##     - opts: '{{ optString }}'
 ##
 ##     # Update fstab (if necessary)
-##     {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+##     {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 ## notify_{{ stigId }}-{{ mountPoint }}-fixFstab:
 ##   cmd.run:
 ##     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
@@ -109,9 +109,9 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ##     - device: '{{ remountDev }}'
 ##     - fstype: '{{ fsType }}'
 ##     - opts: '{{ optString }}'
-##     {% endif %}
+##     {%- endif %}
 ##################################################################
 
-  {% endif %}
-{% endif %} 
-{% endfor %}
+  {%- endif %}
+{%- endif %} 
+{%- endfor %}

@@ -20,13 +20,13 @@ script_V38513-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38513.sh
     - cwd: '/root'
 
-{% if salt['file.file_exists']('/etc/sysconfig/iptables') %}
+{%- if salt['file.file_exists']('/etc/sysconfig/iptables') %}
 file_V38513-repl:
   file.replace:
     - name: /etc/sysconfig/iptables
     - pattern: 'INPUT ACCEPT .*$'
     - repl: 'INPUT DROP [0:0]'
-{% else %}
+{%- else %}
 iptables_V38513-existing:
   iptables.append:
     - table: filter
@@ -59,4 +59,4 @@ service_V38513:
     - name: iptables
     - running
     - enable: True
-{% endif %}
+{%- endif %}

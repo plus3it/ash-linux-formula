@@ -20,13 +20,13 @@ script_V38629-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38629.sh
     - cwd: '/root'
 
-{% if salt['pkg.version']('gdm') %}
+{%- if salt['pkg.version']('gdm') %}
 cmd_V38629-idleConfig:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type int --set /apps/gnome-screensaver/idle_delay 15'
-{% else %}
+{%- else %}
 notify_V38629:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
-{% endif %}
+{%- endif %}
 

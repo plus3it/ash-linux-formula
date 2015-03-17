@@ -25,21 +25,21 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
-{% set auditRules = '/etc/audit/audit.rules' %}
-{% set checkFile = '/etc/localtime' %}
-{% set newRule = '-w ' + checkFile + ' -p wa -k audit_time_rules' %}
+{%- set auditRules = '/etc/audit/audit.rules' %}
+{%- set checkFile = '/etc/localtime' %}
+{%- set newRule = '-w ' + checkFile + ' -p wa -k audit_time_rules' %}
 
-{% if not salt['cmd.run']('grep -c -E -e "' + newRule + '" ' + auditRules ) == '0' %}
+{%- if not salt['cmd.run']('grep -c -E -e "' + newRule + '" ' + auditRules ) == '0' %}
 file_V{{ stig_id }}_auditRules:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{% elif not salt['cmd.run']('grep -c -E -e "' + checkFile + '" ' + auditRules ) == '0' %}
+{%- elif not salt['cmd.run']('grep -c -E -e "' + checkFile + '" ' + auditRules ) == '0' %}
 file_V{{ stig_id }}_auditRules:
   file.replace:
     - name: '{{ auditRules }}'
     - pattern: '{{ checkFile }}'
     - repl: '{{ newRule }}'
-{% else %}
+{%- else %}
 file_V{{ stig_id }}_auditRules:
   file.append:
     - name: '{{ auditRules }}'
@@ -47,4 +47,4 @@ file_V{{ stig_id }}_auditRules:
         
         # Monitor {{ checkFile }} for changes (per STIG-ID V-{{ stig_id }})
         {{ newRule }}
-{% endif %}
+{%- endif %}

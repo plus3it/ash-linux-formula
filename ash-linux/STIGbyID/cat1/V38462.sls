@@ -16,15 +16,15 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% set fileList = [
+{%- set fileList = [
     '/etc/rpmrc',
     '/usr/lib/rpm/rpmrc',
     '/usr/lib/rpm/redhat/rpmrc',
     '/root/.rpmrc',
 ] %}
-{% for checkFile in fileList %}
-{% if salt['file.file_exists'](checkFile) %}
-  {% if salt['file.search'](checkFile,'^nosignature') %}
+{%- for checkFile in fileList %}
+{%- if salt['file.file_exists'](checkFile) %}
+  {%- if salt['file.search'](checkFile,'^nosignature') %}
 notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'
@@ -33,15 +33,15 @@ comment_{{ stigId }}-{{ checkFile }}:
   file.comment:
     - name: '{{ checkFile }}'
     - regex: 'nosignature'
-  {% else %}
+  {%- else %}
 notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "Info: ''nosignature'' option not set in ''{{ checkFile }}''"'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "Info: Configuration-file ''{{ checkFile }}'' does not exist"'
-{% endif %}
-{% endfor %}
+{%- endif %}
+{%- endfor %}
 

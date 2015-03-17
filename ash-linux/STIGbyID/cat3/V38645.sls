@@ -20,19 +20,19 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search'](checkFile, '^UMASK') %}
-  {% if salt['file.search'](checkFile, '^UMASK	077') %}
+{%- if salt['file.search'](checkFile, '^UMASK') %}
+  {%- if salt['file.search'](checkFile, '^UMASK	077') %}
 file_{{ stigId }}-configSet:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^UMASK.*$'
     - repl: 'UMASK	077'
-  {% else %}
+  {%- else %}
 file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "Default user umask-setting already meets STIG-defined requirements"'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ checkFile }}'
@@ -40,4 +40,4 @@ file_{{ stigId }}-configSet:
         
         # Umask must be set to "077" (per STIG V-38645)
         UMASK	077
-{% endif %}
+{%- endif %}

@@ -16,9 +16,9 @@ script_V38594-describe:
     - cwd: /root
 
 # See if the rsh server package is even installed...
-{% if salt['pkg.version']('rsh-server') %}
+{%- if salt['pkg.version']('rsh-server') %}
   # If installed, and enabled, disable it
-  {% if salt['service.enabled']('rsh') %}
+  {%- if salt['service.enabled']('rsh') %}
 svc_V38594-rshDisabled:
   service.disabled:
     - name: 'rsh'
@@ -32,14 +32,14 @@ notice_V38594-disableTelnet:
     - name: 'echo "The ''rsh'' service has been disabled"'
     - unless: svc_V38594-rshDisabled
   # If installed but disabled, make a note of it
-  {% else %}
+  {%- else %}
 notice_V38594-disableTelnet:
   cmd.run:
     - name: 'echo "The ''rsh'' service already disabled"'
-  {% endif %}
+  {%- endif %}
 # Otherwise, just notify that rsh service isn't even present
-{% else %}
+{%- else %}
 notice_V38594-disableTelnet:
   cmd.run:
     - name: 'echo "The ''rsh-server'' package is not installed"'
-{% endif %}
+{%- endif %}

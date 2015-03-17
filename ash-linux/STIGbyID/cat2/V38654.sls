@@ -21,35 +21,35 @@ script_V38654-describe:
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set activeMntStream = salt['mount.active']('extended=true') %}
+{%- set activeMntStream = salt['mount.active']('extended=true') %}
 
 # Iterate the structure by top-level key
-{% for mountPoint in activeMntStream.keys() %}
+{%- for mountPoint in activeMntStream.keys() %}
 
 # Unpack key values out to searchable dictionary
-{% set mountList = activeMntStream[mountPoint] %}
+{%- set mountList = activeMntStream[mountPoint] %}
 
 # Pull fstype value from key-value dictionary
-{% set fsType = mountList['fstype'] %}
+{%- set fsType = mountList['fstype'] %}
 
 # Perform action if mount-type is an NFS-type
-{% if fsType == 'nfs' or fsType == 'nfs4' %}
+{%- if fsType == 'nfs' or fsType == 'nfs4' %}
 
 # Grab the option-list for mount
-{% set optList = mountList['opts'] %}
+{%- set optList = mountList['opts'] %}
   # See if the mount has the 'nosuid' option set
-  {% if 'nosuid' in optList %}
+  {%- if 'nosuid' in optList %}
 notify_V38654-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nosuid'' option"'
-  {% else %}
+  {%- else %}
 notify_V38654-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nosuid'' option:"'
 
 # Remount with "nosuid" option added/set
-  {% set optString = 'nosuid,' + ','.join(optList) %}
-  {% set remountDev = mountList['alt_device'] %}
+  {%- set optString = 'nosuid,' + ','.join(optList) %}
+  {%- set remountDev = mountList['alt_device'] %}
 notify_V38654-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount... {{ remountDev }}\n"'
@@ -63,7 +63,7 @@ remount_V38654-{{ mountPoint }}:
     - opts: '{{ optString }}'
 
     # Update fstab (if necessary)
-    {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+    {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_V38654-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
@@ -75,8 +75,8 @@ fstab_V38654-{{ mountPoint }}:
     - device: '{{ remountDev }}'
     - fstype: '{{ fsType }}'
     - opts: '{{ optString }}'
-    {% endif %}
+    {%- endif %}
 
-  {% endif %}
-{% endif %} 
-{% endfor %}
+  {%- endif %}
+{%- endif %} 
+{%- endfor %}

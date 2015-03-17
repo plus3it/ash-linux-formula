@@ -23,13 +23,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/bashrc', '^[   ]*umask[ 	][0-9][0-9]') %}
+{%- if salt['file.search']('/etc/bashrc', '^[   ]*umask[ 	][0-9][0-9]') %}
 file_{{ stigId }}-bashrcUmask:
   file.replace:
     - name: '/etc/bashrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
     - repl: 'umask 077'
-{% else %}
+{%- else %}
 file_{{ stigId }}-bashrcUmask:
   file.append:
     - name: '/etc/bashrc'
@@ -37,43 +37,43 @@ file_{{ stigId }}-bashrcUmask:
         
         # Umask must be set to "077" (per STIG V-38651)
         umask 077
-{% endif %}
+{%- endif %}
 
 # If AT&T KSH is instelled...
-{% if salt['pkg.version']('ksh') %}
-  {% if salt['file.search']('/etc/kshrc', '^[   ]*umask') %}
+{%- if salt['pkg.version']('ksh') %}
+  {%- if salt['file.search']('/etc/kshrc', '^[   ]*umask') %}
 file_{{ stigId }}-kshrcUmask:
   file.replace:
     - name: '/etc/kshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
     - repl: 'umask 077'
-  {% endif %}
+  {%- endif %}
 
-  {% if salt['file.search']('/etc/skel/.kshrc', '^[   ]*umask') %}
+  {%- if salt['file.search']('/etc/skel/.kshrc', '^[   ]*umask') %}
 file_{{ stigId }}-kshrcUmaskSkel:
   file.replace:
     - name: '/etc/skel/.kshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
     - repl: 'umask 077'
-  {% endif %}
-{% endif %}
+  {%- endif %}
+{%- endif %}
 
 
 # If BSD enhanced-KSH is instelled...
-{% if salt['pkg.version']('mksh') %}
-  {% if salt['file.search']('/etc/mkshrc', '^[   ]*umask') %}
+{%- if salt['pkg.version']('mksh') %}
+  {%- if salt['file.search']('/etc/mkshrc', '^[   ]*umask') %}
 file_{{ stigId }}-mkshrcUmask:
   file.replace:
     - name: '/etc/mkshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
     - repl: 'umask 077'
-  {% endif %}
+  {%- endif %}
 
-  {% if salt['file.search']('/etc/skel/.mkshrc', '^[   ]*umask') %}
+  {%- if salt['file.search']('/etc/skel/.mkshrc', '^[   ]*umask') %}
 file_{{ stigId }}-mkshrcUmaskSkel:
   file.replace:
     - name: '/etc/skel/.mkshrc'
     - pattern: 'umask[ 	][0-9][0-9]*'
     - repl: 'umask 077'
-  {% endif %}
-{% endif %}
+  {%- endif %}
+{%- endif %}

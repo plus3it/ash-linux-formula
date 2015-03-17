@@ -21,19 +21,19 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search'](checkFile, '^umask') %}
-  {% if salt['file.search'](checkFile, '^umask 027') %}
+{%- if salt['file.search'](checkFile, '^umask') %}
+  {%- if salt['file.search'](checkFile, '^umask 027') %}
 file_{{ stigId }}-configSet:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^umask.*$'
     - repl: 'umask 027'
-  {% else %}
+  {%- else %}
 file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "Daemon umask-setting already meets STIG-defined requirements"'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ checkFile }}'
@@ -41,4 +41,4 @@ file_{{ stigId }}-configSet:
         
         # Umask must be set to "022" or "027" (per STIG V-38642)
         umask 027
-{% endif %}
+{%- endif %}

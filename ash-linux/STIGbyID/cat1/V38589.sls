@@ -16,9 +16,9 @@ script_V38589-describe:
     - cwd: /root
 
 # See if the telnet server package is even installed...
-{% if salt['pkg.version']('telnet-server') %}
+{%- if salt['pkg.version']('telnet-server') %}
   # If installed, and enabled, disable it
-  {% if salt['service.enabled']('telnet') %}
+  {%- if salt['service.enabled']('telnet') %}
 svc_V38589-telnetDisabled:
   service.disabled:
     - name: 'telnet'
@@ -32,14 +32,14 @@ notice_V38589-disableTelnet:
     - name: 'echo "The ''telnet'' service has been disabled"'
     - unless: svc_V38589-telnetDisabled
   # If installed but disabled, make a note of it
-  {% else %}
+  {%- else %}
 notice_V38589-disableTelnet:
   cmd.run:
     - name: 'echo "The ''telnet'' service already disabled"'
-  {% endif %}
+  {%- endif %}
 # Otherwise, just notify that telnet service isn't even present
-{% else %}
+{%- else %}
 notice_V38589-disableTelnet:
   cmd.run:
     - name: 'echo "The ''telnet-server'' package is not installed"'
-{% endif %}
+{%- endif %}

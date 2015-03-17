@@ -20,31 +20,31 @@ script_V57569-describe:
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set mountPoint = '/tmp' %}
-{% set activeMntStream = salt['mount.active']('extended=true') %}
-{% set mountStruct = activeMntStream[mountPoint] %}
+{%- set mountPoint = '/tmp' %}
+{%- set activeMntStream = salt['mount.active']('extended=true') %}
+{%- set mountStruct = activeMntStream[mountPoint] %}
 
-{% if not mountPoint in activeMntStream %}
+{%- if not mountPoint in activeMntStream %}
 notify_V57569:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
-{% else %}
+{%- else %}
   # Grab the option-list for mount
-  {% set optList = mountStruct['opts'] %}
+  {%- set optList = mountStruct['opts'] %}
   # See if the mount has the 'noexec' option set
-  {% if 'noexec' in optList %}
+  {%- if 'noexec' in optList %}
 notify_V57569-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' mounted with ''noexec'' option"'
-  {% else %}
+  {%- else %}
 notify_V57569-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' not mounted with ''noexec'' option:"'
 
 # Remount with "noexec" option added/set
-  {% set optString = 'noexec,' + ','.join(optList) %}
-  {% set remountDev = mountStruct['alt_device'] %}
-  {% set fsType = mountStruct['fstype'] %}
+  {%- set optString = 'noexec,' + ','.join(optList) %}
+  {%- set remountDev = mountStruct['alt_device'] %}
+  {%- set fsType = mountStruct['fstype'] %}
 notify_V57569-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount...\n"'
@@ -58,7 +58,7 @@ remount_V57569-{{ mountPoint }}:
     - fstype: '{{ fsType }}'
 
     # Update fstab (if necessary)
-    {% if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+    {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_V57569-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
@@ -70,6 +70,6 @@ fstab_V57569-{{ mountPoint }}:
     - device: '{{ remountDev }}'
     - opts: '{{ optString }}'
     - fstype: '{{ fsType }}'
-    {% endif %}
-  {% endif %} 
-{% endif %}
+    {%- endif %}
+  {%- endif %} 
+{%- endif %}

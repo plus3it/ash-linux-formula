@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('oddjob') %}
+{%- if salt['pkg.version']('oddjob') %}
 svc_{{ stigId }}-oddjobdEnabled:
   service.disabled:
     - name: 'oddjobd'
@@ -27,8 +27,8 @@ svc_{{ stigId }}-oddjobdEnabled:
 svc_{{ stigId }}-oddjobdRunning:
   service.dead:
     - name: 'oddjobd'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The oddjob subsystem is not installed"'
-{% endif %}
+{%- endif %}

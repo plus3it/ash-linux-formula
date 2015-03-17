@@ -23,19 +23,19 @@ script_V38643-describe:
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set activeMntStream = salt['mount.active']('extended=true') %}
+{%- set activeMntStream = salt['mount.active']('extended=true') %}
 
 # Iterate the structure by top-level key
-{% for mountPoint in activeMntStream.keys() %}
+{%- for mountPoint in activeMntStream.keys() %}
 
 # Unpack key values out to searchable dictionary
-{% set mountList = activeMntStream[mountPoint] %}
+{%- set mountList = activeMntStream[mountPoint] %}
 
 # Pull fstype value from key-value dictionary
-{% set fsType = mountList['fstype'] %}
+{%- set fsType = mountList['fstype'] %}
 
 # Perform action if mount-type is an EXT-type
-{% if fsType == 'ext2' or fsType == 'ext3' or fsType == 'ext4' %}
+{%- if fsType == 'ext2' or fsType == 'ext3' or fsType == 'ext4' %}
 notify_V38643-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "Checking ''{{ mountPoint }}'' for world-writable files"'
@@ -46,5 +46,5 @@ strip_V38643-{{ mountPoint }}:
     - cwd: '/root'
     - args: {{ mountPoint }}
 
-{% endif %} 
-{% endfor %}
+{%- endif %} 
+{%- endfor %}

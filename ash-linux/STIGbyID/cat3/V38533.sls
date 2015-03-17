@@ -24,13 +24,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['sysctl.get'](parmName) == parmVal %}
+{%- if salt['sysctl.get'](parmName) == parmVal %}
 sysctl_{{ stigId }}-noRedirects:
   cmd.run:
     - name: 'echo "System already configured to ignore ICMPv4 redirect messages"'
-{% else %}
+{%- else %}
 sysctl_{{ stigId }}-noRedirects:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '{{ parmVal }}'
-{% endif %}
+{%- endif %}

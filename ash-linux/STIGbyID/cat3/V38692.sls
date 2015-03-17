@@ -18,9 +18,9 @@
 
 {%- set stigId = 'V38692' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
-{% set checkFile = '/etc/default/useradd' %}
-{% set parmName = 'INACTIVE' %}
-{% set parmVal = '35' %}
+{%- set checkFile = '/etc/default/useradd' %}
+{%- set parmName = 'INACTIVE' %}
+{%- set parmVal = '35' %}
 
 script_{{ stigId }}-describe:
   cmd.script:

@@ -25,7 +25,7 @@ script_{{ scapId }}-describe:
     - cwd: '/root'
 
 # Disable USB at kernel load
-{% if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*nousb') %}
+{%- if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*nousb') %}
 
 file_{{ scapId }}-repl:
   file.replace:
@@ -38,11 +38,11 @@ notify_{{ scapId }}-audit:
     - name: 'printf "Note: Disabled USB support at IPL via addition of\n      ''nousb'' to {{ grubCfgFile }}\n"'
     - unless: 'file_{{ scapId }}-audit'
 
-{% else %}
+{%- else %}
 
 status_{{ scapId }}:
   cmd.run:
     - name: 'echo "Auditing already enabled at boot"'
 
-{% endif %}
+{%- endif %}
 

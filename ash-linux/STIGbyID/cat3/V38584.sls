@@ -23,7 +23,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version'](svcName) %}
+{%- if salt['pkg.version'](svcName) %}
 svc_{{ stigId }}-{{ svcName }}Enabled:
   service.disabled:
     - name: '{{ svcName }}'
@@ -35,8 +35,8 @@ svc_{{ stigId }}-{{ svcName }}Running:
 pkg_{{ stigId }}-remove:
   pkg.purged:
     - name: '{{ svcName }}'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The {{ svcName }} subsystem is not installed"'
-{% endif %}
+{%- endif %}

@@ -21,36 +21,36 @@ script_V51391-describe:
     - cwd: '/root'
 
 # See if AIDE package is installed
-{% if salt['pkg.version']('aide') %}
+{%- if salt['pkg.version']('aide') %}
   # Extract DB directory-path from AIDE config file
-  {% set aideDbDir = salt['cmd.run']('grep "define DBDIR" /etc/aide.conf | cut -d" " -f 3') %}
-  {% if aideDbDir %}
+  {%- set aideDbDir = salt['cmd.run']('grep "define DBDIR" /etc/aide.conf | cut -d" " -f 3') %}
+  {%- if aideDbDir %}
     # Extract DB file name from AIDE config file
-    {% set aideDbFile = salt['cmd.run']('grep -e "^database=.*/" /etc/aide.conf | cut -d "/" -f 2') %}
+    {%- set aideDbFile = salt['cmd.run']('grep -e "^database=.*/" /etc/aide.conf | cut -d "/" -f 2') %}
     # Assemble DB file-path from prior
-    {% set aideDbPath = aideDbDir + '/' + aideDbFile %}
+    {%- set aideDbPath = aideDbDir + '/' + aideDbFile %}
 
     # Check if DB file-path exists
-    {% if salt['file.file_exists'](aideDbPath) %}
+    {%- if salt['file.file_exists'](aideDbPath) %}
 notify_V51391-foundfile:
   cmd.run:
     - name: 'echo "The configured AIDE database [{{ aideDbPath }}] exists" && exit 0'
 
     # Alert if DB file-path does not exist
-    {% else %}
+    {%- else %}
 notify_V51391-foundfile:
   cmd.run:
     - name: 'printf "The configured AIDE database [{{ aideDbPath }}] does not exist!\n** Run ''/usr/sbin/aide --init'' to create.\n" && exit 1'
-    {% endif %}
-  {% else %}
+    {%- endif %}
+  {%- else %}
 notify_V51391-foundfile:
   cmd.run:
     - name: 'echo "The AIDE database location-definition does not meet test-assumptions. Automated test not possible" && exit 1'
-  {% endif %}
+  {%- endif %}
 
 # Alert if AIDE not installed
-{% else %}
+{%- else %}
 warn_V51391-noAide:
    cmd.run:
      - name: 'echo "The AIDE tools are not installed" && exit 1'
-{% endif %}
+{%- endif %}

@@ -21,7 +21,7 @@ script_V38465-describe:
     - cwd: '/root'
 
 # Define list of library directories to search
-{% set checkLibDirs = [
+{%- set checkLibDirs = [
 	'/lib',
 	'/lib64',
 	'/usr/lib',
@@ -30,7 +30,7 @@ script_V38465-describe:
 %}
 
 # Iterate previously-defined list
-{% for libDir in checkLibDirs %}
+{%- for libDir in checkLibDirs %}
 
 # Report what we're doing
 notify_V38465-{{ libDir }}:
@@ -44,4 +44,4 @@ strip_V38465-{{ libDir }}:
     - cwd: '/root'
     - args: {{ libDir }}
 
-{% endfor %}
+{%- endfor %}

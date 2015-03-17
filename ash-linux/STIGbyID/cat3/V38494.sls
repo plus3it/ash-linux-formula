@@ -20,14 +20,14 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search'](cfgFile,'^' + srchPtn) %}
+{%- if salt['file.search'](cfgFile,'^' + srchPtn) %}
 replace_{{ stigId }}-serialTTY:
   file.replace:
     - name: '{{ cfgFile }}'
     - pattern: '^{{ srchPtn }}.*$'
     - repl: ''
-{% else %}
+{%- else %}
 replace_{{ stigId }}-serialTTY:
   cmd.run:
     - name: 'echo "No serial console entries in {{ cfgFile }}"'
-{% endif %}
+{%- endif %}

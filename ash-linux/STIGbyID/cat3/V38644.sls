@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('ntpdate') %}
+{%- if salt['pkg.version']('ntpdate') %}
 svc_{{ stigId }}-ntpdateEnabled:
   service.disabled:
     - name: 'ntpdate'
@@ -27,8 +27,8 @@ svc_{{ stigId }}-ntpdateEnabled:
 svc_{{ stigId }}-ntpdateRunning:
   service.dead:
     - name: 'ntpdate'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The ntpdate subsystem is not installed"'
-{% endif %}
+{%- endif %}

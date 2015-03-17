@@ -17,7 +17,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('openldap-servers') %}
+{%- if salt['pkg.version']('openldap-servers') %}
 svc_{{ stigId }}-openldapEnabled:
   service.disabled:
     - name: 'slapd'
@@ -29,8 +29,8 @@ svc_{{ stigId }}-openldapRunning:
 pkg_{{ stigId }}-remove:
   pkg.removed:
     - name: 'openldap-servers'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The openldap-servers subsystem is not installed"'
-{% endif %}
+{%- endif %}

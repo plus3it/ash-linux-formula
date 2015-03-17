@@ -17,7 +17,7 @@
 #
 ############################################################
 
-{% set stig_id = '38535' %}
+{%- set stig_id = '38535' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.icmp_echo_ignore_broadcasts' %}
@@ -30,11 +30,11 @@ script_V{{ stig_id }}-describe:
 
 # Purely infomational - we're going to force the value, any way,
 # via 'sysctl.present' since it forces entry in {{ checkFile }}
-{% if salt['sysctl.get']('net.ipv4.icmp_echo_ignore_broadcasts') == '1' %}
+{%- if salt['sysctl.get']('net.ipv4.icmp_echo_ignore_broadcasts') == '1' %}
 sysctl_V{{ stig_id }}-noRedirects:
   cmd.run:
     - name: 'printf "NOTE: In-memory configuration already ignores\n      ICMPv4 packets sent to a broadcast address\n"'
-{% endif %}
+{%- endif %}
 
 # This should *NEVER* be needed on a normal system
 create_V{{ stig_id }}-{{ checkFile }}:

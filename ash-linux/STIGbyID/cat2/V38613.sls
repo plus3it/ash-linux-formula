@@ -20,14 +20,14 @@ script_V38613-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38613.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^PermitRootLogin')
+{%- if salt['file.search']('/etc/ssh/sshd_config', '^PermitRootLogin')
  %}
 file_V38613-repl:
   file.replace:
     - name: '/etc/ssh/sshd_config'
     - pattern: '^PermitRootLogin.*$'
     - repl: 'PermitRootLogin no'
-{% else %}
+{%- else %}
 file_V38613-append:
   file.append:
     - name: '/etc/ssh/sshd_config'
@@ -35,4 +35,4 @@ file_V38613-append:
       - ' '
       - '# Disable host-based authentication (per STIG V-38613)'
       - 'PermitRootLogin no'
-{% endif %}
+{%- endif %}

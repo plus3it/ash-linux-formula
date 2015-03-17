@@ -21,13 +21,13 @@ script_V38577-describe:
     - cwd: '/root'
 
 # Conditional replace or append
-{% if salt['file.search']('/etc/libuser.conf', '^crypt_style') %}
+{%- if salt['file.search']('/etc/libuser.conf', '^crypt_style') %}
 file_V38577-repl:
   file.replace:
     - name: /etc/libuser.conf
     - pattern: '^crypt_style.*$'
     - repl: 'crypt_style = sha512'
-{% else %}
+{%- else %}
 file_V38577-append:
   file.append:
     - name: /etc/libuser.conf
@@ -35,4 +35,4 @@ file_V38577-append:
       - ' '
       - '# Use SHA512 to encrypt password.'
       - 'crypt_style = sha512'
-{% endif %}
+{%- endif %}

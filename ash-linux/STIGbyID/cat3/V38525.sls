@@ -18,12 +18,12 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if grains['cpuarch'] == 'x86_64' %}
+{%- if grains['cpuarch'] == 'x86_64' %}
 file_{{ stigId }}-settimeofday:
   cmd.run:
     - name: 'echo "Not applicable to 64-bit systems: no changes made"'
-{% else %}
+{%- else %}
 file_{{ stigId }}-settimeofday:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}

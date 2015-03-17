@@ -25,11 +25,11 @@ script_{{ stig_id }}-describe:
 
 # Purely infomational - we're going to force the value, any way,
 # via 'sysctl.present' since it forces entry in {{ checkFile }}
-{% if salt['sysctl.get'](parmName) == parmVal %}
+{%- if salt['sysctl.get'](parmName) == parmVal %}
 sysctl_{{ stig_id }}-noRedirects:
   cmd.run:
     - name: 'printf "NOTE: In-memory configuration already disables\n      responding to ICMPv4 broadcast echo\n      requests\n"'
-{% endif %}
+{%- endif %}
 
 # This should *NEVER* be needed on a normal system
 create_{{ stig_id }}-{{ checkFile }}:

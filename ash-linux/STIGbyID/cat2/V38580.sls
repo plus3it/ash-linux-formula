@@ -16,14 +16,14 @@
 #
 ############################################################
 
-{% set stig_id = '38580' %}
+{%- set stig_id = '38580' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{% if grains['cpuarch'] == 'x86_64' %}
+{%- if grains['cpuarch'] == 'x86_64' %}
 file_V{{ stig_id }}-appendModchk:
   file.append:
     - name: /etc/audit/audit.rules
@@ -34,4 +34,4 @@ file_V{{ stig_id }}-appendModchk:
         -w /sbin/rmmod -p x -k modules
         -w /sbin/modprobe -p x -k modules
         -a always,exit -F arch=b64 -S init_module -S delete_module -k modules
-{% endif %}
+{%- endif %}

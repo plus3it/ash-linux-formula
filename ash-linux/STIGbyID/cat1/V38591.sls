@@ -12,19 +12,19 @@
 
 {%- set stigId = 'V38591' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
-{% set chkPkg = 'rsh-server' %}
+{%- set chkPkg = 'rsh-server' %}
 
 script_{{ stigId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version'](chkPkg) %}
+{%- if salt['pkg.version'](chkPkg) %}
 pkg_{{ stigId }}-removeRsh:
   pkg.removed:
     - name: '{{ chkPkg }}'
-{% else %}
+{%- else %}
 pkg_{{ stigId }}-removeRsh:
   cmd.run:
     - name: 'echo "The ''{{ chkPkg }}'' package is not installed"'
-{% endif %}
+{%- endif %}

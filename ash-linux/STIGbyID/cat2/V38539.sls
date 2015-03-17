@@ -20,13 +20,13 @@ script_V38539-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38539.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.tcp_syncookies') %}
+{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.tcp_syncookies') %}
 file_V38539-repl:
   file.replace:
     - name: '/etc/sysctl.conf'
     - pattern: '^net.ipv4.tcp_syncookies.*$'
     - repl: 'net.ipv4.tcp_syncookies = 1'
-{% else %}
+{%- else %}
 file_V38539-append:
   file.append:
     - name: '/etc/sysctl.conf'
@@ -34,4 +34,4 @@ file_V38539-append:
       - ' '
       - '# Enable TCP SYN-cookies'
       - 'net.ipv4.tcp_syncookies = 1'
-{% endif %}
+{%- endif %}

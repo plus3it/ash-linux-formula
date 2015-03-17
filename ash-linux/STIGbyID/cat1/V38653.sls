@@ -14,15 +14,15 @@ script_V38653-describe:
     - source: salt://ash-linux/STIGbyID/cat1/files/V38653.sh
     - cwd: /root
 
-{% if salt['pkg.version']('net-snmp') %}
+{%- if salt['pkg.version']('net-snmp') %}
 file_snmpd:
   file.comment:
     - name: /etc/snmp/snmpd.conf
     - regex: ^[a-z].* public
     - char: '## '
     - unless: 'grep -v "^#" /etc/snmp/snmpd.conf | grep public'
-{% else %}
+{%- else %}
 file_snmpd:
   cmd.run:
     - name: 'echo "No relevant findings possible: the ''net-snmp'' package is not installed"'
-{% endif %}
+{%- endif %}

@@ -20,14 +20,14 @@ script_V38660-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38660.sh
     - cwd: '/root'
 
-{% if not salt['pkg.version']('net-snmp') %}
+{%- if not salt['pkg.version']('net-snmp') %}
 cmd_V38660-notice:
   cmd.run:
     - name: 'echo "Info: SNMP packages not installed - nothing to address"'
-{% elif salt['file.search']('/etc/snmp/snmpd.conf', '^[a-z].*(?:v1|v2c|om2sec)') %}
+{%- elif salt['file.search']('/etc/snmp/snmpd.conf', '^[a-z].*(?:v1|v2c|om2sec)') %}
 file_V38660-commentV1n2s:
   file.comment:
     - name: '/etc/snmp/snmpd.conf'
     - regex: '^[a-z].*(v1|v2c|om2sec)'
-{% endif %}
+{%- endif %}
 

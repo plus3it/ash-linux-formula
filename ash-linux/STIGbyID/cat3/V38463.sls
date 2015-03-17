@@ -22,12 +22,12 @@ script_V38463-describe:
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
-{% if salt['file.search']('/etc/fstab', '[ 	]/var/log[ 	]') %}
+{%- if salt['file.search']('/etc/fstab', '[ 	]/var/log[ 	]') %}
 mount_V38463-tmp:
   cmd.run:
     - name: 'echo "/var/log already mounted as its own filesystem"'
-{% else %}
+{%- else %}
 mount_V38463-tmp:
   cmd.run:
     - name: 'echo "Manual intervention required: create and mount a device as /var/log"'
-{% endif %}
+{%- endif %}

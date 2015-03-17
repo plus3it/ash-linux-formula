@@ -18,11 +18,11 @@ script_V38455-describe:
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
-{% if salt['file.search']('/etc/fstab', '[ 	]/tmp[ 	]') %}
+{%- if salt['file.search']('/etc/fstab', '[ 	]/tmp[ 	]') %}
 mount_V38455-tmp:
    cmd.run:
      - name: 'echo "/tmp already mounted as its own filesystem"'
-{% else %}
+{%- else %}
 mount_V38455-tmp:
   mount.mounted:
     - name: /tmp
@@ -31,4 +31,4 @@ mount_V38455-tmp:
     - mkmnt: True
     - opts:
       - defaults
-{% endif %}
+{%- endif %}

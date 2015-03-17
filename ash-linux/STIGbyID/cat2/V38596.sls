@@ -20,14 +20,14 @@ script_V38596-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38596.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', '^kernel.randomize_va_space')
+{%- if salt['file.search']('/etc/sysctl.conf', '^kernel.randomize_va_space')
  %}
 file_V38596-repl:
   file.replace:
     - name: '/etc/sysctl.conf'
     - pattern: '^kernel.randomize_va_space.*$'
     - repl: 'kernel.randomize_va_space = 2'
-{% else %}
+{%- else %}
 file_V38596-append:
   file.append:
     - name: '/etc/sysctl.conf'
@@ -35,4 +35,4 @@ file_V38596-append:
       - ' '
       - '# enable ASLR (per STIG V-38596)'
       - 'kernel.randomize_va_space = 2'
-{% endif %}
+{%- endif %}

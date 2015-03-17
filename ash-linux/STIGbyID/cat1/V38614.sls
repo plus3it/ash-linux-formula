@@ -18,21 +18,21 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% set sshConfigFile = '/etc/ssh/sshd_config' %}
+{%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 
-{% if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords .*') %}
-  {% if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords no') %}
+{%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords .*') %}
+  {%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords no') %}
 file_{{ stigId }}:
   cmd.run:
     - name: 'echo "Empty passwords already disabled in ''{{ sshConfigFile }}''"'
-  {% else %}
+  {%- else %}
 file_{{ stigId }}:
   file.replace:
     - name: '{{ sshConfigFile }}'
     - pattern: "^PermitEmptyPasswords .*"
     - repl: "PermitEmptyPasswords no"
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_{{ stigId }}:
   file.append:
     - name: '{{ sshConfigFile }}'
@@ -40,4 +40,4 @@ file_{{ stigId }}:
       - ' '
       - '# SSH Must not allow empty passwords (per STIG V-38614)'
       - 'PermitEmptyPasswords no'
-{% endif %}
+{%- endif %}

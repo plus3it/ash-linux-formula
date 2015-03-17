@@ -20,14 +20,14 @@ script_V38680-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38680.sh
     - cwd: '/root'
 
-{% if salt['file.file_exists']('/etc/audit/auditd.conf') %}
+{%- if salt['file.file_exists']('/etc/audit/auditd.conf') %}
 file_V38680-repl:
   file.replace:
     - name: '/etc/audit/auditd.conf'
     - pattern: '^action_mail_acct.*$'
     - repl: 'action_mail_acct = root'
-{% else %}
+{%- else %}
 warn_V38680:
   cmd.run:
     - name: 'echo "The audit config file (/etc/audit/auditd.conf) does not exist"'
-{% endif %}
+{%- endif %}

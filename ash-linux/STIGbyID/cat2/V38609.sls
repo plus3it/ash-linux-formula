@@ -18,11 +18,11 @@ script_V38609-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38609.sh
     - cwd: '/root'
 
-{% if salt['pkg.version']('tftp-server') %}
+{%- if salt['pkg.version']('tftp-server') %}
 svc_V38609-tfptd:
   service.disabled:
     - name: 'tftp-server'
-{% endif %}
+{%- endif %}
 
 cmd_V38609-tfptd:
   cmd.run:

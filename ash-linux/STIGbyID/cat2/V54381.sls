@@ -17,20 +17,20 @@
 
 {%- set stigId = 'V54381' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
-{% set checkFile = '/etc/audit/auditd.conf' %}
-{% set auditParm = 'admin_space_left_action' %}
+{%- set checkFile = '/etc/audit/auditd.conf' %}
+{%- set auditParm = 'admin_space_left_action' %}
 
 script_{{ stigId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{% if salt['file.search'](checkFile, '^' + auditParm) %}
-  {% if salt['file.search'](checkFile, '^' + auditParm + ' = suspend') %}
+{%- if salt['file.search'](checkFile, '^' + auditParm) %}
+  {%- if salt['file.search'](checkFile, '^' + auditParm + ' = suspend') %}
 notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "{{ auditParm }} parameter already set in {{ checkFile }}"'
-  {% else %}
+  {%- else %}
 notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "{{ auditParm }} parameter set in {{ checkFile }} but not to recommended value (''suspend'')"'
@@ -40,10 +40,10 @@ file_{{ stigId }}:
     - name: '{{ checkFile }}'
     - pattern: '^{{ auditParm }} = .*'
     - repl: '{{ auditParm }} = suspend'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_{{ stigId }}:
   file.append:
     - name: '{{ checkFile }}'
     - text: '{{ auditParm }} = suspend'
-{% endif %}
+{%- endif %}
