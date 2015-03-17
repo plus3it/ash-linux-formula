@@ -29,7 +29,7 @@ script_V{{ stig_id }}-describe:
 file_V{{ stig_id }}-sysauth_ac:
   file.replace:
     - name: '{{ checkFile }}'
-    - pattern: " nullok"
-    - repl: ""
+    - pattern: '[	 ]*nullok[	 ]*'
+    - repl: ' '
     - onlyif: 
       - 'test -f {{ checkFile }}'
