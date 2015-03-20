@@ -15,13 +15,16 @@
 #
 ############################################################
 
-script_V38454-describe:
+{%- set stigId = 'V38454' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38454.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # Probably need to replace this with custom module...
-script_V38454-Verfiy:
+script_{{ stigId }}-Verfiy:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38454-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: /root

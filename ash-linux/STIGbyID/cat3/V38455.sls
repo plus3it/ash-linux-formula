@@ -10,22 +10,27 @@
 #
 ############################################################
 
-script_V38455-describe:
+{%- set stigId = 'V38455' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set chkFile = '/etc/fstab' %}
+{%- set chkPtn = '/tmp' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38455.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
-{%- if salt['file.search']('/etc/fstab', '[ 	]/tmp[ 	]') %}
-mount_V38455-tmp:
+{%- if salt['file.search'](chkFile, '[ 	]' + chkPtn + '[ 	]') %}
+mount_{{ stigId }}-{{ chkPtn }}:
    cmd.run:
-     - name: 'echo "/tmp already mounted as its own filesystem"'
+     - name: 'echo "{{ chkPtn }} already mounted as its own filesystem"'
 {%- else %}
-mount_V38455-tmp:
+mount_{{ stigId }}-{{ chkPtn }}:
   mount.mounted:
-    - name: /tmp
+    - name: '{{ chkPtn }}'
     - device: tmpfs
     - fstype: tmpfs
     - mkmnt: True
