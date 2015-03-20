@@ -22,17 +22,17 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% set wantedPkg = 'postfix' %}
+{%- set wantedPkg = 'postfix' %}
 
-{% if not salt['pkg.version'](wantedPkg) %}
+{%- if not salt['pkg.version'](wantedPkg) %}
 notify_{{ stigId }}-noPostfix:
   cmd.run:
     - name: 'echo "Postfix not installed"'
-  {% if salt['pkg.version']('sendmail') %}
+  {%- if salt['pkg.version']('sendmail') %}
 notify_{{ stigId }}-sendmail:
   cmd.run:
     - name: 'echo "Sendmail installed instead of postfix"'
-  {% else %}
+  {%- else %}
 notify_{{ stigId }}-postfix:
   cmd.run:
     - name: 'echo "Attempting to install missing {{ wantedPkg }} package."'
@@ -48,8 +48,8 @@ svc_{{ stigId }}-postfixEnabled:
 svc_{{ stigId }}-postfixRunning:
   service.running:
     - name: '{{ wantedPkg }}'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 # Ensure postfix service is enabled and running
 svc_{{ stigId }}-postfixEnabled:
   service.enabled:
@@ -58,4 +58,4 @@ svc_{{ stigId }}-postfixEnabled:
 svc_{{ stigId }}-postfixRunning:
   service.running:
     - name: '{{ wantedPkg }}'
-{% endif %}
+{%- endif %}

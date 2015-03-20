@@ -25,7 +25,7 @@ script_V{{ stig_id }}-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{% if salt['file.file_exists']('{{ file_modprobe }}') %}
+{%- if salt['file.file_exists']('{{ file_modprobe }}') %}
 file_V{{ stig_id }}-replModprobe:
   file.replace:
     - name: /etc/modprobe.conf
@@ -33,7 +33,7 @@ file_V{{ stig_id }}-replModprobe:
     - repl: "install usb-storage /bin/true"
     - onlyif:
       - 'grep -E -e "usb-storage" {{ file_modprobe }}'
-{% else %}
+{%- else %}
 file_V{{ stig_id }}-touchUSBconf:
   file.touch:
     - name: '{{ file_modprobe_usb }}'
@@ -45,7 +45,7 @@ file_V{{ stig_id }}-appendUSBconf:
       - file: file_V{{ stig_id }}-touchUSBconf
     - onlyif:
       - 'test -f {{ file_modprobe_usb }}'
-{% endif %}
+{%- endif %}
 
 file_V{{ stig_id }}-touchRules:
   file.touch:

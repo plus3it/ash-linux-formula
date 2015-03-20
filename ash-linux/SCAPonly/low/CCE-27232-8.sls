@@ -29,11 +29,11 @@ script_{{ scapId }}-describe:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-{% for proto in checkPat %}
+{%- for proto in checkPat %}
 comment_{{ scapId }}-{{ proto }}:
   file.comment:
     - name: '{{ checkFile }}'
     - regex: '^{{ proto }}'
     - backup: '.bak-{{ proto }}'
     - onlyif: 'grep "^{{ proto }}" {{ checkFile }}'
-{% endfor %}
+{%- endfor %}

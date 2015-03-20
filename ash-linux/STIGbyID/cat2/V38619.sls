@@ -20,12 +20,12 @@ script_V38619-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38619.sh
     - cwd: '/root'
 
-{% for user in salt['user.getent']('') %}
-  {% set ID = user['name'] %}
-  {% set homeDir = user['home'] %}
-  {% set netRc = homeDir + '/.netrc' %}
+{%- for user in salt['user.getent']('') %}
+  {%- set ID = user['name'] %}
+  {%- set homeDir = user['home'] %}
+  {%- set netRc = homeDir + '/.netrc' %}
 
-  {% if salt['file.file_exists'](netRc) %}
+  {%- if salt['file.file_exists'](netRc) %}
 notify_V38619-{{ ID }}:
   cmd.run:
     - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'
@@ -47,6 +47,6 @@ warnfile_V38619-{{ ID }}:
       - '#'
       - '##################################################'
 
-{% endif %}
-{% endfor %}
+{%- endif %}
+{%- endfor %}
 

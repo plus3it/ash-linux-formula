@@ -21,22 +21,22 @@ script_{{ scapId }}-describe:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-{% set TargFile = '/etc/sysconfig/prelink' %}
+{%- set TargFile = '/etc/sysconfig/prelink' %}
 
-{% if salt['pkg.version']('prelink') %}
-  {% if salt['file.search'](TargFile, '^PRELINKING=') %}
+{%- if salt['pkg.version']('prelink') %}
+  {%- if salt['file.search'](TargFile, '^PRELINKING=') %}
 file_{{ scapId }}-alter:
   file.replace:
     - name: '{{ TargFile }}'
     - pattern: '^PRELINKING=.*'
     - repl: 'PRELINKING=no'
-  {% else %}
+  {%- else %}
 file_{{ scapId }}-alter:
   file.append:
     - name: '{{ TargFile }}'
     - text: 'PRELINKING=no'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 notify_{{ scapId }}:
   cmd.run:
     - name: 'echo "NOTICE: the prelink utilities not installed. Applying precautionary remediation."'
@@ -48,4 +48,4 @@ file_{{ scapId }}-alter:
     - name: '{{ TargFile }}'
     - text: 'PRELINKING=no'
     - unless: file_{{ scapId }}-touch
-{% endif %}
+{%- endif %}

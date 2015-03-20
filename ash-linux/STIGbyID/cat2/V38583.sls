@@ -49,6 +49,6 @@ notify_{{ stig_id }}-{{ chkFile }}:
 *       file to prevent unexpected behaviors.\n
 *********************************************\n
 " >&2 && exit 1'
-{% endif %}
+{%- endif %}
 {%- endfor %}
 

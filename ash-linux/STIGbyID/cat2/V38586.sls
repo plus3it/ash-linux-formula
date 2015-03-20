@@ -22,13 +22,13 @@ script_V38586-describe:
     - cwd: '/root'
 
 # Conditional replace or append
-{% if salt['file.search']('/etc/sysconfig/init', '^SINGLE') %}
+{%- if salt['file.search']('/etc/sysconfig/init', '^SINGLE') %}
 file_V38586-repl:
   file.replace:
     - name: '/etc/sysconfig/init'
     - pattern: '^SINGLE.*$'
     - repl: 'SINGLE=/sbin/sulogin' 
-{% else %}
+{%- else %}
 file_V38586-append:
   file.append:
     - name: '/etc/sysconfig/init'
@@ -36,4 +36,4 @@ file_V38586-append:
       - ' '
       - '# Require root password for single-user access (per STIG V-38586)'
       - 'SINGLE=/sbin/sulogin'
-{% endif %}
+{%- endif %}

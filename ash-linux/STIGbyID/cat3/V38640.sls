@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('abrt') %}
+{%- if salt['pkg.version']('abrt') %}
 svc_{{ stigId }}-abrtdEnabled:
   service.disabled:
     - name: 'abrtd'
@@ -27,8 +27,8 @@ svc_{{ stigId }}-abrtdEnabled:
 svc_{{ stigId }}-abrtdRunning:
   service.dead:
     - name: 'abrtd'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The ABRT subsystem is not installed"'
-{% endif %}
+{%- endif %}

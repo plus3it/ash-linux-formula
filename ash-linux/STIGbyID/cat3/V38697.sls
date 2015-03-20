@@ -33,27 +33,27 @@ script_{{ stigId }}-describe:
 # permissions against an indeterminite directory-list in future
 # iterations of this SLS.
 
-{% set dirTmp = '/tmp' %}
-{% set dirVarTmp = '/var/tmp' %}
+{%- set dirTmp = '/tmp' %}
+{%- set dirVarTmp = '/var/tmp' %}
 
-{% if salt['file.check_perms'](dirTmp, '', 'root', 'root', '1777') %}
+{%- if salt['file.check_perms'](dirTmp, '', 'root', 'root', '1777') %}
 directory_{{ stigId }}-tmp:
   cmd.run:
     - name: 'echo "The ''{{ dirTmp }}'' directory already set to mode 1777"'
-{% else %}
+{%- else %}
 directory_{{ stigId }}-tmp:
   file.directory:
     - name: {{ dirTmp }}
     - mode: 1777
-{% endif %}
+{%- endif %}
 
-{% if salt['file.check_perms'](dirVarTmp, '', 'root', 'root', '1777') %}
+{%- if salt['file.check_perms'](dirVarTmp, '', 'root', 'root', '1777') %}
 directory_{{ stigId }}-varTmp:
   cmd.run:
     - name: 'echo "The ''{{ dirVarTmp }}'' directory already set to mode 1777"'
-{% else %}
+{%- else %}
 directory_{{ stigId }}-varTmp:
   file.directory:
     - name: {{ dirVarTmp }}
     - mode: 1777
-{% endif %}
+{%- endif %}

@@ -19,20 +19,20 @@ script_V38604-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38604.sh
     - cwd: '/root'
 
-{% if salt['pkg.version']('ypbind') %}
+{%- if salt['pkg.version']('ypbind') %}
 svc_V38604-ypbind:
   service.disabled:
     - name: 'ypbind'
-{% endif %}
+{%- endif %}
 
-{% if salt['pkg.version']('ypserv') %}
+{%- if salt['pkg.version']('ypserv') %}
 svc_V38604-ypserv:
   service.disabled:
     - name: 'ypserv'
-{% endif %}
+{%- endif %}
 
-{% if salt['pkg.version']('yp-tools') %}
+{%- if salt['pkg.version']('yp-tools') %}
 svc_V38604-yptools:
   service.disabled:
     - name: 'yp-tools'
-{% endif %}
+{%- endif %}

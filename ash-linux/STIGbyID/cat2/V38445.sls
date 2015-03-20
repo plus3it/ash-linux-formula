@@ -20,9 +20,9 @@ notify_V38445-status:
   cmd.run:
     - name: 'echo "Info: recursing ''/var/log/audit'' to reset group-ownerships."'
 
-{% set fileList = salt['file.find']("/var/log/audit", type='f') %}
-{% for fileCheck in fileList %}
-{% if not salt['file.get_group'](fileCheck) == 'root' %}
+{%- set fileList = salt['file.find']("/var/log/audit", type='f') %}
+{%- for fileCheck in fileList %}
+{%- if not salt['file.get_group'](fileCheck) == 'root' %}
 notify_V38445-{{ fileCheck }}:
   cmd.run:
     - name: 'echo "Info: resetting ''{{ fileCheck }}'' group-ownership to ''root''."'
@@ -32,5 +32,5 @@ file_V38445-{{ fileCheck }}:
     - name: '{{ fileCheck }}'
     - group: 'root'
     - replace: 'False'
-{% endif %}
-{% endfor %}
+{%- endif %}
+{%- endfor %}

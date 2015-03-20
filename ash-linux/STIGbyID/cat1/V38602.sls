@@ -17,12 +17,12 @@ script_V38602-describe:
     - source: salt://ash-linux/STIGbyID/cat1/files/V38602.sh
     - cwd: /root
 
-{% set rSvcName = 'rlogin' %}
+{%- set rSvcName = 'rlogin' %}
 
 # See if the rsh server package is even installed...
-{% if salt['pkg.version']('rsh-server') %}
+{%- if salt['pkg.version']('rsh-server') %}
   # If installed, and enabled, disable it
-  {% if salt['service.enabled'](rSvcName) %}
+  {%- if salt['service.enabled'](rSvcName) %}
 svc_V38602-{{ rSvcName }}Disabled:
   service.disabled:
     - name: '{{ rSvcName }}'
@@ -36,14 +36,14 @@ notice_V38602-disable{{ rSvcName }}:
     - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
     - unless: svc_V38602-{{ rSvcName }}Disabled
   # If installed but disabled, make a note of it
-  {% else %}
+  {%- else %}
 notice_V38602-disable{{ rSvcName }}:
   cmd.run:
     - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
-  {% endif %}
+  {%- endif %}
 # Otherwise, just notify that rsh service isn't even present
-{% else %}
+{%- else %}
 notice_V38602-disable{{ rSvcName }}:
   cmd.run:
     - name: 'echo "The ''rsh-server'' package is not installed"'
-{% endif %}
+{%- endif %}

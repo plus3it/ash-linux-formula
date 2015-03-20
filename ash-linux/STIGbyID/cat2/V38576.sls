@@ -21,13 +21,13 @@ script_V38576-describe:
     - cwd: '/root'
 
 # Conditional replace or append
-{% if salt['file.search']('/etc/login.defs', '^ENCRYPT_METHOD') %}
+{%- if salt['file.search']('/etc/login.defs', '^ENCRYPT_METHOD') %}
 file_V38576-repl:
   file.replace:
     - name: /etc/login.defs
     - pattern: '^ENCRYPT_METHOD.*$'
     - repl: 'ENCRYPT_METHOD SHA512'
-{% else %}
+{%- else %}
 file_V38576-append:
   file.append:
     - name: /etc/login.defs
@@ -35,4 +35,4 @@ file_V38576-append:
       - ' '
       - '# Use SHA512 to encrypt password.'
       - 'ENCRYPT_METHOD SHA512'
-{% endif %}
+{%- endif %}

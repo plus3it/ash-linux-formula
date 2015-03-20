@@ -25,40 +25,40 @@ script_{{ scapId }}-describe:
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
-{% set mountPoint = '/dev/shm' %}
-{% set activeMntStream = salt['mount.active']('extended=true') %}
-{% set mountStruct = activeMntStream[mountPoint] %}
+{%- set mountPoint = '/dev/shm' %}
+{%- set activeMntStream = salt['mount.active']('extended=true') %}
+{%- set mountStruct = activeMntStream[mountPoint] %}
 
-{% if not mountPoint in activeMntStream %}
+{%- if not mountPoint in activeMntStream %}
 
 notify_{{ scapId }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
 
-{% else %}
+{%- else %}
 
   # Grab the option-list for mount
-  {% set optList = mountStruct['opts'] %}
+  {%- set optList = mountStruct['opts'] %}
   # See if the mount has the 'nodev' option set
 
-  {% if 'nodev' in optList %}
+  {%- if 'nodev' in optList %}
 
 notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' mounted with ''nodev'' option"'
 
-  {% else %}
+  {%- else %}
 
 notify_{{ scapId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' not mounted with ''nodev'' option:"'
 
-  {% endif %} 
+  {%- endif %} 
 
 # Remount with "nodev" option added/set
-{% set optString = 'nodev,' + ','.join(optList) %}
-{% set remountDev = mountPoint %}
-{% set fsType = mountStruct['fstype'] %}
+{%- set optString = 'nodev,' + ','.join(optList) %}
+{%- set remountDev = mountPoint %}
+{%- set fsType = mountStruct['fstype'] %}
 
 notify_{{ scapId }}-{{ mountPoint }}-remount:
   cmd.run:
@@ -78,4 +78,4 @@ fstab_{{ scapId }}-{{ mountPoint }}:
     - mount: True
     - unless: fstab_{{ scapId }}-{{ mountPoint }}-backup
 
-{% endif %}
+{%- endif %}

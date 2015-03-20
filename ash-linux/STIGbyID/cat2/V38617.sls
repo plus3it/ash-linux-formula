@@ -18,14 +18,14 @@ script_V38617-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38617.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/ssh/sshd_config', '^Ciphers')
+{%- if salt['file.search']('/etc/ssh/sshd_config', '^Ciphers')
  %}
 file_V38617-repl:
   file.replace:
     - name: '/etc/ssh/sshd_config'
     - pattern: '^Ciphers.*$'
     - repl: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
-{% else %}
+{%- else %}
 file_V38617-append:
   file.append:
     - name: '/etc/ssh/sshd_config'
@@ -33,5 +33,5 @@ file_V38617-append:
       - ' '
       - '# SSH service must allow only FIPS 140-2 ciphers (per STIG V-38617)'
       - 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
-{% endif %}
+{%- endif %}
 

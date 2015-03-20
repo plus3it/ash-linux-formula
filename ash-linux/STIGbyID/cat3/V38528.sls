@@ -26,13 +26,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['sysctl.get'](parmName) == parmVal %}
+{%- if salt['sysctl.get'](parmName) == parmVal %}
 sysctl_{{ stigId }}-logMartians:
   cmd.run:
     - name: 'echo "Logging of Martian packets already enabled"'
-{% else %}
+{%- else %}
 sysctl_{{ stigId }}-logMartians:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '{{ parmVal }}'
-{% endif %}
+{%- endif %}

@@ -19,13 +19,13 @@ script_V38622-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38622.sh
     - cwd: '/root'
 
-{% if salt['pkg.version']('postfix') and salt['file.search']('/etc/postfix/main.cf', '^inet_interfaces') %}
+{%- if salt['pkg.version']('postfix') and salt['file.search']('/etc/postfix/main.cf', '^inet_interfaces') %}
 file_V38622-repl:
   file.replace:
     - name: '/etc/postfix/main.cf'
     - pattern: '^inet_interfaces.*$'
     - repl: 'inet_interfaces = localhost'
-{% elif salt['pkg.version']('postfix') and not salt['file.search']('/etc/postfix/main.cf', '^inet_interfaces') %}
+{%- elif salt['pkg.version']('postfix') and not salt['file.search']('/etc/postfix/main.cf', '^inet_interfaces') %}
 file_V38622-append:
   file.append:
     - name: '/etc/postfix/main.cf'
@@ -33,12 +33,12 @@ file_V38622-append:
       - ' '
       - '# SMTP service must not allow relaying (per STIG V-38622)'
       - 'inet_interfaces = localhost'
-{% elif salt['pkg.version']('sendmail') %}
+{%- elif salt['pkg.version']('sendmail') %}
 cmd_V38622-NotImplemented:
   cmd.run:
     - name: 'echo "Sendmail auto-remediation not supported: manual intervention may be required"'
-{% elif salt['pkg.version']('exim') %}
+{%- elif salt['pkg.version']('exim') %}
 cmd_V38622-NotImplemented:
   cmd.run:
     - name: 'echo "Exim auto-remediation not supported: manual intervention may be required"'
-{% endif %}
+{%- endif %}

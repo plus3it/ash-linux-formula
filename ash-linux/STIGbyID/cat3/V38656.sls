@@ -23,16 +23,16 @@ script_{{ stigId }}-describe:
     - cwd: /root
 
 # If the Samba config files are installed...
-{% if salt['pkg.version']('samba-common') %}
+{%- if salt['pkg.version']('samba-common') %}
   # and the "client signing" option is already set to some value,
   # override as necessary
-  {% if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') or salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
+  {%- if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') or salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
 paramSet_{{ stigId }}-clientSigning:
   file.replace:
     - name: '/etc/samba/smb.conf'
     - pattern: 'client signing[ 	]=.*$'
     - repl: 'client signing = mandatory'
-  {% else %}
+  {%- else %}
   # ...otherwise, set a value (append immediately after [global]
   # stanza's header
 paramSet_{{ stigId }}-clientSigning:
@@ -40,10 +40,10 @@ paramSet_{{ stigId }}-clientSigning:
     - name: '/etc/samba/smb.conf'
     - pattern: '^(?P<srctok>^\[global\]$)'
     - repl: '\g<srctok>\n\n# client signing set per STIG-ID V-38656\n\tclient signing = mandatory'
-  {% endif %}
+  {%- endif %}
 # If the Samba config files are not installed...
-{% else %}
+{%- else %}
 paramSet_{{ stigId }}-clientSigning:
   cmd.run:
     - name: 'echo "No relevant findings: Samba configuration components not installed"'
-{% endif %}
+{%- endif %}

@@ -25,7 +25,7 @@ script_V{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Enable audit at kernel load
-{% if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*audit=1') %}
+{%- if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*audit=1') %}
 
 file_V{{ stig_id }}-repl:
   file.replace:
@@ -38,10 +38,10 @@ notify_V{{ stig_id }}-audit:
     - name: 'printf "Note: Enabled audit at IPL via addition of\n      ''audit=1'' to {{ grubCfgFile }}\n"'
     - unless: 'file_V{{ stig_id }}-audit'
 
-{% else %}
+{%- else %}
 
 status_V{{ stig_id }}:
   cmd.run:
     - name: 'echo "Auditing already enabled at boot"'
 
-{% endif %}
+{%- endif %}

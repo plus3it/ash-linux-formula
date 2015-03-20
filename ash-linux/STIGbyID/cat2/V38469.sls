@@ -21,7 +21,7 @@ script_V38469-describe:
     - cwd: '/root'
 
 # Define list of binary directories to search
-{% set checkBinDirs = [
+{%- set checkBinDirs = [
 	'/bin',
 	'/usr/bin',
 	'/usr/local/bin',
@@ -32,7 +32,7 @@ script_V38469-describe:
 %}
 
 # Iterate previously-defined list
-{% for binDir in checkBinDirs %}
+{%- for binDir in checkBinDirs %}
 
 # Report what we're doing
 notify_V38469-{{ binDir }}:
@@ -46,4 +46,4 @@ strip_V38469-{{ binDir }}:
     - cwd: '/root'
     - args: {{ binDir }}
 
-{% endfor %}
+{%- endfor %}

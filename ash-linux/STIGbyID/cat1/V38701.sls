@@ -16,14 +16,14 @@ script_V38701-describe:
     - source: salt://ash-linux/STIGbyID/cat1/files/V38701.sh
     - cwd: /root
 
-{% if salt['pkg.version']('tftp-server') %}
+{%- if salt['pkg.version']('tftp-server') %}
 file_V38701:
   file.sed:
     - name: /etc/xinetd.d/tftp
     - before: 'server_args.*=.*'
     - after: 'server_args		= -s /var/lib/tftpboot'
-{% else %}
+{%- else %}
 file_V38701:
   cmd.run:
     - name: 'echo "No applicable findings possible: ''tftp-server'' package not installed"'
-{% endif %}
+{%- endif %}

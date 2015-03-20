@@ -14,37 +14,37 @@ script_V38677-describe:
     - source: salt://ash-linux/STIGbyID/cat1/files/V38677.sh
     - cwd: /root
 
-{% set exportFile = '/etc/exports' %}
-{% set badOpt = 'insecure_locks' %}
+{%- set exportFile = '/etc/exports' %}
+{%- set badOpt = 'insecure_locks' %}
 
-{% if salt['file.search'](exportFile, badOpt) %}
+{%- if salt['file.search'](exportFile, badOpt) %}
 script_V38677-helper:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat1/files/V38677-helper.sh
     - cwd: /root
 {#
-  {% if salt['file.search'](exportFile, ',' + insecure_locks) %}
+  {%- if salt['file.search'](exportFile, ',' + insecure_locks) %}
 fix_V38677-secondaryOpt:
   file.replace:
     - name: '{{ exportFile }}'
     - pattern: ',{{ badOpt }}'
     - repl: ''
-  {% elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + ',') %}
+  {%- elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + ',') %}
 fix_V38677-primaryOpt:
   file.replace:
     - name: '{{ exportFile }}'
     - pattern: '{{ badOpt }},'
     - repl: ''
-  {% elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + '[ 	]') %}
+  {%- elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + '[ 	]') %}
 fix_V38677-onlyOpt:
   file.replace:
     - name: '{{ exportFile }}'
     - pattern: '{{ badOpt }},'
     - repl: ''
-  {% endif %}
+  {%- endif %}
 #}
-{% else %}
+{%- else %}
 fix_V38677-noChange:
   cmd.run:
     - name: 'echo "No ''{{ badOpt }}'' export options found in ''{{ exportFile }}''"'
-{% endif %}
+{%- endif %}

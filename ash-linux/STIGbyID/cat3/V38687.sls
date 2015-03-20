@@ -22,11 +22,11 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('openswan') %}
+{%- if salt['pkg.version']('openswan') %}
 notify_{{ stigId }}-openSwan:
   cmd.run:
     - name: 'echo "OpenSwan utilities already installed"'
-{% else %}
+{%- else %}
 installed_{{ stigId }}-openSwan:
   pkg.installed:
     - name: 'openswan'
@@ -35,4 +35,4 @@ notify_{{ stigId }}-openSwan:
   cmd.run:
     - name: 'echo "Installed OpenSwan utilities"'
     - unless: 'installed_{{ stigId }}-openSwan'
-{% endif %}
+{%- endif %}

@@ -24,19 +24,19 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search'](checkFile, '^' + parmName) %}
-  {% if salt['file.search'](checkFile, '^' + parmName + ' 0') %}
+{%- if salt['file.search'](checkFile, '^' + parmName) %}
+  {%- if salt['file.search'](checkFile, '^' + parmName + ' 0') %}
 file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'
-  {% else %}
+  {%- else %}
 file_{{ stigId }}-configSet:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^{{ parmName }}.*$'
     - repl: '{{ parmName }} 0'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_{{ stigId }}-configSet:
   file.append:
     - name: '{{ checkFile }}'
@@ -44,4 +44,4 @@ file_{{ stigId }}-configSet:
         
         # SSH service must set a session idle-timeout (per STIG V-38610)
         {{ parmName }} 0
-{% endif %}
+{%- endif %}

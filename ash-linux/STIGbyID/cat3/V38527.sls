@@ -20,14 +20,14 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
-{% if grains['cpuarch'] == 'x86_64' %}
-  {% set pattern = '-a always,exit -F arch=b64 -S clock_settime -k audit_time_rules' %}
-  {% set filename = '/etc/audit/audit.rules' %}
-  {% if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- set pattern = '-a always,exit -F arch=b64 -S clock_settime -k audit_time_rules' %}
+  {%- set filename = '/etc/audit/audit.rules' %}
+  {%- if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
 file_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
-  {% else %}
+  {%- else %}
 file_V{{ stig_id }}-settimeofday:
   file.append:
     - name: '{{ filename }}'
@@ -35,9 +35,9 @@ file_V{{ stig_id }}-settimeofday:
         
         # Audit all system time-modifications via clock_settime (per STIG-ID V-{{ stig_id }})
         {{ pattern }}
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Architecture not supported: no changes made"'
-{% endif %}
+{%- endif %}

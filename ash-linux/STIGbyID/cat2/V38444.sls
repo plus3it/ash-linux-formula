@@ -21,12 +21,12 @@ script_V38444-describe:
     - cwd: '/root'
 
 # Check if IPv6 is enabled
-{% set ipv6Value =  salt['sysctl.get']('net.ipv6.conf.all.disable_ipv6') %}
-{% if 'unknown' in ipv6Value %}
+{%- set ipv6Value =  salt['sysctl.get']('net.ipv6.conf.all.disable_ipv6') %}
+{%- if 'unknown' in ipv6Value %}
 notify_V38444-sysctl:
   cmd.run:
     - name: 'echo "Notice: IPv6 Is disabled: cannot update ip6tables"'
-{% else %}
+{%- else %}
 notify_V38444-sysctl:
   cmd.run:
     - name: 'echo "Info: Updating in-memory ip6tables configuration."'
@@ -46,4 +46,4 @@ iptables_V38444-iptablesSave:
   module.run:
     - name: 'iptables.save'
     - family: 'ipv6'
-{% endif %}
+{%- endif %}

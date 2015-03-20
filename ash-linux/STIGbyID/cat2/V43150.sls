@@ -20,12 +20,12 @@ script_V43150-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V43150.sh
     - cwd: '/root'
 
-{% if salt['pkg.version']('gdm') %}
+{%- if salt['pkg.version']('gdm') %}
 cmd_V43150-setNoUserlist:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/disable_user_list true'
-{% else %}
+{%- else %}
 notify_V43150:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
-{% endif %}
+{%- endif %}

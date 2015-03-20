@@ -20,7 +20,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('qpid-cpp-server') %}
+{%- if salt['pkg.version']('qpid-cpp-server') %}
 svc_{{ stigId }}-qpiddEnabled:
   service.disabled:
     - name: 'qpidd'
@@ -28,8 +28,8 @@ svc_{{ stigId }}-qpiddEnabled:
 svc_{{ stigId }}-qpiddRunning:
   service.dead:
     - name: 'qpidd'
-{% else %}
+{%- else %}
 notice_{{ stigId }}-notPresent:
   cmd.run:
     - name: 'echo "The qpid subsystem is not installed"'
-{% endif %}
+{%- endif %}

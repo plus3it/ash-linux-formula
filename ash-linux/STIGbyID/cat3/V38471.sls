@@ -22,26 +22,26 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% set syslogConf = '/etc/audisp/plugins.d/syslog.conf' %}
+{%- set syslogConf = '/etc/audisp/plugins.d/syslog.conf' %}
 
-{% if salt['file.search'](syslogConf, 'active') %}
-  {% if salt['file.search'](syslogConf, '^#.*active.*=.*yes') %}
+{%- if salt['file.search'](syslogConf, 'active') %}
+  {%- if salt['file.search'](syslogConf, '^#.*active.*=.*yes') %}
 file_{{ stigId }}-mkActive:
   file.uncomment:
     - name: '{{ syslogConf }}'
     - regex: 'active = yes'
-  {% elif salt['file.search'](syslogConf, '^active.*=.*no') %}
+  {%- elif salt['file.search'](syslogConf, '^active.*=.*no') %}
 file_{{ stigId }}-mkActive:
   file.replace:
     - name: '{{ syslogConf }}'
     - pattern: '^active.*=.*no'
     - repl: 'active = yes'
-  {% elif salt['file.search'](syslogConf, '^.*active.*=.*yes') %}
+  {%- elif salt['file.search'](syslogConf, '^.*active.*=.*yes') %}
 file_{{ stigId }}-mkActive:
   cmd.run:
     - name: 'echo "Audit service already configured to forward logs to syslog service"'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 file_{{ stigId }}-mkActive:
   file.append:
     - name: '{{ syslogConf }}'
@@ -49,4 +49,4 @@ file_{{ stigId }}-mkActive:
         
         # Audit records must be forwarded to the syslog service (per STIG-ID V-38471)
         active = yes
-{% endif %}
+{%- endif %}

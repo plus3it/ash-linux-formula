@@ -18,8 +18,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if not salt['pkg.version']('xorg-x11-server-common') %}
+{%- if not salt['pkg.version']('xorg-x11-server-common') %}
 notify_{{ stigId }}-noPostfix:
   cmd.run:
     - name: 'echo "X Windows package not installed"'
-{% endif %}
+{%- endif %}

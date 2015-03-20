@@ -20,8 +20,8 @@ script_V38460-describe:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38460.sh
     - cwd: /root
 
-{% if salt['pkg.version']('nfs-utils') %}
-  {% if salt['file.search']('/etc/exports', 'all_squash') %}
+{%- if salt['pkg.version']('nfs-utils') %}
+  {%- if salt['file.search']('/etc/exports', 'all_squash') %}
 file_V38460-onlyOpt:
   file.replace:
     - name: '/etc/exports'
@@ -39,13 +39,13 @@ file_V38460-secondaryOpt:
     - name: '/etc/exports'
     - pattern: ',all_squash'
     - repl: ''
-  {% else %}
+  {%- else %}
 cmd_V38460-notice:
   cmd.run:
     - name: 'echo "No NFS exports found with all_squash option enabled"'
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 cmd_V38460-notice:
   cmd.run:
     - name: 'echo "NFS service not installed: security control not relevant"'
-{% endif %}
+{%- endif %}

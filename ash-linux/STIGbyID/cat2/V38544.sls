@@ -21,13 +21,13 @@ script_V38544-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38544.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.rp_filter') %}
+{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.rp_filter') %}
 file_V38544-repl:
   file.replace:
     - name: '/etc/sysctl.conf'
     - pattern: '^net.ipv4.conf.default.rp_filter.*$'
     - repl: 'net.ipv4.conf.default.rp_filter = 1'
-{% else %}
+{%- else %}
 file_V38544-append:
   file.append:
     - name: '/etc/sysctl.conf'
@@ -35,4 +35,4 @@ file_V38544-append:
       - ' '
       - '# Enable reverse-path filtering (per STIG V-38544)'
       - 'net.ipv4.conf.default.rp_filter = 1'
-{% endif %}
+{%- endif %}

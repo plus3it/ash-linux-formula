@@ -16,44 +16,44 @@
 ############################################################
 
 # Get userid of the "nobody" user
-{% set noprivInfo = salt['user.info']('nobody') %}
-{% set noprivId = noprivInfo['uid'] %}
+{%- set noprivInfo = salt['user.info']('nobody') %}
+{%- set noprivId = noprivInfo['uid'] %}
 
 script_V38500-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38500.sh
     - cwd: '/root'
 
-{% for user in salt['user.list_users']() %}
-  {% set userInfo = salt['user.info'](user) %}
-  {% set userId = userInfo['uid'] %}
-  {% if userId == 0 %}
+{%- for user in salt['user.list_users']() %}
+  {%- set userInfo = salt['user.info'](user) %}
+  {%- set userId = userInfo['uid'] %}
+  {%- if userId == 0 %}
     #########################################
     # If the user is "root", just acknowledge
-    {% if user == 'root' %}
+    {%- if user == 'root' %}
 notify_V38500-{{ user }}:
   cmd.run:
     - name: 'echo "Info: User ''{{ user }}'' has userid ''{{ userId }}''"'
 
     #################################################################
     # If the uid '0' account isn't "root", nuke and recreate as non-0
-    {% else %}
-    {% set userShadow = salt['shadow.info'](user) %}
-    {% set userDate = userShadow['lstchg'] %}
-    {% set userExpire = userShadow['expire'] %}
-    {% set userFullname = userInfo['fullname'] %}
-    {% set userGid = userInfo['gid'] %}
-    {% set userHome = userInfo['home'] %}
-    {% set userHomePhone = userInfo['homephone'] %}
-    {% set userInactiv = userShadow['inact'] %}
-    {% set userMaxDay = userShadow['max'] %}
-    {% set userMinDay = userShadow['min'] %}
-    {% set userName = user %}
-    {% set userPasswd = userShadow['passwd'] %}
-    {% set userRoomNo = userInfo['roomnumber'] %}
-    {% set userShell = userInfo['shell'] %}
-    {% set userWarnDay = userShadow['warn'] %}
-    {% set userWorkPhone = userInfo['workphone'] %}
+    {%- else %}
+    {%- set userShadow = salt['shadow.info'](user) %}
+    {%- set userDate = userShadow['lstchg'] %}
+    {%- set userExpire = userShadow['expire'] %}
+    {%- set userFullname = userInfo['fullname'] %}
+    {%- set userGid = userInfo['gid'] %}
+    {%- set userHome = userInfo['home'] %}
+    {%- set userHomePhone = userInfo['homephone'] %}
+    {%- set userInactiv = userShadow['inact'] %}
+    {%- set userMaxDay = userShadow['max'] %}
+    {%- set userMinDay = userShadow['min'] %}
+    {%- set userName = user %}
+    {%- set userPasswd = userShadow['passwd'] %}
+    {%- set userRoomNo = userInfo['roomnumber'] %}
+    {%- set userShell = userInfo['shell'] %}
+    {%- set userWarnDay = userShadow['warn'] %}
+    {%- set userWorkPhone = userInfo['workphone'] %}
 
 notify_V38500-{{ user }}:
   cmd.run:
@@ -85,7 +85,7 @@ update_V38500-{{ user }}_recreate:
 update_V38500-{{ user }}_chown:
   cmd.run:
     - name: 'echo "Chowning {{ userName }}''s home directory" ; chown -R {{ userName }} {{ userHome }}'
-    {% endif %}
-  {% endif %}
+    {%- endif %}
+  {%- endif %}
 
-{% endfor %}
+{%- endfor %}

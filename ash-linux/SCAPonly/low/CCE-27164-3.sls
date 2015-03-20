@@ -29,15 +29,15 @@ script_{{ scapId }}-describe:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-{% if salt['sysctl.get'](parmName) == parmVal %}
+{%- if salt['sysctl.get'](parmName) == parmVal %}
 notify_{{ scapId }}-state:
   cmd.run:
     - name: 'echo "{{ notify_nochange }}"'
-{% else %}
+{%- else %}
 notify_{{ scapId }}-state:
   cmd.run:
     - name: 'echo "{{ notify_change }}"'
-{% endif %}
+{%- endif %}
 
 comment_{{ scapId }}-{{ parmName }}:
   file.append:

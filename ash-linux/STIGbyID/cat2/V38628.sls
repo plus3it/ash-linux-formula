@@ -21,11 +21,11 @@ script_V38628-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38628.sh
     - cwd: '/root'
 
-{% if not salt['pkg.version']('auditd') %}
+{%- if not salt['pkg.version']('auditd') %}
 pkg_V38628-audit:
   pkg.installed:
     - name: 'audit'
-{% endif %}
+{%- endif %}
 
 svc_V38628-auditEnabled:
   service.enabled:

@@ -19,13 +19,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% if salt['file.search']('/etc/csh.cshrc', '^[ 	]*umask') %}
+{%- if salt['file.search']('/etc/csh.cshrc', '^[ 	]*umask') %}
 file_{{ stigId }}-configSet:
   file.replace:
     - name: '/etc/csh.cshrc'
     - pattern: 'umask.*$'
     - repl: 'umask 077'
-{% else %}
+{%- else %}
 file_{{ stigId }}-configSet:
   file.append:
     - name: '/etc/csh.cshrc'
@@ -33,4 +33,4 @@ file_{{ stigId }}-configSet:
         
         # Umask must be set to "077" (per STIG V-38649)
         umask 077
-{% endif %}
+{%- endif %}

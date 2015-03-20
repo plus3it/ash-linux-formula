@@ -24,7 +24,6 @@ include:
   - ash-linux.SCAPonly.low.CCE-26801-1
   - ash-linux.SCAPonly.low.CCE-26872-2
   - ash-linux.SCAPonly.low.CCE-26883-9
-  - ash-linux.SCAPonly.low.CCE-26974-6
   - ash-linux.SCAPonly.low.CCE-26981-1
   - ash-linux.SCAPonly.low.CCE-26991-0
   - ash-linux.SCAPonly.low.CCE-26993-6

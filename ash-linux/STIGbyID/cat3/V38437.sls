@@ -28,7 +28,7 @@ script_V38437-describe:
     - source: salt://ash-linux/STIGbyID/cat3/files/V38437.sh
     - cwd: /root
 
-{% if salt['pkg.version']('autofs') %}
+{%- if salt['pkg.version']('autofs') %}
 svc_V38437-autofsEnabled:
   service.disabled:
     - name: 'autofs'
@@ -36,8 +36,8 @@ svc_V38437-autofsEnabled:
 svc_V38437-autofsRunning:
   service.dead:
     - name: 'autofs'
-{% else %}
+{%- else %}
 notice_V38437-notPresent:
   cmd.run:
     - name: 'echo "The autofs subsystem is not installed"'
-{% endif %}
+{%- endif %}

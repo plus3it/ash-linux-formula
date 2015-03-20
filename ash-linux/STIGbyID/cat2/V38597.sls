@@ -21,13 +21,13 @@ script_V38597-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38597.sh
     - cwd: '/root'
 
-{% if salt['file.search']('/etc/sysctl.conf', 'kernel.exec-shield') %}
+{%- if salt['file.search']('/etc/sysctl.conf', 'kernel.exec-shield') %}
 file_V38597-repl:
   file.replace:
     - name: '/etc/sysctl.conf'
     - pattern: '^kernel.exec-shield.*$'
     - repl: 'kernel.exec-shield = 1'
-{% else %}
+{%- else %}
 file_V38597-append:
   file.append:
     - name: '/etc/sysctl.conf'
@@ -35,4 +35,4 @@ file_V38597-append:
       - ' '
       - '# Enable exec-shield (per STIG V-38597)'
       - 'kernel.exec-shield = 1'
-{% endif %}
+{%- endif %}

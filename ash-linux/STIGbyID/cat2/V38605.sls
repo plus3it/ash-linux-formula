@@ -18,11 +18,11 @@ script_V38605-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38605.sh
     - cwd: '/root'
 
-{% if not salt['pkg.version']('cronie') %}
+{%- if not salt['pkg.version']('cronie') %}
 pkg_V38605-cronie:
   pkg.installed:
     - name: 'cronie'
-{% endif %}
+{%- endif %}
 
 svc_V38605-crondEnabled:
   service.enabled:

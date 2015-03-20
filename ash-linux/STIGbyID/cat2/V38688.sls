@@ -21,12 +21,12 @@ script_V38688-describe:
     - cwd: '/root'
 
 # Make sure GDM is installed and enable GDM login banners
-{% if salt['pkg.version']('gdm') %}
+{%- if salt['pkg.version']('gdm') %}
 cmd_V38688-enableBanner:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/banner_message_enable true'
-{% else %}
+{%- else %}
 notify_V38688:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
-{% endif %}
+{%- endif %}

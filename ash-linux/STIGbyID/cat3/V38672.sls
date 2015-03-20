@@ -22,24 +22,24 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{% set svcName = 'netconsole' %}
+{%- set svcName = 'netconsole' %}
 
-{% if salt['pkg.version']('initscripts') %}
+{%- if salt['pkg.version']('initscripts') %}
 # Ensure netconsole service is disabled and deactivated
-  {% if salt['service.enabled'](svcName) %}
+  {%- if salt['service.enabled'](svcName) %}
 svc_{{ stigId }}-{{ svcName }}Disabled:
   service.disabled:
     - name: '{{ svcName }}'
 notify_{{ stigId }}-{{ svcName }}Disabled:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service has been disabled"'
-  {% else %}
+  {%- else %}
 notify_{{ stigId }}-{{ svcName }}Disabled:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service is already disabled"'
-  {% endif %}
+  {%- endif %}
 
-  {% if salt['service.status'](svcName) %}
+  {%- if salt['service.status'](svcName) %}
 svc_{{ stigId }}-{{ svcName }}Dead:
   service.dead:
     - name: '{{ svcName }}'
@@ -48,17 +48,17 @@ notify_{{ stigId }}-{{ svcName }}Dead:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service has been stopped"'
 
-  {% else %}
+  {%- else %}
  
 notify_{{ stigId }}-{{ svcName }}Dead:
   cmd.run:
     - name: 'echo "The ''{{ svcName }}'' service is already stopped"'
 
-  {% endif %}
-{% else %}
+  {%- endif %}
+{%- else %}
 
 notify_{{ stigId }}-package:
   cmd.run:
     - name: 'echo "Parent package of {{ svcName }} not installed"'
 
-{% endif %}
+{%- endif %}
