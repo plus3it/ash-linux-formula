@@ -54,6 +54,6 @@ set_{{ stigId }}-inactive:
     - name: '{{ checkFile }}'
     - text: |
         
-	# Set {{ parmName }} account-locking (per STIG-ID {{ stigId }})
-	{{ parmName }}={{ parmVal }}
+        # Set {{ parmName }} account-locking (per STIG-ID {{ stigId }})
+        {{ parmName }}={{ parmVal }}
     - unless: 'grep -E "^{{ parmName }}={{ parmVal }}" {{ checkFile }}'
