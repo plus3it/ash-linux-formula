@@ -23,21 +23,25 @@
 #
 ############################################################
 
-script_V38437-describe:
+{%- set stigId = 'V38437' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set svcName = 'autofs' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38437.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('autofs') %}
-svc_V38437-autofsEnabled:
+{%- if salt['pkg.version'](svcName) %}
+svc_{{ stigId }}-{{ svcName }}Enabled:
   service.disabled:
-    - name: 'autofs'
+    - name: '{{ svcName }}'
 
-svc_V38437-autofsRunning:
+svc_{{ stigId }}-{{ svcName }}Running:
   service.dead:
-    - name: 'autofs'
+    - name: '{{ svcName }}'
 {%- else %}
-notice_V38437-notPresent:
+notice_{{ stigId }}-notPresent:
   cmd.run:
-    - name: 'echo "The autofs subsystem is not installed"'
+    - name: 'echo "The {{ svcName }} subsystem is not installed"'
 {%- endif %}
