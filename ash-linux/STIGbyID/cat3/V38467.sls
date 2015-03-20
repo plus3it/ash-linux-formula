@@ -14,20 +14,25 @@
 #
 ############################################################
 
-script_V38467-describe:
+{%- set stigId = 'V38467' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set chkFile = '/etc/fstab' %}
+{%- set chkPtn = '/var/log/audit' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38467.sh
+    - source: salt://ash-linux/STIGbyID/cat3/files/{{ stigId }}.sh
     - cwd: /root
 
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
-{%- if salt['file.search']('/etc/fstab', '[ 	]/var/log/audit[ 	]') %}
-mount_V38467-tmp:
+{%- if salt['file.search'](chkFile, '[ 	]' + chkPtn + '[ 	]') %}
+mount_{{ stigId }}-tmp:
    cmd.run:
-     - name: 'echo "/var/log/audit already mounted as its own filesystem"'
+     - name: 'echo "{{ chkPtn }} already mounted as its own filesystem"'
 {%- else %}
-mount_V38467-tmp:
+mount_{{ stigId }}-tmp:
    cmd.run:
-     - name: 'echo "Manual intervention required: create and mount a device as /var/log/audit"'
+     - name: 'echo "Manual intervention required: create and mount a device as {{ chkPtn }}"'
 {%- endif %}

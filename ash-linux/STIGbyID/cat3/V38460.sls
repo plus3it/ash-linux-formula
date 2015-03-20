@@ -15,37 +15,42 @@
 #
 ############################################################
 
-script_V38460-describe:
+{%- set stigId = 'V38460' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
+{%- set checkFile = '/etc/exports' %}
+{%- set checkPtn = 'all_squash' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/V38460.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {%- if salt['pkg.version']('nfs-utils') %}
-  {%- if salt['file.search']('/etc/exports', 'all_squash') %}
-file_V38460-onlyOpt:
+  {%- if salt['file.search'](checkFile, checkPtn) %}
+file_{{ stigId }}-onlyOpt:
   file.replace:
-    - name: '/etc/exports'
-    - pattern: '\(all_squash\)'
+    - name: '{{ checkFile }}'
+    - pattern: '\({{ checkPtn }}\)'
     - repl: ''
 
-file_V38460-firstOpt:
+file_{{ stigId }}-firstOpt:
   file.replace:
-    - name: '/etc/exports'
-    - pattern: '\(all_squash,'
+    - name: '{{ checkFile }}'
+    - pattern: '\({{ checkPtn }},'
     - repl: '('
 
-file_V38460-secondaryOpt:
+file_{{ stigId }}-secondaryOpt:
   file.replace:
-    - name: '/etc/exports'
-    - pattern: ',all_squash'
+    - name: '{{ checkFile }}'
+    - pattern: ',{{ checkPtn }}'
     - repl: ''
   {%- else %}
-cmd_V38460-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
-    - name: 'echo "No NFS exports found with all_squash option enabled"'
+    - name: 'echo "No NFS exports found with {{ checkPtn }} option enabled"'
   {%- endif %}
 {%- else %}
-cmd_V38460-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "NFS service not installed: security control not relevant"'
 {%- endif %}
