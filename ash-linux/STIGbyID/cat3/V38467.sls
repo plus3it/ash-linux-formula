@@ -21,7 +21,7 @@
 
 script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat3/files/{{ stigId }}.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # Not really happy with how the standard mount.mounted handler deals with 
