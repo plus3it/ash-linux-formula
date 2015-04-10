@@ -32,6 +32,7 @@ script_V{{ stig_id }}-describe:
                          'rule32' : '-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid=0 -k access',
                        },
     'selEPERMroot'   : { 'search_string' : 'EPERM -F auid=0 ',
+                         'rule' : '-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access',
                          'rule32' : '-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid=0 -k access',
                        },
 } %}
