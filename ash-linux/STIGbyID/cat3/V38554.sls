@@ -30,9 +30,11 @@ script_V{{ stig_id }}-describe:
 {%- set usertypes = {
     'selDACusers' : { 'search_string' : ' fchownat -F auid>=500 ',
                       'rule' : '-a always,exit -F arch=b64 -S fchownat -F auid>=500 -F auid!=4294967295 -k perm_mod',
+                      'rule32' : '-a always,exit -F arch=b32 -S fchownat -F auid>=500 -F auid!=4294967295 -k perm_mod',
                     },
     'selDACroot'  : { 'search_string' : ' fchownat .*auid=0 ',
                       'rule' : '-a always,exit -F arch=b64 -S fchownat -F auid=0 -k perm_mod',
+                      'rule32' : '-a always,exit -F arch=b32 -S fchownat -F auid=0 -k perm_mod',
                     },
 } %}
 {%- set audit_cfg_file = '/etc/audit/audit.rules' %}
@@ -49,7 +51,7 @@ file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'
     - pattern: '^.*{{ audit_options['search_string'] }}.*$'
-    - repl: '{{ audit_options['rule'] }}'
+    - repl: '{{ audit_options['rule32'] }}\n{{ audit_options['rule'] }}'
     {%- else %}
 file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
@@ -57,7 +59,7 @@ file_V{{ stig_id }}-auditRules_{{ usertype }}:
     - text: |
         
         # Monitor for SELinux DAC changes (per STIG-ID V-{{ stig_id }})
-        {{ audit_options['rule'] }}
+        {{ audit_options['rule32'] }}
     {%- endif %}
   {%- endfor %}
 {%- else %}
