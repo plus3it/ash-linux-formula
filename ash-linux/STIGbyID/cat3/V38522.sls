@@ -20,8 +20,8 @@ script_V{{ stig_id }}-describe:
 
 {%- if grains['cpuarch'] == 'x86_64' %}
   {%- set pattern = '-a always,exit -F arch=b64 -S settimeofday -k audit_time_rules' %}
+  {%- set pattern32 = '-a always,exit -F arch=b32 -S settimeofday -k audit_time_rules' %}
   {%- set filename = '/etc/audit/audit.rules' %}
-  {%- if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
 file_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
@@ -32,8 +32,10 @@ file_V{{ stig_id }}-settimeofday:
     - text: |
         
         # Audit all system time-modifications via settimeofday (per STIG-ID V-{{ stig_id }})
+        {{ pattern32 }}
         {{ pattern }}
-  {%- endif %}
+    - unless:
+      - 'grep -c -E -e "{{ pattern }}" {{ filename }}'
 {%- else %}
 file_V{{ stig_id }}-settimeofday:
   cmd.run:
