@@ -24,7 +24,7 @@ script_V{{ stig_id }}-describe:
   {%- set pattern = '-a always,exit -F arch=b64 -S clock_settime -k audit_time_rules' %}
   {%- set pattern32 = '-a always,exit -F arch=b32 -S clock_settime -k audit_time_rules' %}
   {%- set filename = '/etc/audit/audit.rules' %}
-file_V{{ stig_id }}-settimeofday:
+notify_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
     - onlyif:
