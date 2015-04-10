@@ -34,6 +34,6 @@ file_V{{ stig_id }}-appendModchk:
         -w /sbin/modprobe -p x -k modules
 {%- if grains['cpuarch'] == 'x86_64' or grains['cpuarch'] == 'amd64' or grains['cpuarch'] == 'athlon' %}
         -a always,exit -F arch=b64 -S init_module -S delete_module -k modules
-{%- elif grains['cpuarch'] == 'i386' or grains['cpuarch'] == 'i486' or  grains['cpuarch'] == 'i586' grains['cpuarch'] == 'i686'%}
+{%- elif grains['cpuarch'] == 'i386' or grains['cpuarch'] == 'i486' or grains['cpuarch'] == 'i586' or grains['cpuarch'] == 'i686' %}
         -a always,exit -F arch=b32 -S init_module -S delete_module -k modules
 {%- endif %}
