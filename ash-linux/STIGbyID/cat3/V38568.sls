@@ -23,9 +23,11 @@ script_V{{ stig_id }}-describe:
 {%- set usertypes = {
     'MountUsers' : { 'search_string' : ' mount -F auid>=500 ',
                       'rule' : '-a always,exit -F arch=b64 -S mount -F auid>=500 -F auid!=4294967295 -k export',
+                      'rule32' : '-a always,exit -F arch=b32 -S mount -F auid>=500 -F auid!=4294967295 -k export',
                     },
     'MountRoot'  : { 'search_string' : ' mount .*auid=0 ',
                       'rule' : '-a always,exit -F arch=b64 -S mount -F auid=0 -k export',
+                      'rule32' : '-a always,exit -F arch=b32 -S mount -F auid=0 -k export',
                     },
 } %}
 {%- set audit_cfg_file = '/etc/audit/audit.rules' %}
@@ -42,7 +44,7 @@ file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'
     - pattern: '^.*{{ audit_options['search_string'] }}.*$'
-    - repl: '{{ audit_options['rule'] }}'
+    - repl: '{{ audit_options['rule32'] }}\n{{ audit_options['rule'] }}'
     {%- else %}
 file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
@@ -50,6 +52,7 @@ file_V{{ stig_id }}-auditRules_{{ usertype }}:
     - text: |
         
         # Monitor filesystem mount actions (per STIG-ID V-{{ stig_id }})
+        {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}
     {%- endif %}
   {%- endfor %}

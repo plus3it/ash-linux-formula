@@ -23,6 +23,7 @@ script_V{{ stig_id }}-describe:
 {%- if grains['cpuarch'] == 'x86_64' %}
   {%- set audit_syscall = '-S adjtimex' %}
   {%- set pattern = '-a always,exit -F arch=b64 ' + audit_syscall + ' -k audit_time_rules' %}
+  {%- set pattern32 = '-a always,exit -F arch=b32 ' + audit_syscall + ' -k audit_time_rules' %}
   {%- set filename = '/etc/audit/audit.rules' %}
   {%- if not salt['cmd.run']('grep -c -E -e "' + pattern + '" ' + filename ) == '0' %}
 file_V{{ stig_id }}-auditTime:
@@ -33,7 +34,7 @@ file_V{{ stig_id }}-auditTime:
   file.replace:
     - name: '/etc/audit/audit.rules'
     - pattern: '^.*{{ audit_syscall }}.*$'
-    - repl: '{{ pattern }}'
+    - repl: '{{ pattern32 }}\n{{ pattern }}'
   {%- else %}
 file_V{{ stig_id }}-auditTime:
   file.append:
@@ -41,6 +42,7 @@ file_V{{ stig_id }}-auditTime:
     - text: |
         
         # Log all changes to system time (per  V-{{ stig_id }})
+        {{ pattern32 }}
         {{ pattern }}
   {%- endif %}
 {%- else %}
