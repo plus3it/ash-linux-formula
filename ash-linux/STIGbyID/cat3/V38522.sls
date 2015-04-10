@@ -25,7 +25,9 @@ script_V{{ stig_id }}-describe:
 file_V{{ stig_id }}-settimeofday:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
-  {%- else %}
+    - onlyif:
+      - 'grep -c -E -e "{{ pattern }}" {{ filename }}'
+
 file_V{{ stig_id }}-settimeofday:
   file.append:
     - name: '{{ filename }}'
