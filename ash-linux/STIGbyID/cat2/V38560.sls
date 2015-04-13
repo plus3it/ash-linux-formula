@@ -16,13 +16,14 @@
 #
 ############################################################
 
-script_V38560-describe:
+{%- set stig_id = '38560' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38560.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
-service_V38560:
-  service:
+service_V{{ stig_id }}:
+  service.running:
     - name: iptables
-    - running
     - enable: True
