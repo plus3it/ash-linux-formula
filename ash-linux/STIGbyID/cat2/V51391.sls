@@ -40,17 +40,17 @@ notify_V51391-foundfile:
     {%- else %}
 notify_V51391-foundfile:
   cmd.run:
-    - name: 'printf "The configured AIDE database [{{ aideDbPath }}] does not exist!\n** Run ''/usr/sbin/aide --init'' to create.\n" && exit 1'
+    - name: 'printf "WARNING: The configured AIDE database [{{ aideDbPath }}] does not exist!\n** Run ''/usr/sbin/aide --init'' to create.\n"'
     {%- endif %}
   {%- else %}
 notify_V51391-foundfile:
   cmd.run:
-    - name: 'echo "The AIDE database location-definition does not meet test-assumptions. Automated test not possible" && exit 1'
+    - name: 'echo "WARNING: The AIDE database location-definition does not meet test-assumptions. Automated test not possible"'
   {%- endif %}
 
 # Alert if AIDE not installed
 {%- else %}
 warn_V51391-noAide:
    cmd.run:
-     - name: 'echo "The AIDE tools are not installed" && exit 1'
+     - name: 'echo "WARN: The AIDE tools are not installed"'
 {%- endif %}
