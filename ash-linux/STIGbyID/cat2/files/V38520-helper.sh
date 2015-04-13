@@ -20,7 +20,7 @@ CHKMOD=`rpm -qVf /etc/rsyslog.conf | grep '^..5'`
 if [ "${CHKMOD}" == "" ]
 then
    echo "WARN: rsyslog has not been configured"
-   exit 1
+   exit 0
 else
    echo "Info:  /etc/rsyslog.conf modified - rsyslog may have been configured"
    exit 0
