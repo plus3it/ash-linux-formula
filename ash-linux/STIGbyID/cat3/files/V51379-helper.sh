@@ -27,8 +27,8 @@ esac
 
 if [ ${SETEXIT} -eq 1 ]
 then
-   printf "SELinux disabled: cannot check FS labeling\n"
-   exit ${SETEXIT}
+   printf "WARNING: SELinux disabled, cannot check FS labeling\n"
+   exit 0
 else
    FILELIST=`find /dev -print | xargs ls -dZ /dev 2> /dev/null | grep unlabeled_t | awk '{print $5}'`
    if [ "${FILELIST}" = "" ]
