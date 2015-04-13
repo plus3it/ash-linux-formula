@@ -50,7 +50,7 @@ notify_V38679-{{ ifLabel }}:
         {%- if salt['file.search'](netCfgRoot + ifLabel, 'dhcp') %}
 notify_V38679-{{ ifLabel }}_DHCP:
   cmd.run:
-    - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP" ; exit 1'
+    - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP"'
         {%- else %}
 notify_V38679-{{ ifLabel }}_DHCP:
   cmd.run:
