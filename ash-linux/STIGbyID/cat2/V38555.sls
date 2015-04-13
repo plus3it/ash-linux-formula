@@ -20,7 +20,19 @@ script_V{{ stig_id }}-describe:
     - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
+pkg_V{{ stig_id }}:
+  pkg.installed:
+    - name: iptables
+
+iptables_V{{ stig_id }}-saveRunning:
+  module.run:
+    - name: 'iptables.save'
+    - require:
+      - pkg: pkg_V{{ stig_id }}
+
 service_V{{ stig_id }}:
   service.running:
     - name: iptables
     - enable: True
+    - require:
+      - module: iptables_V{{ stig_id }}-saveRunning
