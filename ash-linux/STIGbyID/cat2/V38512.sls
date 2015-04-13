@@ -26,9 +26,15 @@ pkg_V{{ stig_id }}:
   pkg.installed:
     - name: iptables
 
+iptables_V{{ stig_id }}-saveRunning:
+  module.run:
+    - name: 'iptables.save'
+    - require:
+      - pkg: pkg_V{{ stig_id }}
+
 service_V{{ stig_id }}:
   service.running:
     - name: iptables
     - enable: True
     - require:
-      - pkg: pkg_V{{ stig_id }}
+      - module: iptables_V{{ stig_id }}-saveRunning
