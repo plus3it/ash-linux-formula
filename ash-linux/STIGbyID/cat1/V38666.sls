@@ -45,6 +45,8 @@ cmd_V{{ stig_id }}-cleanChck:
 
 {%- else %}
 
+    {%- if salt['pkg.check_db'](MSFEpkg)[MSFEpkg]['found'] %}
+
 # If not installed, see if it's available in the Yum repos
 pkg_V{{ stig_id }}:
   pkg.installed:
@@ -55,6 +57,8 @@ notify_V{{ stig_id }}-installed:
     - name: 'echo "Installed HBSS package"'
     - onlyif:
       - 'test $(rpm -qa | grep "{{ MSFEpkg }}")'
+
+    {%- endif %}
 
 notify_V{{ stig_id }}-notfound:
   cmd.run:
