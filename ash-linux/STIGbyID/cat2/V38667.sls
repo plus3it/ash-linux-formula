@@ -17,12 +17,13 @@
 ############################################################################
 
 {%- set stig_id = '38667' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set selCfgFile = '/etc/sysconfig/selinux' %}
 {%- set grubCfgFile = '/boot/grub/grub.conf' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
 # Alter the running system-state

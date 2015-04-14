@@ -14,20 +14,23 @@
 #
 ############################################################
 
+{%- set stigId = 'V38660' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set snmpConf = '/etc/snmp/snmpd.conf' %}
 
-script_V38660-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38660.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if not salt['pkg.version']('net-snmp') %}
-cmd_V38660-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "Info: SNMP packages not installed - nothing to address"'
-{%- elif salt['file.search']('/etc/snmp/snmpd.conf', '^[a-z].*(?:v1|v2c|om2sec)') %}
-file_V38660-commentV1n2s:
+{%- elif salt['file.search'](snmpConf, '^[a-z].*(?:v1|v2c|om2sec)') %}
+file_{{ stigId }}-commentV1n2s:
   file.comment:
-    - name: '/etc/snmp/snmpd.conf'
+    - name: '{{ snmpConf }}'
     - regex: '^[a-z].*(v1|v2c|om2sec)'
 {%- endif %}
 

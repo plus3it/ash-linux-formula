@@ -15,16 +15,18 @@
 #  NIST SP 800-53 Revision 4 :: AU-9
 #
 ############################################################
+{%- set stigId = 'V38664' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38664-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38664.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
-script_V38664-helper:
+script_{{ stigId }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38664-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'
 

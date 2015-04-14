@@ -16,14 +16,17 @@
 #
 ############################################################
 
-script_V38663-describe:
+{%- set stigId = 'V38663' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38663.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # NEED TO INVESTIGATE USE OF pkg.verify MODULE
 
-script_V38663-helper:
+script_{{ stigId }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38663-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'
