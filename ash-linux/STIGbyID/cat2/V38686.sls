@@ -16,32 +16,34 @@
 #
 ############################################################
 
-script_V38686-describe:
+{%- set stig_id = '38686' %}
+{%- set file = '/etc/sysconfig/iptables' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38686.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']('/etc/sysconfig/iptables') %}
-file_V38686-repl:
+{%- if salt['file.file_exists']({{ file }}) %}
+file_V{{ stig_id }}-repl:
   file.replace:
-    - name: /etc/sysconfig/iptables
+    - name: {{ file }}
     - pattern: 'FORWARD ACCEPT .*$'
     - repl: 'FORWARD DROP [0:0]'
 {%- else %}
-iptables_V38686-forwardDefault:
+iptables_V{{ stig_id }}-forwardDefault:
   module.run:
     - name: 'iptables.set_policy'
     - table: filter
     - chain: INPUT
     - policy: DROP
-  
-iptables_V38686-saveRunning:
+
+iptables_V{{ stig_id }}-saveRunning:
   module.run:
     - name: 'iptables.save'
 
-service_V38686:
-  service:
+service_V{{ stig_id }}:
+  service.running:
     - name: iptables
-    - running
     - enable: True
 {%- endif %}

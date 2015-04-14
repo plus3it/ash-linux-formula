@@ -15,18 +15,26 @@
 #
 ############################################################
 
-script_V38512-describe:
+{%- set stig_id = '38512' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38512.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
-pkg_V38512:
+pkg_V{{ stig_id }}:
   pkg.installed:
     - name: iptables
 
-service_V38512:
+iptables_V{{ stig_id }}-saveRunning:
+  module.run:
+    - name: 'iptables.save'
+    - require:
+      - pkg: pkg_V{{ stig_id }}
+
+service_V{{ stig_id }}:
   service.running:
     - name: iptables
     - enable: True
     - require:
-      - pkg: pkg_V38512
+      - module: iptables_V{{ stig_id }}-saveRunning

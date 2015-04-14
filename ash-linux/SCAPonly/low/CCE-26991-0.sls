@@ -37,9 +37,11 @@ pkg_{{ scapId }}-{{ svcPkg }}:
 svc_{{ scapId }}-{{ svcName }}Enabled:
   service.enabled:
     - name: '{{ svcName }}'
-    - unless: 'pkg_{{ scapId }}-{{ svcPkg }}'
+    - require: 
+      - pkg: pkg_{{ scapId }}-{{ svcPkg }}
 
 svc_{{ scapId }}-{{ svcName }}Running:
   service.running:
     - name: '{{ svcName }}'
-    - unless: 'svc_{{ scapId }}-{{ svcName }}Enabled'
+    - require: 
+      - service: svc_{{ scapId }}-{{ svcName }}Enabled

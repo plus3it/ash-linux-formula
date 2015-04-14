@@ -54,7 +54,7 @@ notify_{{ stig_id }}-extLogging:
   {%- else %}
 notify_{{ stig_id }}-extLogging:
   cmd.run:
-    - name: 'printf "*********************************************************\n* WARNING: System does not appear to be configured to log\n*\tto an external host.\n*********************************************************\n" >&2 ; exit 1'
+    - name: 'printf "*********************************************************\n* WARNING: System does not appear to be configured to log\n*\to an external host.\n*********************************************************\n" >&2'
   {%- endif %}
 {%- else %}
 notify_{{ stig_id }}-extLogging:

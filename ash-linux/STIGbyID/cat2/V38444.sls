@@ -15,34 +15,36 @@
 #
 ############################################################
 
-script_V38444-describe:
+{%- set stig_id = '38444' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38444.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
 # Check if IPv6 is enabled
 {%- set ipv6Value =  salt['sysctl.get']('net.ipv6.conf.all.disable_ipv6') %}
 {%- if 'unknown' in ipv6Value %}
-notify_V38444-sysctl:
+notify_V{{ stig_id }}-sysctl:
   cmd.run:
     - name: 'echo "Notice: IPv6 Is disabled: cannot update ip6tables"'
 {%- else %}
-notify_V38444-sysctl:
+notify_V{{ stig_id }}-sysctl:
   cmd.run:
     - name: 'echo "Info: Updating in-memory ip6tables configuration."'
 
-cmd_V38444-iptablesSet:
+cmd_V{{ stig_id }}-iptablesSet:
   iptables.set_policy:
     - table: filter
     - chain: INPUT
     - policy: DROP
     - family: ipv6
 
-notify_V38444-iptablesSave:
+notify_V{{ stig_id }}-iptablesSave:
   cmd.run:
     - name: 'echo "Info: Saving in-memory ip6tables configuration to disk."'
 
-iptables_V38444-iptablesSave:
+iptables_V{{ stig_id }}-iptablesSave:
   module.run:
     - name: 'iptables.save'
     - family: 'ipv6'

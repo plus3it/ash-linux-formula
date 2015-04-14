@@ -15,19 +15,22 @@
 #
 ############################################################
 
-script_V38513-describe:
+{%- set stig_id = '38513' %}
+{%- set file = '/etc/sysconfig/iptables' %}
+
+script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38513.sh
+    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']('/etc/sysconfig/iptables') %}
-file_V38513-repl:
+{%- if salt['file.file_exists']({{ file }}) %}
+file_V{{ stig_id }}-repl:
   file.replace:
-    - name: /etc/sysconfig/iptables
+    - name: {{ file }}
     - pattern: 'INPUT ACCEPT .*$'
     - repl: 'INPUT DROP [0:0]'
 {%- else %}
-iptables_V38513-existing:
+iptables_V{{ stig_id }}-existing:
   iptables.append:
     - table: filter
     - chain: INPUT
@@ -35,28 +38,27 @@ iptables_V38513-existing:
     - match: state
     - connstate: ESTABLISHED,RELATED
 
-iptables_V38513-sshdSafety:
+iptables_V{{ stig_id }}-sshdSafety:
   iptables.append:
     - table: filter
     - chain: INPUT
     - jump: ACCEPT
     - dport: 22
     - proto: tcp
-  
-iptables_V38513-inputDefault:
+
+iptables_V{{ stig_id }}-inputDefault:
   module.run:
     - name: 'iptables.set_policy'
     - table: filter
     - chain: INPUT
     - policy: DROP
-  
-iptables_V38513-saveRunning:
+
+iptables_V{{ stig_id }}-saveRunning:
   module.run:
     - name: 'iptables.save'
 
-service_V38513:
-  service:
+service_V{{ stig_id }}:
+  service.running:
     - name: iptables
-    - running
     - enable: True
 {%- endif %}
