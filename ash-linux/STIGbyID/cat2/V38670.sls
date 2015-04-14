@@ -13,44 +13,48 @@
 #  NIST SP 800-53A :: SI-7.1
 #
 ############################################################
+{%- set stigId = 'V38670' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cronRoot = '/var/spool/cron/root' %}
+{%- set cronEtc = '/etc/crontab' %}
 
-script_V38670-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38670.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-notice_V38670:
+notice_{{ stigId }}:
   cmd.run:
     - name: 'echo "Implementation is system- and tenant-specific. This test will look for scheduled service in typical scheduler file locations. However, this tool cannot verify outside those locations or any frequencies discovered within those locations. **MANUAL VERIFICAION WILL BE REQUIRED.**"'
 
 {%- if not salt['pkg.verify']('aide') %}
-warn_V38670-aideConf:
+warn_{{ stigId }}-aideConf:
    cmd.run:
      - name: 'echo "Package unmodified (AIDE has not been configured)"'
 {%- endif %}
 
-{%- if not salt['file.search']('/etc/crontab', '/usr/sbin/aide') %}
-msg_V38670-etcCrontab:
+{%- if not salt['file.search'](cronEtc, '/usr/sbin/aide') %}
+msg_{{ stigId }}-etcCrontab:
   cmd.run:
-    - name: 'echo "Info: AIDE not found in /etc/crontab"'
+    - name: 'echo "Info: AIDE not found in {{ cronEtc }}"'
 {%- else %}
-msg_V38670-etcCrontab:
+msg_{{ stigId }}-etcCrontab:
   cmd.run:
-    - name: 'echo "Info: AIDE found in /etc/crontab"'
+    - name: 'echo "Info: AIDE found in {{ cronEtc }}"'
 {%- endif %}
 
-{%- if salt['file.file_exists']('/var/spool/cron/root') %}
-  {%- if not salt['file.search']('/var/spool/cron/root', '/usr/sbin/aide') %}
-msg_V38670-rootCrontab:
+{%- if salt['file.file_exists']({{ cronRoot }}) %}
+  {%- if not salt['file.search']({{ cronRoot }}, '/usr/sbin/aide') %}
+msg_{{ stigId }}-rootCrontab:
   cmd.run:
-    - name: 'echo "Info: AIDE not found in root users crontab (/var/spool/cron/root)"'
+    - name: 'echo "Info: AIDE not found in root users crontab ({{ cronRoot }})"'
   {%- else %}
-msg_V38670-rootCrontab:
+msg_{{ stigId }}-rootCrontab:
   cmd.run:
-    - name: 'echo "Info: AIDE found in root users crontab (/var/spool/cron/root)"'
+    - name: 'echo "Info: AIDE found in root users crontab ({{ cronRoot }})"'
   {%- endif %}
 {%- else %}
-msg_V38670-rootCrontab:
+msg_{{ stigId }}-rootCrontab:
   cmd.run:
-    - name: 'echo "Info: root user has no crontab (/var/spool/cron/root)"'
+    - name: 'echo "Info: root user has no crontab ({{ cronRoot }})"'
 {%- endif %}

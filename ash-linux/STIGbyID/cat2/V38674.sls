@@ -12,19 +12,23 @@
 #
 ############################################################
 
-script_V38674-describe:
+{%- set stigId = 'V38674' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set initTab = '/etc/inittab' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38674.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/inittab', '^id:5:') %}
-cmd_V38674-x11warn:
+{%- if salt['file.search'](initTab, '^id:5:') %}
+cmd_{{ stigId }}-x11warn:
   cmd.run:
     - name: 'echo "Default run-level enables X11. Will be disabled at next system-boot."'
 {%- endif %}
-file_V38674-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/inittab'
+    - name: '{{ initTab }}'
     - pattern: '^id:.*$'
     - repl: 'id:3:initdefault:'
 

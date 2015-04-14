@@ -14,11 +14,14 @@
 #
 ############################################################
 
-script_V38671-describe:
+{%- set stigId = 'V38671' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38671.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-pkg_V38671-remove:
+pkg_{{ stigId }}-remove:
   pkg.purged:
     - name: 'sendmail'

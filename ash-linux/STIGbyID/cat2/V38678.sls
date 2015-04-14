@@ -14,10 +14,12 @@
 #  NIST SP 800-53A :: AU-5 (1).1 (ii)
 #
 ############################################################
+{%- set stigId = 'V38678' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38678-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38678.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- set auditConf = '/etc/audit/auditd.conf' %}
@@ -41,15 +43,15 @@ script_V38678-describe:
 
 {%- if salt['file.search'](auditConf, '^' + logParm + ' = ') %}
   {%- if salt['file.search'](auditConf, '^' + logParm + ' = ' + keepFreeVar) %}
-notify_V38678-Set:
+notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already set to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
   {%- else %}
-notify_V38678-Set:
+notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "Changing ''{{ logParm }}'' value in ''{{ auditConf }}'' to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
 
-file_V38678-setVal:
+file_{{ stigId }}-setVal:
   file.replace:
     - name: '{{ auditConf }}'
     - pattern: '^{{ logParm }} = .*'
@@ -57,11 +59,11 @@ file_V38678-setVal:
   {%- endif %}
 
 {%- else %}
-notify_V38678-Set:
+notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "''{{ logParm }}'' not set in ''{{ auditConf }}''. Setting to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
 
-file_V38678-setVal:
+file_{{ stigId }}-setVal:
   file.append:
     - name: '{{ auditConf }}'
     - text: '{{ logParm }} = {{ keepFreeVar }}'

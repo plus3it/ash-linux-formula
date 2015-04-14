@@ -14,10 +14,12 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38679' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38679-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38679.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- set netCfgRoot = '/etc/sysconfig/network-scripts/ifcfg-' %}
@@ -43,16 +45,16 @@ script_V38679-describe:
       {%- set ifLabel = listElem['label'] %}
       # Check if there's a "network-scripts" config file
       {%- if salt['file.file_exists'](netCfgRoot + ifLabel) %}
-notify_V38679-{{ ifLabel }}:
+notify_{{ stigId }}-{{ ifLabel }}:
   cmd.run:
     - name: 'echo "Checking {{ netCfgRoot }}{{ ifLabel }} for DCHP use."'
         # Check if boot-time interface configuration uses DHCP and alert
         {%- if salt['file.search'](netCfgRoot + ifLabel, 'dhcp') %}
-notify_V38679-{{ ifLabel }}_DHCP:
+notify_{{ stigId }}-{{ ifLabel }}_DHCP:
   cmd.run:
     - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP"'
         {%- else %}
-notify_V38679-{{ ifLabel }}_DHCP:
+notify_{{ stigId }}-{{ ifLabel }}_DHCP:
   cmd.run:
     - name: 'echo "Info: Interface ''{{ ifLabel }}'' does not use DHCP"'
         {%- endif %}
