@@ -15,18 +15,21 @@
 #
 ############################################################
 
-script_V38688-describe:
+{%- set stigId = 'V38688' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38688.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Make sure GDM is installed and enable GDM login banners
 {%- if salt['pkg.version']('gdm') %}
-cmd_V38688-enableBanner:
+cmd_{{ stigId }}-enableBanner:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/banner_message_enable true'
 {%- else %}
-notify_V38688:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {%- endif %}

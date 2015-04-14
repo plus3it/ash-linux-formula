@@ -25,23 +25,26 @@
 #
 ############################################################
 
-script_V38689-describe:
+{%- set stigId = 'V38689' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38689.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['pkg.version']('gdm') %}
   {%- if salt['file.file_exists']('/etc/issue') %}
-cmd_V38689-setBanner:
+cmd_{{ stigId }}-setBanner:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source=xml:readwrite:$HOME/.gconf --type string --set /apps/gdm/simple-greeter/banner_message_text "$(cat /etc/issue)"'
   {%- else %}
-cmd_V38689-setBanner:
+cmd_{{ stigId }}-setBanner:
   cmd.run:
     - name: 'echo "WARNING: Could not find /etc/banner file: GDM login banner not set!"'
   {%- endif %}
 {%- else %}
-notify_V38689:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {%- endif %}

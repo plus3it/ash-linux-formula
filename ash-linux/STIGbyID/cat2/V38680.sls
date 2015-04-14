@@ -15,19 +15,24 @@
 #
 ############################################################
 
-script_V38680-describe:
+{%- set stigId = 'V38680' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/audit/auditd.conf' %}
+{%- set checkPtn = 'action_mail_acct' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38680.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']('/etc/audit/auditd.conf') %}
-file_V38680-repl:
+{%- if salt['file.file_exists'](checkFile) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/audit/auditd.conf'
-    - pattern: '^action_mail_acct.*$'
-    - repl: 'action_mail_acct = root'
+    - name: '{{ checkFile }}'
+    - pattern: '^{{ checkPtn }}.*$'
+    - repl: '{{ checkPtn }} = root'
 {%- else %}
-warn_V38680:
+warn_{{ stigId }}:
   cmd.run:
-    - name: 'echo "The audit config file (/etc/audit/auditd.conf) does not exist"'
+    - name: 'echo "The audit config file ({{ checkFile }}) does not exist"'
 {%- endif %}
