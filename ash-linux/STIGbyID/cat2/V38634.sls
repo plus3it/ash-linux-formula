@@ -26,13 +26,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('audit') and salt['file.search'](checkfile, '^' + checkPtn) %}
+{%- if salt['pkg.version']('audit') and salt['file.search'](checkFile, '^' + checkPtn) %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^{{ checkPtn }}.*$'
     - repl: '{{ checkPtn }} = rotate'
-{%- elif salt['pkg.version']('audit') and not salt['file.search'](checkfile, '^' + checkPtn) %}
+{%- elif salt['pkg.version']('audit') and not salt['file.search'](checkFile, '^' + checkPtn) %}
 file_{{ stigId }}-append:
   file.append:
     - name: '{{ checkFile }}'

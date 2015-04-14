@@ -43,8 +43,8 @@ msg_{{ stigId }}-etcCrontab:
     - name: 'echo "Info: AIDE found in {{ cronEtc }}"'
 {%- endif %}
 
-{%- if salt['file.file_exists']({{ cronRoot }}) %}
-  {%- if not salt['file.search']({{ cronRoot }}, '/usr/sbin/aide') %}
+{%- if salt['file.file_exists'](cronRoot) %}
+  {%- if not salt['file.search'](cronRoot, '/usr/sbin/aide') %}
 msg_{{ stigId }}-rootCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in root users crontab ({{ cronRoot }})"'
