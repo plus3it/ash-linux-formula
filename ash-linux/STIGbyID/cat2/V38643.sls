@@ -16,10 +16,12 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38643' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38643-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38643.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
@@ -36,13 +38,13 @@ script_V38643-describe:
 
 # Perform action if mount-type is an EXT-type
 {%- if fsType == 'ext2' or fsType == 'ext3' or fsType == 'ext4' %}
-notify_V38643-{{ mountPoint }}:
+notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "Checking ''{{ mountPoint }}'' for world-writable files"'
 
-strip_V38643-{{ mountPoint }}:
+strip_{{ stigId }}-{{ mountPoint }}:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38643-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'
     - args: {{ mountPoint }}
 

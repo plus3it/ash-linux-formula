@@ -14,10 +14,12 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38654' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
 script_V38654-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38654.sh
+    - source: salt://{{ helperLoc }}/V38654.sh
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure

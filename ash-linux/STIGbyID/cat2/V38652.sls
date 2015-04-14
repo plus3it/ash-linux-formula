@@ -13,10 +13,12 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38652' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38652-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38652.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
@@ -38,22 +40,22 @@ script_V38652-describe:
 {%- set optList = mountList['opts'] %}
   # See if the mount has the 'nodev' option set
   {%- if 'nodev' in optList %}
-notify_V38652-{{ mountPoint }}:
+notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "NFS mount {{ mountPoint }} mounted with ''nodev'' option"'
   {%- else %}
-notify_V38652-{{ mountPoint }}:
+notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "NFS mount {{ mountPoint }} not mounted with ''nodev'' option:"'
 
 # Remount with "nodev" option added/set
   {%- set optString = 'nodev,' + ','.join(optList) %}
   {%- set remountDev = mountList['alt_device'] %}
-notify_V38652-{{ mountPoint }}-remount:
+notify_{{ stigId }}-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount...\n"'
 
-remount_V38652-{{ mountPoint }}:
+remount_{{ stigId }}-{{ mountPoint }}:
   module.run:
     - name: 'mount.remount'
     - m_name: '{{ mountPoint }}'
@@ -63,11 +65,11 @@ remount_V38652-{{ mountPoint }}:
 
     # Update fstab (if necessary)
     {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
-notify_V38652-{{ mountPoint }}-fixFstab:
+notify_{{ stigId }}-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
-fstab_V38652-{{ mountPoint }}:
+fstab_{{ stigId }}-{{ mountPoint }}:
   module.run:
     - name: 'mount.set_fstab'
     - m_name: '{{ mountPoint }}'
