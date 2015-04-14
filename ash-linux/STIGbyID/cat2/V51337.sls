@@ -16,12 +16,13 @@
 #############################################################################
 
 {%- set stig_id = 'V51337' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/boot/grub/grub.conf' %}
 {%- set parmSet = 'selinux=0' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
 #########################################

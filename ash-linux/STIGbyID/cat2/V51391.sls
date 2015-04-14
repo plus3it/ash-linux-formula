@@ -15,9 +15,12 @@
 #
 ############################################################
 
-script_V51391-describe:
+{%- set stigId = 'V51391' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V51391.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # See if AIDE package is installed
@@ -32,25 +35,25 @@ script_V51391-describe:
 
     # Check if DB file-path exists
     {%- if salt['file.file_exists'](aideDbPath) %}
-notify_V51391-foundfile:
+notify_{{ stigId }}-foundfile:
   cmd.run:
     - name: 'echo "The configured AIDE database [{{ aideDbPath }}] exists" && exit 0'
 
     # Alert if DB file-path does not exist
     {%- else %}
-notify_V51391-foundfile:
+notify_{{ stigId }}-foundfile:
   cmd.run:
     - name: 'printf "WARNING: The configured AIDE database [{{ aideDbPath }}] does not exist!\n** Run ''/usr/sbin/aide --init'' to create.\n"'
     {%- endif %}
   {%- else %}
-notify_V51391-foundfile:
+notify_{{ stigId }}-foundfile:
   cmd.run:
     - name: 'echo "WARNING: The AIDE database location-definition does not meet test-assumptions. Automated test not possible"'
   {%- endif %}
 
 # Alert if AIDE not installed
 {%- else %}
-warn_V51391-noAide:
+warn_{{ stigId }}-noAide:
    cmd.run:
      - name: 'echo "WARN: The AIDE tools are not installed"'
 {%- endif %}

@@ -21,6 +21,7 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '51875' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set pamFile = '/etc/pam.d/system-auth-ac' %}
 {%- set pamMod = 'pam_lastlog.so' %}
 {%- set failNotice = 'session     required      pam_lastlog.so showfailed' %}
@@ -50,7 +51,7 @@ notify_V{{ stig_id }}-{{ module }}:
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
 {%- if not salt['file.file_exists'](pamFile) %}

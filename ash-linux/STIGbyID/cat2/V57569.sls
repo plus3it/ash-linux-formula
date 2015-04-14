@@ -14,9 +14,12 @@
 #
 ############################################################
 
-script_V57569-describe:
+{%- set stigId = 'V57569' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V57569.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Ingest list of mounted filesystesm into a searchable-structure
@@ -25,7 +28,7 @@ script_V57569-describe:
 {%- set mountStruct = activeMntStream[mountPoint] %}
 
 {%- if not mountPoint in activeMntStream %}
-notify_V57569:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' is not on its own partition: nothing to do."'
 {%- else %}
@@ -33,11 +36,11 @@ notify_V57569:
   {%- set optList = mountStruct['opts'] %}
   # See if the mount has the 'noexec' option set
   {%- if 'noexec' in optList %}
-notify_V57569-{{ mountPoint }}:
+notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' mounted with ''noexec'' option"'
   {%- else %}
-notify_V57569-{{ mountPoint }}:
+notify_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
     - name: 'echo "''{{ mountPoint }}'' not mounted with ''noexec'' option:"'
 
@@ -45,11 +48,11 @@ notify_V57569-{{ mountPoint }}:
   {%- set optString = 'noexec,' + ','.join(optList) %}
   {%- set remountDev = mountStruct['alt_device'] %}
   {%- set fsType = mountStruct['fstype'] %}
-notify_V57569-{{ mountPoint }}-remount:
+notify_{{ stigId }}-{{ mountPoint }}-remount:
   cmd.run:
     - name: 'printf "\t* Attempting remount...\n"'
 
-remount_V57569-{{ mountPoint }}:
+remount_{{ stigId }}-{{ mountPoint }}:
   module.run:
     - name: 'mount.remount'
     - m_name: '{{ mountPoint }}'
@@ -59,11 +62,11 @@ remount_V57569-{{ mountPoint }}:
 
     # Update fstab (if necessary)
     {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
-notify_V57569-{{ mountPoint }}-fixFstab:
+notify_{{ stigId }}-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
 
-fstab_V57569-{{ mountPoint }}:
+fstab_{{ stigId }}-{{ mountPoint }}:
   module.run:
     - name: 'mount.set_fstab'
     - m_name: '{{ mountPoint }}'
