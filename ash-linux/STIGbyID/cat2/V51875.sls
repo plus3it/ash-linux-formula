@@ -41,8 +41,8 @@ add_V{{ stig_id }}-{{ module }}:
     - name: {{ file }}
     - pattern: '^(?P<srctok>session[ \t]*.*pam_limits.so.*$)'
     - repl: '\g<srctok>\n{{ rule }}'
-    - unless:
-      - 'grep -E -e "{{ module }}" {{ file }}'
+    - onlyif:
+      - 'test $(grep -c -E -e "{{ module }}" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-{{ module }}:
   cmd.run:
