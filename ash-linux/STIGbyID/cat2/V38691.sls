@@ -14,22 +14,25 @@
 #
 ############################################################
 
-script_V38691-describe:
+{%- set stigId = 'V38691' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38691.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['file.file_exists']('/etc/init.d/bluetooth') %}
 # Ensure bluetooth service is disabled and stopped
-svc_V38691-bluetoothEnabled:
+svc_{{ stigId }}-bluetoothEnabled:
   service.disabled:
     - name: 'bluetooth'
 
-svc_V38691-bluetoothRunning:
+svc_{{ stigId }}-bluetoothRunning:
   service.dead:
    - name: 'bluetooth'
 {%- else %}
-notice_V38691-noBTservice:
+notice_{{ stigId }}-noBTservice:
   cmd.run:
     - name: 'echo "Info: BlueTooth service not present."'
 {%- endif %}

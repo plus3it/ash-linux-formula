@@ -16,43 +16,46 @@
 #
 ############################################################
 
-script_V38698-describe:
+{%- set stigId = 'V38698' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38698.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-notice_V38698:
+notice_{{ stigId }}:
   cmd.run:
     - name: 'echo "Implementation is system- and tenant-specific. This test will look for scheduled service in typical scheduler file locations. However, this tool cannot verify outside those locations or any frequencies discovered within those locations. **MANUAL VERIFICAION WILL BE REQUIRED.**"'
 
 {%- if not salt['pkg.verify']('aide') %}
-warn_V38698-aideConf:
+warn_{{ stigId }}-aideConf:
   cmd.run:
     - name: 'echo "Package unmodified (AIDE has not been configured)"'
 {%- endif %}
 
 {%- if not salt['file.search']('/etc/crontab', '/usr/sbin/aide') %}
-msg_V38698-etcCrontab:
+msg_{{ stigId }}-etcCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in /etc/crontab"'
 {%- else %}
-msg_V38698-etcCrontab:
+msg_{{ stigId }}-etcCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE found in /etc/crontab"'
 {%- endif %}
 
 {%- if salt['file.file_exists']('/var/spool/cron/root') %}
   {%- if not salt['file.search']('/var/spool/cron/root', '/usr/sbin/aide') %}
-msg_V38698-rootCrontab:
+msg_{{ stigId }}-rootCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in root users crontab (/var/spool/cron/root)"'
   {%- else %}
-msg_V38698-rootCrontab:
+msg_{{ stigId }}-rootCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE found in root users crontab (/var/spool/cron/root)"'
   {%- endif %}
 {%- else %}
-msg_V38698-rootCrontab:
+msg_{{ stigId }}-rootCrontab:
   cmd.run:
     - name: 'echo "Info: root user has no crontab (/var/spool/cron/root)"'
 {%- endif %}
