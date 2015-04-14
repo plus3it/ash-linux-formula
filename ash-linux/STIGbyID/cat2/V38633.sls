@@ -15,9 +15,12 @@
 #
 ############################################################
 
-script_V38633-describe:
+{%- set stigId = 'V38633' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38633.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- set auditConf = '/etc/audit/auditd.conf' %}
@@ -25,15 +28,15 @@ script_V38633-describe:
 
 {%- if salt['file.search'](auditConf, '^' + logParm + ' = ') %}
   {%- if salt['file.search'](auditConf, '^' + logParm + ' = 6') %}
-notify_V38633-Set:
+notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already matches recommended value [6]"'
   {%- else %}
-notify_V38633-Set:
+notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "Setting ''{{ logParm }}'' value in ''{{ auditConf }}'' to match STIG recommended value [6]"'
 
-file_V38633-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ auditConf }}'
     - pattern: '^{{ logParm }} = .*$'
@@ -41,11 +44,11 @@ file_V38633-repl:
   {%- endif %}
 
 {%- else %}
-notify_V38633-Set:
+notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "Setting ''{{ logParm }}'' value in ''{{ auditConf }}'' to match STIG recommended value [6]"'
 
-file_V38633-append:
+file_{{ stigId }}-append:
   file.append:
     - name: '{{ auditConf }}'
     - text: '{{ logParm }} = 6'

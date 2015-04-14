@@ -16,24 +16,29 @@
 #
 ############################################################
 
-script_V38634-describe:
+{%- set stigId = 'V38634' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/audit/auditd.conf' %}
+{%- set checkPtn = 'max_log_file_action' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38634.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('audit') and salt['file.search']('/etc/audit/auditd.conf', '^max_log_file_action') %}
-file_V38634-repl:
+{%- if salt['pkg.version']('audit') and salt['file.search'](checkfile, '^' + checkPtn) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/audit/auditd.conf'
-    - pattern: '^max_log_file_action.*$'
-    - repl: 'max_log_file_action = rotate'
-{%- elif salt['pkg.version']('audit') and not salt['file.search']('/etc/audit/auditd.conf', '^max_log_file_action') %}
-file_V38634-append:
+    - name: '{{ checkFile }}'
+    - pattern: '^{{ checkPtn }}.*$'
+    - repl: '{{ checkPtn }} = rotate'
+{%- elif salt['pkg.version']('audit') and not salt['file.search'](checkfile, '^' + checkPtn) %}
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/audit/auditd.conf'
+    - name: '{{ checkFile }}'
     - text: |
         
         # audit system must rotate logs (per STIG V-38634)
-        max_log_file_action = rotate
+        {{ checkPtn }} = rotate
 {%- endif %}
 

@@ -11,12 +11,15 @@
 #
 ############################################################
 
-script_V38637-describe:
+{%- set stigId = 'V38637' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38637.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-script_V38637-tamperCheck:
+script_{{ stigId }}-tamperCheck:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38637-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'

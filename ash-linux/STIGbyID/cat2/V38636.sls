@@ -16,24 +16,29 @@
 #
 ############################################################
 
-script_V38636-describe:
+{%- set stigId = 'V38636' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/audit/auditd.conf' %}
+{%- set checkPtn = 'num_logs' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38636.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('audit') and salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
-file_V38636-repl:
+{%- if salt['pkg.version']('audit') and salt['file.search'](checkFile, '^' + checkPtn) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/audit/auditd.conf'
-    - pattern: '^num_logs.*$'
-    - repl: 'num_logs = 5'
-{%- elif salt['pkg.version']('audit') and not salt['file.search']('/etc/audit/auditd.conf', '^num_logs') %}
-file_V38636-append:
+    - name: '{{ checkFile }}'
+    - pattern: '^{{ checkPtn }}.*$'
+    - repl: '{{ checkPtn }} = 5'
+{%- elif salt['pkg.version']('audit') and not salt['file.search'](checkFile, '^' + checkPtn) %}
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/audit/auditd.conf'
+    - name: '{{ checkFile }}'
     - text: |
         
         # system must retain enough rotated logs to meet local policy (per STIG V-38636)
-        num_logs = 5
+        {{ checkPtn }} = 5
 {%- endif %}
 
