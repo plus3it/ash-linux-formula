@@ -13,23 +13,28 @@
 #
 ############################################################
 
-script_V38548-describe:
+{%- set stigId = 'V38548' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv6.conf.default.accept_redirects' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38548.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv6.conf.default.accept_redirects') %}
-file_V38548-repl:
+{%- if salt['file.search'](chkFile, parmName) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv6.conf.default.accept_redirects.*$'
-    - repl: 'net.ipv6.conf.default.accept_redirects = 0'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 0'
 {%- else %}
-file_V38548-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysctl.conf'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Disable ICMPv6 redirects (per STIG V-38548)'
-      - 'net.ipv6.conf.default.accept_redirects = 0'
+      - '{{ parmName }} = 0'
 {%- endif %}
