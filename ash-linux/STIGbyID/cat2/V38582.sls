@@ -17,13 +17,17 @@
 #
 ############################################################
 
-script_V38582-describe:
+{%- set stigId = 'V38582' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set svcNam = 'xinetd' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38582.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('xinetd') %}
-svc_V38582-xinetd:
+{%- if salt['pkg.version'](svcNam) %}
+svc_{{ stigId }}-{{ svcNam }}:
   service.disabled:
-    - name: 'xinetd'
+    - name: '{{ svcNam }}'
 {%- endif %}

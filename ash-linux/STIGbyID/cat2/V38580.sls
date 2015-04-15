@@ -17,15 +17,17 @@
 ############################################################
 
 {%- set stig_id = '38580' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkfile = '/etc/audit/audit.rules' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
 file_V{{ stig_id }}-appendModchk:
   file.append:
-    - name: /etc/audit/audit.rules
+    - name: '{{ chkFile }}'
     - text: |
         
         # Monitor dynamic kernel module (un)load (per STIG-ID V-{{ stig_id }}/RHEL-06-000202)
