@@ -15,24 +15,30 @@
 #
 ############################################################
 
-script_V38576-describe:
+{%- set stigId = 'V38576' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/login.defs' %}
+{%- set parmName = 'ENCRYPT_METHOD' %}
+{%- set parmVal = 'SHA512' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38576.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Conditional replace or append
-{%- if salt['file.search']('/etc/login.defs', '^ENCRYPT_METHOD') %}
-file_V38576-repl:
+{%- if salt['file.search'](chkFile, '^' + parmName) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: /etc/login.defs
+    - name: '{{ chkFile }}'
     - pattern: '^ENCRYPT_METHOD.*$'
-    - repl: 'ENCRYPT_METHOD SHA512'
+    - repl: '{{ parmName }} {{ parmVal }}'
 {%- else %}
-file_V38576-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: /etc/login.defs
+    - name: '{{ chkFile }}'
     - text:
       - ' '
-      - '# Use SHA512 to encrypt password.'
-      - 'ENCRYPT_METHOD SHA512'
+      - '# Use {{ parmVal }} to encrypt password.'
+      - '{{ parmName }} {{ parmVal }}'
 {%- endif %}

@@ -14,11 +14,12 @@
 ############################################################
 
 {%- set stig_id = 'V38579' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set grubFiles = ['grub.conf', 'menu.lst'] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: '/root'
 
 file_{{ stig_id }}-bootGrubGrub:

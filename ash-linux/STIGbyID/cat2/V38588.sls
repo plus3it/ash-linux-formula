@@ -14,22 +14,26 @@
 #
 ############################################################
 
-script_V38588-describe:
+{%- set stigId = 'V38588' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysconfig/init' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38588.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Conditional replace or append
-{%- if salt['file.search']('/etc/sysconfig/init', '^PROMPT') %}
-file_V38588-repl:
+{%- if salt['file.search'](chkFile, '^PROMPT') %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysconfig/init'
+    - name: '{{ chkFile }}'
     - pattern: '^PROMPT.*$'
     - repl: 'PROMPT=no' 
 {%- else %}
-file_V38588-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysconfig/init'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Disable interactive-booting of system (per STIG V-38588)'

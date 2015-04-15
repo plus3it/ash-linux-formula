@@ -15,24 +15,28 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38597' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'kernel.exec-shield' %}
 
-script_V38597-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38597.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/sysctl.conf', 'kernel.exec-shield') %}
-file_V38597-repl:
+{%- if salt['file.search'](chkFile, parmName) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^kernel.exec-shield.*$'
-    - repl: 'kernel.exec-shield = 1'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 1'
 {%- else %}
-file_V38597-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysctl.conf'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Enable exec-shield (per STIG V-38597)'
-      - 'kernel.exec-shield = 1'
+      - '{{ parmName }} = 1'
 {%- endif %}

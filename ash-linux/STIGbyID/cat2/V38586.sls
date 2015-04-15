@@ -15,23 +15,26 @@
 #  NIST SP 800-53 Revision 4 :: AC-3
 #
 ############################################################
+{%- set stigId = 'V38586' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysconfig/init' %}
 
-script_V38586-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38586.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Conditional replace or append
-{%- if salt['file.search']('/etc/sysconfig/init', '^SINGLE') %}
-file_V38586-repl:
+{%- if salt['file.search'](chkFile, '^SINGLE') %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysconfig/init'
+    - name: '{{ chkFile }}'
     - pattern: '^SINGLE.*$'
     - repl: 'SINGLE=/sbin/sulogin' 
 {%- else %}
-file_V38586-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysconfig/init'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Require root password for single-user access (per STIG V-38586)'

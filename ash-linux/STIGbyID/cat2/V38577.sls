@@ -14,25 +14,30 @@
 #  NIST SP 800-53 Revision 4 :: IA-7
 #
 ############################################################
+{%- set stigId = 'V38577' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/libuser.conf' %}
+{%- set parmName = 'crypt_style' %}
+{%- set parmVal = 'sha512' %}
 
 script_V38577-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38577.sh
+    - source: salt://{{ helperLoc }}/V38577.sh
     - cwd: '/root'
 
 # Conditional replace or append
-{%- if salt['file.search']('/etc/libuser.conf', '^crypt_style') %}
+{%- if salt['file.search'](chkFile, '^' + parmName) %}
 file_V38577-repl:
   file.replace:
-    - name: /etc/libuser.conf
-    - pattern: '^crypt_style.*$'
-    - repl: 'crypt_style = sha512'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = sha512'
 {%- else %}
 file_V38577-append:
   file.append:
-    - name: /etc/libuser.conf
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Use SHA512 to encrypt password.'
-      - 'crypt_style = sha512'
+      - '{{ parmName }} = sha512'
 {%- endif %}
