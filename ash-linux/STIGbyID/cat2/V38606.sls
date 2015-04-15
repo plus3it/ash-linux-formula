@@ -14,17 +14,20 @@
 #
 ############################################################
 
-script_V38606-describe:
+{%- set stigId = 'V38606' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38606.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['pkg.version']('tftp-server') %}
-svc_V38606-tfptd:
+svc_{{ stigId }}-tfptd:
   service.disabled:
     - name: 'tftp-server'
 {%- endif %}
 
-pkg_V38606-tftpd:
+pkg_{{ stigId }}-tftpd:
   pkg.purged:
     - name: 'tftp-server'
