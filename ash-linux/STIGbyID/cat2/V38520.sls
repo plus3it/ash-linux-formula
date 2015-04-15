@@ -17,12 +17,15 @@
 #
 ############################################################
 
-script_V38520-describe:
+{%- set stigId = 'V38520' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38520.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-script_V38520-helper:
+script_{{ stigId }}-helper:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38520-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'

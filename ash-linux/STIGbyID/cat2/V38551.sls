@@ -16,12 +16,15 @@
 #
 ############################################################
 
-script_V38551-describe:
+{%- set stigId = 'V38551' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38551.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-service_V38551:
+service_{{ stigId }}:
   service:
     - name: ip6tables
     - running

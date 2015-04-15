@@ -14,24 +14,28 @@
 #  NIST SP 800-53 Revision 4 :: SC-5 (2)
 #
 ############################################################
+{%- set stigId = 'V38539' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.tcp_syncookies' %}
 
 script_V38539-describe:
   cmd.script:
     - source: salt://ash-linux/STIGbyID/cat2/files/V38539.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.tcp_syncookies') %}
+{%- if salt['file.search'](chkFile, parmName) %}
 file_V38539-repl:
   file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.tcp_syncookies.*$'
-    - repl: 'net.ipv4.tcp_syncookies = 1'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 1'
 {%- else %}
 file_V38539-append:
   file.append:
-    - name: '/etc/sysctl.conf'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Enable TCP SYN-cookies'
-      - 'net.ipv4.tcp_syncookies = 1'
+      - '{{ parmName }} = 1'
 {%- endif %}

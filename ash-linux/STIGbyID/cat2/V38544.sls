@@ -15,24 +15,28 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38544' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.conf.default.rp_filter' %}
 
-script_V38544-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38544.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.rp_filter') %}
-file_V38544-repl:
+{%- if salt['file.search'](chkFile, parmName) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.conf.default.rp_filter.*$'
-    - repl: 'net.ipv4.conf.default.rp_filter = 1'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 1'
 {%- else %}
-file_V38544-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysctl.conf'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Enable reverse-path filtering (per STIG V-38544)'
-      - 'net.ipv4.conf.default.rp_filter = 1'
+      - '{{ parmName }} = 1'
 {%- endif %}
