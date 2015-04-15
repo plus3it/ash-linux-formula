@@ -17,7 +17,7 @@
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'Ciphers' %}
-{%- set pamrVal = 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc' %}
+{%- set parmVal = 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc' %}
 
 script_{{ stigId }}-describe:
   cmd.script:

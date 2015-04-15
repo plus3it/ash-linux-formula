@@ -16,7 +16,7 @@
 #
 ############################################################
 
-{%- set stigId = 'V38628' %]
+{%- set stigId = 'V38628' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set svcNam = 'audit' %}
 
