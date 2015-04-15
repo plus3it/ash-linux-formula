@@ -15,9 +15,12 @@
 #
 ############################################################
 
-script_V38519-describe:
+{%- set stigId = 'V38519' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38519.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- set cfgFile = '/etc/rsyslog.conf' %}
@@ -63,11 +66,11 @@ script_V38519-describe:
 
 # Ensure that logging-target's filename starts with "/"
     {%- if logFile[0] == '/' %}
-notify_V38519-{{ logFacility }}:
+notify_{{ stigId }}-{{ logFacility }}:
   cmd.run:
     - name: 'echo "Setting owner of {{ logFile }} to root."'
 
-owner_V38519-{{ logFacility }}:
+owner_{{ stigId }}-{{ logFacility }}:
   file.managed:
     - name: '{{ logFile }}'
     - group: root
@@ -75,11 +78,11 @@ owner_V38519-{{ logFacility }}:
 
     {%- else %}
 {%- set logFile = logFile[1:] %}
-notify_V38519-{{ logFacility }}:
+notify_{{ stigId }}-{{ logFacility }}:
   cmd.run:
     - name: 'echo "Setting owner of {{ logFile }} to root."'
 
-owner_V38519-{{ logFacility }}:
+owner_{{ stigId }}-{{ logFacility }}:
   file.managed:
     - name: '{{ logFile }}'
     - user: root

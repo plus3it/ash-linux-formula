@@ -15,13 +15,16 @@
 #
 ############################################################
 
+{%- set stigId = 'V38500' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
 # Get userid of the "nobody" user
 {%- set noprivInfo = salt['user.info']('nobody') %}
 {%- set noprivId = noprivInfo['uid'] %}
 
-script_V38500-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38500.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- for user in salt['user.list_users']() %}
@@ -31,7 +34,7 @@ script_V38500-describe:
     #########################################
     # If the user is "root", just acknowledge
     {%- if user == 'root' %}
-notify_V38500-{{ user }}:
+notify_{{ stigId }}-{{ user }}:
   cmd.run:
     - name: 'echo "Info: User ''{{ user }}'' has userid ''{{ userId }}''"'
 
@@ -55,16 +58,16 @@ notify_V38500-{{ user }}:
     {%- set userWarnDay = userShadow['warn'] %}
     {%- set userWorkPhone = userInfo['workphone'] %}
 
-notify_V38500-{{ user }}:
+notify_{{ stigId }}-{{ user }}:
   cmd.run:
     - name: 'printf "WARNING: Non-root user ''{{ user }}'' has userid ''{{ userId }}''.\n\t** Automatic remediation will be attempted **\n\n\tNote:\n\t* First free, non-privileged UID will be allocated;\n\t* Secondary groups may be lost;\n\t* Account expiry info may be altered\n"'
 
-update_V38500-{{ user }}_nuke:
+update_{{ stigId }}-{{ user }}_nuke:
   user.absent:
     - name: '{{ userName }}'
     - force: 'True'
 
-update_V38500-{{ user }}_recreate:
+update_{{ stigId }}-{{ user }}_recreate:
   user.present:
     - name: '{{ userName }}'
     - gid: '{{ userGid }}'
@@ -82,7 +85,7 @@ update_V38500-{{ user }}_recreate:
     - warndays: '{{ userWarnDay }}'
     - expire: '{{ userExpire }}'
 
-update_V38500-{{ user }}_chown:
+update_{{ stigId }}-{{ user }}_chown:
   cmd.run:
     - name: 'echo "Chowning {{ userName }}''s home directory" ; chown -R {{ userName }} {{ userHome }}'
     {%- endif %}
