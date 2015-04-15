@@ -13,25 +13,31 @@
 #
 ############################################################
 
-script_V38617-describe:
+{%- set stigId = 'V38617' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'Ciphers' %}
+{%- set pamrVal = 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38617.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/ssh/sshd_config', '^Ciphers')
+{%- if salt['file.search'](cfgFile, '^' + parmName)
  %}
-file_V38617-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^Ciphers.*$'
-    - repl: 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} {{parmVal }}'
 {%- else %}
-file_V38617-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text:
       - ' '
       - '# SSH service must allow only FIPS 140-2 ciphers (per STIG V-38617)'
-      - 'Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc'
+      - '{{ parmName }} {{ parmVal }}'
 {%- endif %}
 

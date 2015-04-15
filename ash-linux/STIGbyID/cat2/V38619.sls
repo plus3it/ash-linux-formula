@@ -15,9 +15,12 @@
 #
 ############################################################
 
-script_V38619-describe:
+{%- set stigId = 'V38619' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38619.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- for user in salt['user.getent']('') %}
@@ -26,26 +29,26 @@ script_V38619-describe:
   {%- set netRc = homeDir + '/.netrc' %}
 
   {%- if salt['file.file_exists'](netRc) %}
-notify_V38619-{{ ID }}:
+notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'
 
-move_V38619-{{ ID }}:
+move_{{ stigId }}-{{ ID }}:
   file.rename:
     - source: '{{ netRc }}'
     - name: '{{ netRc }}-MOVEDperSTIGS'
 
-warnfile_V38619-{{ ID }}:
+warnfile_{{ stigId }}-{{ ID }}:
   file.prepend:
     - name: '{{ netRc }}-MOVEDperSTIGS'
-    - text:
-      - '##################################################'
-      - '# File moved per STIG V-38619'
-      - '#'
-      - '# DO NOT RENAME to {{ netRc }}'
-      - '# * presence of netrcs is a security-violation'
-      - '#'
-      - '##################################################'
+    - text: |
+        ##################################################
+        # File moved per STIG {{ stigId }}
+        #
+        # DO NOT RENAME to {{ netRc }}
+        # * presence of netrcs is a security-violation
+        #
+        ##################################################
 
 {%- endif %}
 {%- endfor %}

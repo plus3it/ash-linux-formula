@@ -14,24 +14,29 @@
 #
 ############################################################
 
-script_V38611-describe:
+{%- set stigId = 'V38611' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'IgnoreRhosts' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38611.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/ssh/sshd_config', '^IgnoreRhosts')
+{%- if salt['file.search'](cfgFile', '^' + parmName)
  %}
-file_V38611-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^IgnoreRhosts.*$'
-    - repl: 'IgnoreRhosts yes'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} yes'
 {%- else %}
-file_V38611-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text:
       - ' '
       - '# Disable use of .rhosts files (per STIG V-38611)'
-      - 'IgnoreRhosts yes'
+      - '{{ parmName }} yes'
 {%- endif %}
