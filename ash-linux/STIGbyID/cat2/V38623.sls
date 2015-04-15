@@ -15,17 +15,19 @@
 #  NIST SP 800-53 Revision 4 :: SI-11 b
 #
 ############################################################
+{%- set stigId = 'V38623' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38623-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38623.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- set cfgFile = '/etc/rsyslog.conf' %}
 
 # Define list of syslog "facilities":
 #    These will be used to look for matching logging-targets
-#    within the /etc/rsyslog.conf file
+#    within the {{ cfgFile }} file
 {%- set facilityList = [
     'auth', 
     'authpriv', 
@@ -63,11 +65,11 @@ script_V38623-describe:
 
 # Ensure that logging-target's filename starts with "/"
     {%- if logFile[0] == '/' %}
-notify_V38623-{{ logFacility }}:
+notify_{{ stigId }}-{{ logFacility }}:
   cmd.run:
     - name: 'echo "Setting owner of {{ logFile }} to root."'
 
-owner_V38623-{{ logFacility }}:
+owner_{{ stigId }}-{{ logFacility }}:
   file.managed:
     - name: '{{ logFile }}'
     - mode: '0600'
@@ -75,11 +77,11 @@ owner_V38623-{{ logFacility }}:
 
     {%- else %}
 {%- set logFile = logFile[1:] %}
-notify_V38623-{{ logFacility }}:
+notify_{{ stigId }}-{{ logFacility }}:
   cmd.run:
     - name: 'echo "Setting owner of {{ logFile }} to root."'
 
-owner_V38623-{{ logFacility }}:
+owner_{{ stigId }}-{{ logFacility }}:
   file.managed:
     - name: '{{ logFile }}'
     - user: root

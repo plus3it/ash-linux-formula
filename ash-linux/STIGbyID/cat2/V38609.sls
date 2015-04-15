@@ -13,17 +13,20 @@
 #
 ############################################################
 
-script_V38609-describe:
+{%- set stigId = 'V38609' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38609.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['pkg.version']('tftp-server') %}
-svc_V38609-tfptd:
+svc_{{ stigId }}-tfptd:
   service.disabled:
     - name: 'tftp-server'
 {%- endif %}
 
-cmd_V38609-tfptd:
+cmd_{{ stigId }}-tfptd:
   cmd.run:
     - name: 'echo "TFTP service not installed"'

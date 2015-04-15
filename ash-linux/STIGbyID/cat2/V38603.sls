@@ -14,12 +14,15 @@
 #
 ############################################################
 
-script_V38603-describe:
+{%- set stigId = 'V38603' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38603.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-pkg_V38603:
+pkg_{{ stigId }}:
   pkg.purged:
     - pkgs: 
       - yp-tools

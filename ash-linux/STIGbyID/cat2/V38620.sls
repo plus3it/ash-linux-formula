@@ -16,22 +16,25 @@
 #  NIST SP 800-53A :: AU-8 (1).1 (iii)
 #
 ############################################################
+{%- set stigId = 'V38620' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set svcNam = 'ntp' %}
 
-script_V38620-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38620.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if not salt['pkg.version']('ntp') %}
-pkg_V38620-ntp:
+{%- if not salt['pkg.version'](svcNam) %}
+pkg_{{ stigId }}-{{ svcNam }}:
   pkg.installed:
-    - name: 'ntp'
+    - name: '{{ svcNam }}'
 {%- endif %}
 
-svc_V38620-ntpEnabled:
+svc_{{ stigId }}-{{ svcNam }}Enabled:
   service.enabled:
-    - name: 'ntpd'
+    - name: '{{ svcNam }}d'
 
-svc_V38620-ntpRunning:
+svc_{{ stigId }}-{{ svcNam }}Running:
   service.running:
-    - name: 'ntpd'
+    - name: '{{ svcNam }}d'

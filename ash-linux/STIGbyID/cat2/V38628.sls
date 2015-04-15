@@ -16,21 +16,25 @@
 #
 ############################################################
 
-script_V38628-describe:
+{%- set stigId = 'V38628' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set svcNam = 'audit' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38628.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if not salt['pkg.version']('auditd') %}
-pkg_V38628-audit:
+{%- if not salt['pkg.version'](svcNam + 'd') %}
+pkg_{{ stigId }}-{{ svcNam }}:
   pkg.installed:
-    - name: 'audit'
+    - name: '{{ svcNam }}'
 {%- endif %}
 
-svc_V38628-auditEnabled:
+svc_{{ stigId }}-{{ svcNam }}Enabled:
   service.enabled:
-    - name: 'auditd'
+    - name: '{{ svcNam }}d'
 
-svc_V38628-auditRunning:
+svc_{{ stigId }}-{{ svcNam }}Running:
   service.running:
-    - name: 'auditd'
+    - name: '{{ svcNam }}d'

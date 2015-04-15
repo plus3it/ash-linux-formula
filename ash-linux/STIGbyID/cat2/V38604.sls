@@ -14,25 +14,19 @@
 #
 ############################################################
 
-script_V38604-describe:
+{%- set stigId = 'V38604' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set svcList = [ 'ypbind', 'ypserv', 'yp-tools', ] %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38604.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('ypbind') %}
-svc_V38604-ypbind:
+{%- for svcNam in svcList %}
+  {%- if salt['pkg.version'](svcNam) %}
+svc_{{ stigId }}-{{ svcNam }}:
   service.disabled:
-    - name: 'ypbind'
-{%- endif %}
-
-{%- if salt['pkg.version']('ypserv') %}
-svc_V38604-ypserv:
-  service.disabled:
-    - name: 'ypserv'
-{%- endif %}
-
-{%- if salt['pkg.version']('yp-tools') %}
-svc_V38604-yptools:
-  service.disabled:
-    - name: 'yp-tools'
-{%- endif %}
+    - name: '{{ svcNam }}'
+  {%- endif %}
+{%- endfor %}

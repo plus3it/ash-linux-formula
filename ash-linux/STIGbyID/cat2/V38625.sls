@@ -16,28 +16,31 @@
 #
 ############################################################
 
+{%- set stigId = 'V38625' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set ldapCnf = '/etc/pam_ldap.conf' %}
 
-script_V38625-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38625.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('pam_ldap') and salt['file.search']('/etc/pam_ldap.conf', '^ssl') %}
-file_V38625-repl:
+{%- if salt['pkg.version']('pam_ldap') and salt['file.search'](ldapCnf, '^ssl') %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/pam_ldap.conf'
+    - name: '{{ ldapCnf }}'
     - pattern: '^ssl.*$'
     - repl: 'ssl start_tls'
-{%- elif salt['pkg.version']('pam_ldap') and not salt['file.search']('/etc/pam_ldap.conf', '^ssl') %}
-file_V38625-append:
+{%- elif salt['pkg.version']('pam_ldap') and not salt['file.search'](ldapCnf, '^ssl') %}
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/pam_ldap.conf'
+    - name: '{{ ldapCnf }}'
     - text:
       - ' '
       - '# LDAP auth-queries must use TLS (per STIG V-38625)'
       - 'ssl start_tls'
 {%- elif not salt['pkg.version']('pam_ldap') %}
-cmd_V38625-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "LDAP PAM modules not installed"'
 {%- endif %}

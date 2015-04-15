@@ -15,43 +15,47 @@
 #
 ############################################################
 
-script_V38626-describe:
+{%- set stigId = 'V38626' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set ldapCnf = '/etc/pam_ldap.conf' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38626.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('pam_ldap') and salt['file.search']('/etc/pam_ldap.conf', '^tls_cacert') %}
-file_V38626-replCertdir:
+{%- if salt['pkg.version']('pam_ldap') and salt['file.search'](ldapCnf, '^tls_cacert') %}
+file_{{ stigId }}-replCertdir:
   file.replace:
-    - name: '/etc/pam_ldap.conf'
+    - name: '{{ ldapCnf }}'
     - pattern: '^tls_cacertdir.*$'
     - repl: 'tls_cacertdir /etc/pki/tls/CA'
 
-file_V38626-replCertfile:
+file_{{ stigId }}-replCertfile:
   file.replace:
-    - name: '/etc/pam_ldap.conf'
+    - name: '{{ ldapCnf }}'
     - pattern: '^tls_cacertfile.*$'
     - repl: 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
 
-{%- elif salt['pkg.version']('pam_ldap') and not salt['file.search']('/etc/pam_ldap.conf', '^tls_cacert') %}
-file_V38626-appendCertdir:
+{%- elif salt['pkg.version']('pam_ldap') and not salt['file.search'](ldapCnf, '^tls_cacert') %}
+file_{{ stigId }}-appendCertdir:
   file.append:
-    - name: '/etc/pam_ldap.conf'
+    - name: '{{ ldapCnf }}'
     - text: |
         
         # LDAP TLS certificates must come from trusted CA (per STIG V-38626)
         tls_cacertdir /etc/pki/tls/CA
 
-file_V38626-appendCertfile:
+file_{{ stigId }}-appendCertfile:
   file.append:
-    - name: '/etc/pam_ldap.conf'
+    - name: '{{ ldapCnf }}'
     - text: |
         
         # LDAP TLS certificates must come from trusted CA (per STIG V-38626)
         tls_cacertfile /etc/pki/tls/CA/cacert.pem
 
 {%- elif not salt['pkg.version']('pam_ldap') %}
-cmd_V38626-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "LDAP PAM modules not installed"'
 {%- endif %}

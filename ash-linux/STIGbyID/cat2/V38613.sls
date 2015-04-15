@@ -14,25 +14,29 @@
 #  NIST SP 800-53 Revision 4 :: IA-2 (5)
 #
 ############################################################
+{%- set stigId = 'V38613' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'PermitRootLogin' %}
 
-script_V38613-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38613.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/ssh/sshd_config', '^PermitRootLogin')
+{%- if salt['file.search'](cfgFile, '^' + parmName)
  %}
-file_V38613-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^PermitRootLogin.*$'
-    - repl: 'PermitRootLogin no'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} no'
 {%- else %}
-file_V38613-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text:
       - ' '
       - '# Disable host-based authentication (per STIG V-38613)'
-      - 'PermitRootLogin no'
+      - '{{ parmName }} no'
 {%- endif %}

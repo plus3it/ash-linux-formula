@@ -13,18 +13,20 @@
 #  NIST SP 800-53A :: AU-8 (1).1 (iii)
 #
 ############################################################
+{%- set stigId = 'V38621' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38621-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38621.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if not salt['pkg.version']('ntp') %}
-pkg_V38621-ntp:
+pkg_{{ stigId }}-ntp:
   pkg.installed:
     - name: 'ntp'
 {%- endif %}
 
-cmd_V38621-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "Manual remediation required"'

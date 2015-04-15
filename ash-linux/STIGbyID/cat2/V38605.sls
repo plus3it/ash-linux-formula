@@ -13,21 +13,24 @@
 #
 ############################################################
 
-script_V38605-describe:
+{%- set stigId = 'V38605' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38605.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if not salt['pkg.version']('cronie') %}
-pkg_V38605-cronie:
+pkg_{{ stigId }}-cronie:
   pkg.installed:
     - name: 'cronie'
 {%- endif %}
 
-svc_V38605-crondEnabled:
+svc_{{ stigId }}-crondEnabled:
   service.enabled:
     - name: 'crond'
 
-svc_V38605-crondRunning:
+svc_{{ stigId }}-crondRunning:
   service.running:
     - name: 'crond'

@@ -14,25 +14,30 @@
 #
 ############################################################
 
-script_V38612-describe:
+{%- set stigId = 'V38612' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'HostbasedAuthentication' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38612.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/ssh/sshd_config', '^HostbasedAuthentication')
+{%- if salt['file.search'](cfgFile, '^' + parmName)
  %}
-file_V38612-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/ssh/sshd_config'
-    - pattern: '^HostbasedAuthentication.*$'
-    - repl: 'HostbasedAuthentication no'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} no'
 {%- else %}
-file_V38612-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/ssh/sshd_config'
+    - name: '{{ cfgFile }}'
     - text:
       - ' '
       - '# Disable host-based authentication (per STIG V-38612)'
-      - 'HostbasedAuthentication no'
+      - '{{ parmName }} no'
 {%- endif %}
 

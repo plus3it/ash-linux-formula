@@ -15,17 +15,20 @@
 #
 ############################################################
 
-script_V38629-describe:
+{%- set stigId = 'V38629' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38629.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['pkg.version']('gdm') %}
-cmd_V38629-idleConfig:
+cmd_{{ stigId }}-idleConfig:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type int --set /apps/gnome-screensaver/idle_delay 15'
 {%- else %}
-notify_V38629:
+notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "NOTICE: Graphical desktop system not installed (no action taken)"'
 {%- endif %}
