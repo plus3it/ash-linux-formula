@@ -20,10 +20,11 @@ include:
 # Get list of RPMs that need to be updated
 {%- set updatePairs = salt['pkg.list_upgrades']('name') %}
 
+{%- if updatePairs %}
+
 remediate_V38481-updateRPMs:
   pkg:
     - latest
-    - pkgs:
-{%- for pkgName in updatePairs %}
-      - {{ pkgName }}
-{%- endfor %}
+    - pkgs: {{ updatePairs.keys() }}
+
+{%- endif %}
