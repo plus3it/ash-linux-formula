@@ -14,24 +14,28 @@
 #  NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ############################################################
+{%- set stigId = 'V38529' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.conf.default.accept_source_route' %}
 
-script_V38529-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38529.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/sysctl.conf', 'net.ipv4.conf.default.accept_source_route') %}
-file_V38529-repl:
+{%- if salt['file.search'](chkFile, parmName) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^net.ipv4.conf.default.accept_source_route.*$'
-    - repl: 'net.ipv4.conf.default.accept_source_route = 0'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 0'
 {%- else %}
-file_V38529-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysctl.conf'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Disable ICMPv4 secure redirect packtes'
-      - 'net.ipv4.conf.default.accept_source_route = 0'
+      - '{{ parmName }} = 0'
 {%- endif %}
