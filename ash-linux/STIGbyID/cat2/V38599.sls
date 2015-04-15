@@ -15,14 +15,16 @@
 #  NIST SP 800-53 Revision 4 :: AC-8 a
 #
 ############################################################
+{%- set stigId = 'V38599' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38599-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38599.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['pkg.version']('nordugrid-arc-gridftpd') %}
-cmd_V38599-NotImplemented:
+cmd_{{ stigId }}-NotImplemented:
   cmd.run:
     - name: 'echo "NOT YET IMPLEMENTED"'
 {%- endif %}
@@ -31,13 +33,13 @@ cmd_V38599-NotImplemented:
 # Banners for the proftpd service
 ###################################
 {%- if salt['pkg.version']('proftpd') and salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
-file_V38599-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/proftpd.conf'
     - pattern: '^DisplayConnect.*$'
     - repl: 'DisplayConnect	/etc/issue'
 {%- elif salt['pkg.version']('proftpd') and not salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
-file_V38599-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/proftpd.conf'
     - pattern: '^(?P<srctok>ServerIdent.*$)'
@@ -49,13 +51,13 @@ file_V38599-repl:
 # Banners for the pure-ftpd service
 #####################################
 {%- if salt['pkg.version']('pure-ftpd') and salt['file.search']('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
-file_V38599-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/pure-ftpd/pure-ftpd.conf'
     - pattern: '^FortunesFile.*$'
     - repl: 'FortunesFile	/etc/issue'
 {%- elif salt['pkg.version']('pure-ftpd') and not salt['file.search']('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
-file_V38599-append:
+file_{{ stigId }}-append:
   file.append:
     - name: '/etc/pure-ftpd/pure-ftpd.conf'
     - text:
@@ -70,13 +72,13 @@ file_V38599-append:
 # Banners for the vsftpd service
 ##################################
 {%- if salt['pkg.version']('vsftpd') and salt['file.search']('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
-file_V38599-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/vsftpd/vsftpd.conf'
     - pattern: '^banner_file.*$'
     - repl: 'banner_file=/etc/issue'
 {%- elif salt['pkg.version']('vsftpd') and not salt['file.search']('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
-file_V38599-append:
+file_{{ stigId }}-append:
   file.append:
     - name: '/etc/vsftpd/vsftpd.conf'
     - text:

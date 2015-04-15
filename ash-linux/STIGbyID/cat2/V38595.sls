@@ -16,11 +16,15 @@
 #  NIST SP 800-53 Revision 4 :: IA-2 (1)
 #
 ############################################################
-script_V38595-describe:
+
+{%- set stigId = 'V38595' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38595.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-cmd_V38595-notice:
+cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "Not a technical/enforcible control"'

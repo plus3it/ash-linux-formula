@@ -19,6 +19,7 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '38592' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
 {%- set pamFiles = [
     '/etc/pam.d/system-auth-ac',
@@ -53,7 +54,7 @@ notify_V{{ stig_id }}-{{ file }}_deviance:
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
 # Iterate files to alter...

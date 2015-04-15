@@ -28,12 +28,15 @@
 #
 ############################################################
 
-script_V38593-describe:
+{%- set stigId = 'V38593' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38593.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38593-etcIssue:
+file_{{ stigId }}-etcIssue:
   file.managed:
     - name: '/etc/issue'
-    - source: salt://ash-linux/STIGbyID/cat2/files/issue.txt
+    - source: salt://{{ helperLoc }}/issue.txt

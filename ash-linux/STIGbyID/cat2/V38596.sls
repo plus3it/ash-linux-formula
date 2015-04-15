@@ -15,24 +15,28 @@
 #
 ############################################################
 
-script_V38596-describe:
+{%- set stigId = 'V38596' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'kernel.randomize_va_space' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38596.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search']('/etc/sysctl.conf', '^kernel.randomize_va_space')
- %}
-file_V38596-repl:
+{%- if salt['file.search'](chkFile, '^' + parmName) %}
+file_{{ stigId }}-repl:
   file.replace:
-    - name: '/etc/sysctl.conf'
-    - pattern: '^kernel.randomize_va_space.*$'
-    - repl: 'kernel.randomize_va_space = 2'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = 2'
 {%- else %}
-file_V38596-append:
+file_{{ stigId }}-append:
   file.append:
-    - name: '/etc/sysctl.conf'
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# enable ASLR (per STIG V-38596)'
-      - 'kernel.randomize_va_space = 2'
+      - '{{ parmName }} = 2'
 {%- endif %}
