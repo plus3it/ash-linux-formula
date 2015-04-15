@@ -14,13 +14,15 @@
 #  NIST SP 800-53 :: SC-7 (2).1 (ii)
 #
 ############################################################
+{%- set stigId = 'V38553' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_V38553-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38553.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-service_V38553:
+service_{{ stigId }}:
   service:
     - name: ip6tables
     - running
