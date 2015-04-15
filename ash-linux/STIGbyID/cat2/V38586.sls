@@ -28,13 +28,13 @@ script_{{ stigId }}-describe:
 {%- if salt['file.search'](chkFile, '^SINGLE') %}
 file_{{ stigId }}-repl:
   file.replace:
-    - name: '{{ chkFile }}
+    - name: '{{ chkFile }}'
     - pattern: '^SINGLE.*$'
     - repl: 'SINGLE=/sbin/sulogin' 
 {%- else %}
 file_{{ stigId }}-append:
   file.append:
-    - name: '{{ chkFile }}
+    - name: '{{ chkFile }}'
     - text:
       - ' '
       - '# Require root password for single-user access (per STIG V-38586)'

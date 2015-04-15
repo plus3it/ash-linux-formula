@@ -18,7 +18,7 @@
 
 {%- set stig_id = '38580' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
-{%- set chkfile = '/etc/audit/audit.rules' %}
+{%- set chkFile = '/etc/audit/audit.rules' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
