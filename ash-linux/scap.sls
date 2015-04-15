@@ -1,0 +1,2 @@
+include:
+  - ash-linux.SCAPonly
