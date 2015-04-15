@@ -15,13 +15,18 @@
 #
 ############################################################
 
-script_V38511-describe:
+{%- set stigId = 'V38511' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
+{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set parmName = 'net.ipv4.ip_forward' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38511.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38511-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: /etc/sysctl.conf
-    - pattern: '^net.ipv4.ip_forward =.*$'
-    - repl: 'net.ipv4.ip_forward = 0'
+    - name: '{{ chkFile }}'
+    - pattern: '^{{ parmName }} =.*$'
+    - repl: '{{ parmName }} = 0'
