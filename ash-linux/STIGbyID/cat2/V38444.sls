@@ -16,10 +16,11 @@
 ############################################################
 
 {%- set stig_id = '38444' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
 # Check if IPv6 is enabled

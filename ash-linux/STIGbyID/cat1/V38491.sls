@@ -9,19 +9,21 @@
 #
 ############################################################
 
-script_V38491-describe:
-  cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38491.sh
-    - cwd: /root
-
+{%- set stigId = 'V38491' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
 {%- set hostsEquiv = '/etc/hosts.equiv' %}
 
+script_{{ stigId }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
+    - cwd: /root
+
 {%- if salt['file.file_exists'](hostsEquiv) %}
-file_V38491-hostsEquiv:
+file_{{ stigId }}-hostsEquiv:
   file.absent:
     - name: {{ hostsEquiv }}
 {%- else %}
-file_V38491-hostsEquiv:
+file_{{ stigId }}-hostsEquiv:
   cmd.run:
     - name: 'echo "No ''{{ hostsEquiv }}'' file found"'
 {%- endif %}
@@ -35,7 +37,7 @@ file_V38491-hostsEquiv:
 notify-{{ userName }}:
   cmd.run: 
     - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..." ; exit 1'
-cmd_V38491-{{ userRhost }}_remove:
+cmd_{{ stigId }}-{{ userRhost }}_remove:
   file.absent: 
     - name: '{{ userRhost }}'
 {%- else %}

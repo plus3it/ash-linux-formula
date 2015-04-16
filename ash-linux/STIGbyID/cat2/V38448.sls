@@ -14,22 +14,25 @@
 #
 ############################################################
 
-script_V38448-describe:
+{%- set stigId = 'V38448' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set checkFile = '/etc/gshadow' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38448.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- set checkFile = '/etc/gshadow' %}
 {%- if salt['file.get_group'](checkFile) == 'root' %}
-notify_V38448-ownership:
+notify_{{ stigId }}-ownership:
   cmd.run:
     - name: 'echo "Info: ''{{ checkFile }}'' file already group-owned by ''root''."'
 {%- else %}
-notify_V38448-ownership:
+notify_{{ stigId }}-ownership:
   cmd.run:
     - name: 'echo "WARNING: ''{{ checkFile }}'' not group-owned by ''root''. Fixing..." ; exit 1'
 
-file_V38448-setOwn:
+file_{{ stigId }}-setOwn:
   file.managed:
     - name: '{{ checkFile }}'
     - group: 'root'

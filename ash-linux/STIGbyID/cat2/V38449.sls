@@ -14,12 +14,15 @@
 #
 ############################################################
 
-script_V38449-describe:
+{%- set stigId = 'V38449' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38449.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_38449:
+file_{{ stigId }}:
   file.managed:
-    - name: /etc/gshadow
+    - name: '/etc/gshadow'
     - mode: '0000'

@@ -13,6 +13,7 @@
 ############################################################
 
 {%- set stig_id = '38666' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
 # Will need to update with correct package-name
 {%- set MSFEpkg = 'MSFElinux' %}
 {%- set NAIdir = '/opt/NAI/LinuxShield/engine/dat' %}

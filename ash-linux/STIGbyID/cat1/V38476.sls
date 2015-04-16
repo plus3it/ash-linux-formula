@@ -9,12 +9,15 @@
 #
 ############################################################
 
-script_V38476-describe:
+{%- set stigId = 'V38476' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38476.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-cmd_V38476:
+cmd_{{ stigId }}:
   cmd.run:
   {%- if grains['os'] == 'RedHat' %}
     - name: 'rpm -q --queryformat "%{SUMMARY}\n" gpg-pubkey | grep "Red Hat, Inc. (release key 2)"'
