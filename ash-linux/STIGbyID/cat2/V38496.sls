@@ -14,12 +14,15 @@
 #
 ############################################################
 
-script_V38496-describe:
+{%- set stigId = 'V38496' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38496.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-notify_V38496-userScan:
+notify_{{ stigId }}-userScan:
   cmd.run:
     - name: 'printf "Scanning locally-managed users:\n\t* Examing users with uid 0 >< 500\n\t* Looking for set or null passwords\n"'
 
@@ -32,21 +35,21 @@ notify_V38496-userScan:
 
 {%- if userID < 500 and userID > 0%}
   {%- if userPasswd == '*' or userPasswd == '!!' %}
-list_V38496-{{ userName }}:
+list_{{ stigId }}-{{ userName }}:
   cmd.run:
     - name: 'echo "Info: User ''{{ userName }}'' has a locked password"'
 
   {%- elif '$' in userPasswd %}
-list_V38496-{{ userName }}:
+list_{{ stigId }}-{{ userName }}:
   cmd.run:
     - name: 'echo "WARNING: User ''{{ userName }}'' has a password assigned" ; exit 1'
 
   {%- elif userPasswd == '' %}
-list_V38496-{{ userName }}:
+list_{{ stigId }}-{{ userName }}:
   cmd.run:
     - name: 'printf "** CRITICAL: User ''{{ userName }}'' has a NULL password!! **\n\tAttempting to lock...\n" ; exit 1'
 
-pwlock__V38496-{{ userName }}:
+pwlock__{{ stigId }}-{{ userName }}:
   user.present:
     - name: {{ userName }}
     - password: '!!'

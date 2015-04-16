@@ -15,12 +15,15 @@
 #
 ############################################################
 
-script_V38492-describe:
+{%- set stigId = 'V38492' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38492.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38492-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: /etc/securetty
     - pattern: "^vc/"

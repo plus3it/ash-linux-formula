@@ -13,12 +13,15 @@
 #
 ############################################################
 
-script_V38498-describe:
+{%- set stigId = 'V38498' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38498.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-directory_V38498:
+directory_{{ stigId }}:
   file.directory:
     - name: /var/log/audit
     - file_mode: 0640
