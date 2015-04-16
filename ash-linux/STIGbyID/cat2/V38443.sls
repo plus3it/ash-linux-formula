@@ -14,23 +14,27 @@
 #
 ############################################################
 
-script_V38443-describe:
+{%- set stigId = 'V38443' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/gshadow' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38443.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.get_user']('/etc/gshadow') == 'root' %}
-notify_V38443-ownership:
+{%- if salt['file.get_user'](chkFile) == 'root' %}
+notify_{{ stigId }}-ownership:
   cmd.run:
-    - name: 'echo "Info: ''/etc/gshadow'' file already owned by ''root''."'
+    - name: 'echo "Info: ''{{ chkFile }}'' file already owned by ''root''."'
 {%- else %}
-notify_V38443-ownership:
+notify_{{ stigId }}-ownership:
   cmd.run:
-    - name: 'echo "WARNING: ''/etc/gshadow'' not owned by ''root''. Fixing..." ; exit 1'
+    - name: 'echo "WARNING: ''{{ chkFile }}'' not owned by ''root''. Fixing..." ; exit 1'
 
-file_V38443:
+file_{{ stigId }}:
   file.managed:
-    - name: /etc/gshadow
+    - name: {{ chkFile }}
     - user: root
     - group: root
     - mode: '0000'

@@ -17,11 +17,14 @@
 #
 ############################################################
 
-script_V38439-describe:
+{%- set stigId = 'V38439' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38439.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-cmd_V38439:
+cmd_{{ stigId }}:
   cmd.run:
     - name: 'echo "Not a technically-implementable control"'

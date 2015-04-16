@@ -11,23 +11,27 @@
 #
 ############################################################
 
-script_V38445-describe:
+{%- set stigId = 'V38445' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkDir = '/var/log/audit' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38445.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-notify_V38445-status:
+notify_{{ stigId }}-status:
   cmd.run:
-    - name: 'echo "Info: recursing ''/var/log/audit'' to reset group-ownerships."'
+    - name: 'echo "Info: recursing ''{{ chkDir }}'' to reset group-ownerships."'
 
-{%- set fileList = salt['file.find']("/var/log/audit", type='f') %}
+{%- set fileList = salt['file.find'](chkDir, type='f') %}
 {%- for fileCheck in fileList %}
 {%- if not salt['file.get_group'](fileCheck) == 'root' %}
-notify_V38445-{{ fileCheck }}:
+notify_{{ stigId }}-{{ fileCheck }}:
   cmd.run:
     - name: 'echo "Info: resetting ''{{ fileCheck }}'' group-ownership to ''root''."'
 
-file_V38445-{{ fileCheck }}:
+file_{{ stigId }}-{{ fileCheck }}:
   file.managed:
     - name: '{{ fileCheck }}'
     - group: 'root'

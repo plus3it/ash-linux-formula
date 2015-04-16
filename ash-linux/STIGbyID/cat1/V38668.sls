@@ -13,17 +13,18 @@
 ###########################################################################
 
 {%- set stig_id = '38668' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
 {%- set overrideCAD = '/etc/init/control-alt-delete.override' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 file_V{{ stig_id }}_managed:
   file.managed:
     - name: '{{ overrideCAD }}'
-    - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.txt
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.txt
     - cwd: /root
     - replace: False
 
