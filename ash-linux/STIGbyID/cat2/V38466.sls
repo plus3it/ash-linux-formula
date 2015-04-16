@@ -15,35 +15,20 @@
 #
 ############################################################
 
-script_V38466-describe:
+{%- set stigId = 'V38466' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set dirList = [ '/lib', '/lib64', '/usr/lib', '/usr/lib64', ] %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38466.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38466-lib:
+{%- for chkDir in dirList %}
+file_{{ stigId }}-{{ chkDir }}:
   file.directory:
-    - name: /lib
+    - name: '{{ chkDir }}'
     - user: root
     - recurse:
       - user
-
-file_V38466-lib64:
-  file.directory:
-    - name: /lib64
-    - user: root
-    - recurse:
-      - user
-
-file_V38466-ulib:
-  file.directory:
-    - name: /usr/lib
-    - user: root
-    - recurse:
-      - user
-
-file_V38466-ulib64:
-  file.directory:
-    - name: /usr/lib64
-    - user: root
-    - recurse:
-      - user
+{%- endfor %}

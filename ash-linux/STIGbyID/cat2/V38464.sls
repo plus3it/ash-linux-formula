@@ -14,13 +14,18 @@
 #
 ############################################################
 
-script_V38464-describe:
+{%- set stigId = 'V38464' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'disk_error_action' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38464.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38464:
+file_{{ stigId }}:
   file.replace:
-    - name: /etc/audit/auditd.conf
-    - pattern: "^disk_error_action =.*"
-    - repl: "disk_error_action = HALT"
+    - name: '{{ chkFile }}'
+    - pattern: "^{{ parmName }} =.*"
+    - repl: "{{ parmName }} = HALT"

@@ -15,9 +15,12 @@
 #
 ############################################################
 
-script_V38465-describe:
+{%- set stigId = 'V38465' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38465.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Define list of library directories to search
@@ -33,14 +36,14 @@ script_V38465-describe:
 {%- for libDir in checkLibDirs %}
 
 # Report what we're doing
-notify_V38465-{{ libDir }}:
+notify_{{ stigId }}-{{ libDir }}:
   cmd.run:
     - name: 'echo "Checking ''{{ libDir }}'' for group- or world-writable files"'
 
 # Check (and fix as necessary) library
-strip_V38465-{{ libDir }}:
+strip_{{ stigId }}-{{ libDir }}:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38465-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'
     - args: {{ libDir }}
 
