@@ -14,24 +14,25 @@
 #  NIST SP 800-53 Revision 4 :: SC-5 (2)
 #
 ############################################################
+
 {%- set stigId = 'V38539' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.tcp_syncookies' %}
 
-script_V38539-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38539.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- if salt['file.search'](chkFile, parmName) %}
-file_V38539-repl:
+file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ chkFile }}'
     - pattern: '^{{ parmName }}.*$'
     - repl: '{{ parmName }} = 1'
 {%- else %}
-file_V38539-append:
+file_{{ stigId }}-append:
   file.append:
     - name: '{{ chkFile }}'
     - text:
