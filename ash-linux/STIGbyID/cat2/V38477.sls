@@ -15,13 +15,18 @@
 #
 ############################################################
 
-script_V38477-describe:
+{%- set stigId = 'V38477' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/login.defs' %}
+{%- set parmName = 'PASS_MIN_DAYS' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38477.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38477:
+file_{{ stigId }}:
   file.replace:
-    - name: /etc/login.defs
-    - pattern: "^PASS_MIN_DAYS.*$"
-    - repl: "PASS_MIN_DAYS	1"
+    - name: '{{ chkFile }}'
+    - pattern: "^{{ parmName }}.*$"
+    - repl: "{{ parmName }}	1"

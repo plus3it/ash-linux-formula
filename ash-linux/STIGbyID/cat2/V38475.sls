@@ -16,13 +16,18 @@
 #
 ############################################################
 
-script_V38475-describe:
+{%- set stigId = 'V38475' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/login.defs' %}
+{%- set parmName = 'PASS_MIN_LEN' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38475.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38475:
+file_{{ stigId }}:
   file.replace:
-    - name: /etc/login.defs
-    - pattern: "^PASS_MIN_LEN.*$"
-    - repl: "PASS_MIN_LEN	14"
+    - name: '{{ chkFile }}'
+    - pattern: "^{{ parmName }}.*$"
+    - repl: "{{ parmName }}	14"
