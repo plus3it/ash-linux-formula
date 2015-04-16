@@ -9,20 +9,25 @@
 #
 ############################################################
 
-script_V38653-describe:
+{%- set stigId = 'V38653' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/snmp/snmpd.conf' %}
+{%- set pkgName = 'net-snmp' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38653.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('net-snmp') %}
-file_snmpd:
+{%- if salt['pkg.version'](pkgName) %}
+file_{{ stigId }}-snmpd:
   file.comment:
-    - name: /etc/snmp/snmpd.conf
+    - name: '{{ chkFile }}'
     - regex: ^[a-z].* public
     - char: '## '
-    - unless: 'grep -v "^#" /etc/snmp/snmpd.conf | grep public'
+    - unless: 'grep -v "^#" {{ chkFile }} | grep public'
 {%- else %}
-file_snmpd:
+file_{{ stigId }}-snmpd:
   cmd.run:
-    - name: 'echo "No relevant findings possible: the ''net-snmp'' package is not installed"'
+    - name: 'echo "No relevant findings possible: the ''{{ pkgName }}'' package is not installed"'
 {%- endif %}

@@ -12,9 +12,12 @@
 #
 ############################################################
 
-script_V38602-describe:
+{%- set stigId = 'V38602' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38602.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 {%- set rSvcName = 'rlogin' %}
@@ -23,27 +26,27 @@ script_V38602-describe:
 {%- if salt['pkg.version']('rsh-server') %}
   # If installed, and enabled, disable it
   {%- if salt['service.enabled'](rSvcName) %}
-svc_V38602-{{ rSvcName }}Disabled:
+svc_{{ stigId }}-{{ rSvcName }}Disabled:
   service.disabled:
     - name: '{{ rSvcName }}'
 
-svc_V38602-{{ rSvcName }}Dead:
+svc_{{ stigId }}-{{ rSvcName }}Dead:
  service.dead:
     - name: '{{ rSvcName }}'
 
-notice_V38602-disable{{ rSvcName }}:
+notice_{{ stigId }}-disable{{ rSvcName }}:
   cmd.run:
     - name: 'echo "The ''{{ rSvcName }}'' service has been disabled"'
-    - unless: svc_V38602-{{ rSvcName }}Disabled
+    - unless: svc_{{ stigId }}-{{ rSvcName }}Disabled
   # If installed but disabled, make a note of it
   {%- else %}
-notice_V38602-disable{{ rSvcName }}:
+notice_{{ stigId }}-disable{{ rSvcName }}:
   cmd.run:
     - name: 'echo "The ''{{ rSvcName }}'' service already disabled"'
   {%- endif %}
 # Otherwise, just notify that rsh service isn't even present
 {%- else %}
-notice_V38602-disable{{ rSvcName }}:
+notice_{{ stigId }}-disable{{ rSvcName }}:
   cmd.run:
     - name: 'echo "The ''rsh-server'' package is not installed"'
 {%- endif %}
