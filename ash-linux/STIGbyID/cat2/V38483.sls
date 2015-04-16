@@ -15,12 +15,15 @@
 #
 ############################################################
 
-script_V38483-describe:
+{%- set stigId = 'V38483' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38483.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38483:
+file_{{ stigId }}:
   file.replace:
     - name: /etc/yum.conf
     - pattern: "^gpgcheck=.*$"

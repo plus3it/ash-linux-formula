@@ -14,21 +14,24 @@
 #
 ############################################################
 
-script_V38481-describe:
+{%- set stigId = 'V38481' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38481.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-cmd_V38481-chkSubscribe:
+cmd_{{ stigId }}-chkSubscribe:
   cmd.run:
     - name: 'echo "Subscribed to yum service"'
     - unless: 'yum repolist | grep "repolist: 0"'
 
-cmd_V38481-lastUpdate:
+cmd_{{ stigId }}-lastUpdate:
   cmd.run:
     - name: "printf 'System last updated: ' ; rpm -q `rpm -qa -last | awk 'END {print $1}'` --qf '%{installtime:date}\n'"
     - unless: 'yum repolist | grep "repolist: 0"'
 
-pkg_V38481-upgrades:
+pkg_{{ stigId }}-upgrades:
   module.run:
     - name: pkg.list_upgrades
