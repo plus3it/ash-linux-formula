@@ -10,36 +10,40 @@
 #
 ############################################################
 
-script_V38589-describe:
+{%- set stigId = 'V38589' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set svcNam = 'telnet' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V38589.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
 # See if the telnet server package is even installed...
-{%- if salt['pkg.version']('telnet-server') %}
+{%- if salt['pkg.version'](svcNam + '-server') %}
   # If installed, and enabled, disable it
-  {%- if salt['service.enabled']('telnet') %}
-svc_V38589-telnetDisabled:
+  {%- if salt['service.enabled'](svcNam) %}
+svc_{{ stigId }}-{{ svcNam }}Disabled:
   service.disabled:
-    - name: 'telnet'
+    - name: '{{ svcNam }}'
 
-svc_V38589-telnetDead:
+svc_{{ stigId }}-{{ svcNam }}Dead:
   service.dead:
-    - name: 'telnet'
+    - name: '{{ svcNam }}'
 
-notice_V38589-disableTelnet:
+notice_{{ stigId }}-disableTelnet:
   cmd.run:
-    - name: 'echo "The ''telnet'' service has been disabled"'
-    - unless: svc_V38589-telnetDisabled
+    - name: 'echo "The ''{{ svcNam }}'' service has been disabled"'
+    - unless: svc_{{ stigId }}-{{ svcNam }}Disabled
   # If installed but disabled, make a note of it
   {%- else %}
-notice_V38589-disableTelnet:
+notice_{{ stigId }}-disable{{ svcNam }}:
   cmd.run:
-    - name: 'echo "The ''telnet'' service already disabled"'
+    - name: 'echo "The ''{{ svcNam }}'' service already disabled"'
   {%- endif %}
-# Otherwise, just notify that telnet service isn't even present
+# Otherwise, just notify that {{ svcNam }} service isn't even present
 {%- else %}
-notice_V38589-disableTelnet:
+notice_{{ stigId }}-disable{{ svcNam }}:
   cmd.run:
-    - name: 'echo "The ''telnet-server'' package is not installed"'
+    - name: 'echo "The ''{{ svcNam }}-server'' package is not installed"'
 {%- endif %}
