@@ -15,49 +15,20 @@
 #
 ############################################################
 
-script_V38472-describe:
+{%- set stigId = 'V38472' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set dirList = [ '/bin', '/usr/bin', '/sbin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin', ] %}
+
+script_{{ helperLoc }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38472.sh
+    - source: salt://{{ helperLoc }}/{{ helperLoc }}.sh
     - cwd: '/root'
 
-file_V38472-bin:
+{%- for chkDir in dirList %}
+file_{{ helperLoc }}-{{ chkDir }}:
   file.directory:
-    - name: /bin
+    - name: '{{ chkDir }}'
     - user: root
     - recurse:
       - user
-
-file_V38472-ubin:
-  file.directory:
-    - name: /usr/bin
-    - user: root
-    - recurse:
-      - user
-
-file_V38472-lbin:
-  file.directory:
-    - name: /usr/local/bin
-    - user: root
-    - recurse:
-      - user
-
-file_V38472-sbin:
-  file.directory:
-    - name: /sbin
-    - user: root
-    - recurse:
-      - user
-
-file_V38472-usbin:
-  file.directory:
-    - name: /usr/sbin
-    - user: root
-    - recurse:
-      - user
-
-file_V38472-lsbin:
-  file.directory:
-    - name: /usr/local/sbin
-    - user: root
-    - recurse:
-      - user
+{%- endfor %}

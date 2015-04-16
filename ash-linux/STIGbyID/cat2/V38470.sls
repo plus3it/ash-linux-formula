@@ -14,13 +14,18 @@
 #
 ############################################################
 
-script_V38470-describe:
+{%- set stigId = 'V38470' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'space_left_action' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38470.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38470:
+file_{{ stigId }}:
   file.replace:
-    - name: /etc/audit/auditd.conf
-    - pattern: "^space_left_action =.*"
-    - repl: "space_left_action = email"
+    - name: '{{ chkFile }}'
+    - pattern: "^{{ parmName }} =.*"
+    - repl: "{{ parmName }} = email"

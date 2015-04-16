@@ -15,13 +15,18 @@
 #
 ############################################################
 
-script_V38479-describe:
+{%- set stigId = 'V38479' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/login.defs' %}
+{%- set parmName = 'PASS_MAX_DAYS' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38479.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38479:
+file_{{ stigId }}:
   file.replace:
-    - name: /etc/login.defs
-    - pattern: "^PASS_MAX_DAYS.*$"
-    - repl: "PASS_MAX_DAYS	60"
+    - name: '{{ chkFile }}'
+    - pattern: "^{{ parmName }}.*$"
+    - repl: "{{ parmName }}	60"

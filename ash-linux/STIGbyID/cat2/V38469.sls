@@ -15,9 +15,12 @@
 #
 ############################################################
 
-script_V38469-describe:
+{%- set stigId = 'V38469' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38469.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 # Define list of binary directories to search
@@ -35,14 +38,14 @@ script_V38469-describe:
 {%- for binDir in checkBinDirs %}
 
 # Report what we're doing
-notify_V38469-{{ binDir }}:
+notify_{{ stigId }}-{{ binDir }}:
   cmd.run:
     - name: 'echo "Checking ''{{ binDir }}'' for group- or world-writable files"'
 
 # Check (and fix as necessary) library
-strip_V38469-{{ binDir }}:
+strip_{{ stigId }}-{{ binDir }}:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38469-helper.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: '/root'
     - args: {{ binDir }}
 
