@@ -19,11 +19,12 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '38497' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat1/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
 file_V{{ stig_id }}-sysauth_ac:
