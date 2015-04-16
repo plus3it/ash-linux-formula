@@ -16,11 +16,14 @@
 #
 ############################################################
 
-script_V38488-describe:
+{%- set stigId = 'V38488' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38488.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-cmd_V38488-NotTechnical:
+cmd_{{ stigId }}-NotTechnical:
   cmd.run:
     - name: 'echo "Not a technical/enforcible control"'

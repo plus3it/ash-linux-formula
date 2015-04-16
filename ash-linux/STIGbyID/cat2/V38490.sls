@@ -15,6 +15,7 @@
 ############################################################
 
 {%- set stig_id = '38490' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
 {%- set file_modprobe = '/etc/modprobe.conf' %}
 {%- set file_modprobe_usb = '/etc/modprobe.d/usb.conf' %}
 {%- set file_99usb_rules = '/etc/udev/rules.d/99-usb.rules' %}
@@ -22,7 +23,7 @@
 
 script_V{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
 {%- if salt['file.file_exists']('{{ file_modprobe }}') %}

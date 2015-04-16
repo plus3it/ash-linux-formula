@@ -14,11 +14,14 @@
 #
 ############################################################
 
-script_V38499-describe:
+{%- set stigId = 'V38499' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38499.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-cmd_V38499:
+cmd_{{ stigId }}:
   cmd.run:
     - name: '/usr/sbin/pwconv'

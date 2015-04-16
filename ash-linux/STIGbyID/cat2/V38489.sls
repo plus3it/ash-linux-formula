@@ -12,11 +12,14 @@
 #
 ############################################################
 
-script_V38489-describe:
+{%- set stigId = 'V38489' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38489.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-pkg_V38489:
+pkg_{{ stigId }}:
   pkg.installed:
     - name: aide

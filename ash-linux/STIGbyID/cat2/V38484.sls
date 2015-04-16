@@ -18,19 +18,24 @@
 #
 ############################################################
 
-script_V38484-describe:
+{%- set stigId = 'V38484' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set chkFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'PrintLastLog' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38484.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_V38484-repl:
+file_{{ stigId }}-repl:
   file.replace:
-    - name: /etc/ssh/sshd_config
-    - pattern: "^PrintLastLog.*$"
-    - repl: "PrintLastLog yes"
+    - name: '{{ chkFile }}'
+    - pattern: "^{{ parmName }}.*$"
+    - repl: "{{ parmName }} yes"
 
-file_V38484-add:
+file_{{ stigId }}-add:
   file.append:
-    - name: /etc/ssh/sshd_config
-    - text: 'PrintLastLog yes'
-    - onlyif: 'grep ^PrintLastLog /etc/ssh/sshd_config'
+    - name: '{{ chkFile }}'
+    - text: '{{ parmName }} yes'
+    - onlyif: 'grep ^{{ parmName }} {{ chkFile }}'
