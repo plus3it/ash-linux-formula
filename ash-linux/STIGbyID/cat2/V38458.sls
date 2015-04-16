@@ -14,12 +14,15 @@
 #
 ############################################################
 
-script_V38458-describe:
+{%- set stigId = 'V38458' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://ash-linux/STIGbyID/cat2/files/V38458.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-file_38458:
+file_{{ stigId }}:
   file.managed:
-    - name: /etc/group
+    - name: '/etc/group'
     - user: root
