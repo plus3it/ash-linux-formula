@@ -30,11 +30,15 @@ file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ chkFile }}'
     - pattern: '^{{ parmName }} =.*$'
-    - repl: '{{ parmName }} = {{ parmVal }}'
-  - onlyif: 'grep -E "^{{ parmName }}" {{ chkFile }}'
+    - repl: |
+        # Added {{ parmName }} define per STIG-ID: {{ stigId }}
+        {{ parmName }} = {{ parmVal }}
+    - unless: 'grep -Ew "{{ parmName }}" {{ chkFile }} && \
+               grep -Ew "{{ parmName }}" {{ chkFile }} | \
+               grep -E "{{ parmVal }}$"'
 
-setting_{{ stig_id }}-{{ parmName }}:
+setting_{{ stigId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '{{ parmVal }}'
-  - unless: 'grep -E "^{{ parmName }} = {{ parmVal }}" {{ chkFile }}'
+    - unless: 'grep -E "^{{ parmName }} = {{ parmVal }}" {{ chkFile }}'
