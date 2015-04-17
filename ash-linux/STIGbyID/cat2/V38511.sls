@@ -19,6 +19,7 @@
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.ip_forward' %}
+{%- set parmVal = '0' %}
 
 script_{{ stigId }}-describe:
   cmd.script:
@@ -29,4 +30,11 @@ file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ chkFile }}'
     - pattern: '^{{ parmName }} =.*$'
-    - repl: '{{ parmName }} = 0'
+    - repl: '{{ parmName }} = {{ parmVal }}'
+  - onlyif: 'grep -E "^{{ parmName }}" {{ chkFile }}'
+
+setting_{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '{{ parmVal }}'
+  - unless: 'grep -E "^{{ parmName }} = {{ parmVal }}" {{ chkFile }}'
