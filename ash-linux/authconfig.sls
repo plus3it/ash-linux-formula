@@ -30,8 +30,8 @@ cmd_authconfig:
       - file: file_system-auth
       - file: file_password-auth
     - unless:
-      - 'test (-h /etc/pam.d/password-auth) -a 
-              (-h /etc/pam.d/system-auth)'
+      - 'test -h /etc/pam.d/password-auth -a 
+              -h /etc/pam.d/system-auth'
 
 file_system-auth-ac:
   file.managed:
