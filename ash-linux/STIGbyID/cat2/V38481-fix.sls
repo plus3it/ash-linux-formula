@@ -17,14 +17,5 @@
 include:
   - ash-linux.STIGbyID.cat2.V38481
 
-# Get list of RPMs that need to be updated
-{%- set updatePairs = salt['pkg.list_upgrades']('name') %}
-
-{%- if updatePairs %}
-
 remediate_V38481-updateRPMs:
-  pkg:
-    - latest
-    - pkgs: {{ updatePairs.keys() }}
-
-{%- endif %}
+  pkg.uptodate
