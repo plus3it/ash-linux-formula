@@ -1,3 +1,3 @@
 include:
-  - ash-linux.STIGbyID
-  - ash-linux.SCAPonly
+  - ash-linux.stig
+  - ash-linux.scap
