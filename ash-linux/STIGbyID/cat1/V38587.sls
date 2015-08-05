@@ -13,7 +13,7 @@
 ############################################################
 
 {%- set stigId = 'V38587' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
 {%- set chkPkg = 'telnet-server' %}
 
 script_{{ stigId }}-describe:

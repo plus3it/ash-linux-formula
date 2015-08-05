@@ -13,7 +13,7 @@
 ###########################################################################
 
 {%- set stig_id = '38668' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
 {%- set overrideCAD = '/etc/init/control-alt-delete.override' %}
 
 script_V{{ stig_id }}-describe:

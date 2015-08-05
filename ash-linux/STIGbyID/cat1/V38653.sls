@@ -10,7 +10,7 @@
 ############################################################
 
 {%- set stigId = 'V38653' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
 {%- set chkFile = '/etc/snmp/snmpd.conf' %}
 {%- set pkgName = 'net-snmp' %}
 

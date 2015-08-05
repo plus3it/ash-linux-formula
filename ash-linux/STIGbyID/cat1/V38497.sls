@@ -19,7 +19,7 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = '38497' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat1/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 
 script_V{{ stig_id }}-describe:
