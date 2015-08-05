@@ -19,13 +19,13 @@
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set dirList = [ '/bin', '/usr/bin', '/sbin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin', ] %}
 
-script_{{ helperLoc }}-describe:
+script_{{ stigId }}-describe:
   cmd.script:
-    - source: salt://{{ helperLoc }}/{{ helperLoc }}.sh
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
 {%- for chkDir in dirList %}
-file_{{ helperLoc }}-{{ chkDir }}:
+file_{{ stigId }}-{{ chkDir }}:
   file.directory:
     - name: '{{ chkDir }}'
     - user: root
