@@ -19,7 +19,7 @@
 ############################################################
 
 {%- set stigId = 'V38484' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'PrintLastLog' %}
 

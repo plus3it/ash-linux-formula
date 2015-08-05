@@ -16,7 +16,7 @@
 ############################################################
 
 {%- set stigId = 'V38466' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set dirList = [ '/lib', '/lib64', '/usr/lib', '/usr/lib64', ] %}
 
 script_{{ stigId }}-describe:

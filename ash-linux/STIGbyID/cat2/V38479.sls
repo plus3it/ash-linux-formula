@@ -16,7 +16,7 @@
 ############################################################
 
 {%- set stigId = 'V38479' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/etc/login.defs' %}
 {%- set parmName = 'PASS_MAX_DAYS' %}
 

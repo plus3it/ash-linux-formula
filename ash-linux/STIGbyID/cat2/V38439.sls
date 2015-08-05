@@ -18,7 +18,7 @@
 ############################################################
 
 {%- set stigId = 'V38439' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
 script_{{ stigId }}-describe:
   cmd.script:

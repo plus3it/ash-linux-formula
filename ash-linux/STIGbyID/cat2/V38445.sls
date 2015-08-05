@@ -12,7 +12,7 @@
 ############################################################
 
 {%- set stigId = 'V38445' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkDir = '/var/log/audit' %}
 
 script_{{ stigId }}-describe:

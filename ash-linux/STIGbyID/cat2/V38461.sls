@@ -16,7 +16,7 @@
 ############################################################
 
 {%- set stigId = 'V38461' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/etc/group' %}
 
 script_{{ stigId }}-describe:

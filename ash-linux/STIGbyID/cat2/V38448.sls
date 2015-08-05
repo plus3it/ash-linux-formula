@@ -15,7 +15,7 @@
 ############################################################
 
 {%- set stigId = 'V38448' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set checkFile = '/etc/gshadow' %}
 
 script_{{ stigId }}-describe:

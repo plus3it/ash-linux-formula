@@ -15,7 +15,7 @@
 ############################################################
 
 {%- set stigId = 'V38468' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/cat2' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 {%- set chkFile = '/etc/audit/auditd.conf' %}
 {%- set parmName = 'disk_full_action' %}
 
