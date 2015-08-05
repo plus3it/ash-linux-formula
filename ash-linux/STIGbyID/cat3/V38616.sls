@@ -39,4 +39,4 @@ file_{{ stigId }}-configSet:
         
         # SSH service must not allow setting of user environment options (per STIG V-38616)
         {{ parmName }} {{ parmVal }}
-    - unles: 'grep -E "^{{ parmName }} {{ parmVal }}" {{ cfgFile }}'
+    - unless: 'grep -E "^{{ parmName }} {{ parmVal }}" {{ cfgFile }}'
