@@ -53,7 +53,7 @@ notify_{{ stig_id }}-wontFix:
 *****************************************************\n
 * GRUB not password-protected with SHA512-encrypted\n
 *      password: MANUAL REMEDIATION REQUIRED\n
-*****************************************************\n" >&2 && exit 1'
+*****************************************************\n"'
 
   {%- endif %}
 {%- endif %}
