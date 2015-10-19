@@ -42,12 +42,12 @@ list_{{ stigId }}-{{ userName }}:
   {%- elif '$' in userPasswd %}
 list_{{ stigId }}-{{ userName }}:
   cmd.run:
-    - name: 'echo "WARNING: User ''{{ userName }}'' has a password assigned" ; exit 1'
+    - name: 'echo "WARNING: User ''{{ userName }}'' has a password assigned"'
 
   {%- elif userPasswd == '' %}
 list_{{ stigId }}-{{ userName }}:
   cmd.run:
-    - name: 'printf "** CRITICAL: User ''{{ userName }}'' has a NULL password!! **\n\tAttempting to lock...\n" ; exit 1'
+    - name: 'printf "** CRITICAL: User ''{{ userName }}'' has a NULL password!! **\n\tAttempting to lock...\n"'
 
 pwlock__{{ stigId }}-{{ userName }}:
   user.present:
