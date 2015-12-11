@@ -1,16 +1,17 @@
 # STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38572
 # Finding ID:	V-38572
+# Rule ID:	SV-50373r2_rule
 # Version:	RHEL-06-000060
 # Finding Level:	Low
-#
-#     The system must require at least four characters be changed between 
-#     the old and new passwords during a password change. Requiring a 
-#     minimum number of different characters during password changes 
-#     ensures that newly changed passwords should not resemble previously 
-#     compromised ones. Note that passwords which are changed on 
-#     compromised systems will still be compromised, however. 
+# Description:
+#    Requiring a minimum number of different characters during
+#    password changes ensures that newly changed passwords should
+#    not resemble previously compromised ones. Note that
+#    passwords which are changed on compromised systems will
+#    still be compromised, however.
 #
 #  CCI: CCI-000195
+#  CCE: 26615-5
 #  NIST SP 800-53 :: IA-5 (1) (b)
 #  NIST SP 800-53A :: IA-5 (1).1 (v)
 #  NIST SP 800-53 Revision 4 :: IA-5 (1) (b)
@@ -24,9 +25,9 @@ include:
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'difok' %}
-{%- set param_value = '4' %}
-{%- set notify_change = 'Forced passwords to require at least four character differences.' %}
-{%- set notify_nochange = 'Passwords already require at least four character differences.' %}
+{%- set param_value = '8' %}
+{%- set notify_change = 'Forced passwords to require at least eight character differences.' %}
+{%- set notify_nochange = 'Passwords already require at least eight character differences.' %}
 
 {%- macro set_pam_param(stig_id, file, param, value, notify_text) %}
 # Change existing {{ param }} to {{ value }}
