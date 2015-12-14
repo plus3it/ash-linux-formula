@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/plus3it/ash-linux-formula.svg](https://travis-ci.org/plus3it/ash-linux-formula)
 # ash-linux-formula
 
 Automated System Hardening (ASH) for Linux is a [Salt](http://saltstack.org) 
