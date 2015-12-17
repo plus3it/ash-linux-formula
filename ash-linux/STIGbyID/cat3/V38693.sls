@@ -17,7 +17,7 @@
 include:
   - ash-linux.authconfig
 
-{%- set stig_id = '38693' %}
+{%- set stig_id = 'V38693' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'maxrepeat' %}
@@ -51,9 +51,9 @@ notify_V{{ stig_id }}-{{ param }}:
     - name: 'echo "{{ notify_text }}"'
 {%- endmacro %}
 
-script_V{{ stig_id }}-describe:
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
 {%- if not salt['file.file_exists'](checkFile) %}
