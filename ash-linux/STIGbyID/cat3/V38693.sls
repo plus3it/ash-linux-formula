@@ -22,8 +22,8 @@ include:
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'maxrepeat' %}
 {%- set param_value = '3' %}
-{%- set notify_change = 'Passwords'' repeating characters set to ' + param_value + ' (per STIG ID V-' + stig_id + ').' %}
-{%- set notify_nochange = 'Passwords'' repeating characters already capped at ' + param_value + ' (per STIG ID V-' + stig_id + ').' %}
+{%- set notify_change = 'Passwords'' repeating characters set to ' + param_value + ' (per STIG ID ' + stig_id + ').' %}
+{%- set notify_nochange = 'Passwords'' repeating characters already capped at ' + param_value + ' (per STIG ID ' + stig_id + ').' %}
 
 #define macro to set maxrepeat to '3'
 {%- macro set_pam_param(stig_id, file, param, value, notify_text) %}
