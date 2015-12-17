@@ -16,10 +16,6 @@
 {%- set helperLoc = 'ash-linux/SCAPonly/low/files' %}
 {%- set scapId = 'CCE-27457-1' %}
 {%- set stigId = 'V-38684' %}
-{%- set parmName = 'net.ipv6.conf.default.accept_ra' %}
-{%- set notify_change = 'In-memory configuration of ''{{ parmName }}'' not disab
-led' %}
-{%- set notify_nochange = '''{{ parmName }}'' already disabled' %}
 
 script_{{ scapId }}-describe:
   cmd.run:

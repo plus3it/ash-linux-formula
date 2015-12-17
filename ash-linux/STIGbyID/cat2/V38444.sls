@@ -40,13 +40,19 @@ cmd_V{{ stig_id }}-iptablesSet:
     - chain: INPUT
     - policy: DROP
     - family: ipv6
+    - check_cmd:
+      - test -f '/proc/net/if_inet6'
 
 notify_V{{ stig_id }}-iptablesSave:
   cmd.run:
     - name: 'echo "Info: Saving in-memory ip6tables configuration to disk."'
+    - require:
+      - iptables: cmd_V{{ stig_id }}-iptablesSet
 
 iptables_V{{ stig_id }}-iptablesSave:
   module.run:
     - name: 'iptables.save'
     - family: 'ipv6'
+    - require:
+      - iptables: cmd_V{{ stig_id }}-iptablesSet
 {%- endif %}

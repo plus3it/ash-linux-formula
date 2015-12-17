@@ -17,13 +17,13 @@
 include:
   - ash-linux.authconfig
 
-{%- set stig_id = '38693' %}
+{%- set stig_id = 'V38693' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat3/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'maxrepeat' %}
 {%- set param_value = '3' %}
-{%- set notify_change = 'Passwords'' repeating characters set to ' + param_value + ' (per STIG ID V-' + stig_id + ').' %}
-{%- set notify_nochange = 'Passwords'' repeating characters already capped at ' + param_value + ' (per STIG ID V-' + stig_id + ').' %}
+{%- set notify_change = 'Passwords'' repeating characters set to ' + param_value + ' (per STIG ID ' + stig_id + ').' %}
+{%- set notify_nochange = 'Passwords'' repeating characters already capped at ' + param_value + ' (per STIG ID ' + stig_id + ').' %}
 
 #define macro to set maxrepeat to '3'
 {%- macro set_pam_param(stig_id, file, param, value, notify_text) %}
@@ -51,9 +51,9 @@ notify_V{{ stig_id }}-{{ param }}:
     - name: 'echo "{{ notify_text }}"'
 {%- endmacro %}
 
-script_V{{ stig_id }}-describe:
+script_{{ stig_id }}-describe:
   cmd.script:
-    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
 {%- if not salt['file.file_exists'](checkFile) %}
