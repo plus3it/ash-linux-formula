@@ -27,3 +27,5 @@ service_{{ stigId }}:
     - name: ip6tables
     - running
     - enable: True
+    - onlyif:
+      - test -f '/proc/net/if_inet6'

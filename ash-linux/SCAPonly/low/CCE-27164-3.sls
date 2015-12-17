@@ -49,3 +49,5 @@ setting_{{ scapId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '{{ parmVal }}'
+    - onlyif:
+      - test -f '/proc/net/if_inet6'
