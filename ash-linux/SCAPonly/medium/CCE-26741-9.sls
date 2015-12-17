@@ -18,13 +18,13 @@
 include:
   - ash-linux.authconfig
 
-{%- set scapId = '38693' %}
+{%- set scapId = 'CCE-26741-9' %}
 {%- set helperLoc = 'ash-linux/SCAPonly/medium/files' %}
 {%- set checkFile = '/etc/pam.d/system-auth-ac' %}
 {%- set param_name = 'remember' %}
 {%- set param_value = '24' %}
-{%- set notify_change = 'Passwords'' reuse-interval set to ' + param_value + ' (per STIG ID V-' + scapId + ').' %}
-{%- set notify_nochange = 'Passwords'' reuse-interval already set to ' + param_value + ' (per STIG ID V-' + scapId + ').' %}
+{%- set notify_change = 'Passwords'' reuse-interval set to ' + param_value + ' (per SCAP ID ' + scapId + ').' %}
+{%- set notify_nochange = 'Passwords'' reuse-interval already set to ' + param_value + ' (per SCAP ID ' + scapId + ').' %}
 
 #define macro to set 'remember' to '24'
 {%- macro set_pam_param(scapId, file, param, value, notify_text) %}
