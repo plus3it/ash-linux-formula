@@ -36,17 +36,8 @@ script_{{ stigId }}-describe:
 ####################################
 # Disable USB support (if enabled)
 ####################################
-{%- set modprobConf = '/etc/modprobe.conf' %}
 {%- set usbConf = '/etc/modprobe.d/usb.conf' %}
 
-# Check if USB is enabled - notify if disabled
-{%- if salt['file.file_exists'](usbConf) or salt['file.file_exists'](modprobConf) %}
-  {%- if salt['file.search'](usbConf, 'install usb-storage /bin/true') or salt['file.search'](modprobConf, 'install usb-storage /bin/true') %}
-notify_{{ stigId }}-usbDisabled:
-  cmd.run:
-    - name: 'echo "Mounting of USB devices disabled"'
-  {%- endif %}
-{%- else %}
 file-{{ stigId }}-touchUSBconf:
   file.touch:
     - name: {{ usbConf }}
@@ -59,7 +50,6 @@ file_{{ stigId }}-appendUSBconf:
       - file: file-{{ stigId }}-touchUSBconf
     - onlyif:
       - 'test -f {{ usbConf }}'
-{%- endif %}
 
 ####################################################################
 # Define list of filesystem types that are normally only found on 
