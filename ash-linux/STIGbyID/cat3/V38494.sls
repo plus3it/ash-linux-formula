@@ -26,6 +26,14 @@ replace_{{ stigId }}-serialTTY:
     - name: '{{ cfgFile }}'
     - pattern: '^{{ srchPtn }}.*$'
     - repl: ''
+
+comment_{{ stigId }}-serialConf:
+  file.comment:
+    - name: '/etc/init/serial.conf'
+    - regex: ^pre-start exec /sbin/securetty
+    - char: '#'
+    - require:
+      - file: replace_{{ stigId }}-serialTTY
 {%- else %}
 replace_{{ stigId }}-serialTTY:
   cmd.run:
