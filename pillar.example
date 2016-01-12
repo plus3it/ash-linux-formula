@@ -1,0 +1,13 @@
+# Pillar variables used by ash-linux formula.
+#
+# Currently, only rsyslog service is targeted for Pillar-usage
+#
+#################################################################
+ash-linux:
+  rsyslog:
+    destination: localhost
+    transport: udp
+    log_port: 517
+    match_criteria: *.*
+    disable_locallog: no
+    log_template: RSYSLOG_ForwardFormat
