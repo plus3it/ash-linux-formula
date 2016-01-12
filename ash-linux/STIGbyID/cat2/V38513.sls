@@ -24,7 +24,7 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']({{ file }}) %}
+{%- if salt['file.file_exists'](file) %}
 file_V{{ stig_id }}-repl:
   file.replace:
     - name: {{ file }}
