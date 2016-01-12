@@ -30,7 +30,7 @@ file-V{{ stig_id }}-touchRules:
 file_V{{ stig_id }}-appendBlacklist:
   file.append:
     - name: '{{ file }}'
-    - text: 'install sctp /bin/false'
+    - text: 'install sctp /bin/true'
     - require:
       - file: file-V{{ stig_id }}-touchRules
     - onlyif:
