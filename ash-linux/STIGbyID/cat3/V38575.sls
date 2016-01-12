@@ -28,12 +28,12 @@ script_V{{ stig_id }}-describe:
 
 {%- set usertypes = {
     'selDACusers' : { 'search_string' : ' arch=b64.*unlink.*auid>=500 ',
-                      'rule' : '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete',
-                      'rule32' : '-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete',
+                      'rule' : '-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete',
+                      'rule32' : '-a always,exit -F arch=b32 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete',
                     },
     'selDACroot'  : { 'search_string' : ' arch=b64.*unlink.*auid=0 ',
-                      'rule' : '-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete',
-                      'rule32' : '-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete',
+                      'rule' : '-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete',
+                      'rule32' : '-a always,exit -F arch=b32 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete',
                     },
 } %}
 {%- set audit_cfg_file = '/etc/audit/audit.rules' %}

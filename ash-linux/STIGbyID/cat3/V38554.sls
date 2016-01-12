@@ -59,7 +59,9 @@ file_V{{ stig_id }}-auditRules_{{ usertype }}:
     - text: |
         
         # Monitor for SELinux DAC changes (per STIG-ID V-{{ stig_id }})
+        {{ audit_options['rule'] }}
         {{ audit_options['rule32'] }}
+
     {%- endif %}
   {%- endfor %}
 {%- else %}
