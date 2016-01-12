@@ -27,7 +27,7 @@ file-V{{ stig_id }}-touchRules:
 file_V{{ stig_id }}-appendBlacklist:
   file.append:
     - name: '{{ file }}'
-    - text: 'install rds /bin/false'
+    - text: 'install rds /bin/true'
     - require:
       - file: file-V{{ stig_id }}-touchRules
     - onlyif:
