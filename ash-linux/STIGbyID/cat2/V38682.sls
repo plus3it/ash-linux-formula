@@ -23,24 +23,44 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
+{%- if salt['file.file_exists'](file) %}
+
+file_V{{ stig_id }}-fixBtBlacklist:
+  file.replace:
+    - name: '{{ file }}'
+    - pattern: '^.*\sbluetooth\s.*$'
+    - repl: 'install bluetooth /bin/true'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
+
+file_V{{ stig_id }}-fixNpfBlacklist:
+  file.replace:
+    - name: '{{ file }}'
+    - pattern: '^.*\snet-pf-31\s.*$'
+    - repl: 'install net-pf-31 /bin/true'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
+
+{%- else %}
+
 file-V{{ stig_id }}-touchRules:
   file.touch:
     - name: '{{ file }}'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
 
-file_V{{ stig_id }}-appendBTblacklist:
+file_V{{ stig_id }}-fixBTblacklist:
   file.append:
     - name: '{{ file }}'
-    - text: 'install bluetooth /bin/false'
+    - text: 'install bluetooth /bin/true'
     - require:
       - file: file-V{{ stig_id }}-touchRules
-    - onlyif:
-      - 'test -f {{ file }}'
 
-file_V{{ stig_id }}-appendNPFblacklist:
+file_V{{ stig_id }}-fixNPFblacklist:
   file.append:
     - name: '{{ file }}'
-    - text: 'install net-pf-31 /bin/false'
+    - text: 'install net-pf-31 /bin/true'
     - require:
       - file: file-V{{ stig_id }}-touchRules
-    - onlyif:
-      - 'test -f {{ file }}'
+
+{%- endif %}

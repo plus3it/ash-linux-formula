@@ -18,33 +18,32 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
-{%- if not salt['file.file_exists']('{{ file }}') %}
+
+{%- if salt['file.file_exists'](file) %}
+
+file_V{{ stig_id }}-fixBlacklist:
+  file.replace:
+    - name: '{{ file }}'
+    - pattern: '^.*\srds\s.*$'
+    - repl: 'install rds /bin/true'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
+
+{%- else %}
 
 file-V{{ stig_id }}-touchRules:
   file.touch:
     - name: '{{ file }}'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
 
-file_V{{ stig_id }}-appendBlacklist:
+file_V{{ stig_id }}-fixBlacklist:
   file.append:
     - name: '{{ file }}'
     - text: 'install rds /bin/true'
     - require:
       - file: file-V{{ stig_id }}-touchRules
-    - onlyif:
-      - 'test -f {{ file }}'
-
-{%- elif salt['file.search']('{{ file }}', '^install rds /bin/false') %}
-
-file_V{{ stig_id }}-appendBlacklist:
-   cmd.run:
-     - name: 'echo "RDS already blacklisted in {{ file }}"'
-
-{%- else %}
-
-file_V{{ stig_id }}-appendBlacklist:
-  file.replace:
-    - name: '{{ file }}
-    - pattern: '^.*install[ \t]rds.*$'
-    - repl: 'install rds /bin/false'
 
 {%- endif %}
+
+
