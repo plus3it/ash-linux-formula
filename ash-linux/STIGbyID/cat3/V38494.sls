@@ -20,7 +20,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](cfgFile,'^' + srchPtn) %}
+{%- if salt['file.search'](cfgFile, srchPtn) %}
 replace_{{ stigId }}-serialTTY:
   file.replace:
     - name: '{{ cfgFile }}'
@@ -34,6 +34,15 @@ comment_{{ stigId }}-serialConf:
     - char: '#'
     - require:
       - file: replace_{{ stigId }}-serialTTY
+
+chattr_{{ stigId }}-serialConf:
+  cmd.script:
+    - name: 'V38494-serial_chattr.sh "/etc/init/serial.conf"'
+    - source: 'salt://{{ helperLoc }}/V38494-serial_chattr.sh'
+    - cwd: '/root'
+    - stateful: True
+    - require:
+      - file: comment_{{ stigId }}-serialConf
 {%- else %}
 replace_{{ stigId }}-serialTTY:
   cmd.run:
