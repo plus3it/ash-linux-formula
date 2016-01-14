@@ -21,17 +21,34 @@
 script_V{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
-    - cwd: '/root'
+    - cwd: /root
+
+
+{%- if salt['file.file_exists'](file) %}
+
+file_V{{ stig_id }}-fixBlacklist:
+  file.replace:
+    - name: '{{ file }}'
+    - pattern: '^.*\ssctp\s.*$'
+    - repl: 'install sctp /bin/true'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
+
+{%- else %}
 
 file-V{{ stig_id }}-touchRules:
   file.touch:
     - name: '{{ file }}'
+    - require:
+      - cmd: script_V{{ stig_id }}-describe
 
-file_V{{ stig_id }}-appendBlacklist:
+file_V{{ stig_id }}-fixBlacklist:
   file.append:
     - name: '{{ file }}'
     - text: 'install sctp /bin/true'
     - require:
       - file: file-V{{ stig_id }}-touchRules
-    - onlyif:
-      - 'test -f {{ file }}'
+
+{%- endif %}
+
+
