@@ -17,14 +17,13 @@
 {%- set stigId = 'V38678' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/cat2/files' %}
 
-script_{{ stigId }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
-    - cwd: '/root'
-
 {%- set auditConf = '/etc/audit/auditd.conf' %}
 {%- set logParm = 'space_left' %}
-{%- set auditDir = '/var/log/audit' %}
+{%- if salt['file.directory_exists']('/var/log/audit') %}
+  {%- set auditDir = '/var/log/audit' %}
+{%- else %}
+  {%- set auditDir = '/var/log/' %}
+{%- endif %}
 {%- set pctFree = '0.15'|float %}
 
 # Ingest statvfs data for auditDir into unpackable structure
@@ -40,31 +39,24 @@ script_{{ stigId }}-describe:
 {%- set keepFreeMB = ((auditDiskTotBlocks * pctFree) / 1024 / 1024)|int %}
 {%- set keepFreeVar = keepFreeMB|string %}
 
+script_{{ stigId }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stigId }}.sh
+    - cwd: '/root'
 
-{%- if salt['file.search'](auditConf, '^' + logParm + ' = ') %}
-  {%- if salt['file.search'](auditConf, '^' + logParm + ' = ' + keepFreeVar) %}
-notify_{{ stigId }}-Set:
-  cmd.run:
-    - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already set to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
-  {%- else %}
-notify_{{ stigId }}-Set:
-  cmd.run:
-    - name: 'echo "Changing ''{{ logParm }}'' value in ''{{ auditConf }}'' to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
+{%- if salt['file.search'](auditConf, logParm + ' = ') %}
 
 file_{{ stigId }}-setVal:
   file.replace:
     - name: '{{ auditConf }}'
     - pattern: '^{{ logParm }} = .*'
     - repl: '{{ logParm }} = {{ keepFreeVar }}'
-  {%- endif %}
 
 {%- else %}
-notify_{{ stigId }}-Set:
-  cmd.run:
-    - name: 'echo "''{{ logParm }}'' not set in ''{{ auditConf }}''. Setting to {{ pctFree }} of free blocks [{{ keepFreeMB }}MB]"'
 
 file_{{ stigId }}-setVal:
   file.append:
     - name: '{{ auditConf }}'
     - text: '{{ logParm }} = {{ keepFreeVar }}'
+
 {%- endif %}
