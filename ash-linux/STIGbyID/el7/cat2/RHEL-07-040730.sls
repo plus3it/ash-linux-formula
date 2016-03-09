@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040730
 # Version:	RHEL-07-040730_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The system must not be running any routing protocol daemons, 
-#     unless the system is a router."
+#     The system must not be running any routing protocol daemons, 
+#     unless the system is a router.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

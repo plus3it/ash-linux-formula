@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-010010
 # Version:	RHEL-07-010010_rule

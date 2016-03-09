@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-010290
 # Version:	RHEL-07-010290_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "Account identifiers (individuals, groups, roles, and devices) 
-#     must be disabled after 35 days of inactivity."
+#     Account identifiers (individuals, groups, roles, and devices) 
+#     must be disabled after 35 days of inactivity.
 #
 # CCI-000795
 #    NIST SP 800-53 :: IA-4 e

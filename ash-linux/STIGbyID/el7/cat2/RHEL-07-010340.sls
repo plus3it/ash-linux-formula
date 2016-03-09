@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-010340
 # Version:	RHEL-07-010340_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The Standard Mandatory DoD Notice and Consent Banner must be 
+#     The Standard Mandatory DoD Notice and Consent Banner must be 
 #     displayed immediately prior to, or as part of, command line 
-#     logon prompts."
+#     logon prompts.
 #
 # CCI-001384 CCI-001385 CCI-001386 CCI-001387 CCI-001388
 #    NIST SP 800-53 :: AC-8 c

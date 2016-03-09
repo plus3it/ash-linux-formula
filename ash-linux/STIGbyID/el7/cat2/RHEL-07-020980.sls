@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-020980
 # Version:	RHEL-07-020980_rule
@@ -7,7 +5,7 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "Audio devices must be group-owned by root, sys, bin, or audio."
+#     Audio devices must be group-owned by root, sys, bin, or audio.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

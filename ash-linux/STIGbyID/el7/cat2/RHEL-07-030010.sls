@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-030010
 # Version:	RHEL-07-030010_rule
@@ -7,11 +5,11 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "Auditing must be configured to produce records containing 
+#     Auditing must be configured to produce records containing 
 #     information to establish what type of events occurred, where the 
 #     events occurred, the source of the events, and the outcome of 
 #     the events.These audit records must also identify individual 
-#     identities of group account users."
+#     identities of group account users.
 #
 # CCI-000131 CCI-000126
 #    NIST SP 800-53 :: AU-3

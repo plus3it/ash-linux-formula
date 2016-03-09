@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040120
 # Version:	RHEL-07-040120_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "In order to limit Denial of Service (DoS) attacks, kernel 
+#     In order to limit Denial of Service (DoS) attacks, kernel 
 #     parameters must be configured to catch ACK-floods by tracking 
-#     already established connections."
+#     already established connections.
 #
 # CCI-001095
 #    NIST SP 800-53 :: SC-5 (2)

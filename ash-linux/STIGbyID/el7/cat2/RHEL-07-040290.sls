@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040290
 # Version:	RHEL-07-040290_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The operating system must enable an application firewall, if 
-#     available."
+#     The operating system must enable an application firewall, if 
+#     available.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

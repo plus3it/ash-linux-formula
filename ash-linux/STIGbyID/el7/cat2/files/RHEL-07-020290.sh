@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# STIG URL:
+# Finding ID:	RHEL-07-020290
+# Version:	RHEL-07-020290_rule
+# SRG ID:	
+# Finding Level:	medium
+#
+# Rule Summary:
+#     The system must not have unnecessary accounts.
+#
+# CCI-000366
+#    NIST SP 800-53 :: CM-6 b
+#    NIST SP 800-53A :: CM-6.1 (iv)
+#    NIST SP 800-53 Revision 4 :: CM-6 b
+#
+#################################################################

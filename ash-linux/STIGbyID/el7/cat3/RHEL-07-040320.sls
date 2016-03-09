@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040320
 # Version:	RHEL-07-040320_rule
@@ -7,8 +5,8 @@
 # Finding Level:	low
 #
 # Rule Summary:
-#     "For systems using DNS resolution, at least two name servers 
-#     must be configured."
+#     For systems using DNS resolution, at least two name servers must 
+#     be configured.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

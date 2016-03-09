@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040040
 # Version:	RHEL-07-040040_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The operating system, for PKI-based authentication, must 
-#     enforce authorized access to the corresponding private key."
+#     The operating system, for PKI-based authentication, must enforce 
+#     authorized access to the corresponding private key.
 #
 # CCI-000186
 #    NIST SP 800-53 :: IA-5 (2)

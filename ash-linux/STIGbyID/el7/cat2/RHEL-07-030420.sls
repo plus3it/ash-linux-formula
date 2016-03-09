@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-030420
 # Version:	RHEL-07-030420_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All successful/unsuccessful attempts to access categories of 
+#     All successful/unsuccessful attempts to access categories of 
 #     information (e.g., classification levels) must generate audit 
-#     records."
+#     records.
 #
 # CCI-000172 CCI-002884
 #    NIST SP 800-53 :: AU-12 c

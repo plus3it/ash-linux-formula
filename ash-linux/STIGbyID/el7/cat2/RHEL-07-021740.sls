@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-021740
 # Version:	RHEL-07-021740_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "If the system is using OpenLDAP, the LDAP TLS certificate key 
-#     file must have mode 0600 or less permissive."
+#     If the system is using OpenLDAP, the LDAP TLS certificate key 
+#     file must have mode 0600 or less permissive.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

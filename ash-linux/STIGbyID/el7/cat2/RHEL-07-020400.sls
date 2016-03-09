@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-020400
 # Version:	RHEL-07-020400_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All system files, programs, and directories must be owned by a 
-#     system account."
+#     All system files, programs, and directories must be owned by a 
+#     system account.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-010300
 # Version:	RHEL-07-010300_rule
@@ -7,10 +5,10 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The operating system must use mechanisms meeting the 
+#     The operating system must use mechanisms meeting the 
 #     requirements of applicable federal laws, Executive orders, 
 #     directives, policies, regulations, standards, and guidance for 
-#     authentication to a cryptographic module."
+#     authentication to a cryptographic module.
 #
 # CCI-000803
 #    NIST SP 800-53 :: IA-7

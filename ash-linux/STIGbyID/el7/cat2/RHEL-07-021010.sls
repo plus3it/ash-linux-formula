@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-021010
 # Version:	RHEL-07-021010_rule
@@ -7,10 +5,10 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "Files systems that contain user home directories, are being 
+#     Files systems that contain user home directories, are being 
 #     imported via Network File System (NFS), or are used with 
 #     removable media must be mounted to prevent files with the setuid 
-#     and setgid bit set from being executed."
+#     and setgid bit set from being executed.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

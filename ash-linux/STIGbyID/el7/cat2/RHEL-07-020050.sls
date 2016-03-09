@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-020050
 # Version:	RHEL-07-020050_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All public directories must be group owned by root, a 
-#     privileged system account, or an application account."
+#     All public directories must be group owned by root, a privileged 
+#     system account, or an application account.
 #
 # CCI-001090
 #    NIST SP 800-53 :: SC-4

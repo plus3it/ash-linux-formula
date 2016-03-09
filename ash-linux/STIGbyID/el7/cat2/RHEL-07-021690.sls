@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-021690
 # Version:	RHEL-07-021690_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "For systems using OpenLDAP, the TLS certificate file must be 
-#     owned by ldap."
+#     For systems using OpenLDAP, the TLS certificate file must be 
+#     owned by ldap.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

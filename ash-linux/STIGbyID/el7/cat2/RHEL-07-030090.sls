@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-030090
 # Version:	RHEL-07-030090_rule
@@ -7,11 +5,11 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The operating system must shut down upon audit processing 
+#     The operating system must shut down upon audit processing 
 #     failure, unless availability is an overriding concern. If 
 #     availability is a concern the system must alert the designated 
 #     staff (SA and ISSO at a minimum) in the event of an audit 
-#     processing failure."
+#     processing failure.
 #
 # CCI-000139
 #    NIST SP 800-53 :: AU-5 a

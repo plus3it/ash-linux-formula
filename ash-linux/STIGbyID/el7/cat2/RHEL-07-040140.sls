@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040140
 # Version:	RHEL-07-040140_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "In order to limit Denial of Service (DoS) attacks and traffic 
+#     In order to limit Denial of Service (DoS) attacks and traffic 
 #     congestion, kernel parameters must be configured to enable 
-#     TCP/IP timestamps."
+#     TCP/IP timestamps.
 #
 # CCI-001095
 #    NIST SP 800-53 :: SC-5 (2)

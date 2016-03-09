@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-010080
 # Version:	RHEL-07-010080_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The operating system must conceal, via the session lock, 
+#     The operating system must conceal, via the session lock, 
 #     information previously visible on the display with a publicly 
-#     viewable image."
+#     viewable image.
 #
 # CCI-000060
 #    NIST SP 800-53 :: AC-11 (1)

@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040000
 # Version:	RHEL-07-040000_rule
@@ -7,10 +5,10 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All network connections associated with SSH traffic must 
+#     All network connections associated with SSH traffic must 
 #     terminate at the end of the session or after 10 minutes of 
 #     inactivity, except to fulfill documented and validated mission 
-#     requirements."
+#     requirements.
 #
 # CCI-001133
 #    NIST SP 800-53 :: SC-10

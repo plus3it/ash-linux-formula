@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-021050
 # Version:	RHEL-07-021050_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All public directories must be group-owned by root, sys, bin, 
-#     or an application group."
+#     All public directories must be group-owned by root, sys, bin, or 
+#     an application group.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

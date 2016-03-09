@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-020900
 # Version:	RHEL-07-020900_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All shells referenced in /etc/passwd must be listed in the 
+#     All shells referenced in /etc/passwd must be listed in the 
 #     /etc/shells file, except any shells specified for the purpose of 
-#     preventing logons."
+#     preventing logons.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

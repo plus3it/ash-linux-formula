@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040160
 # Version:	RHEL-07-040160_rule
@@ -7,10 +5,10 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "All network connections associated with a communication session 
+#     All network connections associated with a communication session 
 #     must be terminated at the end of the session or after 10 minutes 
 #     of inactivity from the user at a command prompt, except to 
-#     fulfill documented and validated mission requirements."
+#     fulfill documented and validated mission requirements.
 #
 # CCI-001133 CCI-002361
 #    NIST SP 800-53 :: SC-10

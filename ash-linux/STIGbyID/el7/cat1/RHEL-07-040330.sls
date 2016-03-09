@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040330
 # Version:	RHEL-07-040330_rule
@@ -7,8 +5,8 @@
 # Finding Level:	high
 #
 # Rule Summary:
-#     "There must be no .rhosts, .shosts, rhosts.equiv, or 
-#     shosts.equiv files on the system."
+#     There must be no .rhosts, .shosts, rhosts.equiv, or shosts.equiv 
+#     files on the system.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

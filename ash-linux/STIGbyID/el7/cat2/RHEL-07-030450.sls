@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-030450
 # Version:	RHEL-07-030450_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "The operating system must generate audit records when 
+#     The operating system must generate audit records when 
 #     successful/unsuccessful attempts to modify categories of 
-#     information (e.g., classification levels) occur."
+#     information (e.g., classification levels) occur.
 #
 # CCI-000172 CCI-002884
 #    NIST SP 800-53 :: AU-12 c

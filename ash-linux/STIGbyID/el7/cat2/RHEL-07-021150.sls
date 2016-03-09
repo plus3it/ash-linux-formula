@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-021150
 # Version:	RHEL-07-021150_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "Cron and crontab directories must be group-owned by root, sys, 
-#     bin or cron."
+#     Cron and crontab directories must be group-owned by root, sys, 
+#     bin or cron.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b

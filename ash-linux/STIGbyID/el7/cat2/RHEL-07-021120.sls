@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-021120
 # Version:	RHEL-07-021120_rule
@@ -7,8 +5,8 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "Crontab files must be group-owned by root, cron, or the crontab 
-#     creators primary group."
+#     Crontab files must be group-owned by root, cron, or the crontab 
+#     creators primary group.
 #
 # CCI-000368 CCI-000318 CCI-001812 CCI-001813 CCI-001814
 #    NIST SP 800-53 :: CM-6 c

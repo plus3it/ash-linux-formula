@@ -1,5 +1,3 @@
-#!/bin/sh
-#
 # STIG URL:
 # Finding ID:	RHEL-07-040130
 # Version:	RHEL-07-040130_rule
@@ -7,9 +5,9 @@
 # Finding Level:	medium
 #
 # Rule Summary:
-#     "In order to limit Denial of Service (DoS) attacks, kernel 
+#     In order to limit Denial of Service (DoS) attacks, kernel 
 #     parameters must be configured to properly set the size of the 
-#     connection tracking table."
+#     connection tracking table.
 #
 # CCI-001095
 #    NIST SP 800-53 :: SC-5 (2)
