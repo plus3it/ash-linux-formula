@@ -16,3 +16,15 @@
 #    NIST SP 800-53 Revision 4 :: AC-2 (1)
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "---------------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010000"
+diag_out "   Verify whether the operating system is"
+diag_out "   using the operating System Security"
+diag_out "   Services Daemon (SSSD) for identity and"
+diag_out "   authentication services."
+diag_out "---------------------------------------------"
