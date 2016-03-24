@@ -1,7 +1,7 @@
 # STIG URL:
 # Finding ID:	RHEL-07-010160
 # Version:	RHEL-07-010160_rule
-# SRG ID:	
+# SRG ID:	SRG-OS-000072-GPOS-0040
 # Finding Level:	low
 #
 # Rule Summary:
@@ -14,3 +14,26 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (b)
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-010160' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set chkFile = '/etc/security/pwquality.conf' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt['file.contains'](chkFile, '# maxrepeat') %}
+uncomment_{{ stig_id }}-{{ chkFile }}:
+  file.replace:
+    - name: '{{ chkFile }}'
+    - pattern: '^# maxclassrepeat.*$'
+    - repl: 'maxclassrepeat = 2'
+{%- else %}
+setval_{{ stig_id }}-{{ chkFile }}:
+  file.replace:
+    - name: '{{ chkFile }}'
+    - pattern: '^maxclassrepeat.*$'
+    - repl: 'maxclassrepeat = 2'
+    - append_if_not_found: True
+{%- endif %}
