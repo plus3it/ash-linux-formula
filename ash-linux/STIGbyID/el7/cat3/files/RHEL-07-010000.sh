@@ -3,7 +3,7 @@
 # STIG URL:
 # Finding ID:	RHEL-07-010000
 # Version:	RHEL-07-010000_rule
-# SRG ID:	
+# SRG ID:	SRG-OS-000001-GPOS-00001
 # Finding Level:	low
 #
 # Rule Summary:
