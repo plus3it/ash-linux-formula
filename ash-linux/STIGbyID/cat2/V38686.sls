@@ -36,7 +36,7 @@ iptables_V{{ stig_id }}-forwardDefault:
   module.run:
     - name: 'iptables.set_policy'
     - table: filter
-    - chain: INPUT
+    - chain: FORWARD
     - policy: DROP
 
 iptables_V{{ stig_id }}-saveRunning:
