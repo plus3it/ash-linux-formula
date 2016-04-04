@@ -130,7 +130,7 @@ include:
   - ash-linux.STIGbyID.cat2.V38679
   - ash-linux.STIGbyID.cat2.V38680
   - ash-linux.STIGbyID.cat2.V38682
-#  - ash-linux.STIGbyID.cat2.V38686   # disabled pending fix in v2014.7.5, https://github.com/saltstack/salt/issues/21133
+  - ash-linux.STIGbyID.cat2.V38686
   - ash-linux.STIGbyID.cat2.V38688
   - ash-linux.STIGbyID.cat2.V38689
   - ash-linux.STIGbyID.cat2.V38691

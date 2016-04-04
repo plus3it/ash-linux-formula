@@ -25,26 +25,22 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']({{ file }}) %}
-file_V{{ stig_id }}-repl:
-  file.replace:
-    - name: {{ file }}
-    - pattern: 'FORWARD ACCEPT .*$'
-    - repl: 'FORWARD DROP [0:0]'
-{%- else %}
 iptables_V{{ stig_id }}-forwardDefault:
   module.run:
     - name: 'iptables.set_policy'
     - table: filter
-    - chain: INPUT
+    - chain: FORWARD
     - policy: DROP
 
 iptables_V{{ stig_id }}-saveRunning:
   module.run:
     - name: 'iptables.save'
+  require:
+    - module: iptables_V{{ stig_id }}-forwardDefault
 
 service_V{{ stig_id }}:
   service.running:
     - name: iptables
     - enable: True
-{%- endif %}
+  require:
+    - module: iptables_V{{ stig_id }}-saveRunning
