@@ -40,7 +40,7 @@ add_V{{ stig_id }}-{{ param }}:
     - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
     - repl: '\g<srctok> {{ param }}={{ value }}'
     - onlyif:
-      - 'test $(grep -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=" {{ file }}) -eq 0'
+      - 'test $(grep -c -E -e "password[ \t]*sufficient[ \t]*pam_unix.so.*{{ param }}=" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-reuseParm:
   cmd.run:
