@@ -45,7 +45,7 @@ repl_{{ stigId }}-inactive:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^{{ parmName }}=.*$'
-    - repl: '^{{ parmName }}={{ parmVal }}'
+    - repl: '{{ parmName }}={{ parmVal }}'
     - unless: 'grep -E "^{{ parmName }}={{ parmVal }}" {{ checkFile }}'
 
 # Add value if none present in other forms
