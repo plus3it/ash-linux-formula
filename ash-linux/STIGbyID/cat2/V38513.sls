@@ -24,13 +24,7 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists'](file) %}
-file_V{{ stig_id }}-repl:
-  file.replace:
-    - name: {{ file }}
-    - pattern: 'INPUT ACCEPT .*$'
-    - repl: 'INPUT DROP [0:0]'
-{%- else %}
+{%- if not salt['file.file_exists'](file) %}
 iptables_V{{ stig_id }}-existing:
   iptables.append:
     - table: filter
@@ -38,6 +32,8 @@ iptables_V{{ stig_id }}-existing:
     - jump: ACCEPT
     - match: state
     - connstate: ESTABLISHED,RELATED
+    - require_in:
+      - module: iptables_V{{ stig_id }}-saveRunning
 
 iptables_V{{ stig_id }}-sshdSafety:
   iptables.append:
@@ -46,6 +42,9 @@ iptables_V{{ stig_id }}-sshdSafety:
     - jump: ACCEPT
     - dport: 22
     - proto: tcp
+    - require_in:
+      - module: iptables_V{{ stig_id }}-saveRunning
+{%- endif %}
 
 iptables_V{{ stig_id }}-inputDefault:
   module.run:
@@ -57,9 +56,12 @@ iptables_V{{ stig_id }}-inputDefault:
 iptables_V{{ stig_id }}-saveRunning:
   module.run:
     - name: 'iptables.save'
+    - require:
+      - module: iptables_V{{ stig_id }}-inputDefault
 
 service_V{{ stig_id }}:
   service.running:
     - name: iptables
     - enable: True
-{%- endif %}
+    - require:
+      - module: iptables_V{{ stig_id }}-saveRunning
