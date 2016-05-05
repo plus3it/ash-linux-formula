@@ -13,3 +13,26 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-020430' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set dirList = [
+        '/usr/share/man', 
+        '/usr/share/info'
+    ]
+%}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- for dirChk in dirList %}
+fixPerm_{{ stig_id }}-{{ dirChk }}:
+  cmd.script:
+    - name: '{{ stig_id }}-check_fix.sh "{{ dirChk }}"'
+    - source: 'salt://{{ helperLoc }}/{{ stig_id }}-check_fix.sh'
+    - cwd: '/root'
+    - stateful: True
+    - require:
+      - cmd: script_{{ stig_id }}-describe
+{%- endfor %}
