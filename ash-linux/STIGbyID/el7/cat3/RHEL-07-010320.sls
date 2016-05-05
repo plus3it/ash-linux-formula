@@ -17,8 +17,18 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010320' %}
 {%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set privUser = 'root'%}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+script_{{ stig_id }}-noExpire:
+  cmd.script:
+    - name: '{{ stig_id }}-check_fix.sh "{{ privUser }}"'
+    - source: 'salt://{{ helperLoc }}/{{ stig_id }}-check_fix.sh'
+    - cwd: '/root'
+    - stateful: True
+    - require:
+      - cmd: script_{{ stig_id }}-describe
