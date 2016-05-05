@@ -31,7 +31,7 @@ replace_md5_V{{ stig_id }}-{{ hash_type }}:
     - name: {{ file }}
     - pattern: ' md5'
     - repl: ' {{ hash_type }}'
-    - onlyif: 'grep -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5[\s]*" {{ file }}'
+    - onlyif: 'grep -E -e "^[ \t]*password[ \t]+sufficient[ \t]+pam_unix.so.*[ \t]md5" {{ file }}'
 
 add_V{{ stig_id }}-{{ hash_type }}:
   file.replace:
@@ -39,8 +39,8 @@ add_V{{ stig_id }}-{{ hash_type }}:
     - pattern: '^(?P<srctok>password[ \t]*sufficient[ \t]*pam_unix.so.*$)'
     - repl: '\g<srctok> {{ hash_type }}'
     - onlyif:
-      - 'test $(grep -c -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* md5[\s]*" {{ file }}) -eq 0'
-      - 'test $(grep -c -E -e "^[ \t]*password[ \t]*sufficient[ \t]*pam_unix.so.* {{ hash_type }}[\s]" {{ file }}) -eq 0'
+      - 'test $(grep -c -E -e "^[ \t]*password[ \t]+sufficient[ \t]+pam_unix.so.*[ \t]md5" {{ file }}) -eq 0'
+      - 'test $(grep -c -E -e "^[ \t]*password[ \t]+sufficient[ \t]+pam_unix.so.*[ \t]{{ hash_type }}" {{ file }}) -eq 0'
 
 notify_V{{ stig_id }}-{{ hash_type }}:
   cmd.run:
