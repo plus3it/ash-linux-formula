@@ -16,3 +16,13 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "---------------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021520"
+diag_out "   Ensure that /etc/exports file has mode"
+diag_out "   0644 or less permissive."
+diag_out "---------------------------------------------"
