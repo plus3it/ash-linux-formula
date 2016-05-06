@@ -16,3 +16,15 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: RHEL-07-040370"
+diag_out "   The system must not process"
+diag_out "   IPv4 Internet Control Message"
+diag_out "   Protocol (ICMP) timestamp"
+diag_out "   requests."
+diag_out "----------------------------------"
