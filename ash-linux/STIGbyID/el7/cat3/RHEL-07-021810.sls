@@ -14,3 +14,24 @@
 #    NIST SP 800-53 Revision 4 :: SI-2 (2)
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-021810' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set chkPkg = 'yum-cron' %}
+{%- set chkCfg = '/etc/yum/yum-cron.conf' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt['pkg.version'](chkPkg) %}
+file_{{ stig_id }}-config:
+  file.replace:
+    - name: '{{ chkCfg }}'
+    - pattern: '^\s*download_updates = .*$'
+    - repl: 'download_updates = no'
+{%- else %}
+file_{{ stig_id }}-config:
+  cmd.run:
+    - name: 'echo "The {{ chkPkg }} package is not installed."'
+{%- endif %}
