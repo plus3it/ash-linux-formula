@@ -16,3 +16,13 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "---------------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021610"
+diag_out "   Ensure that the file-integrity tool, aide,"
+diag_out "   is installed"
+diag_out "---------------------------------------------"
