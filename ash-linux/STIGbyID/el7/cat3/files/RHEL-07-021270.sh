@@ -22,7 +22,7 @@ diag_out() {
 }
 
 diag_out "---------------------------------------------"
-diag_out "STIG Finding ID: HEL-07-021270"
+diag_out "STIG Finding ID: RHEL-07-021270"
 diag_out "   The system must use a separate filesystem"
 diag_out "   (or equivalent) for /tmp."
 diag_out "---------------------------------------------"
