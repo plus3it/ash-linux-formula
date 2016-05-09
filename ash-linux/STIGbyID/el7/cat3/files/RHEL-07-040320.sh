@@ -16,3 +16,14 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: RHEL-07-040320"
+diag_out "   System must use redundant DNS"
+diag_out "   servers if configured to use"
+diag_out "   DNS for name resolution."
+diag_out "----------------------------------"

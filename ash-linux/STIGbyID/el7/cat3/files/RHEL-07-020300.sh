@@ -16,3 +16,16 @@
 #    NIST SP 800-53 Revision 4 :: IA-2
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------"
+diag_out "STIG Finding ID: RHEL-07-020300"
+diag_out "   All GIDs referenced in the"
+diag_out "   /etc/passwd file should have a"
+diag_out "   matching reference in the"
+diag_out "   /etc/group file."
+diag_out "----------------------------------"
+

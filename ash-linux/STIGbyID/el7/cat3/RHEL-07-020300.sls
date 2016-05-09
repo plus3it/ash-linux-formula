@@ -14,3 +14,21 @@
 #    NIST SP 800-53 Revision 4 :: IA-2
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-020300' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- for user in salt['user.getent']('') %}
+{%- set ID = user['name'] %}
+{%- if not salt['file.search']('/etc/group', ':' + user['gid']|string() + ':' ) %}
+notify_{{ stig_id }}-{{ ID }}:
+  cmd.run:
+    - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'
+{%- endif %}
+{%- endfor %}
+
+# Probably want output indicating that no unmapped GIDs were found...

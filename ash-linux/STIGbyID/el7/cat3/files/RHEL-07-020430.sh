@@ -15,3 +15,13 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "---------------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-020430"
+diag_out "   Manual page files must have mode 0644 or "
+diag_out "   less permissive."
+diag_out "---------------------------------------------"

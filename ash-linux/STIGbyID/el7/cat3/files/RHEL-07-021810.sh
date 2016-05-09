@@ -16,3 +16,13 @@
 #    NIST SP 800-53 Revision 4 :: SI-2 (2)
 #
 #################################################################
+
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "---------------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021810"
+diag_out "   The yum-cron tool must not automatically"
+diag_out "   obtain or cache updates."
+diag_out "---------------------------------------------"

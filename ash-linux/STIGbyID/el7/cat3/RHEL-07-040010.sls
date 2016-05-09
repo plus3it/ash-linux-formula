@@ -14,3 +14,32 @@
 #    NIST SP 800-53 Revision 4 :: AC-10
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040010' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set limitsFile = '/etc/security/limits.conf' %}
+{%- set limitVal = '10' %}
+{%- set searchRoot = '\*[	 ]*hard[	 ]*maxlogins' %}
+{%- set searchPtn = searchRoot + '[	 ]*' + limitVal + '$' %}
+{%- set fixString = '*	hard	maxlogins	' + limitVal %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+# If correct setting is present but commented, uncomment it
+uncomment_{{ stig_id }}-maxlogins:
+  file.uncomment:
+    - name: '{{ limitsFile }}'
+    - regex: '{{ searchPtn }}'
+    - onlyif: 'grep -E "#*{{ searchPtn }}" {{ limitsFile }}'
+
+# Otherwise, add it
+set_{{ stig_id }}-maxlogins:
+  file.append:
+    - name: '{{ limitsFile }}'
+    - text: |
+        
+        # Limit concurrent login sessions (per STIG {{ stig_id }})
+        {{ fixString }}
+    - unless: 'grep -E "{{ searchPtn }}" {{ limitsFile }}'

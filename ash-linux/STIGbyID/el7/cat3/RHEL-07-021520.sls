@@ -14,3 +14,18 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-021520' %}
+{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set chkFile = '/etc/exports' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+file_{{ stig_id }}-exports:
+  file.managed:
+    - name: '{{ chkFile }}'
+    - user: root
+    - group: root
+    - mode: 0644
