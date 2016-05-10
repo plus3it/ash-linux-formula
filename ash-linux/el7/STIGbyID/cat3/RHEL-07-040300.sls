@@ -19,7 +19,7 @@ include:
   - ash-linux.authconfig
 
 {%- set stig_id = 'RHEL-07-040300' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set pamFile = '/etc/pam.d/system-auth-ac' %}
 {%- set pamMod = 'pam_lastlog.so' %}
 {%- set failNotice = 'session     required      pam_lastlog.so showfailed' %}

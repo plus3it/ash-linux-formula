@@ -16,7 +16,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010320' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set privUser = 'root'%}
 
 script_{{ stig_id }}-describe:

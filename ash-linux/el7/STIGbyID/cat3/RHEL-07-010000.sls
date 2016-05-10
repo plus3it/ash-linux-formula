@@ -18,7 +18,7 @@
 {%- set chkPkg = 'sssd-common' %}
 {%- set chkSvc = 'sssd' %}
 {%- set sssdConf = '/etc/sssd/sssd.conf' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

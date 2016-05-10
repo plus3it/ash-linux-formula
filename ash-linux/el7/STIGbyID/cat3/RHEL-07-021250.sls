@@ -1,12 +1,11 @@
 # STIG URL:
-# Finding ID:	RHEL-07-021260
-# Version:	RHEL-07-021260_rule
+# Finding ID:	RHEL-07-021250
+# Version:	RHEL-07-021250_rule
 # SRG ID:	
 # Finding Level:	low
 #
 # Rule Summary:
-#     The system must use a separate file system for the system audit 
-#     data path.
+#     The system must use a separate file system for /var.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b
@@ -14,10 +13,10 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-021260' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
-{%- set chkPtn = '/var/log/audit' %}
-{%- set chkSvc = 'var-log-audit.mount' %}
+{%- set stig_id = 'RHEL-07-021250' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
+{%- set chkPtn = '/var' %}
+{%- set chkSvc = 'var.mount' %}
 {%- set chkFile = '/etc/fstab' %}
 
 script_{{ stig_id }}-describe:

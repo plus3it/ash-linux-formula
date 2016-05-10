@@ -15,7 +15,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040320' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set chkCfg = '/etc/nsswitch.conf' %}
 {%- set resCfg = '/etc/resolv.conf' %}
 

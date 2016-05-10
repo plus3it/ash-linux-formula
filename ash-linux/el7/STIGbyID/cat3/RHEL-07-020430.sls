@@ -14,7 +14,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-020430' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set dirList = [
         '/usr/share/man', 
         '/usr/share/info'

@@ -14,7 +14,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030760' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set chkPkg = 'xinetd' %}
 {%- set chkCfg = '/etc/rsyslog.conf' %}
 

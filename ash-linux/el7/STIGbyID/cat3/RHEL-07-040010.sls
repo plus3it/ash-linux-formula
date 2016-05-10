@@ -15,7 +15,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040010' %}
-{%- set helperLoc = 'ash-linux/STIGbyID/el7/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set limitsFile = '/etc/security/limits.conf' %}
 {%- set limitVal = '10' %}
 {%- set searchRoot = '\*[	 ]*hard[	 ]*maxlogins' %}
