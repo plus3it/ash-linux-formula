@@ -57,9 +57,18 @@ file_{{ stig_id }}-{{ tsRep }}:
     - mode: '0400'
     - requires: pkg.pkg_{{ stig_id }}-{{ chkPkg }}
 
-# This may be overkill (but STIGs don't specify a zone)
-{%- for zone in salt['firewalld.get_zones']() %}
-firewalld_{{ stig_id }}-icmp_blocks-{{ zone }}:
+file_{{ stig_id }}-{{ tsReq }}:
+  file.managed:
+    - name: '/etc/firewalld/icmptypes/{{ tsReq }}.xml'
+    - source: salt://{{ helperLoc }}/{{ stig_id }}_{{ tsReq }}.xml
+    - user: 'root'
+    - group: 'root'
+    - makedirs: 'True'
+    - dir_mode: '0700'
+    - mode: '0400'
+    - requires: pkg.pkg_{{ stig_id }}-{{ chkPkg }}
+
+firewalld_{{ stig_id }}-icmp_blocks-public:
   firewalld.present:
     - name: public
     - block_icmp:
@@ -69,4 +78,3 @@ firewalld_{{ stig_id }}-icmp_blocks-{{ zone }}:
     - masquerade: False
     - ports:
       - 22/tcp
-{%- endfor %}
