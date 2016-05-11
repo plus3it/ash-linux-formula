@@ -71,6 +71,8 @@ file_{{ stig_id }}-{{ tsReq }}:
 firewalld_{{ stig_id }}-icmp_blocks-public:
   firewalld.present:
     - name: public
+    - runtime: 'True'
+    - persist: 'True'
     - block_icmp:
       - '{{ tsRep }}'
       - '{{ tsReq }}'
