@@ -40,7 +40,7 @@ V{{stig_id}}-jump input to ash chain:
     - require:
       - iptables: V{{stig_id}}-create ash chain
 
-V{{stig_id}}-allow established in ash chain:
+V{{stig_id}}-allow established in input chain:
   iptables.insert:
     - position: 1
     - table: filter
@@ -66,6 +66,17 @@ V{{stig_id}}-allow ssh in ash chain:
     - save: true
     - onchanges:
       - iptables: V{{stig_id}}-jump input to ash chain
+    - require_in:
+      - iptables: V{{stig_id}}-set input to drop
+
+V{{stig_id}}-allow lo in input chain:
+  iptables.append:
+    - table: filter
+    - family: ipv4
+    - chain: INPUT
+    - jump: ACCEPT
+    - in-interface: lo
+    - save: true
     - require_in:
       - iptables: V{{stig_id}}-set input to drop
 
