@@ -3,10 +3,10 @@
 # Version:	RHEL-06-000120
 # Finding Level:	Medium
 #
-#     The systems local IPv4 firewall must implement a deny-all, 
-#     allow-by-exception policy for inbound packets. In "iptables" the 
-#     default policy is applied only after all the applicable rules in the 
-#     table are examined for a match. Setting the default policy to "DROP" 
+#     The systems local IPv4 firewall must implement a deny-all,
+#     allow-by-exception policy for inbound packets. In "iptables" the
+#     default policy is applied only after all the applicable rules in the
+#     table are examined for a match. Setting the default policy to "DROP"
 #     implements proper design for a firewall, ...
 #
 #  CCI: CCI-000066
@@ -24,44 +24,57 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if not salt['file.file_exists'](file) %}
-iptables_V{{ stig_id }}-existing:
+V{{stig_id}}-create ash chain:
+  iptables.chain_present:
+    - name: ASH
+    - table: filter
+    - family: ipv4
+
+V{{stig_id}}-jump input to ash chain:
   iptables.append:
     - table: filter
+    - family: ipv4
     - chain: INPUT
+    - jump: ASH
+    - save: true
+
+V{{stig_id}}-allow established in ash chain:
+  iptables.append:
+    - table: filter
+    - family: ipv4
+    - chain: ASH
     - jump: ACCEPT
     - match: state
     - connstate: ESTABLISHED,RELATED
+    - save: true
+    - onchanges:
+      - iptables: V{{stig_id}}-jump input to ash chain
     - require_in:
-      - module: iptables_V{{ stig_id }}-saveRunning
+      - iptables: V{{stig_id}}-set input to drop
 
-iptables_V{{ stig_id }}-sshdSafety:
+V{{stig_id}}-allow ssh in ash chain:
   iptables.append:
     - table: filter
-    - chain: INPUT
+    - family: ipv4
+    - chain: ASH
     - jump: ACCEPT
     - dport: 22
     - proto: tcp
+    - save: true
+    - onchanges:
+      - iptables: V{{stig_id}}-jump input to ash chain
     - require_in:
-      - module: iptables_V{{ stig_id }}-saveRunning
-{%- endif %}
+      - iptables: V{{stig_id}}-set input to drop
 
-iptables_V{{ stig_id }}-inputDefault:
-  module.run:
-    - name: 'iptables.set_policy'
-    - table: filter
+V{{stig_id}}-set input to drop:
+  iptables.set_policy:
     - chain: INPUT
     - policy: DROP
+    - save: true
 
-iptables_V{{ stig_id }}-saveRunning:
-  module.run:
-    - name: 'iptables.save'
-    - require:
-      - module: iptables_V{{ stig_id }}-inputDefault
-
-service_V{{ stig_id }}:
+V{{stig_id}}-service running:
   service.running:
     - name: iptables
     - enable: True
     - require:
-      - module: iptables_V{{ stig_id }}-saveRunning
+      - iptables: V{{stig_id}}-set input to drop
