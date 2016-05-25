@@ -37,12 +37,15 @@ V{{stig_id}}-jump input to ash chain:
     - chain: INPUT
     - jump: ASH
     - save: true
+    - require:
+      - iptables: V{{stig_id}}-create ash chain
 
 V{{stig_id}}-allow established in ash chain:
-  iptables.append:
+  iptables.insert:
+    - position: 1
     - table: filter
     - family: ipv4
-    - chain: ASH
+    - chain: INPUT
     - jump: ACCEPT
     - match: state
     - connstate: ESTABLISHED,RELATED
@@ -71,6 +74,8 @@ V{{stig_id}}-set input to drop:
     - chain: INPUT
     - policy: DROP
     - save: true
+    - require:
+      - iptables: V{{stig_id}}-jump input to ash chain
 
 V{{stig_id}}-service running:
   service.running:
