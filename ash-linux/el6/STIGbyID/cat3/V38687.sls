@@ -13,26 +13,33 @@
 #  NIST SP 800-53A :: SC-9.1
 #
 ############################################################
-
 {%- set stigId = 'V38687' %}
 {%- set helperLoc = 'ash-linux/el6/STIGbyID/cat3/files' %}
+{%- set osVers = salt['grains.get']('osrelease_info') %}
+{%- set osMajor = osVers[0]|int %}
+{%- set osMinor = osVers[1]|int %}
+{%- if ( (osMajor == 6) and (osMinor < 8) ) %}
+{%- set swanPkg = 'openswan' %}
+{%- else %}
+{%- set swanPkg = 'libreswan' %}
+{%- endif %}
 
 script_{{ stigId }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('openswan') %}
-notify_{{ stigId }}-openSwan:
+{%- if salt['pkg.version'](swanPkg) %}
+notify_{{ stigId }}-{{ swanPkg }}:
   cmd.run:
     - name: 'echo "OpenSwan utilities already installed"'
 {%- else %}
-installed_{{ stigId }}-openSwan:
+installed_{{ stigId }}-{{ swanPkg }}:
   pkg.installed:
-    - name: 'openswan'
+    - name: '{{ swanPkg }}'
 
 notify_{{ stigId }}-openSwan:
   cmd.run:
     - name: 'echo "Installed OpenSwan utilities"'
-    - unless: 'installed_{{ stigId }}-openSwan'
+    - unless: 'installed_{{ stigId }}-{{ swanPkg }}'
 {%- endif %}
