@@ -15,14 +15,7 @@
 ############################################################
 {%- set stigId = 'V38687' %}
 {%- set helperLoc = 'ash-linux/el6/STIGbyID/cat3/files' %}
-{%- set osVers = salt['grains.get']('osrelease_info') %}
-{%- set osMajor = osVers[0]|int %}
-{%- set osMinor = osVers[1]|int %}
-{%- if ( (osMajor == 6) and (osMinor < 8) ) %}
-{%- set swanPkg = 'openswan' %}
-{%- else %}
 {%- set swanPkg = 'libreswan' %}
-{%- endif %}
 
 script_{{ stigId }}-describe:
   cmd.script:
