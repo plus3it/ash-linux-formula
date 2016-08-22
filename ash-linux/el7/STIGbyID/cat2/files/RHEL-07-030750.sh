@@ -1,18 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 #
-# STIG URL:
 # Finding ID:	RHEL-07-030750
 # Version:	RHEL-07-030750_rule
-# SRG ID:	
+# SRG ID:	SRG-OS-000466-GPOS-00210
 # Finding Level:	medium
-#
+# 
 # Rule Summary:
-#     The audit system must be configured to audit files and programs 
-#     deleted by users.
+#	All uses of the rename command must be audited.
 #
-# CCI-000366
-#    NIST SP 800-53 :: CM-6 b
-#    NIST SP 800-53A :: CM-6.1 (iv)
-#    NIST SP 800-53 Revision 4 :: CM-6 b
+# CCI-000172 CCI-002884 
+#    NIST SP 800-53 :: AU-12 c 
+#    NIST SP 800-53A :: AU-12.1 (iv) 
+#    NIST SP 800-53 Revision 4 :: AU-12 c 
+#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################

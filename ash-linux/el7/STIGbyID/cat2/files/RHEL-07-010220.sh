@@ -1,18 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 #
-# STIG URL:
 # Finding ID:	RHEL-07-010220
 # Version:	RHEL-07-010220_rule
-# SRG ID:	
+# SRG ID:	SRG-OS-000076-GPOS-00044
 # Finding Level:	medium
-#
+# 
 # Rule Summary:
-#     Passwords for new users must be restricted to a 60-day maximum 
-#     lifetime.
+#	Passwords for new users must be restricted to a 60-day maximum lifetime.
 #
-# CCI-000199
-#    NIST SP 800-53 :: IA-5 (1) (d)
-#    NIST SP 800-53A :: IA-5 (1).1 (v)
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d)
+# CCI-000199 
+#    NIST SP 800-53 :: IA-5 (1) (d) 
+#    NIST SP 800-53A :: IA-5 (1).1 (v) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d) 
 #
 #################################################################
