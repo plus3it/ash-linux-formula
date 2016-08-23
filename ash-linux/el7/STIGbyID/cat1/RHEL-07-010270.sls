@@ -12,10 +12,44 @@
 #    NIST SP 800-53 Revision 4 :: IA-2 (2) 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-010270' %}
+{%- set stig_id = 'RHEL-07-010270' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords .*') %}
+  {%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords no') %}
+file_{{ stig_id }}:
+  cmd.run:
+    - name: 'echo "Empty passwords already disabled in ''{{ sshConfigFile }}''"'
+    {%- set runtype = 'cmd' %}
+  {%- else %}
+file_{{ stig_id }}:
+  file.replace:
+    - name: '{{ sshConfigFile }}'
+    - pattern: "^PermitEmptyPasswords .*"
+    - repl: "PermitEmptyPasswords no"
+    {%- set runtype = 'file' %}
+  {%- endif %}
+{%- else %}
+file_{{ stig_id }}:
+  file.append:
+    - name: '{{ sshConfigFile }}'
+    - text:
+      - ' '    
+      - '# SSH Must not allow empty passwords (per STIG {{ stig_id }})'
+      - 'PermitEmptyPasswords no'
+  {%- set runtype = 'file' %}
+{%- endif %}
+
+# Bleah: this is a mild botch. If above performs a 'cmd.run', this state
+# will always cause a service restart event.
+service_sshd:
+  service.running:
+    - name: 'sshd'
+    - watch:
+      - {{ runtype }}: file_{{ stig_id }}
