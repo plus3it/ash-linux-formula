@@ -22,5 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010430"
+diag_out "   The operating system must not allow"
+diag_out "   an unattended or automatic logon to"
+diag_out "   the system via a graphical user"
+diag_out "   interface."
 diag_out "----------------------------------------"
 
