@@ -11,3 +11,10 @@
 #    NIST SP 800-53A :: SI-3.1 (ii) 
 #
 #################################################################
+{%- stig_id = 'RHEL-07-030810' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root

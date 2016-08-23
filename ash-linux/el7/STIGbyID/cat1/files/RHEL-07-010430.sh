@@ -6,7 +6,8 @@
 # Finding Level:	high
 # 
 # Rule Summary:
-#	The operating system must not allow an unattended or automatic logon to the system via a graphical user interface.
+#	The operating system must not allow an unattended or 
+#	automatic logon to the system via a graphical user interface.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -14,3 +15,12 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010430"
+diag_out "----------------------------------------"
+
