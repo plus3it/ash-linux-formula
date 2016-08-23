@@ -18,9 +18,16 @@
 #################################################################
 
 {%- set stig_id = 'RHEL-07-010010' %}
-{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+# Check (and fix as necessary) RPM-owned file permissions
+fix_{{ stig_id }}-perms:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}_helper.sh
+    - cwd: '/root'
+    - stateful: True
