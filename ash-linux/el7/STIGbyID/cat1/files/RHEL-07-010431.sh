@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010431"
+diag_out "   The operating system must not allow"
+diag_out "   guest logon to the system."
 diag_out "----------------------------------------"
 
