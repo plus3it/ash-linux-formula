@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020000"
+diag_out "   The rsh-server package must not be"
+diag_out "   installed."
 diag_out "----------------------------------------"
 
