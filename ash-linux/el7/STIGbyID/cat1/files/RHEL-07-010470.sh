@@ -23,5 +23,10 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010470"
+diag_out "   Systems using Unified Extensible"
+diag_out "   Firmware Interface (UEFI) must"
+diag_out "   require authentication upon booting"
+diag_out "   into single-user and maintenance"
+diag_out "   modes."
 diag_out "----------------------------------------"
 
