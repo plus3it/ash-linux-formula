@@ -14,3 +14,14 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010431"
+diag_out "   The operating system must not allow"
+diag_out "   guest logon to the system."
+diag_out "----------------------------------------"
+

@@ -12,3 +12,30 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-010431' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set checkFile = '/etc/gdm/custom.conf'%}
+{%- set checkParm = 'TimedLoginEnable'%}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if not salt['pkg.version']('gdm') %}
+eval_{{ stig_id }}:
+  cmd.run:
+    - name: 'echo "GDM susbsystem is not installed."'
+{% elif salt['file.search'](checkFile, '^' + checkParm) %}
+file_{{ stig_id }}:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^{{ checkParm }}.*$'
+    - repl: '{{ checkParm }}=false'
+{%- else %}
+file_{{ stig_id }}:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^\[daemon]'
+    - repl: '[daemon]\n{{ checkParm }}=false'
+{%- endif %}
