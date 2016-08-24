@@ -23,5 +23,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010460"
+diag_out "   Systems with a Basic Input/Output"
+diag_out "   System (BIOS) must require"
+diag_out "   authentication upon booting into"
+diag_out "   single-user and maintenance modes."
 diag_out "----------------------------------------"
 
