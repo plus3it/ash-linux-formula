@@ -26,7 +26,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-file_V{{ stig_id }}-sysauth_ac:
+file_{{ stig_id }}-sysauth_ac:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '[	 ]*nullok[	 ]*'
