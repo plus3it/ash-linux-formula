@@ -12,10 +12,15 @@
 #    NIST SP 800-53 Revision 4 :: CM-7 a 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-020010' %}
+{%- set stig_id = 'RHEL-07-020010' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+package_{{ stig_id }}-nuke:
+  pkg.removed:
+    - name: 'ypserv'
+
