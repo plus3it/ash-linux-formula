@@ -24,5 +24,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020150"
+diag_out "   The operating system must be"
+diag_out "   configured to check software's"
+diag_out "   cryptographic signatures."
 diag_out "----------------------------------------"
-
