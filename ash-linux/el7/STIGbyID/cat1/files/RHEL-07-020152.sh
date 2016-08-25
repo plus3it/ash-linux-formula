@@ -22,5 +22,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020152"
+diag_out "   The operating system must be"
+diag_out "   configured to verify repository"
+diag_out "   metadata"
 diag_out "----------------------------------------"
-
