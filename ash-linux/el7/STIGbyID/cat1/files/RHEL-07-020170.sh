@@ -26,5 +26,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020170"
+diag_out "   Where applicable, operating should be"
+diag_out "   configured to provide data-at-rest"
+diag_out "   protection via storage-encryption."
 diag_out "----------------------------------------"
-
