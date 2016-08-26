@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020210"
+diag_out "   The operating system must enable"
+diag_out "   SELinux."
 diag_out "----------------------------------------"
 
