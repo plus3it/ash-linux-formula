@@ -12,10 +12,20 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-020220' %}
+{%- set stig_id = 'RHEL-07-020220' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set svcName = 'ctrl-alt-del.target' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+stop_{{ stig_id }}-{{ svcName }}:
+  service.dead:
+    - name: '{{ svcName }}'
+
+disable_{{ stig_id }}-{{ svcName }}:
+  service.disabled:
+    - name: '{{ svcName }}'
+

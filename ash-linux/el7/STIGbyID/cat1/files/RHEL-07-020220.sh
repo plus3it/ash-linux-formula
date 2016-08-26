@@ -21,5 +21,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020220"
+diag_out "   The x86 Ctrl-Alt-Delete key sequence"
+diag_out "   must be disabled."
 diag_out "----------------------------------------"
-
