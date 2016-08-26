@@ -13,10 +13,25 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (3)
 #
 #################################################################
-{%- stig_id = 'RHEL-07-020152' %}
+{%- set stig_id = 'RHEL-07-020152' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set checkFile = '/etc/yum.conf'%}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{%- if salt['file.search'](checkFile, '^repo_gpgcheck') %}
+file_{{ stig_id }}-{{ checkFile }}:
+  file.replace:
+    - name: '{{ checkFile }}'
+    - pattern: '^repo_gpgcheck.*$'
+    - repl: 'repo_gpgcheck=1'
+{%- else %}
+file_{{ stig_id }}-{{ checkFile }}:
+  file.replace:
+    - name: '{{ checkFile }}'
+    - pattern: '^\[main]'
+    - repl: '[main]\nrepo_gpgcheck=1'
+{%- endif %}

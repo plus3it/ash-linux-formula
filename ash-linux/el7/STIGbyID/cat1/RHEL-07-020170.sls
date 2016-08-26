@@ -17,10 +17,44 @@
 #    NIST SP 800-53 Revision 4 :: SC-28
 #
 #################################################################
-{%- stig_id = 'RHEL-07-020170' %}
+{%- set stig_id = 'RHEL-07-020170' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set corePkg = 'cryptsetup' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+# Nothing's encrypted without LUKS packages...
+{%- if salt['pkg.version'](corePkg) %}
+
+# Grab info about all active mounts and stuff into a searchable struct
+{%- set activeMntStream = salt['mount.active']('extended=false') %}
+# Iterate the structure by top-level key
+{%- for mountPoint in activeMntStream.keys() %}
+  # We don't care about pseudo-filesystems
+  {%- if not ( 
+               mountPoint.startswith('/sys') or 
+               mountPoint.startswith('/dev') or
+               mountPoint.startswith('/run') or
+               mountPoint.startswith('/proc')
+             ) %}
+    # Unpack what's left
+    {%- set mountList = activeMntStream[mountPoint] %}
+    {%- set mountDev = mountList['device'] %}
+check_{{ stig_id }}-{{ mountPoint }}:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}_helper.sh
+    - name: '{{ helperLoc }}/{{ stig_id }}_helper.sh "{{ mountDev }}" "{{ mountPoint }}"'
+    - cwd: /root
+    - stateful: True
+   {%- endif %}
+{%- endfor %}
+{%- else %}
+present_{{ stig_id }}-{{ corePkg }}:
+  cmd.run:
+    - name: 'echo "OS-level disk-encryption capability not present"'
+    - cwd: /root
+{%- endif %}
+

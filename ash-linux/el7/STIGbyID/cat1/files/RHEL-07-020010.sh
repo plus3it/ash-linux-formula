@@ -21,5 +21,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020010"
+diag_out "   The ypserv package must not be"
+diag_out "   installed."
 diag_out "----------------------------------------"
-
