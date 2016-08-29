@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020211"
+diag_out "   The operating system must enable the"
+diag_out "   SELinux targeted policy."
 diag_out "----------------------------------------"
 

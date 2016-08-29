@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020240"
+diag_out "   The operating system must be a"
+diag_out "   supported release."
 diag_out "----------------------------------------"
 
