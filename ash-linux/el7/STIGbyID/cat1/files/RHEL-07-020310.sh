@@ -22,5 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020310"
+diag_out "   The root account must be the only"
+diag_out "   account having unrestricted access to"
+diag_out "   the system."
 diag_out "----------------------------------------"
 
