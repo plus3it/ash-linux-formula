@@ -12,10 +12,24 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-020240' %}
+{%- set stig_id = 'RHEL-07-020240' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+## Apparently, I shouldn't try to run an EL7 STIG-scanner against
+## an EL 4 based host, I guess?
+{%- if salt['grains.get']('osrelease') == '7' %}
+goodtest_{{ stig_id }}:
+  cmd.run:
+    - name: 'echo "This test-suite valid against this target"'
+    - cwd: /root
+{%- else %}
+goodtest_{{ stig_id }}:
+  cmd.run:
+    - name: 'echo "This test-suite valid against this target"'
+    - cwd: /root
+{%- endif %}
