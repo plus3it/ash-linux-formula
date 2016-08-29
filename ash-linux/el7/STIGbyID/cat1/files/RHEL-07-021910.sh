@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021910"
+diag_out "   The telnet-server package must not"
+diag_out "   be installed."
 diag_out "----------------------------------------"
 
