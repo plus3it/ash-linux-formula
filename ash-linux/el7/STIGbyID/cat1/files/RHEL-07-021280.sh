@@ -29,5 +29,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021280"
+diag_out "   The operating system must implement"
+diag_out "   NIST FIPS-validated cryptography."
 diag_out "----------------------------------------"
-
