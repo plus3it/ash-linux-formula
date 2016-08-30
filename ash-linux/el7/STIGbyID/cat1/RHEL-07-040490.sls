@@ -13,10 +13,26 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
-{%- stig_id = 'RHEL-07-040490' %}
+{%- set stig_id = 'RHEL-07-040490' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set ftpds = (
+                  'proftpd',
+                  'pure-ftpd',
+                  'vsftpd'
+                ) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{% if salt['pkg.version']('proftpd', 'pure-ftpd', 'vsfptd') %}
+  {%- for ftpd in ftpds %}
+    {%- if salt['pkg.version'](ftpd) %}
+cmd_{{ stig_id }}-{{ ftpd }}-notify:
+  cmd.run:
+    - name: 'echo "Found ftp-server package {{ ftpd }} installed." > /dev/stderr && exit 1'
+    - cwd: /root
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}

@@ -22,5 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040490"
+diag_out "   No File Transfer Protocol (FTP)"
+diag_out "   server packages may be installed"
+diag_out "   unless needed."
 diag_out "----------------------------------------"
 
