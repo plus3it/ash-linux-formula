@@ -20,5 +20,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030810"
+diag_out "   The system must use a DoD-approved"
+diag_out "   virus scan program."
 diag_out "----------------------------------------"
 
