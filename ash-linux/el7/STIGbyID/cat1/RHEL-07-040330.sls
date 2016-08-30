@@ -12,10 +12,29 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-040330' %}
+{%- set stig_id = 'RHEL-07-040330' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+# Iterate locally-managed users to look for .shosts files
+{%- for userName in salt['user.list_users']() %}
+{%- set userInfo = salt['user.info'](userName) %}
+{%- set userHome = userInfo['home'] %}
+{%- set userShost = userHome + '/.shosts' %}
+{%- if salt['file.file_exists'](userShost) %}
+notify-{{ userName }}:
+  cmd.run: 
+    - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.shosts'' file. Removing..." ; exit 1'
+cmd_{{ stig_id }}-{{ userShost }}_remove:
+  file.absent: 
+    - name: '{{ userShost }}'
+{%- else %}
+notify-{{ userName }}:
+  cmd.run: 
+    - name: 'echo "Info: User ''{{ userName }}'' does not have an ''.shosts'' file."'
+{%- endif %}
+{%- endfor %}
