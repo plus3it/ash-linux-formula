@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040540"
+diag_out "   Remote X connections for interactive"
+diag_out "   users must be encrypted."
 diag_out "----------------------------------------"
 
