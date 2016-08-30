@@ -20,10 +20,20 @@
 #    NIST SP 800-53 Revision 4 :: AU-2 d
 #
 #################################################################
-{%- stig_id = 'RHEL-07-030010' %}
+{%- set stig_id = 'RHEL-07-030010' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set svcName = 'auditd.service' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+start_{{ stig_id }}-{{ svcName }}:
+  service.running:
+    - name: '{{ svcName }}'
+
+enable_{{ stig_id }}-{{ svcName }}:
+  service.enabled:
+    - name: '{{ svcName }}'
+

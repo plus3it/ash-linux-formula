@@ -29,5 +29,5 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030010"
+diag_out "   Auditing service must be running."
 diag_out "----------------------------------------"
-
