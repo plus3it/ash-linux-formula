@@ -24,10 +24,14 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (1)
 #
 #################################################################
-{%- stig_id = 'RHEL-07-040500' %}
+{%- set stig_id = 'RHEL-07-040500' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+package_{{ stig_id }}-nuke:
+  pkg.removed:
+    - name: 'tftp-server'
