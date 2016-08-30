@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040331"
+diag_out "   There must be no shosts.equiv files"
+diag_out "   on the system."
 diag_out "----------------------------------------"
 
