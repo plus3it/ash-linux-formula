@@ -1,29 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 #
-# STIG URL:
 # Finding ID:	RHEL-07-040320
 # Version:	RHEL-07-040320_rule
-# SRG ID:	
+# SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	low
-#
+# 
 # Rule Summary:
-#     "For systems using DNS resolution, at least two name servers 
-#     must be configured."
+#	"For systems using DNS resolution, at least two name servers must be configured."
 #
-# CCI-000366
-#    NIST SP 800-53 :: CM-6 b
-#    NIST SP 800-53A :: CM-6.1 (iv)
-#    NIST SP 800-53 Revision 4 :: CM-6 b
+# CCI-000366 
+#    NIST SP 800-53 :: CM-6 b 
+#    NIST SP 800-53A :: CM-6.1 (iv) 
+#    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-
-diag_out() {
-   echo "${1}"
-}
-
-diag_out "----------------------------------"
-diag_out "STIG Finding ID: RHEL-07-040320"
-diag_out "   System must use redundant DNS"
-diag_out "   servers if configured to use"
-diag_out "   DNS for name resolution."
-diag_out "----------------------------------"

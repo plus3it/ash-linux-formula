@@ -1,28 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 #
-# STIG URL:
 # Finding ID:	RHEL-07-021610
 # Version:	RHEL-07-021610_rule
-# SRG ID:	
+# SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	low
-#
+# 
 # Rule Summary:
-#     The file integrity tool must be configured to verify extended 
-#     attributes.
+#	The file integrity tool must be configured to verify extended attributes.
 #
-# CCI-000366
-#    NIST SP 800-53 :: CM-6 b
-#    NIST SP 800-53A :: CM-6.1 (iv)
-#    NIST SP 800-53 Revision 4 :: CM-6 b
+# CCI-000366 
+#    NIST SP 800-53 :: CM-6 b 
+#    NIST SP 800-53A :: CM-6.1 (iv) 
+#    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-
-diag_out() {
-   echo "${1}"
-}
-
-diag_out "---------------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-021610"
-diag_out "   Ensure that the file-integrity tool, aide,"
-diag_out "   is installed"
-diag_out "---------------------------------------------"
