@@ -25,5 +25,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040590"
+diag_out "   The SSH daemon must be configured to"
+diag_out "   only use the SSHv2 protocol."
 diag_out "----------------------------------------"
-

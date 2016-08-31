@@ -14,13 +14,30 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040580' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set snmpCfg = '/etc/snmp/snmpd.conf' %}
+{%- set forbidStrs = [
+                      'public',
+                      'private'
+                     ] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('net-snmp') %}
+{%- if (
+        salt['pkg.version']('net-snmp') or
+        salt['file.exists'](snmpCfg)
+       ) %}
+  {%- for community in forbidStrs %}
+    {%- if salt['file.search'](snmpCfg, community) %}
+file_{{ stig_id }}-{{ community }}:
+  file.comment:
+    - name: '{{ snmpCfg }}'
+    - regex: '^[A-Za-z].*\s{{ community }}'
+    - char: '#'
+    {%- endif %}
+  {%- endfor %}
 {%- else %}
 cmd_{{ stig_id }}-missing:
   cmd.run:
