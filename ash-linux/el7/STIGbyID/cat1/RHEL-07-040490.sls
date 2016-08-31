@@ -26,7 +26,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{% if salt['pkg.version']('proftpd', 'pure-ftpd', 'vsfptd') %}
+{% if salt['pkg.version'](*ftpds) %}
   {%- for ftpd in ftpds %}
     {%- if salt['pkg.version'](ftpd) %}
 cmd_{{ stig_id }}-{{ ftpd }}-notify:
