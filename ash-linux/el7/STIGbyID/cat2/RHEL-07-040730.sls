@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must not be performing packet forwarding unless the system is a router.
+#	The system must not be performing packet forwarding unless
+#	the system is a router.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

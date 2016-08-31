@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system's access control program must be configured to grant or deny system access to specific hosts and services.
+#	The system's access control program must be configured to grant
+#	or deny system access to specific hosts and services.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

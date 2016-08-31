@@ -4,7 +4,12 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The operating system must shut down upon audit processing failure, unless availability is an overriding concern. If availability is a concern, the system must alert the designated staff (System Administrator [SA] and Information System Security Officer [ISSO] at a minimum) in the event of an audit processing failure."
+#	The operating system must shut down upon audit processing
+#	failure, unless availability is an overriding concern. If
+#	availability is a concern, the system must alert the
+#	designated staff (System Administrator [SA] and Information
+#	System Security Officer [ISSO] at a minimum) in the event of
+#	an audit processing failure.
 #
 # CCI-000139 
 #    NIST SP 800-53 :: AU-5 a 

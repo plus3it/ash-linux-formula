@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive users must have a home directory assigned in the /etc/passwd file.
+#	All local interactive users must have a home directory assigned
+#	in the /etc/passwd file.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive user home directories defined in the /etc/passwd file must exist.
+#	All local interactive user home directories defined in the
+#	/etc/passwd file must exist.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

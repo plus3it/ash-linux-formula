@@ -1,12 +1,13 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-010100
 # Version:	RHEL-07-010100_rule
 # SRG ID:	SRG-OS-000070-GPOS-00038
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"When passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
+#	When passwords are changed or new passwords are established,
+#	the new password must contain at least one lower-case
+#	character.
 #
 # CCI-000193 
 #    NIST SP 800-53 :: IA-5 (1) (a) 
@@ -14,3 +15,11 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010100"
+diag_out "----------------------------------------"

@@ -1,12 +1,12 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-010150
 # Version:	RHEL-07-010150_rule
 # SRG ID:	SRG-OS-000072-GPOS-00040
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed the number of repeating consecutive characters must not be more than four characters.
+#	When passwords are changed the number of repeating consecutive
+#	characters must not be more than four characters.
 #
 # CCI-000195 
 #    NIST SP 800-53 :: IA-5 (1) (b) 
@@ -14,3 +14,11 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010150"
+diag_out "----------------------------------------"

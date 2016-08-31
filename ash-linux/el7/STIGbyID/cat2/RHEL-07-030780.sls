@@ -4,9 +4,14 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation.
+#	The rsyslog daemon must not accept log messages from other
+#	servers unless the server is being used for log aggregation.
 #
-# CCI-000368 CCI-000318 CCI-001812 CCI-001813 CCI-001814 
+# CCI-000368 
+# CCI-000318 
+# CCI-001812 
+# CCI-001813 
+# CCI-001814 
 #    NIST SP 800-53 :: CM-6 c 
 #    NIST SP 800-53A :: CM-6.1 (v) 
 #    NIST SP 800-53 Revision 4 :: CM-6 c 

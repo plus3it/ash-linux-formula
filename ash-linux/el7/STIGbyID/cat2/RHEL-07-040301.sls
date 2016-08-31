@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must display the date and time of the last successful account logon upon an SSH logon.
+#	The system must display the date and time of the last
+#	successful account logon upon an SSH logon.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

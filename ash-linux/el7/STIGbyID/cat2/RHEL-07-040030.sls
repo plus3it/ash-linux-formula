@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The operating system, for PKI-based authentication, must validate certificates by performing RFC 5280-compliant certification path validation."
+#	The operating system, for PKI-based authentication, must
+#	validate certificates by performing RFC 5280-compliant
+#	certification path validation.
 #
 # CCI-000185 
 #    NIST SP 800-53 :: IA-5 (2) 

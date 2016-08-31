@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Files systems that are being imported via Network File System (NFS) must be mounted to prevent files with the setuid and setgid bit set from being executed.
+#	Files systems that are being imported via Network File System
+#	(NFS) must be mounted to prevent files with the setuid and
+#	setgid bit set from being executed.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

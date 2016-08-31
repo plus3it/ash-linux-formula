@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The shadow file must be configured to store only encrypted representations of passwords.
+#	The shadow file must be configured to store only encrypted
+#	representations of passwords.
 #
 # CCI-000196 
 #    NIST SP 800-53 :: IA-5 (1) (c) 

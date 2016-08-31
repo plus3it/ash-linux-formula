@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must not forward Internet Protocol version 4 (IPv4) source-routed packets.
+#	The system must not forward Internet Protocol version 4 (IPv4)
+#	source-routed packets.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

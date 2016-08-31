@@ -4,7 +4,10 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must uniquely identify and must authenticate organizational users (or processes acting on behalf of organizational users) using multi-factor authentication.
+#	The operating system must uniquely identify and must
+#	authenticate organizational users (or processes acting on
+#	behalf of organizational users) using multi-factor
+#	authentication.
 #
 # CCI-000766 
 #    NIST SP 800-53 :: IA-2 (2) 

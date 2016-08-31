@@ -6,7 +6,9 @@
 # Rule Summary:
 #	USB mass storage must be disabled.
 #
-# CCI-000366 CCI-000778 CCI-001958 
+# CCI-000366 
+# CCI-000778 
+# CCI-001958 
 #    NIST SP 800-53 :: CM-6 b 
 #    NIST SP 800-53A :: CM-6.1 (iv) 
 #    NIST SP 800-53 Revision 4 :: CM-6 b 

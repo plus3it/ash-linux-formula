@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The SSH daemon must perform strict mode checking of home directory configuration files.
+#	The SSH daemon must perform strict mode checking of home
+#	directory configuration files.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"When passwords are changed or new passwords are assigned, the new password must contain at least one numeric character."
+#	When passwords are changed or new passwords are assigned, the
+#	new password must contain at least one numeric character.
 #
 # CCI-000194 
 #    NIST SP 800-53 :: IA-5 (1) (a) 

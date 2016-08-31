@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must implement cryptography to protect the integrity of Lightweight Directory Access Protocol (LDAP) communications.
+#	The operating system must implement cryptography to protect
+#	the integrity of Lightweight Directory Access Protocol (LDAP)
+#	communications.
 #
 # CCI-001453 
 #    NIST SP 800-53 :: AC-17 (2) 

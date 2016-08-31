@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The file integrity tool must use FIPS 140-2 approved cryptographic hashes for validating file contents and directories.
+#	The file integrity tool must use FIPS 140-2 approved
+#	cryptographic hashes for validating file contents and
+#	directories.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must initiate a session lock after a 15-minute period of inactivity for all connection types.
+#	The operating system must initiate a session lock after a
+#	15-minute period of inactivity for all connection types.
 #
 # CCI-000057 
 #    NIST SP 800-53 :: AC-11 a 

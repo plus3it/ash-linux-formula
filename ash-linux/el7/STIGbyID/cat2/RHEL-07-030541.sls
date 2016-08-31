@@ -6,7 +6,8 @@
 # Rule Summary:
 #	All uses of the postqueue command must be audited.
 #
-# CCI-000135 CCI-002884 
+# CCI-000135 
+# CCI-002884 
 #    NIST SP 800-53 :: AU-3 (1) 
 #    NIST SP 800-53A :: AU-3 (1).1 (ii) 
 #    NIST SP 800-53 Revision 4 :: AU-3 (1) 

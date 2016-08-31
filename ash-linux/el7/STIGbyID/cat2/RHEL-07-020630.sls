@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"All local interactive user accounts, upon creation, must be assigned a home directory."
+#	All local interactive user accounts, upon creation, must be
+#	assigned a home directory.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

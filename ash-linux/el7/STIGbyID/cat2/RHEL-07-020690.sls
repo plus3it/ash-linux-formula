@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All files and directories contained in local interactive user home directories must be group-owned by a group of which the home directory owner is a member.
+#	All files and directories contained in local interactive user
+#	home directories must be group-owned by a group of which the
+#	home directory owner is a member.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

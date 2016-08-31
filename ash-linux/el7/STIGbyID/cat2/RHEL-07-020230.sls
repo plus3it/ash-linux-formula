@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must define default permissions for all authenticated users in such a way that the user can only read and modify their own files.
+#	The operating system must define default permissions for all
+#	authenticated users in such a way that the user can only read
+#	and modify their own files.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

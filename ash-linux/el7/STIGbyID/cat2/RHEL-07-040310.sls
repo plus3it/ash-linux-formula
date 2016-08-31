@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must not permit direct logons to the root account using remote access via SSH.
+#	The system must not permit direct logons to the root account
+#	using remote access via SSH.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces.
+#	The operating system must initiate a screensaver after a
+#	15-minute period of inactivity for graphical user interfaces.
 #
 # CCI-000057 
 #    NIST SP 800-53 :: AC-11 a 

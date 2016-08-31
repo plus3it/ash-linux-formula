@@ -4,9 +4,12 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must generate audit records for all successful/unsuccessful account access count events.
+#	The operating system must generate audit records for all
+#	successful/unsuccessful account access count events.
 #
-# CCI-000172 CCI-002884 CCI-000126 
+# CCI-000172 
+# CCI-002884 
+# CCI-000126 
 #    NIST SP 800-53 :: AU-12 c 
 #    NIST SP 800-53A :: AU-12.1 (iv) 
 #    NIST SP 800-53 Revision 4 :: AU-12 c 

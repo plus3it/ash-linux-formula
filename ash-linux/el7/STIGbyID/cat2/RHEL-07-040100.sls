@@ -4,9 +4,14 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The host must be configured to prohibit or restrict the use of functions, ports, protocols, and/or services, as defined in the Ports, Protocols, and Services Management Component Local Service Assessment (PPSM CLSA) and vulnerability assessments."
+#	The host must be configured to prohibit or restrict the use
+#	of functions, ports, protocols, and/or services, as defined
+#	in the Ports, Protocols, and Services Management Component
+#	Local Service Assessment (PPSM CLSA) and vulnerability
+#	assessments.
 #
-# CCI-000382 CCI-002314 
+# CCI-000382 
+# CCI-002314 
 #    NIST SP 800-53 :: CM-7 
 #    NIST SP 800-53A :: CM-7.1 (iii) 
 #    NIST SP 800-53 Revision 4 :: CM-7 b 

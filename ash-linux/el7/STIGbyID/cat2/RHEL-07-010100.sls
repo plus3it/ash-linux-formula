@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"When passwords are changed or new passwords are established, the new password must contain at least one lower-case character."
+#	When passwords are changed or new passwords are established,
+#	the new password must contain at least one lower-case
+#	character.
 #
 # CCI-000193 
 #    NIST SP 800-53 :: IA-5 (1) (a) 

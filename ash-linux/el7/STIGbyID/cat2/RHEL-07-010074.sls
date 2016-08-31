@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must initiate a session lock for graphical user interfaces when the screensaver is activated.
+#	The operating system must initiate a session lock for
+#	graphical user interfaces when the screensaver is activated.
 #
 # CCI-000057 
 #    NIST SP 800-53 :: AC-11 a 

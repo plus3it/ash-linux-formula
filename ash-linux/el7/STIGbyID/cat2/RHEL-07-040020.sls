@@ -6,7 +6,8 @@
 # Rule Summary:
 #	The system must log informational authentication data.
 #
-# CCI-000067 CCI-000126 
+# CCI-000067 
+# CCI-000126 
 #    NIST SP 800-53 :: AC-17 (1) 
 #    NIST SP 800-53A :: AC-17 (1).1 
 #    NIST SP 800-53 Revision 4 :: AC-17 (1) 

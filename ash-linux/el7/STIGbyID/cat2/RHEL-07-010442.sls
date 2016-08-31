@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must not allow a non-certificate trusted host SSH logon to the system.
+#	The operating system must not allow a non-certificate trusted
+#	host SSH logon to the system.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

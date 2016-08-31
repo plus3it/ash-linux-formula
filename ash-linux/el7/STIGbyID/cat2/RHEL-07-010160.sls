@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed the number of repeating characters of the same character class must not be more than four characters.
+#	When passwords are changed the number of repeating characters
+#	of the same character class must not be more than four
+#	characters.
 #
 # CCI-000195 
 #    NIST SP 800-53 :: IA-5 (1) (b) 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must update the DoD-approved virus scan program every seven days or more frequently.
+#	The system must update the DoD-approved virus scan program
+#	every seven days or more frequently.
 #
 # CCI-001668 
 #    NIST SP 800-53 :: SI-3 a 

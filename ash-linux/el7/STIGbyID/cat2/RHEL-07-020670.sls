@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive user home directories must be group-owned by the home directory owners primary group.
+#	All local interactive user home directories must be group-
+#	owned by the home directory owners primary group.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

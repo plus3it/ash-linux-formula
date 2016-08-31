@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030401
 # Version:	RHEL-07-030401_rule
 # SRG ID:	SRG-OS-000458-GPOS-00203
@@ -14,3 +13,11 @@
 #    NIST SP 800-53 Revision 4 :: AU-12 c 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030401"
+diag_out "----------------------------------------"

@@ -1,12 +1,12 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-010070
 # Version:	RHEL-07-010070_rule
 # SRG ID:	SRG-OS-000029-GPOS-00010
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must initiate a screensaver after a 15-minute period of inactivity for graphical user interfaces.
+#	The operating system must initiate a screensaver after a
+#	15-minute period of inactivity for graphical user interfaces.
 #
 # CCI-000057 
 #    NIST SP 800-53 :: AC-11 a 
@@ -14,3 +14,11 @@
 #    NIST SP 800-53 Revision 4 :: AC-11 a 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010070"
+diag_out "----------------------------------------"

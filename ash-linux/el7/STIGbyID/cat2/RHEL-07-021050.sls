@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"All world-writable directories must be group-owned by root, sys, bin, or an application group."
+#	All world-writable directories must be group-owned by root, sys,
+#	bin, or an application group.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed a minimum of eight of the total number of characters must be changed.
+#	When passwords are changed a minimum of eight of the total
+#	number of characters must be changed.
 #
 # CCI-000195 
 #    NIST SP 800-53 :: IA-5 (1) (b) 

@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-010240
 # Version:	RHEL-07-010240_rule
 # SRG ID:	SRG-OS-000077-GPOS-00045
@@ -14,3 +13,11 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (e) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010240"
+diag_out "----------------------------------------"

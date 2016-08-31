@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	User and group account administration utilities must be configured to store only encrypted representations of passwords.
+#	User and group account administration utilities must be
+#	configured to store only encrypted representations of
+#	passwords.
 #
 # CCI-000196 
 #    NIST SP 800-53 :: IA-5 (1) (c) 

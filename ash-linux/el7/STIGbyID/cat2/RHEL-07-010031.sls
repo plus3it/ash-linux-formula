@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must display the approved Standard Mandatory DoD Notice and Consent Banner before granting local or remote access to the system via a graphical user logon.
+#	The operating system must display the approved Standard
+#	Mandatory DoD Notice and Consent Banner before granting local
+#	or remote access to the system via a graphical user logon.
 #
 # CCI-000048 
 #    NIST SP 800-53 :: AC-8 a 

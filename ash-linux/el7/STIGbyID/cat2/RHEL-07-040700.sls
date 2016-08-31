@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The SSH daemon must not allow compression or must only allow compression after successful authentication.
+#	The SSH daemon must not allow compression or must only allow
+#	compression after successful authentication.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

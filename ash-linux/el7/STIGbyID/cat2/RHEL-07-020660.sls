@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive user home directories must be owned by their respective users.
+#	All local interactive user home directories must be owned by
+#	their respective users.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

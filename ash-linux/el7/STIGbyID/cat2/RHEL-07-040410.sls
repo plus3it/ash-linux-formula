@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must ignore to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages.
+#	The system must ignore to Internet Protocol version 4 (IPv4)
+#	Internet Control Message Protocol (ICMP) redirect messages.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

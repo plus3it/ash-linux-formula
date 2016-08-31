@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords for new users must be restricted to a 24 hours/1 day minimum lifetime.
+#	Passwords for new users must be restricted to a 24 hours/1 day
+#	minimum lifetime.
 #
 # CCI-000198 
 #    NIST SP 800-53 :: IA-5 (1) (d) 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Local initialization files for local interactive users must be group-owned by the users primary group or root.
+#	Local initialization files for local interactive users must be
+#	group-owned by the users primary group or root.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

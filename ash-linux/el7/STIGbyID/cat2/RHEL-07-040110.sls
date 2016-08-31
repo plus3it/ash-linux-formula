@@ -4,9 +4,12 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	A FIPS 140-2 approved cryptographic algorithm must be used for SSH communications.
+#	A FIPS 140-2 approved cryptographic algorithm must be used for
+#	SSH communications.
 #
-# CCI-000068 CCI-000366 CCI-000803 
+# CCI-000068 
+# CCI-000366 
+# CCI-000803 
 #    NIST SP 800-53 :: AC-17 (2) 
 #    NIST SP 800-53A :: AC-17 (2).1 
 #    NIST SP 800-53 Revision 4 :: AC-17 (2) 

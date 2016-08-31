@@ -4,9 +4,14 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All system device files must be correctly labeled to prevent unauthorized modification.
+#	All system device files must be correctly labeled to prevent
+#	unauthorized modification.
 #
-# CCI-000318 CCI-001812 CCI-001813 CCI-001814 CCI-000368 
+# CCI-000318 
+# CCI-001812 
+# CCI-001813 
+# CCI-001814 
+# CCI-000368 
 #    NIST SP 800-53 :: CM-3 e 
 #    NIST SP 800-53A :: CM-3.1 (v) 
 #    NIST SP 800-53 Revision 4 :: CM-3 f 

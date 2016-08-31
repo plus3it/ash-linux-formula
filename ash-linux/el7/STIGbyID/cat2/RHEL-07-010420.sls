@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The delay between logon prompts following a failed console logon attempt must be at least four seconds.
+#	The delay between logon prompts following a failed console
+#	logon attempt must be at least four seconds.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

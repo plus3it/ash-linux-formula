@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive user home directories must have mode 0750 or less permissive.
+#	All local interactive user home directories must have mode 0750
+#	or less permissive.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

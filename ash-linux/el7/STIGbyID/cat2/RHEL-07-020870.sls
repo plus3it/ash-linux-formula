@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive user initialization files executable search paths must contain only absolute paths.
+#	All local interactive user initialization files executable
+#	search paths must contain only absolute paths.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

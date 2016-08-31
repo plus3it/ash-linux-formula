@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must not respond to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) echoes sent to a broadcast address.
+#	The system must not respond to Internet Protocol version 4
+#	(IPv4) Internet Control Message Protocol (ICMP) echoes sent
+#	to a broadcast address.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 

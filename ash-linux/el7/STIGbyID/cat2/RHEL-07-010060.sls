@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must enable a user session lock until that user re-establishes access using established identification and authentication procedures.
+#	The operating system must enable a user session lock until that
+#	user re-establishes access using established identification and
+#	authentication procedures.
 #
 # CCI-000056 
 #    NIST SP 800-53 :: AC-11 b 

@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local initialization files for interactive users must be owned by the home directory user or root.
+#	All local initialization files for interactive users must be
+#	owned by the home directory user or root.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
