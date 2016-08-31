@@ -12,10 +12,20 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-040331' %}
+{%- set stig_id = 'RHEL-07-040331' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
-
+{%- set hostsEquiv = '/etc/ssh/shosts.equiv' %}
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{%- if salt['file.file_exists'](hostsEquiv) %}
+file_{{ stig_id }}-hostsEquiv:
+  file.absent:
+    - name: {{ hostsEquiv }}
+{%- else %}
+file_{{ stig_id }}-hostsEquiv:
+  cmd.run:
+    - name: 'echo "No ''{{ hostsEquiv }}'' file found"'
+{%- endif %}

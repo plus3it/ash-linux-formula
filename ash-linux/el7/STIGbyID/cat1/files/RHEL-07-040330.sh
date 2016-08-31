@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040330"
+diag_out "   There must be no .shosts files on the"
+diag_out "   system."
 diag_out "----------------------------------------"
 

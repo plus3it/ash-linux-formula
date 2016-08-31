@@ -12,10 +12,54 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- stig_id = 'RHEL-07-040540' %}
+{%- set stig_id = 'RHEL-07-040540' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set baseXpkg = 'xorg-x11-server-Xorg' %}
+{%- set sshConfigFile = '/etc/ssh/sshd_config' %}
+{%- set sshParm = 'X11Forwarding' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' .*') %}
+  {%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' yes') %}
+file_{{ stig_id }}:
+  cmd.run:
+    - name: 'echo "X11-encryption already set in ''{{ sshConfigFile }}''"'
+    {%- set runtype = 'cmd' %}
+  {%- else %}
+file_{{ stig_id }}:
+  file.replace:
+    - name: '{{ sshConfigFile }}'
+    - pattern: "^{{ sshParm }} .*"
+    - repl: "{{ sshParm }} yes"
+    {%- set runtype = 'file' %}
+  {%- endif %}
+{%- else %}
+file_{{ stig_id }}:
+  file.append:
+    - name: '{{ sshConfigFile }}'
+    - text:
+      - ' '    
+      - '# SSH Must not allow empty passwords (per STIG {{ stig_id }})'
+      - '{{ sshParm }} yes'
+  {%- set runtype = 'file' %}
+{%- endif %}
+
+# Bleah: this is a mild botch. If above performs a 'cmd.run', this state
+# will always cause a service restart event.
+service_{{ stig_id }}-sshd:
+  service.running:
+    - name: 'sshd'
+    - watch:
+      - {{ runtype }}: file_{{ stig_id }}
+
+{%- if not salt['pkg.version'](baseXpkg) %}
+cmd_{{ stig_id }}-notify:
+  cmd.run:
+    - name: 'echo "Note: X-related subsystems not installed."'
+    - cwd: /root
+{%- endif %}
+

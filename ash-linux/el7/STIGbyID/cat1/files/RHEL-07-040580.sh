@@ -21,5 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040580"
+diag_out "   SNMP community strings must be"
+diag_out "   changed from the default."
 diag_out "----------------------------------------"
 

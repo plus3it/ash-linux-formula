@@ -23,7 +23,7 @@ diag_out() {
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010440"
 diag_out "   The operating system must not allow"
-diag_out "   empty passwords for SSH logon to the
+diag_out "   empty passwords for SSH logon to the"
 diag_out "   system."
 diag_out "----------------------------------------"
 
