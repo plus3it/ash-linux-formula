@@ -16,10 +16,9 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010470' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
-{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
-{%- if salt['grains.get']('os') = 'CentOS' %}
+{%- if salt['grains.get']('os') == 'CentOS' %}
   {%- set mainCfg = '/boot/efi/EFI/centos/grub.cfg' %}
-{%- elif salt['grains.get']('os') = 'RedHat' %}
+{%- elif salt['grains.get']('os') == 'RedHat' %}
   {%- set mainCfg = '/boot/efi/EFI/redhat/grub.cfg' %}
 {%- endif %}
 
