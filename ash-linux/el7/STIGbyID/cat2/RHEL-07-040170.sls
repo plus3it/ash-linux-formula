@@ -38,3 +38,11 @@
 #    NIST SP 800-53 Revision 4 :: AC-8 c 3 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040170' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
