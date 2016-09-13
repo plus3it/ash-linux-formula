@@ -16,9 +16,43 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010030' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set pkgName = 'dconf' %}
+{%- set dconfDir = '/etc/dconf/db/local.d' %}
+{%- set targVal = 'banner-message-enable=true' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt['pkg.version'](pkgName) %}
+{%- set dconfFiles = salt['file.find'](dconfDir, type='f') %}
+  {%- if dconfFiles %}
+    {%- for dconfFile in dconfFiles %}
+      {%- if salt['file.search'](dconfFile, '^' + targVal + '$') %}
+file_{{ stig_id }}-{{ dconfFile }}:
+  cmd.run:
+    - name: 'echo "Banner value set in {{ dconfFile }}"'
+    - cwd: /root
+      {%- else %}
+file_{{ stig_id }}-{{ dconfFile }}:
+  cmd.run:
+    - name: 'echo "Banner value not set in {{ dconfFile }}"'
+    - cwd: /root
+      {%- endif %}
+    {%- endfor %}
+  {%- else %}
+file_{{ stig_id }}-setVal:
+  file.append:
+    - name: '{{ dconfDir }}/01-banner-message'
+    - text: |
+        [org/gnome/login-screen] 
+        {{ targVal }}
+    - makedirs: true
+  {%- endif %}
+{%- else %}
+file_{{ stig_id }}-setVal:
+  cmd.run:
+    - name: 'echo "Package ''{{ pkgName }}'' not installed: state not applicable."'
+    - cwd: /root
+{%- endif %}
