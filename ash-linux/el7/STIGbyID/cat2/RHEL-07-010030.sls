@@ -19,40 +19,42 @@
 {%- set pkgName = 'dconf' %}
 {%- set dconfDir = '/etc/dconf/db/local.d' %}
 {%- set targVal = 'banner-message-enable=true' %}
+{%- set headerLabel = 'org/gnome/login-screen' %}
+{%- set dconfHeader = '[' + headerLabel + ']' %}
+{%- set dconfBanner = dconfDir + '/01-banner-message' %}
+
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+# Check if target RPM is installed
 {%- if salt['pkg.version'](pkgName) %}
-{%- set dconfFiles = salt['file.find'](dconfDir, type='f') %}
-  {%- if dconfFiles %}
-    {%- for dconfFile in dconfFiles %}
-      {%- if salt['file.search'](dconfFile, '^' + targVal + '$') %}
-file_{{ stig_id }}-{{ dconfFile }}:
+  # Check if a section-header is already present
+  {%- if salt['file.search'](dconfBanner, '^\[' + headerLabel + '\]') %}
+    # Check if a banner-message has already been specified
+    {%- if salt['file.search'](dconfBanner, targVal) %}
+file_{{ stig_id }}-{{ dconfBanner }}:
   cmd.run:
-    - name: 'echo "Banner value set in {{ dconfFile }}"'
+    - name: 'echo "Use of a banner-message already enabled"'
     - cwd: /root
-      {%- else %}
-file_{{ stig_id }}-{{ dconfFile }}:
-  cmd.run:
-    - name: 'echo "Banner value not set in {{ dconfFile }}"'
-    - cwd: /root
-      {%- endif %}
-    {%- endfor %}
-  {%- else %}
-file_{{ stig_id }}-setVal:
-  file.append:
-    - name: '{{ dconfDir }}/01-banner-message'
-    - text: |
-        [org/gnome/login-screen] 
+    {%- else  %}
+file_{{ stig_id }}-{{ dconfBanner }}:
+  file.replace:
+    - name: '{{ dconfBanner }}'
+    - pattern: '^\[{{ headerLabel }}\]'
+    - repl: |
+        {{ dconfHeader }}
         {{ targVal }}
-    - makedirs: true
+    {%- endif  %}
+  {%- else %}
+file_{{ stig_id }}-{{ dconfBanner }}:
+  file.append:
+    - name: '{{ dconfBanner }}'
+    - text: |
+        {{ dconfHeader }}
+        {{ targVal }}
   {%- endif %}
 {%- else %}
-file_{{ stig_id }}-setVal:
-  cmd.run:
-    - name: 'echo "Package ''{{ pkgName }}'' not installed: state not applicable."'
-    - cwd: /root
 {%- endif %}
