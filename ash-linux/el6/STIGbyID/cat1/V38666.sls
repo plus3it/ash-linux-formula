@@ -46,7 +46,7 @@ cmd_V{{ stig_id }}-cleanChck:
 
 {%- else %}
 
-    {%- if salt['pkg.check_db'](MSFEpkg)[MSFEpkg]['found'] %}
+    {%- if salt['pkg.latest_version'](MSFEpkg) %}
 
 # If not installed, see if it's available in the Yum repos
 pkg_V{{ stig_id }}:
