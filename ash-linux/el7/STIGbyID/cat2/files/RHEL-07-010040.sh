@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010040"
+diag_out "   Text-base login system must display"
+diag_out "   the Standard Mandatory DoD notice and"
+diag_out "   consent banner before granting access"
+diag_out "   to the system."
 diag_out "----------------------------------------"

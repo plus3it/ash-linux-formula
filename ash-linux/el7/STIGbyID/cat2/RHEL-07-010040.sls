@@ -16,9 +16,18 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010040' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set bannerText = 'ash-linux/el7/banner-consent_full.txt' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+file_{{ stig_id }}:
+  file.managed:
+    - name: '/etc/issue'
+    - source: salt://{{ bannerText }}
+    - user: root
+    - group: root
+    - mode: 0444
 
