@@ -8,7 +8,10 @@
 # Rule Summary:
 #	"The operating system must generate audit records for all account creations, modifications, disabling, and termination events."
 #
-# CCI-000018 CCI-000172 CCI-001403 CCI-002130 
+# CCI-000018 
+# CCI-000172 
+# CCI-001403 
+# CCI-002130 
 #    NIST SP 800-53 :: AC-2 (4) 
 #    NIST SP 800-53A :: AC-2 (4).1 (i&ii) 
 #    NIST SP 800-53 Revision 4 :: AC-2 (4) 
