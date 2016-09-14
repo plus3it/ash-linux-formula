@@ -22,4 +22,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010060"
+diag_out "   The operating system must enable a"
+diag_out "   user session lock until that user"
+diag_out "   reauthenticates."
 diag_out "----------------------------------------"
