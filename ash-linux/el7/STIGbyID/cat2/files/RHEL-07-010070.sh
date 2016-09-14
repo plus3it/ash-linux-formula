@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010070"
+diag_out "   The operating system must initiate a"
+diag_out "   screensaver after a 15-minute period"
+diag_out "   of inactivity for graphical user"
+diag_out "   interfaces."
 diag_out "----------------------------------------"
