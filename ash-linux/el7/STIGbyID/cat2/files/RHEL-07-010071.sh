@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010071"
+diag_out "   The operating system must initiate a"
+diag_out "   session lock after a 15-minute"
+diag_out "   period of inactivity for all"
+diag_out "   connection types."
 diag_out "----------------------------------------"
