@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010100"
+diag_out "   When passwords are changed or new"
+diag_out "   passwords are established, the new"
+diag_out "   password must contain at least one"
+diag_out "   lower-case character."
 diag_out "----------------------------------------"
