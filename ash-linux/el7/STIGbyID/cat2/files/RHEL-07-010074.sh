@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010074"
+diag_out "   The operating system must initiate a"
+diag_out "   session lock for graphical user"
+diag_out "   interfaces when the screensaver is"
+diag_out "   activated."
 diag_out "----------------------------------------"
