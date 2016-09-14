@@ -18,6 +18,7 @@
 {%- set cfgFile = '/etc/security/pwquality.conf' %}
 {%- set parmName = 'ucredit' %}
 {%- set parmValu = '-1' %}
+{%- set parmDesc = 'uppercase' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -36,6 +37,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ cfgFile }}'
     - text: |
         # Inserted per STIG-ID {{ stig_id }}:
-        # * Require new passwords to have at least one uppercase character
+        # * Require new passwords to have at least one {{ parmDesc }} character
         {{ parmName }} = {{ parmValu }}
 {%- endif %}
