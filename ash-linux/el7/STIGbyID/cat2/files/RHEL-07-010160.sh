@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010160"
+diag_out "   When passwords are changed the"
+diag_out "   number of repeating characters of"
+diag_out "   the same character class must not be"
+diag_out "   more than four characters."
 diag_out "----------------------------------------"
