@@ -14,9 +14,13 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010072' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set pkgName = 'screen' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+package_{{ pkgName }}:
+  pkg.installed:
+    - name: '{{ pkgName }}'

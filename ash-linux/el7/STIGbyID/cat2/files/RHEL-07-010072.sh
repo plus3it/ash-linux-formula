@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010072"
+diag_out "   The operating system must have the"
+diag_out "   screen package installed."
 diag_out "----------------------------------------"
