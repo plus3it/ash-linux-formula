@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010180"
+diag_out "   The shadow file must be configured"
+diag_out "   to store only encrypted"
+diag_out "   representations of passwords."
 diag_out "----------------------------------------"
