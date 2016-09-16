@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010170"
+diag_out "   The PAM system service must be"
+diag_out "   configured to store only encrypted"
+diag_out "   representations of passwords."
 diag_out "----------------------------------------"
