@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010190"
+diag_out "   User and group account administration"
+diag_out "   utilities must be configured to store"
+diag_out "   only encrypted representations of"
+diag_out "   passwords."
 diag_out "----------------------------------------"
