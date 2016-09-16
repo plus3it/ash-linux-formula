@@ -4,9 +4,18 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must prohibit the use of cached PAM authenticators after one day.
+#	The operating system must prohibit the use of cached PAM
+#	authenticators after one day.
 #
 # CCI-002007 
 #    NIST SP 800-53 Revision 4 :: IA-5 (13) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-010401' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

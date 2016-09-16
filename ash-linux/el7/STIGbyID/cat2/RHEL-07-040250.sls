@@ -4,9 +4,20 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must protect against or limit the effects of Denial of Service (DoS) attacks by validating the operating system is implementing rate-limiting measures on impacted network interfaces.
+#	The operating system must protect against or limit the effects
+#	of Denial of Service (DoS) attacks by validating the operating
+#	system is implementing rate-limiting measures on impacted
+#	network interfaces.
 #
 # CCI-002385 
 #    NIST SP 800-53 Revision 4 :: SC-5 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040250' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

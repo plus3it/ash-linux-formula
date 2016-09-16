@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Files systems that contain user home directories must be mounted to prevent files with the setuid and setgid bit set from being executed.
+#	Files systems that contain user home directories must be
+#	mounted to prevent files with the setuid and setgid bit set
+#	from being executed.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -12,3 +14,11 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-021010' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

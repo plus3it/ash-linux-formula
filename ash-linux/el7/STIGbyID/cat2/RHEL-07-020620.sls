@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All local interactive users must have a home directory assigned in the /etc/passwd file.
+#	All local interactive users must have a home directory assigned
+#	in the /etc/passwd file.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -12,3 +13,11 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-020620' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

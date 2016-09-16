@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must map the authenticated identity to the user or group account for PKI-based authentication.
+#	The operating system must map the authenticated identity to the
+#	user or group account for PKI-based authentication.
 #
 # CCI-000187 
 #    NIST SP 800-53 :: IA-5 (2) 
@@ -12,3 +13,11 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (2) (c) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040050' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

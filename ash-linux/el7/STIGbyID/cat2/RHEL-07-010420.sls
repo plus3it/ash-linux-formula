@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The delay between logon prompts following a failed console logon attempt must be at least four seconds.
+#	The delay between logon prompts following a failed console
+#	logon attempt must be at least four seconds.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -12,3 +13,11 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-010420' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

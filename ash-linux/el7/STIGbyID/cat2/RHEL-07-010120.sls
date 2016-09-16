@@ -4,7 +4,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"When passwords are changed or new passwords are assigned, the new password must contain at least one special character."
+#	When passwords are changed or new passwords are assigned, the
+#	new password must contain at least one special character.
 #
 # CCI-001619 
 #    NIST SP 800-53 :: IA-5 (1) (a) 
@@ -12,3 +13,30 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-010120' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/security/pwquality.conf' %}
+{%- set parmName = 'ocredit' %}
+{%- set parmValu = '-1' %}
+{%- set parmDesc = 'special' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt['file.search'](cfgFile, '^' + parmName) %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ parmValu }}'
+{%- else %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.append:
+    - name: '{{ cfgFile }}'
+    - text: |
+        # Inserted per STIG-ID {{ stig_id }}:
+        # * Require new passwords to have at least one {{ parmDesc }} character
+        {{ parmName }} = {{ parmValu }}
+{%- endif %}

@@ -4,12 +4,22 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All network connections associated with SSH traffic must terminate after a period of inactivity.
+#	All network connections associated with SSH traffic must
+#	terminate after a period of inactivity.
 #
-# CCI-001133 CCI-002361 
+# CCI-001133 
+# CCI-002361 
 #    NIST SP 800-53 :: SC-10 
 #    NIST SP 800-53A :: SC-10.1 (ii) 
 #    NIST SP 800-53 Revision 4 :: SC-10 
 #    NIST SP 800-53 Revision 4 :: AC-12 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040191' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

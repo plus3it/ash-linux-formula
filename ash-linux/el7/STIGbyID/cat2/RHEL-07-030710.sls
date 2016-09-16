@@ -4,9 +4,14 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The operating system must generate audit records for all account creations, modifications, disabling, and termination events."
+#	The operating system must generate audit records for all
+#	account creations, modifications, disabling, and termination
+#	events.
 #
-# CCI-000018 CCI-000172 CCI-001403 CCI-002130 
+# CCI-000018 
+# CCI-000172 
+# CCI-001403 
+# CCI-002130 
 #    NIST SP 800-53 :: AC-2 (4) 
 #    NIST SP 800-53A :: AC-2 (4).1 (i&ii) 
 #    NIST SP 800-53 Revision 4 :: AC-2 (4) 
@@ -19,3 +24,11 @@
 #    NIST SP 800-53 Revision 4 :: AC-2 (4) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-030710' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+

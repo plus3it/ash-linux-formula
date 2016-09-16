@@ -4,9 +4,14 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must not allow removable media to be used as the boot loader unless approved.
+#	The system must not allow removable media to be used as the
+#	boot loader unless approved.
 #
-# CCI-000368 CCI-000318 CCI-001812 CCI-001813 CCI-001814 
+# CCI-000368 
+# CCI-000318 
+# CCI-001812 
+# CCI-001813 
+# CCI-001814 
 #    NIST SP 800-53 :: CM-6 c 
 #    NIST SP 800-53A :: CM-6.1 (v) 
 #    NIST SP 800-53 Revision 4 :: CM-6 c 
@@ -18,3 +23,11 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (1) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-021760' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
