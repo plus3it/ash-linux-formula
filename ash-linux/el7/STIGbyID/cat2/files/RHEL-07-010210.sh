@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010210"
+diag_out "   Passwords must be restricted to a 24"
+diag_out "   hours/1 day minimum lifetime."
 diag_out "----------------------------------------"
