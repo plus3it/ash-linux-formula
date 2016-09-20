@@ -15,6 +15,7 @@
 {%- set stig_id = 'RHEL-07-010210' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set targExp = 1 %}
+{%- set goodUsers = [] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -30,6 +31,7 @@ script_{{ stig_id }}-describe:
           passwdMin < targExp 
          )
     %}
+{%- do goodUsers.append(userName) %}
 notify_{{ stig_id }}-{{ userName }}:
   cmd.run:
     - name: 'echo "{{ userName }} min-change value ({{ passwdMin }}) is less than {{ targExp }}. Changing..."'
@@ -45,3 +47,10 @@ setmin_{{ stig_id }}-{{ userName }}:
 
   {%- endif %}
 {%- endfor %}
+
+{%- if not goodUsers %}
+notify_{{ stig_id }}-FoundNone:
+  cmd.run:
+    - name: 'echo "Found no users with non-compliant minimum password lifetime"'
+    - cwd: /root
+{%- endif %}
