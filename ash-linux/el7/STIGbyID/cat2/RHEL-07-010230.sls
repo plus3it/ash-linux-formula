@@ -14,9 +14,43 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010230' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set targExp = 60 %}
+{%- set goodUsers = [] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for userName in salt['user.list_users']() %}
+{%- set shadowInfo = salt['shadow.info'](userName) %}
+{%- set userPasswd = shadowInfo.passwd %}
+{%- set passwdMax = shadowInfo.max %}
+  {%- if (
+          userPasswd.startswith("$") and
+          passwdMax > targExp 
+         )
+    %}
+{%- do goodUsers.append(userName) %}
+notify_{{ stig_id }}-{{ userName }}:
+  cmd.run:
+    - name: 'echo "{{ userName }} max-change value ({{ passwdMax }}) is less than {{ targExp }}. Changing..."'
+    - cwd: /root
+
+setmax_{{ stig_id }}-{{ userName }}:
+  module.run:
+    - name: shadow.set_maxdays
+    - m_name: '{{ userName }}'
+    - maxdays: {{ targExp }}
+    - require: 
+      - cmd: notify_{{ stig_id }}-{{ userName }}
+
+  {%- endif %}
+{%- endfor %}
+
+{%- if not goodUsers %}
+notify_{{ stig_id }}-FoundNone:
+  cmd.run:
+    - name: 'echo "Found no users with non-compliant maximum password lifetime"'
+    - cwd: /root
+{%- endif %}
