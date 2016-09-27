@@ -15,9 +15,26 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010420' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set targFile = '/etc/login.defs' %}
+{%- set searchRoot = 'FAIL_DELAY' %}
+{%- set targVal = '4' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt['file.search'](targFile, '^' + searchRoot) %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.replace:
+    - name: '{{ targFile }}'   
+    - pattern: '^{{ searchRoot }}.*$'
+    - repl: '{{ searchRoot }}	{{ targVal }}'
+{%- else %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.append:
+    - name: '{{ targFile }}'   
+    - text: |
+        # Inserted per STIG {{ stig_id }}
+        {{ searchRoot }}	{{ targVal }}
+{%- endif %}
