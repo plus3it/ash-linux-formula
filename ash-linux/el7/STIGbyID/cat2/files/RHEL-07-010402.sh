@@ -19,4 +19,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010402"
+diag_out "   The operating system must prohibit"
+diag_out "   the use of cached SSH authenticators"
+diag_out "   after one day."
 diag_out "----------------------------------------"
