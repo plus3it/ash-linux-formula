@@ -22,7 +22,7 @@ script_{{ stig_id }}-describe:
 
 {%- for sudoer in sudoerFiles %}
   {%- if salt['file.search'](sudoer, '^[a-zA-Z%@].*!authenticate') %}
-notify{{ sudoer }}:
+notify_{{ stig_id }}-{{ sudoer }}:
   cmd.run:
     - name: 'printf "[WARNING]:\tThe {{ sudoer }} file contains an active ''!authenticate''\n\t\tentry. Sites using only key-based logins should ignore this warning.\n" > /dev/stderr'
     - cwd: /root
