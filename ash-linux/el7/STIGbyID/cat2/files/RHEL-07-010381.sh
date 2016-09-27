@@ -18,4 +18,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010381"
+diag_out "   Users must re-authenticate for"
+diag_out "   privilege escalation."
 diag_out "----------------------------------------"
