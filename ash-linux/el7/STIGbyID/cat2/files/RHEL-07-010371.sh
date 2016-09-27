@@ -19,4 +19,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010371"
+diag_out "   If three unsuccessful logon attempts"
+diag_out "   within 15 minutes occur the"
+diag_out "   associated account must be locked."
 diag_out "----------------------------------------"

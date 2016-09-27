@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010250"
+diag_out "   Passwords must be a minimum of 15"
+diag_out "   characters in length."
 diag_out "----------------------------------------"

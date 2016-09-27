@@ -12,9 +12,19 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010380' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set sudoerFiles = [ '/etc/sudoers' ] %}
+{%- set sudoerFiles = sudoerFiles + salt['file.find']('/etc/sudoers.d', 'maxdepth=0', 'type=f') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for sudoer in sudoerFiles %}
+  {%- if salt['file.search'](sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
+notify_{{ stig_id}}-{{ sudoer }}:
+  cmd.run:
+    - name: 'printf "[WARNING]:\tThe {{ sudoer }} file contains an active ''NOPASSWD''\n\t\tentry. Sites using only key-based logins should ignore this warning.\n" > /dev/stderr'
+    - cwd: /root
+  {%- endif %}
+{%- endfor %}

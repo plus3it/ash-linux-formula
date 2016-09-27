@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010441"
+diag_out "   The operating system must not allow"
+diag_out "   users to override SSH environment"
+diag_out "   variables."
 diag_out "----------------------------------------"

@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010420"
+diag_out "   The delay between logon prompts"
+diag_out "   following a failed console logon"
+diag_out "   attempt must be at least four"
+diag_out "   seconds."
 diag_out "----------------------------------------"

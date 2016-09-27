@@ -14,9 +14,40 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010240' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set targFile = '/etc/pam.d/system-auth' %}
+{%- if salt['file.is_link'](targFile) %}
+  {%- set targFile = targFile + '-ac' %}
+{%- endif %}
+{%- set searchRoot = '^password\s+sufficient\s+pam_unix.so\s+' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{%- if salt['file.search'](targFile, searchRoot + '.*remember=5') %}
+file_{{ stig_id }}-{{ targFile }}:
+  cmd.run:
+    - name: 'echo "Found target config in {{ targFile }}."'
+    - cwd: /root
+{%- elif salt['file.search'](targFile, searchRoot) %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.replace:
+    - name: {{ targFile }}
+    - pattern: '^(?P<srctok>{{ searchRoot }}.*$)'
+    - repl: '\g<srctok> remember=5'
+file_{{ stig_id }}-{{ targFile }}-cleanup:
+  file.replace:
+    - name: {{ targFile }}
+    - pattern: '(md5|bigcrypt|sha256|blowfish) '
+    - repl: ''
+    - onchanges:
+      - file: file_{{ stig_id }}-{{ targFile }}
+{%- else %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.replace:
+    - name: {{ targFile }}
+    - pattern: '^(?P<srctok>^password\s+requisite\s+pam_pwquality.so.*)'
+    - repl: '\g<srctok>\npassword sufficient pam_unix.so remember=5'
+{%- endif %}
 

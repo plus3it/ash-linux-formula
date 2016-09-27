@@ -16,9 +16,24 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010190' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set targFile = '/etc/libuser.conf' %}
+{%- set searchRoot = 'crypt_style' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt['file.search'](targFile, '^' + searchRoot) %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.replace:
+    - name: '{{ targFile }}'   
+    - pattern: '^{{ searchRoot }}.*$'
+    - repl: '{{ searchRoot }} = sha512'
+{%- else %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.replace:
+    - name: '{{ targFile }}'   
+    - pattern: '^(?P<srctok>^\[defaults\].*$)'
+    - repl: '\g<srctok>\n{{ searchRoot }} = sha512'
+{%- endif %}

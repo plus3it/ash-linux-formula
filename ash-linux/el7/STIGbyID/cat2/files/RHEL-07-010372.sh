@@ -19,4 +19,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010372"
+diag_out "   Accounts subject to three"
+diag_out "   unsuccessful login attempts within"
+diag_out "   15 minutes must be locked for the"
+diag_out "   maximum configurable period."
 diag_out "----------------------------------------"

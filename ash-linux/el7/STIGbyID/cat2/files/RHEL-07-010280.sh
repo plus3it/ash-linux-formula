@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010280"
+diag_out "   The operating system must disable"
+diag_out "   account identifiers (individuals,"
+diag_out "   groups, roles, and devices) if the"
+diag_out "   password expires."
 diag_out "----------------------------------------"

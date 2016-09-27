@@ -5,7 +5,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords must be prohibited from reuse for a minimum of five generations.
+#	Passwords must be prohibited from reuse for a minimum of
+#       five generations.
 #
 # CCI-000200 
 #    NIST SP 800-53 :: IA-5 (1) (e) 
@@ -20,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010240"
+diag_out "   Passwords must be prohibited from"
+diag_out "   reuse for a minimum of five"
+diag_out "   generations."
 diag_out "----------------------------------------"

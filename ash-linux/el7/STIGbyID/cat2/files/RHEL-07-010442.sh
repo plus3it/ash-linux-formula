@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010442"
+diag_out "   The operating system must not allow"
+diag_out "   a non-certificate trusted host SSH"
+diag_out "   logon to the system."
 diag_out "----------------------------------------"
