@@ -23,4 +23,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010500"
+diag_out "   The operating system must uniquely"
+diag_out "   identify and must authenticate"
+diag_out "   organizational users using multi-"
+diag_out "   factor authentication."
 diag_out "----------------------------------------"
