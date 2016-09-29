@@ -23,4 +23,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020090"
+diag_out "   The operating system must prevent"
+diag_out "   non-privileged users from executing"
+diag_out "   privileged functions."
 diag_out "----------------------------------------"
