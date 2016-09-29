@@ -19,4 +19,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020130"
+diag_out "   A file integrity tool must verify"
+diag_out "   the baseline operating system"
+diag_out "   configuration at least weekly."
 diag_out "----------------------------------------"
