@@ -19,4 +19,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020140"
+diag_out "   Designated personnel must be"
+diag_out "   notified if baseline configurations"
+diag_out "   are changed in an unauthorized"
+diag_out "   manner."
 diag_out "----------------------------------------"
