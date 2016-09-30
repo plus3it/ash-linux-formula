@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020250"
+diag_out "   System security patches and updates"
+diag_out "   must be installed and up to date."
 diag_out "----------------------------------------"
