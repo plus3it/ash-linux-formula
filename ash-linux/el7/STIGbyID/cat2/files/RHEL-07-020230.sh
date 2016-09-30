@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020230"
+diag_out "   The operating system must define"
+diag_out "   default permissions for all"
+diag_out "   authenticated users in such a way"
+diag_out "   that the user can only read and"
+diag_out "   modify their own files."
 diag_out "----------------------------------------"

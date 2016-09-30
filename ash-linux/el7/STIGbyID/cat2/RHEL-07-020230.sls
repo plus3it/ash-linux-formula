@@ -16,9 +16,21 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020230' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/login.defs'%}
+{%- set parmName = 'UMASK' %}
+{%- set parmValu = '077' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}\s.*$'
+    - repl: '{{ parmName }} {{ parmValu }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} {{ parmValu }}
