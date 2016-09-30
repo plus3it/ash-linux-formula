@@ -26,4 +26,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020161"
+diag_out "   File system automounter must be"
+diag_out "   disabled unless required."
 diag_out "----------------------------------------"
