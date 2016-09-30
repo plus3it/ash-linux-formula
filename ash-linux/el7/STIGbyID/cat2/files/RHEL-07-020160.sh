@@ -26,4 +26,5 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020160"
+diag_out "   USB mass storage must be disabled."
 diag_out "----------------------------------------"

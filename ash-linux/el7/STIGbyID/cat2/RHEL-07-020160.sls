@@ -20,9 +20,33 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020160' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set foundMods = [] %}
+{%- set modFiles = [] %}
+{%- for modFile in salt['file.find']('/etc/modprobe.d', 'maxdepth=0', 'type=f') %}
+  {%- do modFiles.append(modFile) %}
+{%- endfor %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for modFile in modFiles %}
+  {%- if salt['file.search'](modFile, '^[a-z]*\susb') %}
+    {%- do foundMods.append(modFile) %}
+file_{{ stig_id }}-foundin-{{ modFile }}:
+  file.replace:
+    - name: '{{ modFile }}'
+    - pattern: '^[a-z]*\susb.*$'
+    - repl: 'install usb-storage /bin/true'
+    - backup: False
+  {%- endif %}
+
+{%- endfor %}
+
+{%- if not foundMods %}
+file_{{ stig_id }}-nousbstorage:
+  file.append:
+    - name: '/etc/modprobe.d/nousbstorage'
+    - text: 'install usb-storage /bin/true'
+{%- endif %}
