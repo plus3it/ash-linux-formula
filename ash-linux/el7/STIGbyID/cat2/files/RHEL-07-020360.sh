@@ -18,4 +18,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020360"
+diag_out "   All files and directories must have"
+diag_out "   a valid owner."
 diag_out "----------------------------------------"
