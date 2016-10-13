@@ -15,9 +15,23 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020620' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set userList =  salt['user.list_users']() %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for user in userList %}
+  {%- set userInfo = salt['user.info'](user) %}
+  {%- set userHome = userInfo['home'] %}
+  {%- if not (
+              salt['file.directory_exists'](userHome) or
+              salt['file.file_exists'](userHome)
+             ) %}
+notify_{{ stig_id }}-{{ user }}:
+  cmd.run:
+    - name: 'echo "{{ user }}''s home directory ''{{ userHome }}'' does not exist."'
+    - cwd: /root
+  {%- endif %}
+{%- endfor %}
