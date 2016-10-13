@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020620"
+diag_out "   All local interactive users must"
+diag_out "   have a home directory assigned in"
+diag_out "   the /etc/passwd file."
 diag_out "----------------------------------------"

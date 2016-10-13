@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020630"
+diag_out "   All local interactive user accounts,"
+diag_out "   upon creation, must be assigned a"
+diag_out "   home directory."
 diag_out "----------------------------------------"

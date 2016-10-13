@@ -14,10 +14,10 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020250' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set maxDays = 30 %}
+{%- set maxDays = salt['pillar.get']('ash-linux:lookup:mustpatch-days', 30) %}
 {%- set daysToSec = maxDays * 24 * 60 * 60 %}
 {%- set todaysdt = salt['cmd.run']('date "+%s"') %}
-{%- set lastUpdt = salt['cmd.run']("date -d $(yum history 2> /dev/null | awk -F'|' '/\| Update/{print $3}' | head -1 | sed -e 's/^ *//' -e 's/ .*$//') +%s") %}
+{%- set lastUpdt = salt['cmd.run']("date -d $(yum history 2> /dev/null | awk -F '|' '$4 ~ / U/{print $3}' | head -1 | sed -e 's/^ *//' -e 's/ .*$//') +%s") %}
 {%- set dateDiff = todaysdt|int - lastUpdt|int %}
 
 script_{{ stig_id }}-describe:
@@ -30,4 +30,12 @@ notify_{{ stig_id }}-lastUpdate:
   cmd.run:
     - name: 'echo "System updated less than {{ maxDays }} ago"'
     - cwd: /root
+{%- else %}
+notify_{{ stig_id }}-lastUpdate:
+  cmd.run:
+    - name: 'echo "System last updated more than {{ maxDays }} ago: updating."'
+    - cwd: /root
+
+upgrade__{{ stig_id }}:
+  pkg.uptodate
 {%- endif %}

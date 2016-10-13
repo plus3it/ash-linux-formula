@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020640"
+diag_out "   All local interactive user home"
+diag_out "   directories defined in the"
+diag_out "   /etc/passwd file must exist."
 diag_out "----------------------------------------"

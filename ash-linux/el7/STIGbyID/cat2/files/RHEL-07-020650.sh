@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020650"
+diag_out "   All local interactive user home"
+diag_out "   directories must have mode 0750 or"
+diag_out "   less permissive."
 diag_out "----------------------------------------"
