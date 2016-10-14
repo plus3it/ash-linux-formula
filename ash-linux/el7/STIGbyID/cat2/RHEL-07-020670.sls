@@ -15,9 +15,25 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020670' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set sysuserMax = salt['cmd.run']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set userList =  salt['user.list_users']() %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+
+{%- for user in userList %}
+  {%- set userInfo = salt['user.info'](user) %}
+  {%- set userHome = userInfo['home'] %}
+  {%- set userUid = userInfo['uid']|int %}
+  {%- set userGid = userInfo['gid']|int %}
+  {%- if userUid > sysuserMax %}
+fixgroup_{{ stig_id }}-{{ userHome }}:
+  file.directory:
+    - name: '{{ userHome }}'
+    - group: {{ userGid }}
+
+  {%- endif %}
+{%- endfor %}

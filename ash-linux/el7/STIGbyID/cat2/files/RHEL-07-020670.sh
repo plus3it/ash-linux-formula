@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020670"
+diag_out "   All local interactive user home"
+diag_out "   directories must be group-owned by"
+diag_out "   the home directory owners primary"
+diag_out "   group."
 diag_out "----------------------------------------"
