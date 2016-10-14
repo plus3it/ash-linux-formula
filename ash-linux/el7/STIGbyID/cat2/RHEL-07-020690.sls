@@ -22,3 +22,14 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+# Thoughts on remediation:
+# Need to:
+#   1) Identify all local users with uid > SYS_MAX
+#   2) Identify (each) user's primary and secondary groups
+#   3) (iteratively) Determine (each) user's home-directory
+#   4) Do a find against their home directory
+#   5) Create a KVP dictionary with each found file/directory as the key and 
+#      the group-owner as the value.
+#   6) If current group-owner value for file is not in the user's primary or 
+#      secondary groups, change the group-ownership to the user's primary
+#      group.
