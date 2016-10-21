@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020850"
+diag_out "   Local initialization files for local"
+diag_out "   interactive users must be"
+diag_out "   group-owned by the users primary"
+diag_out "   group or root."
 diag_out "----------------------------------------"
