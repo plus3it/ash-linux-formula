@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021050"
+diag_out "   All world-writable directories must"
+diag_out "   be group-owned by root, sys, bin, or"
+diag_out "   an application group."
 diag_out "----------------------------------------"
