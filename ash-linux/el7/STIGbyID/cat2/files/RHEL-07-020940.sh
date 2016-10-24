@@ -31,4 +31,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020940"
+diag_out "   All system device files must be"
+diag_out "   correctly labeled to prevent"
+diag_out "   unauthorized modification."
 diag_out "----------------------------------------"

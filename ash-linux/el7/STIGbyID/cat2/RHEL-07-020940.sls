@@ -25,9 +25,30 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020940' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set badDevNodes = [] %}
+{%- do badDevNodes.extend(salt.cmd.run('find / -context *:device_t:* \( -type c -o -type b \)').split('\n')) %}
+{%- do badDevNodes.extend(salt.cmd.run('find / -context *:unlabeled_t:* \( -type c -o -type b \)').split('\n')) %}
+
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for file in badDevNodes %}
+  {%- if file %}
+    {%- if salt.lowpkg.owner(file) %}
+      {%- set fixRPM = salt.lowpkg.owner(file) %}
+dev_{{ stig_id }}-{{ file }}:
+  pkg.install:
+    - name: '{{ fixRPM }}'
+    - reinstall: True
+    {%- else %}
+dev_{{ stig_id }}-{{ file }}:
+  cmd.run:
+    - name: 'echo "Bad device ''{{ file }}'' not installed by an RPM: cannot attempt fix"'
+    - cwd: /root
+    {%- endif %}
+
+  {%- endif %}
+{%- endfor %}
