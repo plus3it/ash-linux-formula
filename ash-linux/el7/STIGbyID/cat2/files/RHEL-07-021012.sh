@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021012"
+diag_out "   Files systems that are being"
+diag_out "   imported via Network File System"
+diag_out "   (NFS) must be mounted to prevent"
+diag_out "   files with the setuid and setgid bit"
+diag_out "   set from being executed."
 diag_out "----------------------------------------"
