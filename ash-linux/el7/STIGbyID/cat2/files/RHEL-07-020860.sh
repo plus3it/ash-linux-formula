@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020860"
+diag_out "   All local initialization files must"
+diag_out "   have mode 0740 or less permissive."
 diag_out "----------------------------------------"
