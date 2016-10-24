@@ -30,4 +30,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021060"
+diag_out "   The umask must be set to 077 for all"
+diag_out "   local interactive user accounts."
 diag_out "----------------------------------------"
