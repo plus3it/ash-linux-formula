@@ -25,4 +25,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030090"
+diag_out "   The operating system must shut down"
+diag_out "   upon audit processing failure,"
+diag_out "   unless availability is an overriding"
+diag_out "   concern."
 diag_out "----------------------------------------"
