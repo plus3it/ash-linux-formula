@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021200"
+diag_out "   If the cron.allow file exists it"
+diag_out "   must be group-owned by root."
 diag_out "----------------------------------------"

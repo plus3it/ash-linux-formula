@@ -14,9 +14,21 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021200' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set allowFile = '/etc/cron.allow' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt.file.file_exists(allowFile) %}
+fixown_{{ stig_id }}-{{ allowFile }}:
+  file.managed:
+    - name: '{{ allowFile }}'
+    - group: 'root'
+{%- else %}
+fixown_{{ stig_id }}-{{ allowFile }}:
+  cmd.run:
+    - name: 'echo "File ''{{ allowFile }}'' not present."'
+    - cwd: /root
+{%- endif %}
