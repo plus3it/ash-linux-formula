@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021620"
+diag_out "  The file integrity tool must use"
+diag_out "  FIPS 140-2 approved cryptographic"
+diag_out "  hashes for validating file contents"
+diag_out "  and directories."
 diag_out "----------------------------------------"
