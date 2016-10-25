@@ -25,9 +25,18 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021760' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set grubCfgs = salt.file.find('/', type='f', name='grub.cfg') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for file in grubCfgs %}
+  {%- if salt.file.search(file, '^\sset root=') %}
+notify_{{ stig_id }}-{{ file }}:
+  cmd.run:
+    - name: 'echo "ALERT: alternate root-device defined in {{ file }}: please check its validity."'
+    - cwd: /root
+  {%- endif %}
+{%- endfor %}

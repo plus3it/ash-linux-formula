@@ -31,4 +31,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021760"
+diag_out "   The system must not allow removable"
+diag_out "   media to be used as the boot loader"
+diag_out "   unless approved."
 diag_out "----------------------------------------"
