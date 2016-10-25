@@ -20,4 +20,5 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021160"
+diag_out "   Cron logging must be implemented."
 diag_out "----------------------------------------"
