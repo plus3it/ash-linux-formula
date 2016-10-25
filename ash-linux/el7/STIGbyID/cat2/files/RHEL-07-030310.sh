@@ -18,4 +18,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030310"
+diag_out "   All privileged function executions"
+diag_out "   must be audited."
 diag_out "----------------------------------------"
