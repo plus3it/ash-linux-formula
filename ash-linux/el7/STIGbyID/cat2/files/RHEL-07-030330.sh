@@ -19,4 +19,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030330"
+diag_out "   The operating system must off-load"
+diag_out "   audit records onto a different"
+diag_out "   system or media from the system"
+diag_out "   being audited."
 diag_out "----------------------------------------"
