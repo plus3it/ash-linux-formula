@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021230"
+diag_out "   Kernel core dumps must be disabled"
+diag_out "   unless needed."
 diag_out "----------------------------------------"

@@ -20,3 +20,6 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+service_{{ stig_id }}-kdump:
+  service.disabled:
+    - name: 'kdump.service'
