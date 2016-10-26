@@ -16,8 +16,8 @@
 {%- set remoteCfg = '/etc/audisp/audisp-remote.conf' %}
 {%- set nfParm = 'network_failure_action'%}
 {%- set dfParm = 'disk_full_action'%}
-{%- set aurmtNetFail = salt.pillar.get('ash-linux:lookup:audit-net-fail', 'syslog') %}
-{%- set auDiskFull = salt.pillar.get('ash-linux:lookup:audit-disk-full', 'syslog') %}
+{%- set aurmtNetFail = salt.pillar.get('ash-linux:lookup:audisp-net-fail', 'syslog') %}
+{%- set auDiskFull = salt.pillar.get('ash-linux:lookup:audisp-disk-full', 'syslog') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
