@@ -19,15 +19,16 @@
 {%- set stig_id = 'RHEL-07-030382' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set sysuserMax = salt['cmd.run']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set act2mon = 'lchown' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' lchown -F auid>' + sysuserMax + ' ',
-                      'rule' : '-a always,exit -F arch=b64 -S lchown -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
-                      'rule32' : '-a always,exit -F arch=b32 -S lchown -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
+    'selDACusers' : { 'search_string' : ' ' + act2mon + ' -F auid>' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
                     },
-    'selDACroot'  : { 'search_string' : ' lchown -F auid=0 ',
-                      'rule' : '-a always,exit -F arch=b64 -S lchown -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
-                      'rule32' : '-a always,exit -F arch=b32 -S lchown -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
+    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' -F auid=0 ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
                     },
 } %}
 
