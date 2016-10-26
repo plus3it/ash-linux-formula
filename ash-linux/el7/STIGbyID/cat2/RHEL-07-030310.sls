@@ -12,7 +12,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030310' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set ruleFile = '/etc/audit/rules.d/setuid_setgid.rules' %}
 {%- set localFstypes = [
                          'ext2',
                          'ext3',
@@ -30,6 +30,9 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+touch_{{ stig_id }}-{{ ruleFile }}:
+  file.touch:
+    - name: '{{ ruleFile }}'
 
 {%- for mount in mntList %}
   {%- if mntStruct[mount]['fstype'] in localFstypes %}
@@ -46,5 +49,7 @@ audit_{{ stig_id }}-{{ privFile }}:
     - pattern: '^.*{{ privFile }}.*$'
     - repl: '-a always,exit -F path={{ privFile }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k setuid/setgid'
     - append_if_not_found: True
+    - require:
+      - file: touch_{{ stig_id }}-{{ ruleFile }}
   {%- endif %}
 {%- endfor %}
