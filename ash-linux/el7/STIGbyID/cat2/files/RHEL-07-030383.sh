@@ -24,4 +24,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030383"
+diag_out "   All uses of the fchownat command"
+diag_out "   must be audited."
 diag_out "----------------------------------------"
