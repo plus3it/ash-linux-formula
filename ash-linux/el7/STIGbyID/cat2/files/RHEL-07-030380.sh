@@ -24,4 +24,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030380"
+diag_out "   All uses of the chown command must"
+diag_out "   be audited."
 diag_out "----------------------------------------"
