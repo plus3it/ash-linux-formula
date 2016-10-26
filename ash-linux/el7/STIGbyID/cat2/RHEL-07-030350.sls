@@ -16,9 +16,30 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030350' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set audCfg = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'space_left'%}
+{%- set fullPct = 0.75 %}
+{%- set auditVol = '/var/log/audit' %}
+{%- set usageDict = salt.status.diskusage(auditVol) %}
+{%- set audSzMB = usageDict[auditVol]['total'] // 1024 // 1024 %}
+{%- set alrtFull = (( audSzMB * 0.75 )|int)|string %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt.file.file_exists(audCfg) %}
+file_{{ stig_id }}-{{ parmName }}:
+  file.replace:
+    - name: '{{ audCfg }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ alrtFull }}'
+    - append_if_not_found: True
+{%- else %}
+file_{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ audCfg }}'
+    - text: '{{ parmName }} = {{ alrtFull }}'
+    - makedirs: True
+{%- endif %}

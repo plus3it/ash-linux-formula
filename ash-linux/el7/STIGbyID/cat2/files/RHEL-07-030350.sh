@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030350"
+diag_out "   Alert when allocated audit record"
+diag_out "   storage volume reaches 75% of the"
+diag_out "   repository maximum audit record"
+diag_out "   storage capacity."
 diag_out "----------------------------------------"
