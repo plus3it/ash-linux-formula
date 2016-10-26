@@ -19,4 +19,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030340"
+diag_out "   The audit system must take"
+diag_out "   appropriate action when the audit"
+diag_out "   storage volume is full."
 diag_out "----------------------------------------"
