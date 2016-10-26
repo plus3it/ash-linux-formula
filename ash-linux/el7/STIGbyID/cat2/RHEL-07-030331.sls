@@ -14,9 +14,31 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030331' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set remoteCfg = '/etc/audisp/audisp-remote.conf' %}
+{%- set parmName = 'enable_krb5' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+# STIG doesn't enumerate this, but the handler's kinda pointless
+# if this package isn't installed
+pkg_{{ stig_id }}-audispRemote:
+  pkg.installed:
+    - name: audispd-plugins
+
+{%- if salt.file.file_exists(remoteCfg) %}
+file_{{ stig_id }}-{{ remoteCfg }}:
+  file.replace:
+    - name: '{{ remoteCfg }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} = yes'
+    - append_if_not_found: True
+{%- else %}
+file_{{ stig_id }}-{{ remoteCfg }}:
+  file.append:
+    - name: '{{ remoteCfg }}'
+    - text: '{{ parmName }} = yes'
+    - makedirs: True
+{%- endif %}

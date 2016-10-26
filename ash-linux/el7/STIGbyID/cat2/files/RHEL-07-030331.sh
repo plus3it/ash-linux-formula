@@ -20,4 +20,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030331"
+diag_out "   The operating system must encrypt"
+diag_out "   the transfer of audit records"
+diag_out "   off-loaded onto a different system"
+diag_out "   or media from the system being"
+diag_out "   audited."
 diag_out "----------------------------------------"
