@@ -35,6 +35,9 @@
        # Action auditd will take if it overruns its event-queues
 ##     audit-overflow: <0|1|2>
 
+       # Action auditd will take if log-space is running out
+##     audit-space-action: <ignore|syslog|rotate|email|exec|suspend|single|halt>
+
        # The IP/hostname of a remote node configured to collect
        # event information from the audispd service
 ##     audisp-server: audispdcol.my.fully-qualified.domain

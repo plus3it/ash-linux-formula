@@ -15,9 +15,26 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030351' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set audCfg = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'space_left_action'%}
+{%- set alrtMeth = salt.pillar.get('ash-linux:lookup:audit-space-action', 'email') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt.file.file_exists(audCfg) %}
+file_{{ stig_id }}-{{ parmName }}:
+  file.replace:
+    - name: '{{ audCfg }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ alrtMeth }}'
+    - append_if_not_found: True
+{%- else %}
+file_{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ audCfg }}'
+    - text: '{{ parmName }} = {{ alrtMeth }}'
+    - makedirs: True
+{%- endif %}
