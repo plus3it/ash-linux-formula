@@ -15,9 +15,26 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030352' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set audCfg = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'action_mail_acct'%}
+{%- set alrtdest = salt.pillar.get('ash-linux:lookup:notifier-email', 'root') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt.file.file_exists(audCfg) %}
+file_{{ stig_id }}-{{ parmName }}:
+  file.replace:
+    - name: '{{ audCfg }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ alrtdest }}'
+    - append_if_not_found: True
+{%- else %}
+file_{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ audCfg }}'
+    - text: '{{ parmName }} = {{ alrtdest }}'
+    - makedirs: True
+{%- endif %}

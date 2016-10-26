@@ -21,4 +21,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030352"
+diag_out "   The operating system must"
+diag_out "   immediately notify the SA and ISSO"
+diag_out "   (at a minimum) when the threshold"
+diag_out "   for the repository maximum audit"
+diag_out "   record storage capacity is reached."
 diag_out "----------------------------------------"
