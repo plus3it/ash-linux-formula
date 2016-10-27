@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030400"
+diag_out "   All uses of the setxattr command"
+diag_out "   must be audited."
 diag_out "----------------------------------------"
