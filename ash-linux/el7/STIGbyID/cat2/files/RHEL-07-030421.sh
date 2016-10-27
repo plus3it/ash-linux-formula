@@ -22,4 +22,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030421"
+diag_out "   All uses of the open command must be"
+diag_out "   audited."
 diag_out "----------------------------------------"
