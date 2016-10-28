@@ -20,13 +20,13 @@
 {%- set act2mon = 'ftruncate' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' ' + act2mon + ' -F auid>' + sysuserMax + ' ',
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
+    'selDACusers' : { 'search_string' : ' ' + act2mon + ' -F exit=EPERM -F auid>' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
                     },
-    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' -F auid=0 ',
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
+    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' -F exit=EPERM -F auid=0 ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=EPERM -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=EPERM -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
                     },
 } %}
 
