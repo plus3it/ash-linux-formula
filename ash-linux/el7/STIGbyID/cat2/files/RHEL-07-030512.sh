@@ -26,4 +26,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030512"
+diag_out "   All uses of the gpasswd command must"
+diag_out "   be audited."
 diag_out "----------------------------------------"
