@@ -22,4 +22,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030441"
+diag_out "   All uses of the semanage command"
+diag_out "   must be audited."
 diag_out "----------------------------------------"
