@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030630"
+diag_out "   All uses of the pam_timestamp_check"
+diag_out "   command must be audited."
 diag_out "----------------------------------------"
