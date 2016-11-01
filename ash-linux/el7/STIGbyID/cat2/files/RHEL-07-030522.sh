@@ -30,4 +30,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030522"
+diag_out "   All uses of the sudo command must be"
+diag_out "   audited."
 diag_out "----------------------------------------"
