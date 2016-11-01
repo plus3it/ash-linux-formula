@@ -31,4 +31,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030523"
+diag_out "   The operating system must generate"
+diag_out "   audit records containing the"
+diag_out "   full-text recording of modifications"
+diag_out "   to sudo configuration files."
 diag_out "----------------------------------------"
