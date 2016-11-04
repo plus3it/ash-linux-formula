@@ -31,4 +31,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030780"
+diag_out "   The rsyslog daemon must not accept"
+diag_out "   log messages from other servers"
+diag_out "   unless the server is being used for"
+diag_out "   log aggregation."
 diag_out "----------------------------------------"
