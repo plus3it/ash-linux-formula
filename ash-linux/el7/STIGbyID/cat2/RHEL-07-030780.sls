@@ -31,3 +31,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+disable_{{ stig_id }}-imtcp:
+  file.comment:
+    - name: '/etc/rsyslog.conf'
+    - regex: ^\$ModLoad imtcp
+    - char: '#'

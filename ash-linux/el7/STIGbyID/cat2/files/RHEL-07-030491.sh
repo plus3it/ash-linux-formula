@@ -27,4 +27,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030491"
+diag_out "   The operating system must generate"
+diag_out "   audit records for all unsuccessful"
+diag_out "   account access events."
 diag_out "----------------------------------------"

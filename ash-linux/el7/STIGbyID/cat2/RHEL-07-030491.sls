@@ -21,9 +21,17 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030491' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
+{%- set watchFile = '/var/run/faillock' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+file_{{ stig_id }}-{{ audit_cfg_file }}:
+  file.replace:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ watchFile }}.*$'
+    - repl: '-w {{ watchFile }} -p wa -k logins'
+    - append_if_not_found: True

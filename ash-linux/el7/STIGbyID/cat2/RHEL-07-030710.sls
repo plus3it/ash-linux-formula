@@ -26,9 +26,27 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030710' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set files2mon = [
+                      '/etc/group',
+                      '/etc/passwd',
+                      '/etc/gshadow',
+                      '/etc/shadow',
+                      '/etc/security/opasswd'
+                     ] %}
+{%- set key2mon = 'identity' %}
+
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for file2mon in files2mon %}
+file_{{ stig_id }}-{{ file2mon }}:
+  file.replace:
+    - name: '{{ ruleFile }}'
+    - pattern: '^-w {{ file2mon }} .*$'
+    - repl: '-w {{ file2mon }} -p wa -k {{ key2mon }}'
+    - append_if_not_found: True
+{%- endfor %}

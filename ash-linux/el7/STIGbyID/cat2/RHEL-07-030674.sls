@@ -14,9 +14,25 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030674' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set path2mon = '/sbin/modprobe' %}
+{%- set key2mon = 'module-change' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+{%- if not salt.file.file_exists(ruleFile) %}
+touch_{{ stig_id }}-{{ ruleFile }}:
+  file.touch:
+    - name: '{{ ruleFile }}'
+{%- endif %}
+
+file_{{ stig_id }}-{{ ruleFile }}:
+  file.replace:
+    - name: '{{ ruleFile }}'
+    - pattern: '^-w {{ path2mon }}.*$'
+    - repl: '-w {{ path2mon }} -F perm=x -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key={{ key2mon }}'
+    - append_if_not_found: True
 
