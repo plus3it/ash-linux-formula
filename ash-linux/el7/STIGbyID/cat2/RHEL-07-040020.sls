@@ -18,9 +18,49 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040020' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/rsyslog.conf' %}
+{%- set srcPatAuth = '^auth\.\*' %}
+{%- set srcPatDmn = '^daemon.notice' %}
+{%- set replAuth = 'auth.*,authpriv.*	/var/log/auth.log' %}
+{%- set replDmn = 'daemon.notice	/var/log/messages' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt.file.search(cfgFile, srcPatAuth) %}
+file_{{ stig_id }}-authlog:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '{{ srcPatAuth }}.*$'
+    - repl: '{{ replAuth }}'
+{%- else %}
+file_{{ stig_id }}-authlog:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^(?P<srctok>#### RULES ####.*$)'
+    - repl: |
+        \g<srctok>
+        # Inserted per STIG {{ stig_id }}
+        {{ replAuth }}
+    - append_if_not_found: True
+{%- endif %}
+
+{%- if salt.file.search(cfgFile, srcPatDmn) %}
+file_{{ stig_id }}-daemonlog:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '{{ srcPatDmn }}.*$'
+    - repl: '{{ replDmn }}'
+{%- else %}
+file_{{ stig_id }}-daemonlog:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^(?P<srctok>#### RULES ####.*$)'
+    - repl: |
+        \g<srctok>
+        # Inserted per STIG {{ stig_id }}
+        {{ replDmn }}
+    - append_if_not_found: True
+{%- endif %}

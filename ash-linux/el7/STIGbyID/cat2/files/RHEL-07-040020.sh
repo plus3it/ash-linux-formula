@@ -24,4 +24,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040020"
+diag_out "   The system must log informational"
+diag_out "   authentication data."
 diag_out "----------------------------------------"
