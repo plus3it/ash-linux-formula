@@ -40,9 +40,34 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040170' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set parmName = '/etc/ssh/sshd_config'%}
+{%- set parmValu = '/etc/issue'%}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+file_{{ stig_id }}-{{ parmValu }}:
+  file.managed:
+    - name: '{{ parmValu }}'
+    - source: salt://{{ helperLoc }}/issue.txt
+    - user: 'root'
+    - group: 'root'
+    - mode: 0444
+
+file_{{ stig_id }}-{{ parmName }}:
+  file.replace:
+    - name: '{{ parmName }}'
+    - pattern: '^\s{{ parmName }}=.*$'
+    - repl: '{{ parmName }}={{ parmValue }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }}={{ parmValu }}
+
+service_{{ stig_id }}-{{ cfgFile }}:
+  service.running:
+    - name: sshd
+    - watch:
+      - file: file_{{ stig_id }}-{{ parmName }}

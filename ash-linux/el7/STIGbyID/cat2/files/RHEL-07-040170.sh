@@ -46,4 +46,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040170"
+diag_out "   The Standard Mandatory DoD Notice"
+diag_out "   and Consent Banner must be displayed"
+diag_out "   immediately prior to, or as part of,"
+diag_out "   remote access logon prompts."
 diag_out "----------------------------------------"
