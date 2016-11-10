@@ -14,9 +14,23 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040060' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set pkgChk = 'pam_pkcs11' %}
+{%- set cfgFile = '/etc/pam_pkcs11/cn_map' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+touch_{{ stig_id }}-{{ cfgFile }}:
+  file.touch:
+    - name: '{{ cfgFile }}'
+    - unless: ' test -e {{ cfgFile }}'
+
+mode_{{ stig_id }}-{{ cfgFile }}:
+  file.managed:
+    - name: '{{ cfgFile }}'
+    - mode: 0644
+    - require:
+      - file: 'touch_{{ stig_id }}-{{ cfgFile }}'
 
