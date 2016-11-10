@@ -23,9 +23,27 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040110' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'Ciphers' %}
+{%- set parmValu = 'aes128-ctr,aes192-ctr,aes256-ctr' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} {{ parmValu }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} {{ parmValu }}
+
+service_{{ stig_id }}-{{ cfgFile }}:
+  service.running:
+    - name: sshd
+    - watch:
+      - file: file_{{ stig_id }}-{{ cfgFile }}
