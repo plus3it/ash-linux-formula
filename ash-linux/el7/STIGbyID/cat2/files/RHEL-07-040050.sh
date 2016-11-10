@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040050"
+diag_out "   The operating system must map the"
+diag_out "   authenticated identity to the user"
+diag_out "   or group account for PKI-based"
+diag_out "   authentication."
 diag_out "----------------------------------------"
