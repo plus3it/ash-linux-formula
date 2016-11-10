@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040080"
+diag_out "   The cn_map file must be group owned"
+diag_out "   by root."
 diag_out "----------------------------------------"

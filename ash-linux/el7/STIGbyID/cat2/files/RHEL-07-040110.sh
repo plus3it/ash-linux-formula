@@ -29,4 +29,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040110"
+diag_out "   A FIPS 140-2 approved cryptographic"
+diag_out "   algorithm must be used for SSH"
+diag_out "   communications."
 diag_out "----------------------------------------"

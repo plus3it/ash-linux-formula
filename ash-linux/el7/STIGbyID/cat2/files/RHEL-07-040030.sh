@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040030"
+diag_out "   The operating system, for PKI-based"
+diag_out "   authentication, must validate"
+diag_out "   certificates by performing RFC"
+diag_out "   5280-compliant certification path"
+diag_out "   validation."
 diag_out "----------------------------------------"

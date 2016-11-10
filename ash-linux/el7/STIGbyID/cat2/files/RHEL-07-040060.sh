@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040060"
+diag_out "   The cn_map file must have mode 0644"
+diag_out "   or less permissive."
 diag_out "----------------------------------------"

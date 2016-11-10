@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040040"
+diag_out "   The operating system, for PKI-based"
+diag_out "   authentication, must enforce"
+diag_out "   authorized access to all PKI private"
+diag_out "   keys stored or used by the operating"
+diag_out "   system."
 diag_out "----------------------------------------"

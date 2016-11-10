@@ -26,4 +26,11 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040160"
+diag_out "   All network connections associated"
+diag_out "   with a communication session must be"
+diag_out "   terminated at the end of the session"
+diag_out "   or after 10 minutes of inactivity"
+diag_out "   from the user at a command prompt,"
+diag_out "   except to fulfill documented and"
+diag_out "   validated mission requirements."
 diag_out "----------------------------------------"
