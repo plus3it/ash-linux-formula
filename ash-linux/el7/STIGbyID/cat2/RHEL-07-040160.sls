@@ -20,9 +20,22 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040160' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/profile' %}
+{%- set parmName = 'TMOUT' %}
+{%- set parmValu = '600' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^\s{{ parmName }}=.*$'
+    - repl: 'readonly {{ parmName }}={{ parmValu }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Inserted per STIG {{ stig_id }}
+        readonly {{ parmName }}={{ parmValu }}
+ 
