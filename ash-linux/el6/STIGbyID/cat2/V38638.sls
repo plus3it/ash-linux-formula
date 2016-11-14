@@ -26,7 +26,7 @@ script_{{ stigId }}-describe:
 {%- if salt['pkg.version']('gdm') %}
 cmd_{{ stigId }}-autoLock:
   cmd.run:
-    - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/lock_enabled true 
+    - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gnome-screensaver/lock_enabled true'
 {%- else %}
 notify_{{ stigId }}:
   cmd.run:
