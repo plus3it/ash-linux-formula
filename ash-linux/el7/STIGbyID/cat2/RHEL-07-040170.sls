@@ -65,7 +65,7 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - append_if_not_found: True
     - not_found_content: |
         # Inserted per STIG {{ stig_id }}
-        {{ parmName }}={{ parmValu }}
+        {{ parmName }} {{ parmValu }}
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
