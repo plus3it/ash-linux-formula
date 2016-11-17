@@ -25,4 +25,10 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040190"
+diag_out "   All network connections associated"
+diag_out "   with SSH traffic must terminate at"
+diag_out "   the end of the session or after 10"
+diag_out "   minutes of inactivity, except to"
+diag_out "   fulfill documented and validated"
+diag_out "   mission requirements."
 diag_out "----------------------------------------"
