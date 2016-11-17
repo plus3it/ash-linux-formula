@@ -24,4 +24,13 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040210"
+diag_out "   The operating system must, for"
+diag_out "   networked systems, synchronize"
+diag_out "   clocks with a server that is"
+diag_out "   synchronized to one of the redundant"
+diag_out "   United States Naval Observatory"
+diag_out "   (USNO) time servers, a time server"
+diag_out "   designated for the appropriate DoD"
+diag_out "   network (NIPRNet/SIPRNet), and/or"
+diag_out "   the Global Positioning System (GPS)."
 diag_out "----------------------------------------"
