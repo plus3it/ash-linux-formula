@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040332"
+diag_out "   The SSH daemon must not allow"
+diag_out "   authentication using known hosts"
+diag_out "   authentication."
 diag_out "----------------------------------------"
