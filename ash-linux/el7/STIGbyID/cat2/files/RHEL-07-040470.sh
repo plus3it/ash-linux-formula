@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040470"
+diag_out "   Network interfaces must not be in"
+diag_out "   promiscuous mode."
 diag_out "----------------------------------------"
