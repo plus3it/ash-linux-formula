@@ -24,4 +24,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040260"
+diag_out "   All networked systems must have SSH"
+diag_out "   installed."
 diag_out "----------------------------------------"

@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040301"
+diag_out "   The system must display the date and"
+diag_out "   time of the last successful account"
+diag_out "   logon upon an SSH logon."
 diag_out "----------------------------------------"

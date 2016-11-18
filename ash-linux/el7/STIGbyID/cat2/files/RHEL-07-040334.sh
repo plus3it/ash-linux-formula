@@ -5,7 +5,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The SSH daemon must not allow authentication using rhosts authentication.
+#	The SSH daemon must not allow authentication using rhosts
+#	authentication.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -20,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040334"
+diag_out "   The SSH daemon must not allow"
+diag_out "   authentication using rhosts"
+diag_out "   authentication."
 diag_out "----------------------------------------"

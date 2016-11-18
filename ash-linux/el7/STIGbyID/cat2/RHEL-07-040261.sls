@@ -20,9 +20,14 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040261' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set service = 'sshd' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+running_{{ stig_id }}-{{ service }}:
+  service.running:
+    - name: '{{ service }}'
+    - enable: True

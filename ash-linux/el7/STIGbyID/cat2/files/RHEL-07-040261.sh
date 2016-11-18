@@ -26,4 +26,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040261"
+diag_out "   All networked systems must use SSH"
+diag_out "   for confidentiality and integrity of"
+diag_out "   transmitted and received information"
+diag_out "   as well as information during"
+diag_out "   preparation for transmission."
 diag_out "----------------------------------------"

@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040380"
+diag_out "   The system must not respond to"
+diag_out "   Internet Protocol version 4 (IPv4)"
+diag_out "   Internet Control Message Protocol"
+diag_out "   (ICMP) echoes sent to a broadcast"
+diag_out "   address."
 diag_out "----------------------------------------"

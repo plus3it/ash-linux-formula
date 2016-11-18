@@ -15,9 +15,29 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040250' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set fwRule = salt.cmd.run('firewall-cmd --direct --get-rule ipv4 filter IN_public_allow') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if ( '--limit' in fwRule.split(' ') )
+   and ( '--limit-burst' in fwRule.split(' ') )
+ %}
+cmd_{{ stig_id }}-firewall:
+  cmd.run:
+    - name: 'printf "Found rule:\n\t{{ fwRule }}"'
+    - cwd: /root
+{%- else %}
+cmd_{{ stig_id }}-firewall:
+  cmd.run:
+    - name: 'firewall-cmd --direct --add-rule ipv4 filter IN_public_allow 0 -m tcp -p tcp -m limit --limit 25/minute --limit-burst 100 -j ACCEPT'
+    - cwd: /root
+
+save_{{ stig_id }}-firewall:
+  module.run:
+    - name: 'firewalld.make_permanent'
+    - require:
+      - cmd: 'cmd_{{ stig_id }}-firewall'
+{%- endif %}

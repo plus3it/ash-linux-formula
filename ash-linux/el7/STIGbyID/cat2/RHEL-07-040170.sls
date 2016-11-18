@@ -40,7 +40,8 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040170' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set parmName = '/etc/ssh/sshd_config'%}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'Banner' %}
 {%- set parmValu = '/etc/issue'%}
 
 script_{{ stig_id }}-describe:
@@ -56,11 +57,11 @@ file_{{ stig_id }}-{{ parmValu }}:
     - group: 'root'
     - mode: 0444
 
-file_{{ stig_id }}-{{ parmName }}:
+file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
-    - name: '{{ parmName }}'
-    - pattern: '^\s{{ parmName }}=.*$'
-    - repl: '{{ parmName }} {{ parmValue }}'
+    - name: '{{ cfgFile }}'
+    - pattern: '^\s{{ parmName }} .*$'
+    - repl: '{{ parmName }} {{ parmValu }}'
     - append_if_not_found: True
     - not_found_content: |
         # Inserted per STIG {{ stig_id }}
@@ -70,4 +71,4 @@ service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
     - name: sshd
     - watch:
-      - file: file_{{ stig_id }}-{{ parmName }}
+      - file: file_{{ stig_id }}-{{ cfgFile }}
