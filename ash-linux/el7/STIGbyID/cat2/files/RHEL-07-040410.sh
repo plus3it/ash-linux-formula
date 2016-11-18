@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040410"
+diag_out "   The system must ignore to Internet"
+diag_out "   Protocol version 4 (IPv4) Internet"
+diag_out "   Control Message Protocol (ICMP)"
+diag_out "   redirect messages."
 diag_out "----------------------------------------"
