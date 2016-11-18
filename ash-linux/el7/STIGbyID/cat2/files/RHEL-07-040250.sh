@@ -21,4 +21,10 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040250"
+diag_out "   The operating system must protect"
+diag_out "   against or limit the effects of"
+diag_out "   Denial of Service (DoS) attacks by"
+diag_out "   validating the operating system is"
+diag_out "   implementing rate-limiting measures"
+diag_out "   on impacted network interfaces."
 diag_out "----------------------------------------"
