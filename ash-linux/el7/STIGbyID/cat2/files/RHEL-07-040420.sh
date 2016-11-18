@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040420"
+diag_out "   The system must not allow interfaces"
+diag_out "   to perform Internet Protocol version"
+diag_out "   4 (IPv4) Internet Control Message"
+diag_out "   Protocol (ICMP) redirects by default."
 diag_out "----------------------------------------"
