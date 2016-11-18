@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040351"
+diag_out "   The system must not forward Internet"
+diag_out "   Protocol version 4 (IPv4)"
+diag_out "   source-routed packets by default."
 diag_out "----------------------------------------"
