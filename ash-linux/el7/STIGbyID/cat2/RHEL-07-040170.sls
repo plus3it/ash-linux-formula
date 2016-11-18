@@ -60,11 +60,11 @@ file_{{ stig_id }}-{{ parmName }}:
   file.replace:
     - name: '{{ parmName }}'
     - pattern: '^\s{{ parmName }}=.*$'
-    - repl: '{{ parmName }}={{ parmValue }}'
+    - repl: '{{ parmName }} {{ parmValue }}'
     - append_if_not_found: True
     - not_found_content: |
         # Inserted per STIG {{ stig_id }}
-        {{ parmName }}={{ parmValu }}
+        {{ parmName }} {{ parmValu }}
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
