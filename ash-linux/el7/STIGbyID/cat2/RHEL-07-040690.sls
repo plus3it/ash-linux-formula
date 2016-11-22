@@ -14,9 +14,35 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040690' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'UsePrivilegeSeparation' %}
+{%- set parmValu = 'yes' %}
+{%- set skipIt = salt['pillar.get']('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - cwd: /root
+{%- else %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^\s{{ parmName }} .*$'
+    - repl: '{{ parmName }} {{ parmValu }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} {{ parmValu }}
+
+service_{{ stig_id }}-{{ cfgFile }}:
+  service.running:
+    - name: sshd
+    - watch:
+      - file: file_{{ stig_id }}-{{ cfgFile }}
+{%- endif %}
