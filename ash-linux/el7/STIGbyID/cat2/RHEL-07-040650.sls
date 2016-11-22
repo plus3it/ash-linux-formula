@@ -14,9 +14,16 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040650' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set keysList = salt.cmd.run('find / -name "ssh_host*key" -type f').split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for key in keysList %}
+file_{{ stig_id }}-{{ key }}:
+  file.managed:
+    - name: '{{ key }}'
+    - mode: '0600'
+{%- endfor %}
