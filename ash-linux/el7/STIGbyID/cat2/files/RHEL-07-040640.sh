@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040640"
+diag_out "   The SSH public host key files must"
+diag_out "   have mode 0644 or less permissive."
 diag_out "----------------------------------------"
