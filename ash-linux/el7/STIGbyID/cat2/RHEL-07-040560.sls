@@ -14,9 +14,26 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040560' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set rpmGrpLst = salt.pkg.group_info('X Window System') %}
+{%- set targRpm = "xorg-x11-server-common" %}
+{%- set skipIt = salt['pillar.get']('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - cwd: /root
+{%- else %}
+purge_{{ stig_id }}-{{ targRpm }}:
+  pkg.removed:
+    - pkgs:
+      - '{{ targRpm }}'
+  {%- for rpm in rpmGrpLst %}
+      - '{{ rpm }}'
+  {%- endfor %}
+{%- endif %}

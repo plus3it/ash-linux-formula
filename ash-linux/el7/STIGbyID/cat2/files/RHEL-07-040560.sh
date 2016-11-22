@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040560"
+diag_out "   An X Windows display manager must"
+diag_out "   not be installed unless approved."
 diag_out "----------------------------------------"
