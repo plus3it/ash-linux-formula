@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040740"
+diag_out "   The Network File System (NFS) must"
+diag_out "   be configured to use AUTH_GSS."
 diag_out "----------------------------------------"
