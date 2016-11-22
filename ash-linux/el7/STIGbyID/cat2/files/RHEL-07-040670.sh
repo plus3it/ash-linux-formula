@@ -30,4 +30,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040670"
+diag_out "   The SSH daemon must not permit"
+diag_out "   Kerberos authentication unless"
+diag_out "   needed."
 diag_out "----------------------------------------"
