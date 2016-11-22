@@ -32,4 +32,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040660"
+diag_out "   The SSH daemon must not permit"
+diag_out "   Generic Security Service Application"
+diag_out "   Program Interface (GSSAPI)"
+diag_out "   authentication unless needed."
 diag_out "----------------------------------------"
