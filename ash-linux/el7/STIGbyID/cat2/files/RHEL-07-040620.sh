@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040620"
+diag_out "   The SSH daemon must be configured to"
+diag_out "   only use Message Authentication"
+diag_out "   Codes (MACs) employing FIPS 140-2"
+diag_out "   approved cryptographic hash"
+diag_out "   algorithms."
 diag_out "----------------------------------------"
