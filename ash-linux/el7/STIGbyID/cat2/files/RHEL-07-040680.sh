@@ -21,4 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040680"
+diag_out "   The SSH daemon must perform strict"
+diag_out "   mode checking of home directory"
+diag_out "   configuration files."
 diag_out "----------------------------------------"
