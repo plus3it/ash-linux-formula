@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040700"
+diag_out "   The SSH daemon must not allow"
+diag_out "   compression or must only allow"
+diag_out "   compression after successful"
+diag_out "   authentication."
 diag_out "----------------------------------------"
