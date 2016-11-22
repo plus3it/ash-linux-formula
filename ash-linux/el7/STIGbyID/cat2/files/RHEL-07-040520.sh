@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040520"
+diag_out "   If the Trivial File Transfer"
+diag_out "   Protocol (TFTP) server is required,"
+diag_out "   the TFTP daemon must be configured"
+diag_out "   to operate in secure mode."
 diag_out "----------------------------------------"

@@ -15,9 +15,23 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040520' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set pkgChk = 'tftp-server' %}
+{%- set cfgFile = '/etc/xinetd.d/tftp' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if salt.pkg.version(pkgChk) %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: 'server_args\s=\s.*$'
+    - repl: 'server_args\t= -s /var/lib/tftpboot'
+{% else %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  cmd.run:
+    - name: 'echo "{{ pkgChk }} package not installed. Skipping."'
+    - cwd: /root
+{% endif %}
