@@ -21,4 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040820"
+diag_out "   The system's access control program"
+diag_out "   must be configured to grant or deny"
+diag_out "   system access to specific hosts and"
+diag_out "   services."
 diag_out "----------------------------------------"

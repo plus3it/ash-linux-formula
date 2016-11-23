@@ -15,9 +15,15 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040820' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set svcName = 'firewalld' %}
+{%- set svcState = salt.service.show(svcName)['ActiveState'] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+servic_{{ stig_id }}-{{ svcName }}:
+  service.running:
+    - name: '{{ svcName }}'
+    - enable: True
