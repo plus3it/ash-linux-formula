@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040860"
+diag_out "   The system must not forward IPv6"
+diag_out "   source-routed packets."
 diag_out "----------------------------------------"
