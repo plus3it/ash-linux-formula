@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040830"
+diag_out "   The system must not have"
+diag_out "   unauthorized IP tunnels configured."
 diag_out "----------------------------------------"
