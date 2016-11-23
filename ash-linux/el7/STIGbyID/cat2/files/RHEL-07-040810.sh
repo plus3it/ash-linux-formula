@@ -20,4 +20,5 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040810"
+diag_out "   The system must use a local firewall."
 diag_out "----------------------------------------"

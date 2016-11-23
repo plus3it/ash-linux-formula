@@ -20,3 +20,6 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+package_{{ stig_id }}-present:
+  pkg.installed:
+    - name: firewalld
