@@ -24,7 +24,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](cfgFile, '^' + parmName) %}
+{%- if salt.file.search(cfgFile, '^' + parmName) %}
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
     - name: '{{ cfgFile }}'

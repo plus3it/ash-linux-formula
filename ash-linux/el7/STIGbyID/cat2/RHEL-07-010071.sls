@@ -27,7 +27,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Check if target RPM is installed
-{%- if salt['pkg.version'](pkgName) %}
+{%- if salt.pkg.version(pkgName) %}
 file_{{ stig_id }}-{{ dconfCfgFile }}:
   file.managed:
     - name: '{{ dconfCfgFile }}'

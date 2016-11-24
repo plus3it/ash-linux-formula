@@ -15,9 +15,9 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020650' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set homeMode = salt['pillar.get']('ash-linux:lookup:home-mode', '0750') %}
-{%- set sysuserMax = salt['cmd.run']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
-{%- set userList =  salt['user.list_users']() %}
+{%- set homeMode = salt.pillar.get('ash-linux:lookup:home-mode', '0750') %}
+{%- set sysuserMax = salt.cmd.run("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set userList =  salt.user.list_users() %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -25,7 +25,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- for user in userList %}
-  {%- set userInfo = salt['user.info'](user) %}
+  {%- set userInfo = salt.user.info(user) %}
   {%- set userHome = userInfo['home'] %}
   {%- set userUid = userInfo['uid']|int %}
   {%- set userGid = userInfo['gid']|int %}

@@ -17,7 +17,7 @@
 {%- set stig_id = 'RHEL-07-030541' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set ruleFile = '/etc/audit/rules.d/priv_acts.rules' %}
-{%- set sysuserMax = salt['cmd.run']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt.cmd.run("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
 {%- set path2mon = '/usr/sbin/postqueue' %}
 {%- set key2mon = 'privileged-postfix' %}
 

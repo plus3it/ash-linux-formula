@@ -23,7 +23,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](targFile, '^' + searchRoot) %}
+{%- if salt.file.search(targFile, '^' + searchRoot) %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: '{{ targFile }}'   

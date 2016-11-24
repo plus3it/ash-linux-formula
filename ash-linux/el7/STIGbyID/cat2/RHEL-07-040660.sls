@@ -29,7 +29,7 @@
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'GSSAPIAuthentication' %}
 {%- set parmValu = 'no' %}
-{%- set skipIt = salt['pillar.get']('ash-linux:lookup:skip-stigs', []) %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

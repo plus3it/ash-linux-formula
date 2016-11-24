@@ -15,7 +15,7 @@
 {%- set stig_id = 'RHEL-07-010240' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set targFile = '/etc/pam.d/system-auth' %}
-{%- if salt['file.is_link'](targFile) %}
+{%- if salt.file.is_link(targFile) %}
   {%- set targFile = targFile + '-ac' %}
 {%- endif %}
 {%- set searchRoot = '^password\s+sufficient\s+pam_unix.so\s+' %}
@@ -25,12 +25,12 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](targFile, searchRoot + '.*remember=5') %}
+{%- if salt.file.search(targFile, searchRoot + '.*remember=5') %}
 file_{{ stig_id }}-{{ targFile }}:
   cmd.run:
     - name: 'echo "Found target config in {{ targFile }}."'
     - cwd: /root
-{%- elif salt['file.search'](targFile, searchRoot) %}
+{%- elif salt.file.search(targFile, searchRoot) %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}

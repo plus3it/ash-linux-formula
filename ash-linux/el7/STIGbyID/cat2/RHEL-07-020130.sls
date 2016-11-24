@@ -13,8 +13,8 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020130' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set hostname = salt['grains.get']('fqdn') %}
-{%- set ntfyMail = salt['pillar.get']('ash-linux:lookup:notifier-email', 'root') %}
+{%- set hostname = salt.grains.get('fqdn') %}
+{%- set ntfyMail = salt.pillar.get('ash-linux:lookup:notifier-email', 'root') %}
 {%- set foundCrons = [] %}
 {%- set cronFiles = [ '/var/spool/cron/root' ] %}
 {%- set cronDirs = [
@@ -24,7 +24,7 @@
                      '/etc/cron.weekly'
                    ] %}
 {%- for cronDir in cronDirs %}
-  {%- do cronFiles.extend(salt['file.find'](cronDir, 'maxdepth=0', 'type=f')) %}
+  {%- do cronFiles.extend(salt.file.find(cronDir, 'maxdepth=0', 'type=f')) %}
 {%- endfor %}
 
 script_{{ stig_id }}-describe:
@@ -32,9 +32,9 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('aide') %} 
+{%- if salt.pkg.version('aide') %} 
   {%- for cronFile in cronFiles %}
-    {%- if salt['file.search'](cronFile, '/aide ') %}
+    {%- if salt.file.search(cronFile, '/aide ') %}
       {%- do foundCrons.append(cronFile) %}
     {%- endif %}
   {%- endfor %}

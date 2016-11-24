@@ -22,7 +22,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set foundMods = [] %}
 {%- set modFiles = [] %}
-{%- for modFile in salt['file.find']('/etc/modprobe.d', 'maxdepth=0', 'type=f') %}
+{%- for modFile in salt.file.find('/etc/modprobe.d', 'maxdepth=0', 'type=f') %}
   {%- do modFiles.append(modFile) %}
 {%- endfor %}
 
@@ -32,7 +32,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- for modFile in modFiles %}
-  {%- if salt['file.search'](modFile, '^[a-z]*\susb') %}
+  {%- if salt.file.search(modFile, '^[a-z]*\susb') %}
     {%- do foundMods.append(modFile) %}
 file_{{ stig_id }}-foundin-{{ modFile }}:
   file.replace:

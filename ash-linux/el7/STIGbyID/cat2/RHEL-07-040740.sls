@@ -17,7 +17,7 @@
 {%- set cfgFile = '/etc/fstab' %}
 {%- set chkPkg = 'nfs-utils' %}
 {%- set secopts = ',sec=krb5:krb5i:krb5p' %}
-{%- set skipIt = salt['pillar.get']('ash-linux:lookup:skip-stigs', []) %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

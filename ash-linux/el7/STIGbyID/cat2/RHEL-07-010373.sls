@@ -30,7 +30,7 @@ script_{{ stig_id }}-describe:
 
 # Iterate files to alter...
 {%- for checkFile in pamFiles %}
-  {%- if salt['file.is_link'](checkFile) %}
+  {%- if salt.file.is_link(checkFile) %}
       {%- set checkFile = checkFile + '-ac' %}
   {%- endif %}
 

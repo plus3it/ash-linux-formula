@@ -21,7 +21,7 @@
                          'jfs',
                          'btrfs'
                         ] %}
-{%- set mountData = salt['mount.fstab']() %}
+{%- set mountData = salt.mount.fstab() %}
 {%- set mounts = mountData.keys() %}
 
 script_{{ stig_id }}-describe:
@@ -33,7 +33,7 @@ script_{{ stig_id }}-describe:
 {%- for mount in mounts %}
   {%- set mountType = mountData[mount]['fstype'] %}
   {%- if mountData[mount]['fstype'] in localFstypes %}
-    {%- set foundString = salt['cmd.run']('find ' + mount + ' -xdev -nouser') %}
+    {%- set foundString = salt.cmd.run('find ' + mount + ' -xdev -nouser') %}
     {%- set foundList = foundString.split('\n') %}
     {%- do nouserFiles.extend(foundList) %}
   {%- endif %}

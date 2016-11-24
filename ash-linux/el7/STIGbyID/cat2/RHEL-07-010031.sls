@@ -28,11 +28,11 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Check if target RPM is installed
-{%- if salt['pkg.version'](pkgChk) %}
+{%- if salt.pkg.version(pkgChk) %}
   # Check if a section-header is already present
-  {%- if salt['file.search'](dconfBanner, '^\[' + headerLabel + '\]') %}
+  {%- if salt.file.search(dconfBanner, '^\[' + headerLabel + '\]') %}
     # Check if a banner-message has already been specified
-    {%- if salt['file.search'](dconfBanner, 'banner-message-text=') %}
+    {%- if salt.file.search(dconfBanner, 'banner-message-text=') %}
 file_{{ stig_id }}-{{ dconfBanner }}:
   cmd.run:
     - name: 'echo "A ''banner-message-text'' value has been defined"'

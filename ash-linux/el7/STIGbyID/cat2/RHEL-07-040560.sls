@@ -16,7 +16,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set rpmGrpLst = salt.pkg.group_info('X Window System') %}
 {%- set targRpm = "xorg-x11-server-common" %}
-{%- set skipIt = salt['pillar.get']('ash-linux:lookup:skip-stigs', []) %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
