@@ -26,11 +26,11 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- if (
-        salt['pkg.version']('net-snmp') or
-        salt['file.exists'](snmpCfg)
+        salt.pkg.version('net-snmp') or
+        salt.file.file_exists(snmpCfg)
        ) %}
   {%- for community in forbidStrs %}
-    {%- if salt['file.search'](snmpCfg, community) %}
+    {%- if salt.file.search(snmpCfg, community) %}
 file_{{ stig_id }}-{{ community }}:
   file.comment:
     - name: '{{ snmpCfg }}'

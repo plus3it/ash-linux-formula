@@ -16,15 +16,15 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010470' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
-{%- if salt['grains.get']('os') == 'CentOS' %}
+{%- if salt.grains.get('os') == 'CentOS' %}
   {%- set mainCfg = '/boot/efi/EFI/centos/grub.cfg' %}
-{%- elif salt['grains.get']('os') == 'RedHat' %}
+{%- elif salt.grains.get('os') == 'RedHat' %}
   {%- set mainCfg = '/boot/efi/EFI/redhat/grub.cfg' %}
 {%- endif %}
 
 {%- set srcCfg = '/etc/grub.d/10_linux' %}
 {%- set dummyPass = '4BadPassw0rd' %}
-{%- set grubPass = salt['cmd.run']('printf "' + dummyPass + 
+{%- set grubPass = salt.cmd.run('printf "' + dummyPass + 
                        '\n' + dummyPass + '\n" | grub2-mkpasswd-pbkdf2 ' +
                        '2>&1 | grep "password is" ' +
                        '| sed "s/^.*password is //"') %}
@@ -34,13 +34,13 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.directory_exists']('/sys/firmware/efi') %}
-  {%- if salt['file.search'](mainCfg, 'password_pbkdf2') %}
+{%- if salt.file.directory_exists('/sys/firmware/efi') %}
+  {%- if salt.file.search(mainCfg, 'password_pbkdf2') %}
 script_{{ stig_id }}-{{ mainCfg }}:
   cmd.run:
     - name: 'echo "Password - or pointer - already set in {{ mainCfg }}"'
     - cwd: /root
-    {%- if salt['file.search'](srcCfg, 'superusers="root" password_pbkdf2') %}
+    {%- if salt.file.search(srcCfg, 'superusers="root" password_pbkdf2') %}
 script_{{ stig_id }}-{{ srcCfg }}:
   cmd.run:
     - name: 'echo "Password already set in {{ srcCfg }}"'

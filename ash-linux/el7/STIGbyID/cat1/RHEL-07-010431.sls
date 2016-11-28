@@ -22,11 +22,11 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if not salt['pkg.version']('gdm') %}
+{%- if not salt.pkg.version('gdm') %}
 eval_{{ stig_id }}:
   cmd.run:
     - name: 'echo "GDM susbsystem is not installed."'
-{% elif salt['file.search'](checkFile, '^' + checkParm) %}
+{% elif salt.file.search(checkFile, '^' + checkParm) %}
 file_{{ stig_id }}:
   file.replace:
     - name: {{ checkFile }}

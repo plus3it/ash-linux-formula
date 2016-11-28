@@ -24,7 +24,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](checkFile, '^gpgcheck') %}
+{%- if salt.file.search(checkFile, '^gpgcheck') %}
 file_{{ stig_id }}-{{ checkFile }}:
   file.replace:
     - name: '{{ checkFile }}'

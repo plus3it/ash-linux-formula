@@ -19,7 +19,7 @@
 {%- set mainCfg = '/boot/grub2/grub.cfg' %}
 {%- set srcCfg = '/etc/grub.d/10_linux' %}
 {%- set dummyPass = '4BadPassw0rd' %}
-{%- set grubPass = salt['cmd.run']('printf "' + dummyPass + 
+{%- set grubPass = salt.cmd.run('printf "' + dummyPass + 
                        '\n' + dummyPass + '\n" | grub2-mkpasswd-pbkdf2 ' +
                        '2>&1 | grep "password is" ' +
                        '| sed "s/^.*password is //"') %}
@@ -29,12 +29,12 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](mainCfg, 'password_pbkdf2') %}
+{%- if salt.file.search(mainCfg, 'password_pbkdf2') %}
 script_{{ stig_id }}-{{ mainCfg }}:
   cmd.run:
     - name: 'echo "Password - or pointer - already set in {{ mainCfg }}"'
     - cwd: /root
-  {%- if salt['file.search'](srcCfg, 'superusers="root" password_pbkdf2') %}
+  {%- if salt.file.search(srcCfg, 'superusers="root" password_pbkdf2') %}
 script_{{ stig_id }}-{{ srcCfg }}:
   cmd.run:
     - name: 'echo "Password already set in {{ srcCfg }}"'

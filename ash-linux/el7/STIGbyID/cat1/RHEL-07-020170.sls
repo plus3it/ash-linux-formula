@@ -27,10 +27,10 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Nothing's encrypted without LUKS packages...
-{%- if salt['pkg.version'](corePkg) %}
+{%- if salt.pkg.version(corePkg) %}
 
 # Grab info about all active mounts and stuff into a searchable struct
-{%- set activeMntStream = salt['mount.active']('extended=false') %}
+{%- set activeMntStream = salt.mount.active('extended=false') %}
 # Iterate the structure by top-level key
 {%- for mountPoint in activeMntStream.keys() %}
   # We don't care about pseudo-filesystems

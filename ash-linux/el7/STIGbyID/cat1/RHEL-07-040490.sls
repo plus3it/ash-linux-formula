@@ -26,9 +26,9 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{% if salt['pkg.version'](*ftpds) %}
+{% if salt.pkg.version(*ftpds) %}
   {%- for ftpd in ftpds %}
-    {%- if salt['pkg.version'](ftpd) %}
+    {%- if salt.pkg.version(ftpd) %}
 cmd_{{ stig_id }}-{{ ftpd }}-notify:
   cmd.run:
     - name: 'echo "Found ftp-server package {{ ftpd }} installed." > /dev/stderr && exit 1'
