@@ -14,3 +14,13 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010490"
+diag_out "   Unnecessary default system accounts"
+diag_out "   must be removed."
+diag_out "----------------------------------------"
