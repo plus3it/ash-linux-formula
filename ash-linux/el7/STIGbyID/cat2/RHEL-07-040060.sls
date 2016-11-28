@@ -25,6 +25,7 @@ script_{{ stig_id }}-describe:
 touch_{{ stig_id }}-{{ cfgFile }}:
   file.touch:
     - name: '{{ cfgFile }}'
+    - makedirs: True
     - unless: ' test -e {{ cfgFile }}'
 
 mode_{{ stig_id }}-{{ cfgFile }}:
