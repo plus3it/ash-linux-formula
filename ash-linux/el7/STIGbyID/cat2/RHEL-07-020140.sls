@@ -15,17 +15,26 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set hostname = salt.grains.get('fqdn') %}
 {%- set ntfyMail = salt.pillar.get('ash-linux:lookup:notifier-email', 'root') %}
-{%- set foundCrons = [] %}
-{%- set cronFiles = [ '/var/spool/cron/root' ] %}
+{%- set cronRoot = '/var/spool/cron/root' %}
 {%- set cronDirs = [
                      '/etc/cron.daily',
                      '/etc/cron.hourly',
                      '/etc/cron.monthly',
                      '/etc/cron.weekly'
                    ] %}
+{%- set cronFiles = [] %}
+{%- set foundCrons = [] %}
+
+###
+# Populate cronFiles list if relevant files are found...
+{%- if salt.file.file_exists(cronRoot) %}
+  {%- do cronFiles.append(cronRoot) %}
+{%- endif %}
 {%- for cronDir in cronDirs %}
   {%- do cronFiles.extend(salt.file.find(cronDir, 'maxdepth=0', 'type=f')) %}
 {%- endfor %}
+#
+###
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -34,16 +43,17 @@ script_{{ stig_id }}-describe:
 
 {%- if salt.pkg.version('aide') %} 
   {%- for cronFile in cronFiles %}
-    {%- if salt.file.search(cronFile, '/aide ') %}
-      {%- do foundCrons.append(cronFile) %}
+    {%- if salt.file.search(cronFile, '\/aide ') %}
+      {% do foundCrons.extend(cronFile) %}
     {%- endif %}
   {%- endfor %}
 
   {%- if foundCrons %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
-    - name: 'echo "Found cron entries for AIDE"'
+    - name: 'printf "\nchanged=no comment=''Found cron entries for AIDE.''\n"'
     - cwd: /root
+    - stateful: True
   {%- else %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
