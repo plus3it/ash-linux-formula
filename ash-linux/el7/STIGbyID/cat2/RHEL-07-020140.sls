@@ -4,9 +4,78 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Designated personnel must be notified if baseline configurations are changed in an unauthorized manner.
+#	Designated personnel must be notified if baseline configurations
+#	are changed in an unauthorized manner.
 #
 # CCI-001744 
 #    NIST SP 800-53 Revision 4 :: CM-3 (5) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-020140' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set hostname = salt.grains.get('fqdn') %}
+{%- set ntfyMail = salt.pillar.get('ash-linux:lookup:notifier-email', 'root') %}
+{%- set cronRoot = '/var/spool/cron/root' %}
+{%- set cronDirs = [
+                     '/etc/cron.daily',
+                     '/etc/cron.hourly',
+                     '/etc/cron.monthly',
+                     '/etc/cron.weekly'
+                   ] %}
+{%- set cronFiles = [] %}
+{%- set foundCrons = [] %}
+
+###
+# Populate cronFiles list if relevant files are found...
+{%- if salt.file.file_exists(cronRoot) %}
+  {%- do cronFiles.append(cronRoot) %}
+{%- endif %}
+{%- for cronDir in cronDirs %}
+  {%- do cronFiles.extend(salt.file.find(cronDir, 'maxdepth=0', 'type=f')) %}
+{%- endfor %}
+#
+###
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt.pkg.version('aide') %} 
+  {%- for cronFile in cronFiles %}
+    {%- if salt.file.search(cronFile, '\/aide ') %}
+      {% do foundCrons.extend(cronFile) %}
+    {%- endif %}
+  {%- endfor %}
+
+  {%- if foundCrons %}
+notify_{{ stig_id }}-aideFound:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Found cron entries for AIDE.''\n"'
+    - cwd: /root
+    - stateful: True
+  {%- else %}
+notify_{{ stig_id }}-aideFound:
+  cmd.run:
+    - name: 'echo "Found no cron entries for AIDE: fixing..."'
+    - cwd: /root
+
+cron_{{ stig_id }}-file:
+  file.append:
+    - name: /var/spool/cron/root
+    - text: |
+        0 0 * * * /usr/sbin/aide --check | /bin/mail -s "aide integrity check run for {{ hostname }}" {{ ntfyMail }}
+
+cron_{{ stig_id }}-service:
+  service.running:
+    - name: 'crond.service'
+    - watch:
+      - file: cron_{{ stig_id }}-file
+
+  {%- endif %}
+{%- else %}
+notify_{{ stig_id }}-aideFound:
+  cmd.run:
+    - name: 'echo "AIDE subsystem not installed"'
+    - cwd: /root
+{%- endif %}

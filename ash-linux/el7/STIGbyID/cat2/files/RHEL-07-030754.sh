@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030754
 # Version:	RHEL-07-030754_rule
 # SRG ID:	SRG-OS-000466-GPOS-00210
@@ -16,3 +15,13 @@
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030754"
+diag_out "   All uses of the unlinkat command"
+diag_out "   must be audited."
+diag_out "----------------------------------------"

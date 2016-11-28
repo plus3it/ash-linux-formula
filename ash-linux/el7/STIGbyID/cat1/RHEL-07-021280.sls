@@ -31,12 +31,12 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](kernType) %}
+{%- if salt.pkg.version(kernType) %}
 notify_{{ stig_id }}-kernWarn:
   cmd.run:
     - name: 'echo "STIG-compatible kernel-extensions available."'
     - cwd: /root
-  {%- if salt['file.search'](grub2cfg, 'fips=1') %}
+  {%- if salt.file.search(grub2cfg, 'fips=1') %}
 notify_{{ stig_id }}-{{ grub2cfg }}:
   cmd.run:
     - name: 'echo "At least one boot-menu entry has FIPS-mode enabled."'
@@ -47,7 +47,7 @@ notify_{{ stig_id }}-{{ grub2cfg }}:
     - name: 'echo "No boot-menu entries have FIPS-mode enabled." > /dev/stderr && exit 1'
     - cwd: /root
   {%- endif %}
-  {%- if salt['file.search'](fipsChk, '^1') %}
+  {%- if salt.file.search(fipsChk, '^1') %}
 notify_{{ stig_id }}-{{ fipsChk }}:
   cmd.run:
     - name: 'echo "FIPS-mode active in {{ fipsChk }}."'

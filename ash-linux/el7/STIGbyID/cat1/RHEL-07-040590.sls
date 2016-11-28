@@ -26,8 +26,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' .*') %}
-  {%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' 2') %}
+{%- if salt.file.search(sshConfigFile, '^' + sshParm + ' .*') %}
+  {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' 2') %}
 file_{{ stig_id }}:
   cmd.run:
     - name: 'echo "Protocol-version already set in ''{{ sshConfigFile }}''"'

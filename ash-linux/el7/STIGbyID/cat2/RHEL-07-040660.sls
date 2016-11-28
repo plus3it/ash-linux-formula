@@ -4,9 +4,15 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The SSH daemon must not permit Generic Security Service Application Program Interface (GSSAPI) authentication unless needed.
+#	The SSH daemon must not permit Generic Security Service
+#	Application Program Interface (GSSAPI) authentication unless
+#	needed.
 #
-# CCI-000368 CCI-000318 CCI-001812 CCI-001813 CCI-001814 
+# CCI-000368 
+# CCI-000318 
+# CCI-001812 
+# CCI-001813 
+# CCI-001814 
 #    NIST SP 800-53 :: CM-6 c 
 #    NIST SP 800-53A :: CM-6.1 (v) 
 #    NIST SP 800-53 Revision 4 :: CM-6 c 
@@ -18,3 +24,37 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (1) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040660' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'GSSAPIAuthentication' %}
+{%- set parmValu = 'no' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - cwd: /root
+{%- else %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^\s{{ parmName }} .*$'
+    - repl: '{{ parmName }} {{ parmValu }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} {{ parmValu }}
+
+service_{{ stig_id }}-{{ cfgFile }}:
+  service.running:
+    - name: sshd
+    - watch:
+      - file: file_{{ stig_id }}-{{ cfgFile }}
+{%- endif %}

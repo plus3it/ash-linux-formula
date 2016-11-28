@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-010250
 # Version:	RHEL-07-010250_rule
 # SRG ID:	SRG-OS-000078-GPOS-00046
@@ -14,3 +13,13 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010250"
+diag_out "   Passwords must be a minimum of 15"
+diag_out "   characters in length."
+diag_out "----------------------------------------"

@@ -1,12 +1,12 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030780
 # Version:	RHEL-07-030780_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation.
+#	The rsyslog daemon must not accept log messages from other
+#	servers unless the server is being used for log aggregation.
 #
 # CCI-000368 
 # CCI-000318 
@@ -24,3 +24,15 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (1) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030780"
+diag_out "   The rsyslog daemon must not accept"
+diag_out "   log messages from other servers"
+diag_out "   unless the server is being used for"
+diag_out "   log aggregation."
+diag_out "----------------------------------------"

@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-021060
 # Version:	RHEL-07-021060_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
@@ -24,3 +23,13 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (1) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021060"
+diag_out "   The umask must be set to 077 for all"
+diag_out "   local interactive user accounts."
+diag_out "----------------------------------------"

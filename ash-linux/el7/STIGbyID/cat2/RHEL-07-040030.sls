@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The operating system, for PKI-based authentication, must validate certificates by performing RFC 5280-compliant certification path validation."
+#	The operating system, for PKI-based authentication, must
+#	validate certificates by performing RFC 5280-compliant
+#	certification path validation.
 #
 # CCI-000185 
 #    NIST SP 800-53 :: IA-5 (2) 
@@ -12,3 +14,26 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (2) (a) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040030' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set pkgChk = 'pam_pkcs11' %}
+{%- set cfgFile = '/etc/pam_pkcs11/pam_pkcs11.conf' %}
+{%- set chkParm = 'cert_policy' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt.pkg.version(pkgChk) %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '{{ chkParm }} = .*$'
+    - repl: '{{ chkParm }} = ca, ocsp_on, signature;'
+{%- else %}
+notify_{{ stig_id }}-notInstalled:
+  cmd.run:
+    - name: 'echo "{{ pkgChk }} packages not installed"'
+    - cwd: /root
+{%- endif %}

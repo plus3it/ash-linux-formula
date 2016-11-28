@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030381
 # Version:	RHEL-07-030381_rule
 # SRG ID:	SRG-OS-000064-GPOS-00033
@@ -18,3 +17,13 @@
 #    NIST SP 800-53 Revision 4 :: AU-2 d 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030381"
+diag_out "   All uses of the fchown command must"
+diag_out "   be audited."
+diag_out "----------------------------------------"

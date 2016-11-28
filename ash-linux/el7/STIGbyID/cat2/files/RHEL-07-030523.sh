@@ -1,12 +1,12 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030523
 # Version:	RHEL-07-030523_rule
 # SRG ID:	SRG-OS-000037-GPOS-00015
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must generate audit records containing the full-text recording of modifications to sudo configuration files.
+#	The operating system must generate audit records containing the
+#	full-text recording of modifications to sudo configuration files.
 #
 # CCI-000130 
 # CCI-000135 
@@ -24,3 +24,15 @@
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030523"
+diag_out "   The operating system must generate"
+diag_out "   audit records containing the"
+diag_out "   full-text recording of modifications"
+diag_out "   to sudo configuration files."
+diag_out "----------------------------------------"

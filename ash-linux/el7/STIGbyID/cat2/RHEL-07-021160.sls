@@ -12,3 +12,33 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-021160' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set checkFile = '/etc/rsyslog.conf' %}
+{%- set srchPatrn = '^\*.\* ~' %}
+{%- set replPatrn = 'cron.* /var/log/cron.log' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt.pkg.version('rsyslog') %}
+  {%- if salt.file.search(checkFile, srchPatrn) %}
+setconf_{{ stig_id }}-{{ checkFile }}:
+  file.replace:
+    - name: '{{ checkFile }}'
+    - pattern: '^(?P<srctok>{{ srchPatrn }})'
+    - repl: '{{ replPatrn }}\n\g<srctok>'
+  {%- else %}
+setconf_{{ stig_id }}-{{ checkFile }}:
+  file.append:
+    - name: '{{ checkFile }}'
+    - text: '{{ replPatrn }}'
+  {%- endif %}
+{%- else %}
+notify_{{ stig_id }}-notPresent:
+  cmd.run:
+    - name: 'echo "The rsyslog service is not present"'
+    - cwd: /root
+{%- endif %}

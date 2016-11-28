@@ -1,12 +1,12 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-010420
 # Version:	RHEL-07-010420_rule
 # SRG ID:	SRG-OS-000480-GPOS-00226
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The delay between logon prompts following a failed console logon attempt must be at least four seconds.
+#	The delay between logon prompts following a failed console
+#	logon attempt must be at least four seconds.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -14,3 +14,15 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-010420"
+diag_out "   The delay between logon prompts"
+diag_out "   following a failed console logon"
+diag_out "   attempt must be at least four"
+diag_out "   seconds."
+diag_out "----------------------------------------"

@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-040020
 # Version:	RHEL-07-040020_rule
 # SRG ID:	SRG-OS-000032-GPOS-00013
@@ -18,3 +17,13 @@
 #    NIST SP 800-53 Revision 4 :: AU-2 d 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-040020"
+diag_out "   The system must log informational"
+diag_out "   authentication data."
+diag_out "----------------------------------------"

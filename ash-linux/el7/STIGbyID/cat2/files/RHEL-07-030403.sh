@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030403
 # Version:	RHEL-07-030403_rule
 # SRG ID:	SRG-OS-000458-GPOS-00203
@@ -14,3 +13,13 @@
 #    NIST SP 800-53 Revision 4 :: AU-12 c 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030403"
+diag_out "   All uses of the removexattr command "
+diag_out "   must be audited."
+diag_out "----------------------------------------"

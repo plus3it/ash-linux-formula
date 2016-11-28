@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-021160
 # Version:	RHEL-07-021160_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
@@ -14,3 +13,12 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021160"
+diag_out "   Cron logging must be implemented."
+diag_out "----------------------------------------"

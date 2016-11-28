@@ -22,8 +22,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords .*') %}
-  {%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords no') %}
+{%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords .*') %}
+  {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords no') %}
 file_{{ stig_id }}:
   cmd.run:
     - name: 'echo "Empty passwords already disabled in ''{{ sshConfigFile }}''"'

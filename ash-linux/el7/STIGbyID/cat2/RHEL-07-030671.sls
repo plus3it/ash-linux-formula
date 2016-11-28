@@ -12,3 +12,53 @@
 #    NIST SP 800-53 Revision 4 :: AU-12 c 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-030671' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set act2mon = 'delete_module' %}
+{%- set key2mon = 'module-change' %}
+{%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
+{%- set usertypes = {
+    'selDACusers' : { 'search_string' : ' ' + act2mon + ' ' ,
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+                    },
+    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+                    },
+} %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+# Monitoring of SELinux DAC config
+{%- if grains['cpuarch'] == 'x86_64' %}
+  {%- for usertype,audit_options in usertypes.items() %}
+    {%- if not salt.cmd.run('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+file_{{ stig_id }}-auditRules_{{ usertype }}:
+  cmd.run:
+    - name: 'echo "Appropriate audit rule already in place"'
+    {%- elif not salt.cmd.run('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+file_{{ stig_id }}-auditRules_{{ usertype }}:
+  file.replace:
+    - name: '{{ audit_cfg_file }}'
+    - pattern: '^.*{{ audit_options['search_string'] }}.*$'
+    - repl: '{{ audit_options['rule32'] }}\n{{ audit_options['rule'] }}'
+    {%- else %}
+file_{{ stig_id }}-auditRules_{{ usertype }}:
+  file.append:
+    - name: '{{ audit_cfg_file }}'
+    - text: |
+        
+        # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
+        {{ audit_options['rule32'] }}
+        {{ audit_options['rule'] }}
+    {%- endif %}
+  {%- endfor %}
+{%- else %}
+file_{{ stig_id }}-auditRules_selDAC:
+  cmd.run:
+    - name: 'echo "Architecture not supported: no changes made"'
+{%- endif %}

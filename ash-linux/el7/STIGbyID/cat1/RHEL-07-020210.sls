@@ -20,13 +20,13 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Verify that the reboot system-state is acceptable
-{%- if salt['file.file_exists']('/etc/selinux/config') %}
-  {%- if salt['file.search']('/etc/selinux/config', '^SELINUX=enforcing') %}
+{%- if salt.file.file_exists('/etc/selinux/config') %}
+  {%- if salt.file.search('/etc/selinux/config', '^SELINUX=enforcing') %}
 msg_{{ stig_id }}-modeSet:
   cmd.run:
     - name: 'echo "Info: Current SELinux mode is Enforcing. Nothing to change"'
   {%- else %}
-    {%- if salt['file.search']('/etc/selinux/config', '^SELINUX=permissive') %}
+    {%- if salt.file.search('/etc/selinux/config', '^SELINUX=permissive') %}
 msg_{{ stig_id }}-bootSet:
   cmd.run:
     - name: 'echo "Current SELinux mode is permissive. Setting to Enforcing for next boot"'
@@ -39,7 +39,7 @@ sel_{{ stig_id }}-modeSet:
 msg_{{ stig_id }}-chgModeSet:
   cmd.run:
     - name: 'echo "Current SELinux mode is permissive. Changing to Enforcing"'
-    {%- elif salt['file.search']('/etc/selinux/config', '^SELINUX=disabled') %}
+    {%- elif salt.file.search('/etc/selinux/config', '^SELINUX=disabled') %}
 msg_{{ stig_id }}-bootSet:
   cmd.run:
     - name: 'echo "Current SELinux mode is disabled. Setting to Enforcing for next boot"'

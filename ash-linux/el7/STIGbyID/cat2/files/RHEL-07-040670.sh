@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-040670
 # Version:	RHEL-07-040670_rule
 # SRG ID:	SRG-OS-000364-GPOS-00151
@@ -24,3 +23,14 @@
 #    NIST SP 800-53 Revision 4 :: CM-5 (1) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-040670"
+diag_out "   The SSH daemon must not permit"
+diag_out "   Kerberos authentication unless"
+diag_out "   needed."
+diag_out "----------------------------------------"

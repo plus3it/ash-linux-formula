@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-020160
 # Version:	RHEL-07-020160_rule
 # SRG ID:	SRG-OS-000114-GPOS-00059
@@ -20,3 +19,12 @@
 #    NIST SP 800-53 Revision 4 :: IA-3 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-020160"
+diag_out "   USB mass storage must be disabled."
+diag_out "----------------------------------------"

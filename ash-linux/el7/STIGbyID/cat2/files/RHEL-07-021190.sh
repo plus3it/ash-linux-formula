@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-021190
 # Version:	RHEL-07-021190_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
@@ -14,3 +13,13 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021190"
+diag_out "   If the cron.allow file exists it"
+diag_out "   must be owned by root."
+diag_out "----------------------------------------"

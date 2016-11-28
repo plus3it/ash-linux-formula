@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The operating system, for PKI-based authentication, must enforce authorized access to all PKI private keys stored or used by the operating system."
+#	The operating system, for PKI-based authentication, must
+#	enforce authorized access to all PKI private keys stored or
+#	used by the operating system.
 #
 # CCI-000186 
 #    NIST SP 800-53 :: IA-5 (2) 
@@ -12,3 +14,26 @@
 #    NIST SP 800-53 Revision 4 :: IA-5 (2) 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040040' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set pkgChk = 'pam_pkcs11' %}
+{%- set cfgFile = '/etc/pam_pkcs11/pam_pkcs11.conf' %}
+{%- set chkParm = 'use_pkcs11_module' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if salt.pkg.version(pkgChk) %}
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '{{ chkParm }} = .*$'
+    - repl: '{{ chkParm }} = cackey;'
+{%- else %}
+notify_{{ stig_id }}-notInstalled:
+  cmd.run:
+    - name: 'echo "{{ pkgChk }} packages not installed"'
+    - cwd: /root
+{%- endif %}

@@ -23,8 +23,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' .*') %}
-  {%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' yes') %}
+{%- if salt.file.search(sshConfigFile, '^' + sshParm + ' .*') %}
+  {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' yes') %}
 file_{{ stig_id }}:
   cmd.run:
     - name: 'echo "X11-encryption already set in ''{{ sshConfigFile }}''"'
@@ -56,7 +56,7 @@ service_{{ stig_id }}-sshd:
     - watch:
       - {{ runtype }}: file_{{ stig_id }}
 
-{%- if not salt['pkg.version'](baseXpkg) %}
+{%- if not salt.pkg.version(baseXpkg) %}
 cmd_{{ stig_id }}-notify:
   cmd.run:
     - name: 'echo "Note: X-related subsystems not installed."'

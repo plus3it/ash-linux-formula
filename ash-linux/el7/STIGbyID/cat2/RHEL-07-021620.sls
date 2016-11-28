@@ -4,7 +4,9 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The file integrity tool must use FIPS 140-2 approved cryptographic hashes for validating file contents and directories.
+#	The file integrity tool must use FIPS 140-2 approved
+#	cryptographic hashes for validating file contents and
+#	directories.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -12,3 +14,22 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-021620' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set cfgFile = '/etc/aide.conf' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+pkg_{{ stig_id }}-aide:
+  pkg.installed:
+    - name: 'aide'
+
+fixcfg_{{ stig_id }}-{{ cfgFile }}:
+  cmd.run:
+    - name: 'awk ''{ if (/^\// && !/sha512/) printf("%s+sha512\n",$0);
+             else print $0}'' {{ cfgFile }} > /tmp/{{ stig_id }} && mv
+             /tmp/{{ stig_id }} {{ cfgFile }}'
+    - cwd: /root

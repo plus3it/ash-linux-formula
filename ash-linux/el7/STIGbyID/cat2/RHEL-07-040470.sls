@@ -12,3 +12,27 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+{%- set stig_id = 'RHEL-07-040470' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set ifList = salt.network.interfaces().keys() %}
+{%- set ifMode = 'PROMISC' %}
+{%- set modeTarg = 'off' %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- for if in ifList %}
+  {%- if salt.cmd.run('ip link show ' + if + ' | grep ' + ifMode) %}
+property_{{ stig_id }}-{{ if }}:
+  cmd.run:
+    - name: 'printf "Turning off promiscuous mode on {{ if }} " && ip link set {{ if }} promisc {{ modeTarg }} && echo "...SUCCESS" || echo "...FAILED"'
+    - cwd: /root
+  {%- else %}
+property_{{ stig_id }}-{{ if }}:
+  cmd.run:
+    - name: 'echo "Interface {{ if }} (already) not in promicuous mode."'
+    - cwd: /root
+  {%- endif %}
+{%- endfor %}

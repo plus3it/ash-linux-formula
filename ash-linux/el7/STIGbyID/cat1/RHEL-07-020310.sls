@@ -22,11 +22,11 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Get userid of the "nobody" user
-{%- set noprivInfo = salt['user.info']('nobody') %}
+{%- set noprivInfo = salt.user.info('nobody') %}
 {%- set noprivId = noprivInfo['uid'] %}
 
-{%- for user in salt['user.list_users']() %}
-  {%- set userInfo = salt['user.info'](user) %}
+{%- for user in salt.user.list_users() %}
+  {%- set userInfo = salt.user.info(user) %}
   {%- set userId = userInfo['uid'] %}
   {%- if userId == 0 %}
     #########################################
@@ -39,7 +39,7 @@ notify_{{ stig_id }}-{{ user }}:
     #################################################################
     # If the uid '0' account isn't "root", nuke and recreate as non-0
     {%- else %}
-    {%- set userShadow = salt['shadow.info'](user) %}
+    {%- set userShadow = salt.shadow.info(user) %}
     {%- set userDate = userShadow['lstchg'] %}
     {%- set userExpire = userShadow['expire'] %}
     {%- set userFullname = userInfo['fullname'] %}

@@ -1,12 +1,13 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-040170
 # Version:	RHEL-07-040170_rule
 # SRG ID:	SRG-OS-000023-GPOS-00006
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	"The Standard Mandatory DoD Notice and Consent Banner must be displayed immediately prior to, or as part of, remote access logon prompts."
+#	The Standard Mandatory DoD Notice and Consent Banner must be
+#	displayed immediately prior to, or as part of, remote access
+#	logon prompts.
 #
 # CCI-000048 
 # CCI-000050 
@@ -38,3 +39,15 @@
 #    NIST SP 800-53 Revision 4 :: AC-8 c 3 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-040170"
+diag_out "   The Standard Mandatory DoD Notice"
+diag_out "   and Consent Banner must be displayed"
+diag_out "   immediately prior to, or as part of,"
+diag_out "   remote access logon prompts."
+diag_out "----------------------------------------"

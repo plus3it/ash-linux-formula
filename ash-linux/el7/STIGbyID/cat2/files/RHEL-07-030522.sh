@@ -1,5 +1,4 @@
-#!/bin/bash
-#
+#!/bin/sh
 # Finding ID:	RHEL-07-030522
 # Version:	RHEL-07-030522_rule
 # SRG ID:	SRG-OS-000037-GPOS-00015
@@ -24,3 +23,13 @@
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-030522"
+diag_out "   All uses of the sudo command must be"
+diag_out "   audited."
+diag_out "----------------------------------------"
