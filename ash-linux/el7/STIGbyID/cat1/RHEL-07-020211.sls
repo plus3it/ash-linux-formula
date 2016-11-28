@@ -24,7 +24,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](selPolModule) %}
+{%- if salt.pkg.version(selPolModule) %}
 symlink_{{ stig_id }}-selinxCfg:
   file.symlink:
     - name: {{ selLink }}

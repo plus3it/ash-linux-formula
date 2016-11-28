@@ -15,7 +15,7 @@
 {%- set stig_id = 'RHEL-07-010260' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set sysauthroot = '/etc/pam.d/system-auth' %}
-{%- if salt['file.file_exists'](sysauthroot + '-ac') %}
+{%- if salt.file.file_exists(sysauthroot + '-ac') %}
   {%- set checkFile = sysauthroot + '-ac' %}
 {% else %}
   {%- set checkFile = sysauthroot %}

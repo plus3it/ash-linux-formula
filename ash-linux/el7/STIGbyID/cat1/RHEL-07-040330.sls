@@ -21,11 +21,11 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Iterate locally-managed users to look for .shosts files
-{%- for userName in salt['user.list_users']() %}
-{%- set userInfo = salt['user.info'](userName) %}
+{%- for userName in salt.user.list_users() %}
+{%- set userInfo = salt.user.info(userName) %}
 {%- set userHome = userInfo['home'] %}
 {%- set userShost = userHome + '/.shosts' %}
-{%- if salt['file.file_exists'](userShost) %}
+{%- if salt.file.file_exists(userShost) %}
 notify-{{ userName }}:
   cmd.run: 
     - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.shosts'' file. Removing..." ; exit 1'
