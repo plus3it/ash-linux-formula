@@ -45,6 +45,7 @@ enable_{{ stig_id }}-{{ primeSvc }}:
 {%- else %}
 missing_{{ stig_id }}-describe:
   cmd.run:
-    - name: 'echo "Was not able to find either McAfee or Clam A/V services installed" > /dev/stderr && exit 1'
+    - name: 'printf "\nchanged=no comment=''Was not able to find either McAfee or Clam A/V services installed. This will be a finding.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}
