@@ -37,8 +37,8 @@ script_{{ stig_id }}-describe:
 # If "alert only" need to decide on best method to use for detect-
 # and-notify
 ###################################################################
-{%- if salt['pkg.version'](acPkg) %}
+{%- if salt.pkg.version(acPkg) %}
 {%- endif %}
 
-{%- if salt['pkg.version'](pkcsPkg) %}
+{%- if salt.pkg.version(pkcsPkg) %}
 {%- endif %}

@@ -30,11 +30,11 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Check if target RPM is installed
-{%- if salt['pkg.version'](pkgName) %}
+{%- if salt.pkg.version(pkgName) %}
   # Check if a section-header is already present
-  {%- if salt['file.search'](dconfBanner, '^\[' + headerLabel + '\]') %}
+  {%- if salt.file.search(dconfBanner, '^\[' + headerLabel + '\]') %}
     # Check if a banner-message has already been specified
-    {%- if salt['file.search'](dconfBanner, targVal) %}
+    {%- if salt.file.search(dconfBanner, targVal) %}
 file_{{ stig_id }}-{{ dconfBanner }}:
   cmd.run:
     - name: 'echo "Screensaver idle-activation is set"'

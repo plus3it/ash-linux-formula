@@ -23,8 +23,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](pkgChk) %}
-  {%- if salt['file.file_exists'](chkFile) %}
+{%- if salt.pkg.version(pkgChk) %}
+  {%- if salt.file.file_exists(chkFile) %}
 config_{{ stig_id }}-{{ pkgChk }}:
   file.replace:
     - name: '{{ chkFile }}'

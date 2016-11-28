@@ -18,7 +18,6 @@
 {%- set pkgName = 'dconf' %}
 {%- set dconfDir = '/etc/dconf/db/local.d' %}
 {%- set dconfCfgFile = dconfDir + '/locks/screensaver' %}
-{%- set dconfHeader = '[' + headerLabel + ']' %}
 
 
 script_{{ stig_id }}-describe:
@@ -27,7 +26,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # Check if target RPM is installed
-{%- if salt['pkg.version'](pkgName) %}
+{%- if salt.pkg.version(pkgName) %}
 file_{{ stig_id }}-{{ dconfCfgFile }}:
   file.managed:
     - name: '{{ dconfCfgFile }}'
@@ -38,6 +37,6 @@ file_{{ stig_id }}-{{ dconfCfgFile }}:
 {%- else %}
 file_{{ stig_id }}-{{ dconfCfgFile }}:
   cmd.run:
-    - name: 'echo "Relevant subsystems not installed: skipping..."
+    - name: 'echo "Relevant subsystems not installed: skipping..."'
     - cwd: /root
 {%- endif %}

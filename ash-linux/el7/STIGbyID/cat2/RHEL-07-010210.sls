@@ -22,8 +22,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for userName in salt['user.list_users']() %}
-{%- set shadowInfo = salt['shadow.info'](userName) %}
+{%- for userName in salt.user.list_users() %}
+{%- set shadowInfo = salt.shadow.info(userName) %}
 {%- set userPasswd = shadowInfo.passwd %}
 {%- set passwdMin = shadowInfo.min %}
   {%- if (

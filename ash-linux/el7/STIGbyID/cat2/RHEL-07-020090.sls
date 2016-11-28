@@ -29,10 +29,10 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for userName in salt['user.list_users']() %}
-{%- set userInfo = salt['user.info'](userName) %}
+{%- for userName in salt.user.list_users() %}
+{%- set userInfo = salt.user.info(userName) %}
   {%- if userInfo.gid >= regUserGid %}
-    {%- set seUmap =  salt['cmd.run']('semanage login -ln | awk \'/' + userName + '/{print $2}\'') %}
+    {%- set seUmap =  salt.cmd.run('semanage login -ln | awk \'/' + userName + '/{print $2}\'') %}
     {%- if seUmap == "unconfined_u" %}
       {%- do uncUsers.append(userName) %}
     {%- elif seUmap == "staff_u" %}
@@ -55,7 +55,7 @@ set_{{ stig_id }}-SELuserRole-{{ nullUser }}:
   {%- endfor %}
 {%- endif %} 
 
-{%- if not salt['cmd.run']('semanage login -l | awk \'/^__defaul/{ print $2}\'') == stig_role %}
+{%- if not salt.cmd.run('semanage login -l | awk \'/^__defaul/{ print $2}\'') == stig_role %}
 notify_{{ stig_id }}-baDefault:
   cmd.run:
     - name: 'printf "[WARNING] Default SEL login user role-mapping is not\n\t\"{{ stig_role }}\": users created after this state runs will\n\tneed to be explicitly set to STIG-compatible roles."'

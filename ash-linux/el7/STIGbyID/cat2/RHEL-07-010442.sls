@@ -24,8 +24,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' .*') %}
-  {%- if salt['file.search'](sshConfigFile, '^' + sshParm + ' 2') %}
+{%- if salt.file.search(sshConfigFile, '^' + sshParm + ' .*') %}
+  {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' 2') %}
 file_{{ stig_id }}:
   cmd.run:
     - name: 'echo "{{ sshParm }} already set to {{ sshPval }}in ''{{ sshConfigFile }}''"'
@@ -51,7 +51,7 @@ file_{{ stig_id }}:
 
 # Bleah: this is a mild botch. If above performs a 'cmd.run', this state
 # will always cause a service restart event.
-service_sshd:
+service_{{ stig_id }}-sshd:
   service.running:
     - name: 'sshd'
     - watch:
