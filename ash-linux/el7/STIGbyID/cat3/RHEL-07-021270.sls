@@ -12,21 +12,7 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-# Finding ID:	RHEL-07-021260
-# Version:	RHEL-07-021260_rule
-# SRG ID:	SRG-OS-000480-GPOS-00227
-# Finding Level:	low
-# 
-# Rule Summary:
-#	The system must use /var/log/audit for the system audit data path.
-#
-# CCI-000366 
-#    NIST SP 800-53 :: CM-6 b 
-#    NIST SP 800-53A :: CM-6.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: CM-6 b 
-#
-#################################################################
-{%- set stig_id = 'RHEL-07-021260' %}
+{%- set stig_id = 'RHEL-07-021270' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set chkPtn = '/tmp' %}

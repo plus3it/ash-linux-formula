@@ -12,7 +12,7 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-010490' %}
+{%- set stig_id = 'RHEL-07-040300' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/pam.d/postlogin'%}
