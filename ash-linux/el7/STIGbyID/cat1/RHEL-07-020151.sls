@@ -18,22 +18,30 @@
 {%- set stig_id = 'RHEL-07-020151' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set checkFile = '/etc/yum.conf'%}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(checkFile, '^localpkg_gpgcheck') %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - cwd: /root
+{%- else %}
+  {%- if salt.file.search(checkFile, '^localpkg_gpgcheck') %}
 file_{{ stig_id }}-{{ checkFile }}:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^localpkg_gpgcheck.*$'
     - repl: 'localpkg_gpgcheck=1'
-{%- else %}
+  {%- else %}
 file_{{ stig_id }}-{{ checkFile }}:
   file.replace:
     - name: '{{ checkFile }}'
     - pattern: '^\[main]'
     - repl: '[main]\nlocalpkg_gpgcheck=1'
+  {%- endif %}
 {%- endif %}
