@@ -44,7 +44,7 @@ notice_{{ stig_id }}-{{ chkPkg }}:
     - stateful: True
     - cwd: /root
   {%- endif %}
-  {%- if salt.service.show(svcName)['ActiveState'] == 'active' %}
+  {%- if salt.service.available(svcName) %}
 notice_{{ stig_id }}-{{ svcName }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Potential finding: {{ svcName }} is running.''\n"'
