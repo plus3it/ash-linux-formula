@@ -34,7 +34,7 @@
   ## This kludge necessary to account for /tmp as either ##
   ## standard filesystem or tmpfs pseudo-filesystem.     ##
   #########################################################
-{%- if salt.service.show('tmp.mount')['ActiveState']  == 'active' %}
+{%- if salt.service.available('tmp.mount') %}
   {%- set fstab = [ '/tmp' ] %}
   {%- set mntMessage = chkPtn + ' managed by systemd' %}
 {%- else %}
