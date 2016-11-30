@@ -21,17 +21,17 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
 {%- set oflowVal = salt.pillar.get('ash-linux:lookup:audit-overflow', '2') %}
-{%- set oflowStr = '-f '+ oflowVal %}
+{%- set oflowStr = '-f '+ oflowVal|string %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if oflowVal in ruleFile %}
+{%- if oflowVal|string in ruleFile %}
 setval_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "Target audit-overflow value ({{ oflowVal }})already set"'
+    - name: 'echo "Target audit-overflow value ({{ oflowVal|string }})already set"'
     - cwd: /root
 {%- else %}
 setval_{{ stig_id }}:
