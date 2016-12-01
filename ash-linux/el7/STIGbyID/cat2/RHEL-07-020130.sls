@@ -24,7 +24,7 @@
                      '/etc/cron.weekly'
                    ] %}
 {%- for cronDir in cronDirs %}
-  {%- do cronFiles.extend(salt.file.find(cronDir, 'maxdepth=0', 'type=f')) %}
+  {%- do cronFiles.extend(salt.file.find(cronDir, maxdepth='0', type='f')) %}
 {%- endfor %}
 
 script_{{ stig_id }}-describe:

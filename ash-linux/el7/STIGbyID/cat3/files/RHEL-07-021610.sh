@@ -6,7 +6,8 @@
 # Finding Level:	low
 # 
 # Rule Summary:
-#	The file integrity tool must be configured to verify extended attributes.
+#	The file integrity tool must be configured to verify
+#	extended attributes.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -14,3 +15,14 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
+
+diag_out "----------------------------------------"
+diag_out "STIG Finding ID: RHEL-07-021610"
+diag_out "   The file integrity tool must be"
+diag_out "   configured to verify extended"
+diag_out "   attributes."
+diag_out "----------------------------------------"

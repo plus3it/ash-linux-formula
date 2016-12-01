@@ -28,13 +28,10 @@ script_{{ stig_id }}-describe:
 file_{{ stig_id }}-{{ parmName }}:
   file.replace:
     - name: '{{ audCfg }}'
-    - pattern: '^\s{{ parmName }}.*$'
+    - pattern: '^[ 	]*{{ parmName }}.*$'
     - repl: '{{ parmName }} = {{ alrtMeth }}'
     - append_if_not_found: True
-{%- else %}
-file_{{ stig_id }}-{{ parmName }}:
-  file.append:
-    - name: '{{ audCfg }}'
-    - text: '{{ parmName }} = {{ alrtMeth }}'
-    - makedirs: True
+    - not_found_content: |-
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} = {{ alrtMeth }}
 {%- endif %}

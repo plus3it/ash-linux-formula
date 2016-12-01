@@ -13,7 +13,7 @@
 {%- set stig_id = 'RHEL-07-010381' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set sudoerFiles = [ '/etc/sudoers' ] %}
-{%- set sudoerFiles = sudoerFiles + salt.file.find('/etc/sudoers.d', 'maxdepth=0', 'type=f') %}
+{%- set sudoerFiles = sudoerFiles + salt.file.find('/etc/sudoers.d', maxdepth='0', type='f') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
