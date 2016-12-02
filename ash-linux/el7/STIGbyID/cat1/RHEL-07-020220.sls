@@ -24,8 +24,9 @@ script_{{ stig_id }}-describe:
 stop_{{ stig_id }}-{{ svcName }}:
   service.dead:
     - name: '{{ svcName }}'
+    - enable: False
 
-disable_{{ stig_id }}-{{ svcName }}:
-  service.disabled:
-    - name: '{{ svcName }}'
-
+mask_{{ stig_id }}-{{ svcName }}:
+  cmd.run:
+    - name: 'systemctl mask {{ svcName }}'
+    - cwd: /root
