@@ -37,6 +37,19 @@ notice_{{ stig_id }}-{{ chkPkg }}:
     - name: 'printf "\nchanged=no comment=''Potential finding: {{ chkPkg }} is installed.''\n"'
     - stateful: True
     - cwd: /root
+    {%- if salt.file.search(cfgFile, '^conn ') %}
+notice_{{ stig_id }}-{{ cfgFile }}:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Potential finding: {{ cfgFile }} contains tunnel defenitions.''\n"'
+    - stateful: True
+    - cwd: /root
+    {%- else %}
+notice_{{ stig_id }}-{{ cfgFile }}:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''IPSEC configuration file ({{ cfgFile }}) contains no tunnel defenitions.''\n"'
+    - stateful: True
+    - cwd: /root
+    {%- endif %}
   {%- else %}
 notice_{{ stig_id }}-{{ chkPkg }}:
   cmd.run:
@@ -54,19 +67,6 @@ notice_{{ stig_id }}-{{ svcName }}:
 notice_{{ stig_id }}-{{ svcName }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Service {{ svcName }} is not running.''\n"'
-    - stateful: True
-    - cwd: /root
-  {%- endif %}
-  {%- if salt.file.search(cfgFile, '^conn ') %}
-notice_{{ stig_id }}-{{ cfgFile }}:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Potential finding: {{ cfgFile }} contains tunnel defenitions.''\n"'
-    - stateful: True
-    - cwd: /root
-  {%- else %}
-notice_{{ stig_id }}-{{ cfgFile }}:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''IPSEC configuration file ({{ cfgFile }}) contains no tunnel defenitions.''\n"'
     - stateful: True
     - cwd: /root
   {%- endif %}
