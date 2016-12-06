@@ -16,7 +16,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/fstab' %}
 {%- set chkPkg = 'nfs-utils' %}
-{%- set secopts = ',sec=krb5:krb5i:krb5p' %}
+{%- set secopts = 'sec=krb5:krb5i:krb5p' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
@@ -41,9 +41,16 @@ notify_{{ stig_id }}-break:
       {%- set devName = fstabData[mount]['device'] %}
       {%- set dumpOpt = fstabData[mount]['dump'] %}
       {%- set fstype  = fstabData[mount]['fstype'] %}
-      {%- set optStr  = fstabData[mount]['opts']|join(',') + secopts %}
+      {%- set optStr  = fstabData[mount]['opts']|join(',') + ',' + secopts %}
       {%- set mntOpts = optStr.split(',') %}
       {%- set passNum = fstabData[mount]['pass'] %}
+      {%- if secopts in fstabData[mount]['opts'] %}
+fixopts_{{ stig_id }}-{{ mount }}:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Mountpoint {{ mount }} already has KRB5 mount-options set: state ok.''\n"'
+    - cwd: /root
+    - stateful: True
+      {%- else %}
 fixopts_{{ stig_id }}-{{ mount }}:
   module.run:
     - name: mount.set_fstab
@@ -53,9 +60,8 @@ fixopts_{{ stig_id }}-{{ mount }}:
     - opts: '{{ optStr }}'
     - dump: '{{ dumpOpt }}'
     - pass_num: '{{ passNum }}'
-# printf "{{ devName }}\t{{ mount }}\t{{ fstype }}\t{{ optStr }}\t{{ passNum }} {{ dumpOpt }}\n"'
     - cwd: /root
-# mount.set_fstab(name, device, fstype, opts='defaults', dump=0, pass_num=0, config='/etc/fstab', test=False, match_on='auto', **kwargs)
+      {%- endif %}
     {%- endif %}
   {%- endfor %}
 {%- endif %}
