@@ -48,3 +48,16 @@
        # Action to take if audispd is unable to send logs to a
        # remote collector-host
 ##     audisp-net-fail: <syslog|single|halt>
+
+       # List of accounts that should be banned from deployed systems
+##     banned-accts
+##       - ftp
+##       - games
+##       - gopher
+
+       # DNS-related information for SaltStack to enforce if not
+       # being received via other means (e.g., DHCP)
+##     dns-info
+##       nameservers
+##         - nameserver1.I.P.addr
+##         - nameserver2.I.P.addr
