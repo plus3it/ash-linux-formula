@@ -20,9 +20,9 @@
 {%- set pamMod = 'pam_faillock.so' %}
 {%- set parmName = 'fail_interval' %}
 {%- set parmValu = salt.pillar.get('ash-linux:lookup:faillock:' + parmName, '900') %}
-{%- set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 ' + parmName + '=' + parmValu %}
-{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 ' + parmName + '=' + parmValu %}
-{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 ' + parmName + '=' + parmValu %}
+{%- set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 ' %}
+{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 ' %}
+{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 ' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -30,14 +30,8 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 
-#define macro to configure the pam module in a file
+#define macro to configure the dirctive-anchors to host the faillock parm/vals
 {%- macro pammod_template(stig_id, file, pam_module, preauth, authfail, authsucc) %}
-notify_{{ stig_id }}-{{ file }}_exists:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''{{ pam_module }} was absent in {{ file }}.''\n"'
-    - cwd: /root
-    - stateful: True
-
 insert_{{ stig_id }}-{{ file }}_faillock:
   file.replace:
     - name: {{ file }}
@@ -55,25 +49,23 @@ insert_{{ stig_id }}-{{ file }}_faillock:
     {%- set checkFile = checkFile + '-ac' %}
   {%- endif %}
 
+  # Check if faillock is present, fix if necessary
   {%- if not salt.file.search(checkFile, pamMod) %}
 
-#file {{ checkFile }} exists
-#{{ pamMod }} not yet present in file
-#Use macro to add necessary rules
 {{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc) }}
 
-  {%- else %}
-
-## notify_{{ stig_id }}-{{ checkFile }}_exists:
-##   cmd.run:
-##     - name: 'printf "\nchanged=no comment=''{{ pamMod }} already present in {{ checkFile }}.''\n"'
-##     - cwd: /root
-##     - stateful: True
+  {%- endif %}
+setVal_{{ stig_id }}-{{ checkFile }}:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^(?P<srctok>auth.*{{ pamMod }}.*)$'
+    - repl: '\g<srctok> {{ parmName }}={{ parmValu }}'
+    - unless: 'grep -q "{{ pamMod }}.*{{ parmName }}=" {{ checkFile }}'
+  
 fixVal_{{ stig_id }}-{{ checkFile }}:
   file.replace:
     - name: {{ checkFile }}
     - pattern: '{{parmName }}=[0-9]*'
     - repl: '{{ parmName }}={{ parmValu }}'
 
-  {%- endif %}
 {%- endfor %}
