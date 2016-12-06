@@ -14,15 +14,15 @@
 {%- set stig_id = 'RHEL-07-010371' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set pamFiles = [
-                     '/etc/pam.d/system-auth',
-                     '/etc/pam.d/password-auth'
-                    ]
- %}
+                    '/etc/pam.d/system-auth',
+                    '/etc/pam.d/password-auth'
+                     ] %}
 {%- set pamMod = 'pam_faillock.so' %}
-{%- set lockTO = '900' %}
-{%- set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 unlock_time=' + lockTO %}
-{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
-{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900' %}
+{%- set parmName = 'fail_interval' %}
+{%- set parmValue = salt.pillar.get('ash-linux:lookup:faillock:' + parmName, '900') %}
+{%- set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 ' + parmName + '=' + parmValu %}
+{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 ' + parmName + '=' + parmValu %}
+{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 ' + parmName + '=' + parmValu %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -31,10 +31,12 @@ script_{{ stig_id }}-describe:
 
 
 #define macro to configure the pam module in a file
-{%- macro pammod_template(stig_id, file, pam_module, preauth, authfail, authsucc, lock_timeout) %}
+{%- macro pammod_template(stig_id, file, pam_module, preauth, authfail, authsucc) %}
 notify_{{ stig_id }}-{{ file }}_exists:
   cmd.run:
-    - name: 'echo "{{ pam_module }} was absent in {{ file }}"'
+    - name: 'printf "\nchanged=no comment=''{{ pam_module }} was absent in {{ file }}.''\n"'
+    - cwd: /root
+    - stateful: True
 
 insert_{{ stig_id }}-{{ file }}_faillock:
   file.replace:
@@ -43,10 +45,6 @@ insert_{{ stig_id }}-{{ file }}_faillock:
     - repl: '{{ preauth }}\n\g<srctok>\n{{ authfail }}\n{{ authsucc }}'
     - onlyif:
       - 'test $(grep -c -E -e "{{ pam_module }}" {{ file }}) -eq 0'
-
-notify_{{ stig_id }}-{{ file }}_deviance:
-  cmd.run:
-    - name: 'echo "STIG prescribes indefinite-lock; utility implements {{ lock_timeout }}s lock"'
 {%- endmacro %}
 
 # Iterate files to alter...
@@ -60,14 +58,14 @@ notify_{{ stig_id }}-{{ file }}_deviance:
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #Use macro to add necessary rules
-{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc) }}
 
   {%- elif not salt.file.search(checkFile, pamMod) %}
 
 #file {{ checkFile }} exists
 #{{ pamMod }} not yet present in file
 #Use macro to add necessary rules
-{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc) }}
 
   {%- elif not salt.file.search(checkFile, preAuth) %}
 
@@ -98,25 +96,9 @@ STIG is probably not present. "'
 #preAuth rule already present in file
 notify_{{ stig_id }}-{{ checkFile }}_exists:
   cmd.run:
-    - name: 'printf "{{ pamMod }} already present in {{ checkFile }} with correct ruleset."'
+    - name: 'printf "\nchanged=no comment=''{{ pamMod }} already present in {{ checkFile }} with correct ruleset.''\n"'
+    - cwd: /root
+    - stateful: True
 
   {%- endif %}
 {%- endfor %}
-
-notify_{{ stig_id }}-docError:
-  cmd.run:
-    - name: 'printf "
-************\n
-** NOTICE **\n
-************\n
-\tIf following STIG/SCAP guidance and only implementing the:\n\n
-{{ authFail }}\n
-{{ authSucc }}\n\n
-\tGuidance, desired lockout behavior will not be achieved.  \n
-\tThis tool corrects the STIG-prescribed remediation per\n
-\tRedHat Solution ID 62949.\n\n
-Additionally: DISA security guidelines (STIGS) prescribe\n
-an indefinite-lock/manual-unlock policy; for operational-\n
-supportability reasons, this utility implements a {{ lockTO }}s\n
-lock. To match STIGs: edit the relevant PAM files and set\n
-the ''unlock_time'' value to ''604800''.\n"'
