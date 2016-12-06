@@ -19,30 +19,53 @@
                     ]
  %}
 {%- set pamMod = 'pam_faillock.so' %}
-{%- set lockTO = '900' %}
-{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 unlock_time=' + lockTO + ' fail_interval=900 even_deny_root fail_interval=' + lockTO %}
-{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 unlock_time=' + lockTO + ' fail_interval=900 even_deny_root fail_interval=' + lockTO %}
+{%- set parmName = 'even_deny_root' %}
+{%- set preAuth =  'auth        required      ' + pamMod + ' preauth silent audit deny=3 ' %}
+{%- set authFail = 'auth        [default=die] ' + pamMod + ' authfail deny=3 ' %}
+{%- set authSucc = 'auth        required      ' + pamMod + ' authsucc deny=3 ' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+
+#define macro to configure the dirctive-anchors to host the faillock parm/vals
+{%- macro pammod_template(stig_id, file, pam_module, preauth, authfail, authsucc) %}
+insert_{{ stig_id }}-{{ file }}_faillock:
+  file.replace:
+    - name: {{ file }}
+    - pattern: '^(?P<srctok>auth[ \t]*[a-z]*[ \t]*pam_unix.so.*$)'
+    - repl: '{{ preauth }}\n\g<srctok>\n{{ authfail }}\n{{ authsucc }}'
+    - onlyif:
+      - 'test $(grep -c -E -e "{{ pam_module }}" {{ file }}) -eq 0'
+{%- endmacro %}
+
 # Iterate files to alter...
 {%- for checkFile in pamFiles %}
+  # Identify proper target to modify - probably redundant in newer, 
+  # symlink-following releases of SaltStack
   {%- if salt.file.is_link(checkFile) %}
-      {%- set checkFile = checkFile + '-ac' %}
+    {%- set checkFile = checkFile + '-ac' %}
   {%- endif %}
 
-insert_{{ stig_id }}-{{ checkFile }}_faillock_fail:
-  file.replace:
-    - name: '{{ checkFile }}'
-    - pattern: '^(?P<srctok>auth.*{{ pamMod }}.*authfail.*$)'
-    - repl: '\g<srctok> even_deny_root'
+  # Check if faillock is present, fix if necessary
+  {%- if not salt.file.search(checkFile, pamMod) %}
 
-insert_{{ stig_id }}-{{ checkFile }}_faillock_succ:
+{{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc) }}
+
+  {%- endif %}
+setVal_{{ stig_id }}-{{ checkFile }}:
   file.replace:
-    - name: '{{ checkFile }}'
-    - pattern: '^(?P<srctok>auth.*{{ pamMod }}.*authsucc.*$)'
-    - repl: '\g<srctok> even_deny_root'
+    - name: {{ checkFile }}
+    - pattern: '^(?P<srctok>auth.*{{ pamMod }}.*)$'
+    - repl: '\g<srctok> {{ parmName }}'
+    - unless: 'grep -q "{{ pamMod }}.*{{ parmName }}" {{ checkFile }}'
+  
+fixVal_{{ stig_id }}-{{ checkFile }}:
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '{{parmName }}=[0-9]*'
+    - repl: '{{ parmName }}'
+
 {%- endfor %}
