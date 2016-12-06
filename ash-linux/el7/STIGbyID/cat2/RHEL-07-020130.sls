@@ -16,7 +16,10 @@
 {%- set hostname = salt.grains.get('fqdn') %}
 {%- set ntfyMail = salt.pillar.get('ash-linux:lookup:notifier-email', 'root') %}
 {%- set foundCrons = [] %}
-{%- set cronFiles = [ '/var/spool/cron/root' ] %}
+{%- set cronFiles = [] %}
+{%- if salt.file.file_exists('/var/spool/cron/root') %}
+  {%- do cronFiles.append('/var/spool/cron/root') %}
+{%- endif %}
 {%- set cronDirs = [
                      '/etc/cron.daily',
                      '/etc/cron.hourly',
@@ -24,7 +27,7 @@
                      '/etc/cron.weekly'
                    ] %}
 {%- for cronDir in cronDirs %}
-  {%- do cronFiles.extend(salt.file.find(cronDir, maxdepth='0', type='f')) %}
+  {%- do cronFiles.extend(salt.file.find(cronDir, maxdepth='1', type='f')) %}
 {%- endfor %}
 
 script_{{ stig_id }}-describe:
