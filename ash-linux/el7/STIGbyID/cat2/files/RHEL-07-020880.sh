@@ -20,4 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-020880"
+diag_out "   Local initialization files must not"
+diag_out "   execute world-writable programs."
 diag_out "----------------------------------------"
