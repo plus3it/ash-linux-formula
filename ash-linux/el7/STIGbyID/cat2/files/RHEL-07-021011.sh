@@ -22,4 +22,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-021011"
+diag_out "   Files systems that are used with"
+diag_out "   removable media must be mounted to"
+diag_out "   prevent files with the setuid and"
+diag_out "   setgid bit set from being executed."
 diag_out "----------------------------------------"
