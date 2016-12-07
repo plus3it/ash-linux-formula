@@ -16,9 +16,16 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040180' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set authCfg = '/etc/sysconfig/authconfig' %}
+{%- set ldapCfg = '/etc/pam_ldap.conf' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+notice_{{ stig_id }}-BadSTIG:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Per https://access.redhat.com/solutions/1198543, {{ ldapCfg }} has been deprecated in favor of SSSD''\n"'
+    - cwd: /root
+    - stateful: True

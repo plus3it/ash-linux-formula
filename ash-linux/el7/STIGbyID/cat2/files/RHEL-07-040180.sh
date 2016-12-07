@@ -22,4 +22,9 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-040180"
+diag_out "   The operating system must implement"
+diag_out "   cryptography to protect the"
+diag_out "   integrity of Lightweight Directory"
+diag_out "   Access Protocol (LDAP)"
+diag_out "   authentication communications."
 diag_out "----------------------------------------"
