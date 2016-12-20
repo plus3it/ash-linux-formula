@@ -34,33 +34,39 @@ script_{{ stig_id }}-describe:
 {%- if salt.pkg.version(kernType) %}
 notify_{{ stig_id }}-kernWarn:
   cmd.run:
-    - name: 'echo "STIG-compatible kernel-extensions available."'
+    - name: 'printf "\nchanged=no comment=''STIG-compatible kernel-extensions available.''\n"'
     - cwd: /root
+    - stateful: True
   {%- if salt.file.search(grub2cfg, 'fips=1') %}
 notify_{{ stig_id }}-{{ grub2cfg }}:
   cmd.run:
-    - name: 'echo "At least one boot-menu entry has FIPS-mode enabled."'
+    - name: 'printf "\nchanged=no comment=''At least one boot-menu entry has FIPS-mode enabled.''\n"'
     - cwd: /root
+    - stateful: True
   {%- else %}
 notify_{{ stig_id }}-{{ grub2cfg }}:
   cmd.run:
-    - name: 'echo "No boot-menu entries have FIPS-mode enabled." > /dev/stderr && exit 1'
+    - name: 'printf "\nchanged=no comment=''No boot-menu entries have FIPS-mode enabled.''\n" && exit 1'
     - cwd: /root
+    - stateful: True
   {%- endif %}
   {%- if salt.file.search(fipsChk, '^1') %}
 notify_{{ stig_id }}-{{ fipsChk }}:
   cmd.run:
-    - name: 'echo "FIPS-mode active in {{ fipsChk }}."'
+    - name: 'printf "\nchanged=no comment=''FIPS-mode active in {{ fipsChk }}.''\n"'
     - cwd: /root
+    - stateful: True
   {%- else %}
 notify_{{ stig_id }}-{{ fipsChk }}:
   cmd.run:
-    - name: 'echo "FIPS-mode not active in {{ fipsChk }}." > /dev/stderr && exit 1'
+    - name: 'printf "\nchanged=no comment=''FIPS-mode not active in {{ fipsChk }}.''\n" && exit 1'
     - cwd: /root
+    - stateful: True
   {%- endif %}
 {%- else %}
 notify_{{ stig_id }}-kernWarn:
   cmd.run:
-    - name: 'printf "STIG-compatible kernel-extensions not available.\n" > /dev/stderr && exit 1'
+    - name: 'printf "\nchanged=no comment=''STIG-compatible kernel-extensions not available.''\n" && exit 1'
     - cwd: /root
+    - stateful: True
 {%- endif %}

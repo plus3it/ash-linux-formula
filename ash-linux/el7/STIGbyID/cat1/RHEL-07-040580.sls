@@ -32,7 +32,6 @@ notify_{{ stig_id }}-skipSet:
     - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - stateful: True
     - cwd: /root
-# Nothing's OS-level encrypted without LUKS packages...
 {%- elif (
         salt.pkg.version('net-snmp') or
         salt.file.file_exists(snmpCfg)

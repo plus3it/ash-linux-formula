@@ -34,7 +34,9 @@ script_{{ stig_id }}-describe:
     {%- if user == 'root' %}
 notify_{{ stig_id }}-{{ user }}:
   cmd.run:
-    - name: 'echo "Info: User ''{{ user }}'' has userid ''{{ userId }}''"'
+    - name: 'printf "\nchanged=no comment=''Info: User {{ user }} has userid {{ userId }}.''\n"'
+    - cwd: /root
+    - stateful: True
 
     #################################################################
     # If the uid '0' account isn't "root", nuke and recreate as non-0
@@ -85,7 +87,9 @@ update_{{ stig_id }}-{{ user }}_recreate:
 
 update_{{ stig_id }}-{{ user }}_chown:
   cmd.run:
-    - name: 'echo "Chowning {{ userName }}''s home directory" ; chown -R {{ userName }} {{ userHome }}'
+    - name: 'printf "\nchanged=no comment=''Chowning {{ userName }}`s home directory" ; chown -R {{ userName }} {{ userHome }}''\n"'
+    - cwd: /root
+    - stateful: True
     {%- endif %}
   {%- endif %}
 

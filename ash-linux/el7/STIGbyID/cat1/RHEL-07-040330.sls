@@ -28,13 +28,17 @@ script_{{ stig_id }}-describe:
 {%- if salt.file.file_exists(userShost) %}
 notify-{{ userName }}:
   cmd.run: 
-    - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.shosts'' file. Removing..." ; exit 1'
+    - name: 'printf "\nchanged=no comment=''WARNING: User ''{{ userName }}'' has an ''.shosts'' file. Removing...''\n" || exit 1'
+    - cwd: /root
+    - stateful: True
 cmd_{{ stig_id }}-{{ userShost }}_remove:
   file.absent: 
     - name: '{{ userShost }}'
 {%- else %}
 notify-{{ userName }}:
   cmd.run: 
-    - name: 'echo "Info: User ''{{ userName }}'' does not have an ''.shosts'' file."'
+    - name: 'printf "\nchanged=no comment=''Info: User {{ userName }} does not have an .shosts file.''\n"'
+    - cwd: /root
+    - stateful: True
 {%- endif %}
 {%- endfor %}

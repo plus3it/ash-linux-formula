@@ -24,12 +24,16 @@ script_{{ stig_id }}-describe:
   {%- if salt.file.search('/etc/selinux/config', '^SELINUX=enforcing') %}
 msg_{{ stig_id }}-modeSet:
   cmd.run:
-    - name: 'echo "Info: Current SELinux mode is Enforcing. Nothing to change"'
+    - name: 'printf "\nchanged=no comment=''Info: Current SELinux mode is Enforcing. Nothing to change.''\n"'
+    - cwd: /root
+    - stateful: True
   {%- else %}
     {%- if salt.file.search('/etc/selinux/config', '^SELINUX=permissive') %}
 msg_{{ stig_id }}-bootSet:
   cmd.run:
-    - name: 'echo "Current SELinux mode is permissive. Setting to Enforcing for next boot"'
+    - name: 'printf "\nchanged=no comment=''Current SELinux mode is permissive. Setting to Enforcing for next boot.''\n"'
+    - cwd: /root
+    - stateful: True
 
 sel_{{ stig_id }}-modeSet:
   selinux:
@@ -38,11 +42,15 @@ sel_{{ stig_id }}-modeSet:
 
 msg_{{ stig_id }}-chgModeSet:
   cmd.run:
-    - name: 'echo "Current SELinux mode is permissive. Changing to Enforcing"'
+    - name: 'printf "\nchanged=no comment=''Current SELinux mode is permissive. Changing to Enforcing.''\n"'
+    - cwd: /root
+    - stateful: True
     {%- elif salt.file.search('/etc/selinux/config', '^SELINUX=disabled') %}
 msg_{{ stig_id }}-bootSet:
   cmd.run:
-    - name: 'echo "Current SELinux mode is disabled. Setting to Enforcing for next boot"'
+    - name: 'printf "\nchanged=no comment=''Current SELinux mode is disabled. Setting to Enforcing for next boot.''\n"'
+    - cwd: /root
+    - stateful: True
     {%- endif %}
 
 file_{{ stig_id }}-enableSEL:

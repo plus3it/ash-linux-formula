@@ -25,7 +25,9 @@ script_{{ stig_id }}-describe:
   {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords no') %}
 file_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "Empty passwords already disabled in ''{{ sshConfigFile }}''"'
+    - name: 'printf "\nchanged=no comment=''Empty passwords already disabled in {{ sshConfigFile }}''.\n"'
+    - cwd: /root
+    - stateful: True
     {%- set runtype = 'cmd' %}
   {%- else %}
 file_{{ stig_id }}:
@@ -39,10 +41,10 @@ file_{{ stig_id }}:
 file_{{ stig_id }}:
   file.append:
     - name: '{{ sshConfigFile }}'
-    - text:
-      - ' '    
-      - '# SSH Must not allow empty passwords (per STIG {{ stig_id }})'
-      - 'PermitEmptyPasswords no'
+    - text: |-
+        
+        # SSH Must not allow empty passwords (per STIG {{ stig_id }})
+        PermitEmptyPasswords no
   {%- set runtype = 'file' %}
 {%- endif %}
 
