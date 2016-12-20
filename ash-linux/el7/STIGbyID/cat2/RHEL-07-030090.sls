@@ -38,7 +38,7 @@ setval_{{ stig_id }}:
   file.replace:
     - name: '{{ ruleFile }}'
     - pattern: '^\s-f.*$'
-    - repl: |
+    - repl: |-
         # Inserted per STIG {{ stig_id }}
         {{ oflowStr }}
     - append_if_not_found: True

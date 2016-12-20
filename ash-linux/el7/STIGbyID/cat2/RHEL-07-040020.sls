@@ -40,7 +40,7 @@ file_{{ stig_id }}-authlog:
   file.replace:
     - name: '{{ cfgFile }}'
     - pattern: '^(?P<srctok>#### RULES ####.*$)'
-    - repl: |
+    - repl: |-
         \g<srctok>
         # Inserted per STIG {{ stig_id }}
         {{ replAuth }}
@@ -58,7 +58,7 @@ file_{{ stig_id }}-daemonlog:
   file.replace:
     - name: '{{ cfgFile }}'
     - pattern: '^(?P<srctok>#### RULES ####.*$)'
-    - repl: |
+    - repl: |-
         \g<srctok>
         # Inserted per STIG {{ stig_id }}
         {{ replDmn }}
