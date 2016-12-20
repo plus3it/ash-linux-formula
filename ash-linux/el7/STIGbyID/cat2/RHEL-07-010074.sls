@@ -15,45 +15,79 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010074' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set pkgName = 'dconf' %}
 {%- set dconfDir = '/etc/dconf/db/local.d' %}
-{%- set targVal = 'lock-delay=uint32 5' %}
+{%- set dconfFile = dconfDir + '/00-screensaver' %}
 {%- set headerLabel = 'org/gnome/desktop/screensaver' %}
 {%- set dconfHeader = '[' + headerLabel + ']' %}
-{%- set dconfBanner = dconfDir + '/00-screensaver' %}
-
+{%- set parmName = 'lock-delay' %}
+{%- set parmValu = 'uint32 5' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-# Check if target RPM is installed
-{%- if salt.pkg.version(pkgName) %}
-  # Check if a section-header is already present
-  {%- if salt.file.search(dconfBanner, '^\[' + headerLabel + '\]') %}
-    # Check if a banner-message has already been specified
-    {%- if salt.file.search(dconfBanner, targVal) %}
-file_{{ stig_id }}-{{ dconfBanner }}:
+# Handler was selected for skipping...
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
   cmd.run:
-    - name: 'echo "Screensaver lock-time value is set"'
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
     - cwd: /root
-    {%- else  %}
-file_{{ stig_id }}-{{ dconfBanner }}:
+# The dconf RPM is present
+{%- elif salt.pkg.version(pkgName) %}
+  # The config file exists
+  {%- if salt.file.file_exists(dconfFile) %}
+    # The parameter is present and defined
+    {%- if salt.file.search(dconfFile, parmName) %}
+file_{{ stig_id }}-setVal:
   file.replace:
-    - name: '{{ dconfBanner }}'
-    - pattern: '^\[{{ headerLabel }}\]'
-    - repl: |
-        {{ dconfHeader }}
-        {{ targVal }}
-    {%- endif  %}
-  {%- else %}
-file_{{ stig_id }}-{{ dconfBanner }}:
+    - name: '{{ dconfFile }}'
+    - pattern: '^[ 	]*{{ parmName }}=.*$'
+    - repl: '{{ parmName }}={{ parmValu }}'
+    # The parameter is absent but section-header is present
+    {%- elif salt.file.search(dconfFile, dconfHeader) %}
+file_{{ stig_id }}-setVal:
+  file.replace:
+    - name: '{{ dconfFile }}'
+    - pattern: '^(?P<srctok>\{{ dconfHeader }}.*$)'
+    - repl: |-
+        \g<srctok>
+        {{ parmName }}={{ parmValu }}
+    # The parameter and section-header are absent
+    {%- else %}
+file_{{ stig_id }}-setVal:
   file.append:
-    - name: '{{ dconfBanner }}'
-    - text: |
+    - name: '{{ dconfFile }}'
+    - text: |-
         {{ dconfHeader }}
-        {{ targVal }}
+        {{ parmName }}={{ parmValu }}
+    {%- endif %}
+  # The config file does not exist
+  {%- else %}
+file_{{ stig_id }}-setVal:
+  file.managed:
+    - name: '{{ dconfFile }}'
+    - user: 'root'
+    - contents: |-
+        {{ dconfHeader }}
+        {{ parmName }}={{ parmValu }}
+    - group: 'root'
+    - mode: '0644'
   {%- endif %}
+update_{{ stig_id }}-dconf:
+  cmd.run:
+    - name: '/usr/bin/dconf update'
+    - cwd: /root
+    - onchanges:
+      - file: file_{{ stig_id }}-setVal
+# The dconf RPM is not present
 {%- else %}
+notify_{{ stig_id }}-noRPM:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''RPM {{ pkgName }} not installed: skipping...''\n"'
+    - stateful: True
+    - cwd: /root
 {%- endif %}
