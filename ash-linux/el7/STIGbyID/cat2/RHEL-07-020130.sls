@@ -56,7 +56,7 @@ notify_{{ stig_id }}-aideFound:
 cron_{{ stig_id }}-file:
   file.append:
     - name: /var/spool/cron/root
-    - text: |
+    - text: |-
         0 0 * * * /usr/sbin/aide --check | /bin/mail -s "aide integrity check run for {{ hostname }}" {{ ntfyMail }}
 
 cron_{{ stig_id }}-service:

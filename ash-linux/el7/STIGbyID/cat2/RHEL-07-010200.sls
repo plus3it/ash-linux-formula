@@ -33,7 +33,7 @@ file_{{ stig_id }}-{{ targFile }}:
 file_{{ stig_id }}-{{ targFile }}:
   file.append:
     - name: '{{ targFile }}'   
-    - text: |
+    - text: |-
         # Inserted per STIG {{ stig_id }}
         {{ searchRoot }}	1
 {%- endif %}

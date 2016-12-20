@@ -54,7 +54,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
 file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
     - name: '{{ audit_cfg_file }}'
-    - text: |
+    - text: |-
         
         # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}

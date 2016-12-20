@@ -35,7 +35,7 @@ config_{{ stig_id }}-{{ pkgChk }}:
 config_{{ stig_id }}-{{ pkgChk }}:
   file.append:
     - name: '{{ chkFile }}'
-    - text: |
+    - text: |-
         {{ parmName }} = {{ parmValu }}
   {%- endif %}
 {%- endif %}

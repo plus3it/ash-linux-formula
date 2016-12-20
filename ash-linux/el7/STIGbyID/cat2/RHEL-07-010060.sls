@@ -47,7 +47,7 @@ file_{{ stig_id }}-{{ dconfBanner }}:
   file.replace:
     - name: '{{ dconfBanner }}'
     - pattern: '^\[{{ headerLabel }}\]'
-    - repl: |
+    - repl: |-
         {{ dconfHeader }}
         {{ targVal }}
     {%- endif  %}
@@ -55,7 +55,7 @@ file_{{ stig_id }}-{{ dconfBanner }}:
 file_{{ stig_id }}-{{ dconfBanner }}:
   file.append:
     - name: '{{ dconfBanner }}'
-    - text: |
+    - text: |-
         {{ dconfHeader }}
         {{ targVal }}
   {%- endif %}

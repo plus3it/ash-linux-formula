@@ -43,7 +43,7 @@ script_{{ stig_id }}-{{ srcCfg }}:
 file_{{ stig_id }}-{{ srcCfg }}:
   file.append:
     - name: '{{ srcCfg }}'
-    - text: |
+    - text: |-
         # Added per STIG-ID {{ stig_id }}
         set superusers="root" password_pbkdf2 root {{ grubPass }}
 cmd_{{ stig_id }}-{{ mainCfg }}:
@@ -57,7 +57,7 @@ cmd_{{ stig_id }}-{{ mainCfg }}:
 file_{{ stig_id }}-{{ srcCfg }}:
   file.append:
     - name: '{{ srcCfg }}'
-    - text: |
+    - text: |-
         # Added per STIG-ID {{ stig_id }}
         set superusers="root" password_pbkdf2 root {{ grubPass }}
 cmd_{{ stig_id }}-{{ mainCfg }}:
