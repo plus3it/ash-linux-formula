@@ -45,7 +45,7 @@ justdoit_{{ stig_id }}-{{ cfgFile }}:
     - pattern: '^\s{{ parmName }} = .*$'
     - repl: '{{ parmName }} = {{ minPvalu|join(", ") }}'
     - append_if_not_found: True
-    - not_found_content: |
+    - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} = {{ minPvalu|join(", ") }}
 

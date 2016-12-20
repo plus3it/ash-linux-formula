@@ -45,7 +45,7 @@ file_{{ stig_id }}-{{ parmName }}:
     - pattern: '^{{ parmName }} = .*$'
     - repl: '{{ parmName }} = {{ parmValuTarg }}'
     - append_if_not_found: True
-    - not_found_content: |
+    - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} = {{ parmValuTarg }}
   {%- endif %}

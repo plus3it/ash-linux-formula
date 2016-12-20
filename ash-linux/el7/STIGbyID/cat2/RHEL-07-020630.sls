@@ -30,6 +30,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - pattern: '^{{ parmName }}\s.*$'
     - repl: '{{ parmName }} {{ parmValu }}'
     - append_if_not_found: True
-    - not_found_content: |
+    - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} {{ parmValu }}
