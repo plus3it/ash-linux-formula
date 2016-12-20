@@ -54,7 +54,7 @@ file_{{ stig_id }}-setVal:
   file.replace:
     - name: '{{ dconfFile }}'
     - pattern: '^(?P<srctok>\{{ dconfHeader }}.*$)'
-    - repl: |
+    - repl: |-
         \g<srctok>
         {{ parmName }}={{ parmValu }}
     # The parameter and section-header are absent
