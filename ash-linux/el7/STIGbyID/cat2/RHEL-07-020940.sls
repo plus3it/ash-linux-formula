@@ -46,8 +46,9 @@ dev_{{ stig_id }}-{{ file }}:
     {%- else %}
 dev_{{ stig_id }}-{{ file }}:
   cmd.run:
-    - name: 'echo "Bad device ''{{ file }}'' not installed by an RPM: cannot attempt fix"'
+    - name: 'printf "\nchanged=no comment=''Bad device {{ file }} not installed by an RPM: cannot attempt fix.''\n"'
     - cwd: /root
+    - stateful: True
     {%- endif %}
 
   {%- endif %}

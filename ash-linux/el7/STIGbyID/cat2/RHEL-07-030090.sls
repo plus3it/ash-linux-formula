@@ -31,8 +31,9 @@ script_{{ stig_id }}-describe:
 {%- if oflowVal|string in ruleFile %}
 setval_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "Target audit-overflow value ({{ oflowVal|string }})already set"'
+    - name: 'printf "\nchanged=no comment=''Target audit-overflow value ({{ oflowVal|string }})already set.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
 setval_{{ stig_id }}:
   file.replace:

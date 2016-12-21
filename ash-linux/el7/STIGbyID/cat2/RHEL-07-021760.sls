@@ -36,7 +36,8 @@ script_{{ stig_id }}-describe:
   {%- if salt.file.search(file, '^\sset root=') %}
 notify_{{ stig_id }}-{{ file }}:
   cmd.run:
-    - name: 'echo "ALERT: alternate root-device defined in {{ file }}: please check its validity."'
+    - name: 'printf "\nchanged=no comment=''ALERT: alternate root-device defined in {{ file }}: please check its validity.''\n"'
     - cwd: /root
+    - stateful: True
   {%- endif %}
 {%- endfor %}

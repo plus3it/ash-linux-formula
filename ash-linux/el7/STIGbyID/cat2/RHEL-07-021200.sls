@@ -29,6 +29,7 @@ fixown_{{ stig_id }}-{{ allowFile }}:
 {%- else %}
 fixown_{{ stig_id }}-{{ allowFile }}:
   cmd.run:
-    - name: 'echo "File ''{{ allowFile }}'' not present."'
+    - name: 'printf "\nchanged=no comment=''File {{ allowFile }} not present.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

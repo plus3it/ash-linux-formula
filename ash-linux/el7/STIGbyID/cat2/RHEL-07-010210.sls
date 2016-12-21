@@ -52,6 +52,7 @@ setmin_{{ stig_id }}-{{ userName }}:
 {%- if not goodUsers %}
 notify_{{ stig_id }}-FoundNone:
   cmd.run:
-    - name: 'echo "Found no users with non-compliant minimum password lifetime"'
+    - name: 'printf "\nchanged=no comment=''Found no users with non-compliant minimum password lifetime.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}
