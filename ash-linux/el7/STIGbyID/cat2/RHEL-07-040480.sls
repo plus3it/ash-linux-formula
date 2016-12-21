@@ -36,8 +36,9 @@ script_{{ stig_id }}-describe:
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
   cmd.run:
-    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
 justdoit_{{ stig_id }}-{{ cfgFile }}:
   file.replace:

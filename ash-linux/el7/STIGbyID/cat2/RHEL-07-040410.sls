@@ -32,8 +32,9 @@ script_{{ stig_id }}-describe:
   {%- if parmValuCurr == '0' %}
 cmd_{{ stig_id }}-{{ parmName }}:
   cmd.run:
-    - name: 'echo "{{ parmName }} already set to {{ parmValuTarg }}"'
+    - name: 'printf "\nchanged=no comment=''{{ parmName }} already set to {{ parmValuTarg }}''\n"'
     - cwd: /root
+    - stateful: True
   {%- else %}
 cmd_{{ stig_id }}-{{ parmName }}:
   cmd.run:

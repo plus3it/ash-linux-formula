@@ -32,6 +32,7 @@ file_{{ stig_id }}-{{ cfgFile }}:
 {% else %}
 file_{{ stig_id }}-{{ cfgFile }}:
   cmd.run:
-    - name: 'echo "{{ pkgChk }} package not installed. Skipping."'
+    - name: 'printf "\nchanged=no comment=''{{ pkgChk }} package not installed. Skipping.''\n"'
     - cwd: /root
+    - stateful: True
 {% endif %}
