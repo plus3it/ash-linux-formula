@@ -27,13 +27,15 @@ script_{{ stig_id }}-describe:
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-break:
   cmd.run:
-    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - cwd: /root
+    - stateful: True
 {%- elif not salt.pkg.version(chkPkg) %}
 notify_{{ stig_id }}-break:
   cmd.run:
-    - name: 'echo "NFS client utilities ({{ chkPkg }}) not installed: skipping."'
+    - name: 'printf "\nchanged=no comment=''NFS client utilities ({{ chkPkg }}) not installed: skipping.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
   {%- set fstabData = salt.mount.fstab() %}
   {%- for mount in fstabData.keys() %}
