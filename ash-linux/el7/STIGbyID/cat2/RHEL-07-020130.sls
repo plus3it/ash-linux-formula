@@ -45,13 +45,15 @@ script_{{ stig_id }}-describe:
   {%- if foundCrons %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
-    - name: 'echo "Found cron entries for AIDE"'
+    - name: 'printf "\nchanged=no comment=''Found cron entries for AIDE.''\n"'
     - cwd: /root
+    - stateful: True
   {%- else %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
-    - name: 'echo "Found no cron entries for AIDE: fixing..."'
+    - name: 'printf "\nchanged=no comment=''Found no cron entries for AIDE: fixing...''\n"'
     - cwd: /root
+    - stateful: True
 
 cron_{{ stig_id }}-file:
   file.append:
@@ -69,6 +71,7 @@ cron_{{ stig_id }}-service:
 {%- else %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
-    - name: 'echo "AIDE subsystem not installed"'
+    - name: 'printf "\nchanged=no comment=''AIDE subsystem not installed.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

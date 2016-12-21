@@ -26,7 +26,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040660' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set svcName 'sshd' %}
+{%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'GSSAPIAuthentication' %}
 {%- set parmValu = 'no' %}

@@ -28,14 +28,18 @@ script_{{ stig_id }}-describe:
 {%- if daysToSec >= todaysdt|int - lastUpdt|int %} 
 notify_{{ stig_id }}-lastUpdate:
   cmd.run:
-    - name: 'echo "System updated less than {{ maxDays }} ago"'
+    - name: 'printf "\nchanged=no comment=''System updated less than {{ maxDays }} ago.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
 notify_{{ stig_id }}-lastUpdate:
   cmd.run:
-    - name: 'echo "System last updated more than {{ maxDays }} ago: updating."'
+    - name: 'printf "\nchanged=no comment=''System last updated more than {{ maxDays }} ago: updating.''\n"'
     - cwd: /root
+    - stateful: True
 
 upgrade__{{ stig_id }}:
   pkg.uptodate
+    - require:
+      - cmd: notify_{{ stig_id }}-lastUpdate
 {%- endif %}

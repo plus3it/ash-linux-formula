@@ -15,6 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010442' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set svcName = 'sshd' %}
 {%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 {%- set sshParm = 'HostbasedAuthentication' %}
 {%- set sshPval = 'no' %}
@@ -28,7 +29,9 @@ script_{{ stig_id }}-describe:
   {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' 2') %}
 file_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "{{ sshParm }} already set to {{ sshPval }}in ''{{ sshConfigFile }}''"'
+    - name: 'printf "\nchanged=no comment=''{{ sshParm }} already set to {{ sshPval }}in ''{{ sshConfigFile }}.''\n"'
+    - cwd: /root
+    - stateful: True
     {%- set runtype = 'cmd' %}
   {%- else %}
 file_{{ stig_id }}:
@@ -53,6 +56,6 @@ file_{{ stig_id }}:
 # will always cause a service restart event.
 service_{{ stig_id }}-sshd:
   service.running:
-    - name: 'sshd'
+    - name: '{{ svcName }}'
     - watch:
       - {{ runtype }}: file_{{ stig_id }}

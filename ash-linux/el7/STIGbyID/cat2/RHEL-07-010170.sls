@@ -29,8 +29,9 @@ script_{{ stig_id }}-describe:
 {%- if salt.file.search(targFile, searchRoot + '.*sha512') %}
 file_{{ stig_id }}-{{ targFile }}:
   cmd.run:
-    - name: 'echo "Found target config in {{ targFile }}."'
+    - name: 'printf "\nchanged=no comment=''Found target config in {{ targFile }}.''\n"'
     - cwd: /root
+    - stateful: True
 {%- elif salt.file.search(targFile, searchRoot) %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:

@@ -34,8 +34,9 @@ script_{{ stig_id }}-describe:
 {%- do goodUsers.append(userName) %}
 notify_{{ stig_id }}-{{ userName }}:
   cmd.run:
-    - name: 'echo "{{ userName }} min-change value ({{ passwdMin }}) is less than {{ targExp }}. Changing..."'
+    - name: 'printf "\nchanged=no comment=''{{ userName }} min-change value ({{ passwdMin }}) is less than {{ targExp }}. Changing...''\n"'
     - cwd: /root
+    - stateful: True
 
 setmin_{{ stig_id }}-{{ userName }}:
   module.run:

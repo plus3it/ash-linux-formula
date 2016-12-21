@@ -27,6 +27,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- for parmName in parmNames %}
 sysctl_{{ stig_id }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
@@ -41,3 +42,4 @@ file_{{ stig_id }}-{{ parmName }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         #         {{ parmName }} = {{ parmValuTarg }}
+{%- endfor %}
