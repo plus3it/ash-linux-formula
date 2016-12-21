@@ -26,17 +26,11 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if parmValuCurr == '0' %}
-cmd_{{ stig_id }}-{{ parmName }}:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''{{ parmName }} already set to {{ parmValuTarg }}.''\n"'
-    - cwd: /root
-    - stateful: True
-{%- else %}
-cmd_{{ stig_id }}-{{ parmName }}:
-  cmd.run:
-    - name: 'sysctl -w {{ parmName }}={{ parmValuTarg }} '
-    - cwd: /root
+sysctl_{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '{{ parmValuTarg }}'
+
 file_{{ stig_id }}-{{ parmName }}:
   file.replace:
     - name: '{{ cfgFile }}'
@@ -45,5 +39,4 @@ file_{{ stig_id }}-{{ parmName }}:
     - append_if_not_found: True
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
-        {{ parmName }} = {{ parmValuTarg }}
-{%- endif %}
+        #         {{ parmName }} = {{ parmValuTarg }}
