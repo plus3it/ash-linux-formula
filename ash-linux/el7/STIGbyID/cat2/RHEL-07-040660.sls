@@ -26,6 +26,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040660' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set svcName 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'GSSAPIAuthentication' %}
 {%- set parmValu = 'no' %}
@@ -39,8 +40,9 @@ script_{{ stig_id }}-describe:
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
   cmd.run:
-    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
@@ -54,7 +56,7 @@ file_{{ stig_id }}-{{ cfgFile }}:
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
-    - name: sshd
+    - name: '{{ svcName }}' 
     - watch:
       - file: file_{{ stig_id }}-{{ cfgFile }}
 {%- endif %}
