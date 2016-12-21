@@ -16,6 +16,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040620' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'MACs' %}
 {%- set parmValu = 'hmac-sha2-256,hmac-sha2-512' %}
@@ -37,6 +38,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
-    - name: sshd
+    - name: '{{ svcName }}'
     - watch:
       - file: file_{{ stig_id }}-{{ cfgFile }}

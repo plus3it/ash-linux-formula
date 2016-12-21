@@ -15,6 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040332' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'IgnoreUserKnownHosts' %}
 {%- set parmValu = 'yes' %}
@@ -36,6 +37,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
-    - name: sshd
+    - name: '{{ svcName }}'
     - watch:
       - file: file_{{ stig_id }}-{{ cfgFile }}
