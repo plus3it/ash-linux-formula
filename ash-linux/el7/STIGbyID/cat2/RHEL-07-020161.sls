@@ -31,8 +31,9 @@ script_{{ stig_id }}-describe:
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
   cmd.run:
-    - name: 'echo "Handler for {{ stig_id }} has been selected for skip."'
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
   {%- if salt.pkg.version(pkgChk) %}
 service_{{ stig_id }}-{{ pkgChk }}_dead:
@@ -46,8 +47,9 @@ service_{{ stig_id }}-{{ pkgChk }}_disabled:
   {%- else %}
 notify_{{ stig_id }}-no_{{ pkgChk }}:
   cmd.run:
-    - name: 'echo "The {{ pkgChk }} package is not installed. Nothing to do."'
+    - name: 'printf "\nchanged=no comment=''The {{ pkgChk }} package is not installed. Nothing to do.''\n"'
     - cwd: /root
+    - stateful: True
 
   {%- endif %}
 {%- endif %}

@@ -35,8 +35,9 @@ script_{{ stig_id }}-describe:
              ) %}
 notify_{{ stig_id }}-{{ user }}:
   cmd.run:
-    - name: 'echo "{{ user }}''s home directory ''{{ userHome }}'' does not exist. Creating..."'
+    - name: 'printf "\nchanged=no comment=''{{ user }}s home directory {{ userHome }} does not exist. Creating...''\n"'
     - cwd: /root
+    - stateful: True
 
 createHome_{{ stig_id }}-{{ user }}:
   user.present:

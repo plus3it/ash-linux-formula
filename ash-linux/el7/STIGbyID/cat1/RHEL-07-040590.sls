@@ -18,6 +18,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040590' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set svcName = 'sshd' %}
 {%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 {%- set sshParm = 'Protocol' %}
 
@@ -27,10 +28,12 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' .*') %}
-  {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' 2') %}
+  {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' 2$') %}
 file_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "Protocol-version already set in ''{{ sshConfigFile }}''"'
+    - name: 'printf "\nchanged=no comment=''Protocol-version already set in {{ sshConfigFile }}''\n"'
+    - cwd: /root
+    - stateful: True
     {%- set runtype = 'cmd' %}
   {%- else %}
 file_{{ stig_id }}:
@@ -44,10 +47,10 @@ file_{{ stig_id }}:
 file_{{ stig_id }}:
   file.append:
     - name: '{{ sshConfigFile }}'
-    - text:
-      - ' '    
-      - '# SSH Must only allow version 2 (per STIG {{ stig_id }})'
-      - '{{ sshParm }} 2'
+    - text: |-
+        
+        # SSH Must only allow version 2 (per STIG {{ stig_id }})
+        {{ sshParm }} 2
   {%- set runtype = 'file' %}
 {%- endif %}
 
@@ -55,6 +58,6 @@ file_{{ stig_id }}:
 # will always cause a service restart event.
 service_sshd:
   service.running:
-    - name: 'sshd'
+    - name: '{{ svcName }}'
     - watch:
       - {{ runtype }}: file_{{ stig_id }}

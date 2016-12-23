@@ -38,18 +38,20 @@ script_{{ stig_id }}-describe:
   {%- if salt.file.search(mainCfg, 'password_pbkdf2') %}
 script_{{ stig_id }}-{{ mainCfg }}:
   cmd.run:
-    - name: 'echo "Password - or pointer - already set in {{ mainCfg }}"'
+    - name: 'printf "\nchanged=no comment=''Password - or pointer - already set in {{ mainCfg }}.''\n"'
     - cwd: /root
+    - stateful: True
     {%- if salt.file.search(srcCfg, 'superusers="root" password_pbkdf2') %}
 script_{{ stig_id }}-{{ srcCfg }}:
   cmd.run:
-    - name: 'echo "Password already set in {{ srcCfg }}"'
+    - name: 'printf "\nchanged=no comment=''Password already set in {{ srcCfg }}.''\n"'
     - cwd: /root
+    - stateful: True
     {%- else %}
 file_{{ stig_id }}-{{ srcCfg }}:
   file.append:
     - name: '{{ srcCfg }}'
-    - text: |
+    - text: |-
         # Added per STIG-ID {{ stig_id }}
         set superusers="root" password_pbkdf2 root {{ grubPass }}
 cmd_{{ stig_id }}-{{ mainCfg }}:
@@ -63,7 +65,7 @@ cmd_{{ stig_id }}-{{ mainCfg }}:
 file_{{ stig_id }}-{{ srcCfg }}:
   file.append:
     - name: '{{ srcCfg }}'
-    - text: |
+    - text: |-
         # Added per STIG-ID {{ stig_id }}
         set superusers="root" password_pbkdf2 root {{ grubPass }}
 cmd_{{ stig_id }}-{{ mainCfg }}:
@@ -76,6 +78,7 @@ cmd_{{ stig_id }}-{{ mainCfg }}:
 {%- else %}
 cmd_{{ stig_id }}-notice:
   cmd.run:
-    - name: 'echo "System not booted from EFI."'
+    - name: 'printf "\nchanged=no comment=''System not booted from EFI.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

@@ -25,7 +25,9 @@ script_{{ stig_id }}-describe:
 {%- if not salt.pkg.version('gdm') %}
 eval_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "GDM susbsystem is not installed."'
+    - name: 'printf "\nchanged=no comment=''GDM susbsystem is not installed.''\n"'
+    - cwd: /root
+    - stateful: True
 {% elif salt.file.search(checkFile, '^' + checkParm) %}
 file_{{ stig_id }}:
   file.replace:

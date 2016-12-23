@@ -27,5 +27,7 @@ file_{{ stig_id }}-hostsEquiv:
 {%- else %}
 file_{{ stig_id }}-hostsEquiv:
   cmd.run:
-    - name: 'echo "No ''{{ hostsEquiv }}'' file found"'
+    - name: 'printf "\nchanged=no comment=''No offending ''{{ hostsEquiv }}'' file found.''\n"'
+    - cwd: /root
+    - stateful: True
 {%- endif %}

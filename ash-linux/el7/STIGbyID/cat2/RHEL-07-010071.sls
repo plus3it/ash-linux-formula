@@ -37,6 +37,7 @@ file_{{ stig_id }}-{{ dconfCfgFile }}:
 {%- else %}
 file_{{ stig_id }}-{{ dconfCfgFile }}:
   cmd.run:
-    - name: 'echo "Relevant subsystems not installed: skipping..."'
+    - name: 'printf "\nchanged=no comment=''Relevant subsystems not installed: skipping...''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

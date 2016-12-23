@@ -19,6 +19,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040190' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'ClientAliveInterval' %}
 {%- set parmValu = '600' %}
@@ -34,12 +35,12 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - pattern: '^\s{{ parmName }} .*$'
     - repl: '{{ parmName }} {{ parmValu }}'
     - append_if_not_found: True
-    - not_found_content: |
+    - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} {{ parmValu }}
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
-    - name: sshd
+    - name: '{{ svcName }}'
     - watch:
       - file: file_{{ stig_id }}-{{ cfgFile }}

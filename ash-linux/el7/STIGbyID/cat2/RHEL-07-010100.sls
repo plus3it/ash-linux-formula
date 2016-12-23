@@ -36,7 +36,7 @@ file_{{ stig_id }}-{{ cfgFile }}:
 file_{{ stig_id }}-{{ cfgFile }}:
   file.append:
     - name: '{{ cfgFile }}'
-    - text: |
+    - text: |-
         # Inserted per STIG-ID {{ stig_id }}:
         # * Require new passwords to have at least one {{ parmDesc }} character
         {{ parmName }} = {{ parmValu }}

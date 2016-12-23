@@ -34,6 +34,7 @@ file_{{ stig_id }}-{{ cfgFile }}:
 {%- else %}
 notify_{{ stig_id }}-notInstalled:
   cmd.run:
-    - name: 'echo "{{ pkgChk }} packages not installed"'
+    - name: 'printf "\nchanged=no comment=''{{ pkgChk }} packages not installed.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

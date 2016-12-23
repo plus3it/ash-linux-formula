@@ -14,6 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040580' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set snmpCfg = '/etc/snmp/snmpd.conf' %}
 {%- set forbidStrs = [
                       'public',
@@ -25,7 +26,13 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if (
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- elif (
         salt.pkg.version('net-snmp') or
         salt.file.file_exists(snmpCfg)
        ) %}
@@ -41,6 +48,7 @@ file_{{ stig_id }}-{{ community }}:
 {%- else %}
 cmd_{{ stig_id }}-missing:
   cmd.run:
-    - name: 'echo "No SNMP agent installed"'
+    - name: 'printf "\nchanged=no comment=''No SNMP agent installed''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

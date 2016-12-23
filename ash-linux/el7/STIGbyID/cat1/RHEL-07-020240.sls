@@ -22,14 +22,16 @@ script_{{ stig_id }}-describe:
 
 ## Apparently, I shouldn't try to run an EL7 STIG-scanner against
 ## an EL 4 based host, I guess?
-{%- if salt.grains.get('osrelease') == '7' %}
+{%- if salt.grains.get('osmajorrelease') == '7' %}
 goodtest_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "This test-suite valid against this target"'
+    - name: 'printf "\nchanged=no comment=''This test-suite valid against this target.''\n"'
     - cwd: /root
+    - stateful: True
 {%- else %}
 goodtest_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "This test-suite valid against this target"'
+    - name: 'printf "\nchanged=no comment=''This test-suite not valid against this target.''\n"'
+    - stateful: True
     - cwd: /root
 {%- endif %}

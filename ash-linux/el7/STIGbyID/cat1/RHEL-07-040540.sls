@@ -14,6 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040540' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set svcName = 'sshd' %}
 {%- set baseXpkg = 'xorg-x11-server-Xorg' %}
 {%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 {%- set sshParm = 'X11Forwarding' %}
@@ -27,7 +28,9 @@ script_{{ stig_id }}-describe:
   {%- if salt.file.search(sshConfigFile, '^' + sshParm + ' yes') %}
 file_{{ stig_id }}:
   cmd.run:
-    - name: 'echo "X11-encryption already set in ''{{ sshConfigFile }}''"'
+    - name: 'printf "\nchanged=no comment=''X11-encryption already set in {{ sshConfigFile }}.''\n"'
+    - cwd: /root
+    - stateful: True
     {%- set runtype = 'cmd' %}
   {%- else %}
 file_{{ stig_id }}:
@@ -41,10 +44,10 @@ file_{{ stig_id }}:
 file_{{ stig_id }}:
   file.append:
     - name: '{{ sshConfigFile }}'
-    - text:
-      - ' '    
-      - '# SSH Must not allow empty passwords (per STIG {{ stig_id }})'
-      - '{{ sshParm }} yes'
+    - text: |-
+        
+        # SSH Must not allow empty passwords (per STIG {{ stig_id }})
+        {{ sshParm }} yes
   {%- set runtype = 'file' %}
 {%- endif %}
 
@@ -52,14 +55,15 @@ file_{{ stig_id }}:
 # will always cause a service restart event.
 service_{{ stig_id }}-sshd:
   service.running:
-    - name: 'sshd'
+    - name: '{{ svcName }}'
     - watch:
       - {{ runtype }}: file_{{ stig_id }}
 
 {%- if not salt.pkg.version(baseXpkg) %}
 cmd_{{ stig_id }}-notify:
   cmd.run:
-    - name: 'echo "Note: X-related subsystems not installed."'
+    - name: 'printf "\nchanged=no comment=''Note: X-related subsystems not installed.''\n"'
+    - cwd: /root
+    - stateful: True
     - cwd: /root
 {%- endif %}
-

@@ -32,7 +32,8 @@ property_{{ stig_id }}-{{ if }}:
   {%- else %}
 property_{{ stig_id }}-{{ if }}:
   cmd.run:
-    - name: 'echo "Interface {{ if }} (already) not in promicuous mode."'
+    - name: 'printf "\nchanged=no comment=''Interface {{ if }} (already) not in promicuous mode.''\n"'
     - cwd: /root
+    - stateful: True
   {%- endif %}
 {%- endfor %}

@@ -33,6 +33,7 @@ setconf_{{ stig_id }}-{{ checkFile }}:
 {%- else %}
 notify_{{ stig_id }}-notPresent:
   cmd.run:
-    - name: 'echo "The rsyslog service is not present"'
+    - name: 'printf "\nchanged=no comment=''The rsyslog service is not present.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

@@ -28,25 +28,18 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- for parmName in parmNames %}
-  {%- set parmValuCurr = salt.cmd.run('sysctl -n ' + parmName) %}
-  {%- if parmValuCurr == '0' %}
-cmd_{{ stig_id }}-{{ parmName }}:
-  cmd.run:
-    - name: 'echo "{{ parmName }} already set to {{ parmValuTarg }}"'
-    - cwd: /root
-  {%- else %}
-cmd_{{ stig_id }}-{{ parmName }}:
-  cmd.run:
-    - name: 'sysctl -w {{ parmName }}={{ parmValuTarg }} '
-    - cwd: /root
+sysctl_{{ stig_id }}-{{ parmName }}:
+  sysctl.present:
+    - name: '{{ parmName }}'
+    - value: '{{ parmValuTarg }}'
+
 file_{{ stig_id }}-{{ parmName }}:
   file.replace:
     - name: '{{ cfgFile }}'
     - pattern: '^{{ parmName }} = .*$'
     - repl: '{{ parmName }} = {{ parmValuTarg }}'
     - append_if_not_found: True
-    - not_found_content: |
+    - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
-        {{ parmName }} = {{ parmValuTarg }}
-  {%- endif %}
+        #         {{ parmName }} = {{ parmValuTarg }}
 {%- endfor %}

@@ -34,8 +34,9 @@ script_{{ stig_id }}-describe:
 {%- do goodUsers.append(userName) %}
 notify_{{ stig_id }}-{{ userName }}:
   cmd.run:
-    - name: 'echo "{{ userName }} max-change value ({{ passwdMax }}) is less than {{ targExp }}. Changing..."'
+    - name: 'printf "\nchanged=no comment=''{{ userName }} max-change value ({{ passwdMax }}) is less than {{ targExp }}. Changing...''\n"'
     - cwd: /root
+    - stateful: True
 
 setmax_{{ stig_id }}-{{ userName }}:
   module.run:
@@ -51,6 +52,7 @@ setmax_{{ stig_id }}-{{ userName }}:
 {%- if not goodUsers %}
 notify_{{ stig_id }}-FoundNone:
   cmd.run:
-    - name: 'echo "Found no users with non-compliant maximum password lifetime"'
+    - name: 'printf "\nchanged=no comment=''Found no users with non-compliant maximum password lifetime.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}

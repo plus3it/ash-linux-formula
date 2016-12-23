@@ -19,6 +19,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020170' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set corePkg = 'cryptsetup' %}
 
 script_{{ stig_id }}-describe:
@@ -26,35 +27,41 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-# Nothing's encrypted without LUKS packages...
-{%- if salt.pkg.version(corePkg) %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+# Nothing's OS-level encrypted without LUKS packages...
+{%- elif salt.pkg.version(corePkg) %}
 
-# Grab info about all active mounts and stuff into a searchable struct
-{%- set activeMntStream = salt.mount.active('extended=false') %}
-# Iterate the structure by top-level key
-{%- for mountPoint in activeMntStream.keys() %}
-  # We don't care about pseudo-filesystems
-  {%- if not ( 
+  # Grab info about all active mounts and stuff into a searchable struct
+  {%- set activeMntStream = salt.mount.active('extended=false') %}
+  # Iterate the structure by top-level key
+  {%- for mountPoint in activeMntStream.keys() %}
+    # We don't care about pseudo-filesystems
+    {%- if not ( 
                mountPoint.startswith('/sys') or 
                mountPoint.startswith('/dev') or
                mountPoint.startswith('/run') or
                mountPoint.startswith('/proc')
              ) %}
-    # Unpack what's left
-    {%- set mountList = activeMntStream[mountPoint] %}
-    {%- set mountDev = mountList['device'] %}
+      # Unpack what's left
+      {%- set mountList = activeMntStream[mountPoint] %}
+      {%- set mountDev = mountList['device'] %}
 check_{{ stig_id }}-{{ mountPoint }}:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}_helper.sh
     - name: '{{ helperLoc }}/{{ stig_id }}_helper.sh "{{ mountDev }}" "{{ mountPoint }}"'
     - cwd: /root
     - stateful: True
-   {%- endif %}
-{%- endfor %}
+     {%- endif %}
+  {%- endfor %}
 {%- else %}
 present_{{ stig_id }}-{{ corePkg }}:
   cmd.run:
-    - name: 'echo "OS-level disk-encryption capability not present"'
+    - name: 'printf "\nchanged=no comment=''OS-level disk-encryption capability not present.''\n"'
     - cwd: /root
+    - stateful: True
 {%- endif %}
-
