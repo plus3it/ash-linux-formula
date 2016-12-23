@@ -39,7 +39,9 @@ script_{{ stig_id }}-describe:
     {%- if not salt.cmd.run('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
 file_{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
-    - name: 'echo "Appropriate audit rule already in place"'
+    - name: 'printf "\nchanged=no comment=''Appropriate audit rule already in place.''\n"'
+    - cwd: /root
+    - stateful: True
     {%- elif not salt.cmd.run('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
 file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
@@ -60,5 +62,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
 {%- else %}
 file_{{ stig_id }}-auditRules_selDAC:
   cmd.run:
-    - name: 'echo "Architecture not supported: no changes made"'
+    - name: 'printf "\nchanged=no comment=''Architecture not supported: no changes made.''\n"'
+    - cwd: /root
+    - stateful: True
 {%- endif %}
