@@ -2,14 +2,14 @@
 # Version:	RHEL-07-040320_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	low
-# 
+#
 # Rule Summary:
 #	"For systems using DNS resolution, at least two name servers must be configured."
 #
-# CCI-000366 
-#    NIST SP 800-53 :: CM-6 b 
-#    NIST SP 800-53A :: CM-6.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: CM-6 b 
+# CCI-000366
+#    NIST SP 800-53 :: CM-6 b
+#    NIST SP 800-53A :: CM-6.1 (iv)
+#    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040320' %}
@@ -17,7 +17,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nsswitchConf = '/etc/nsswitch.conf' %}
 {%- set resolvConf = '/etc/resolv.conf' %}
-{%- set dnsList = salt.cmd.run("awk '/^nameserver/ {print $2}' " + resolvConf).split('\n') %} 
+{%- set dnsList = salt.cmd.shell("awk '/^nameserver/ {print $2}' " + resolvConf).split('\n') %}
 {%- set dnsList_add = salt.pillar.get('ash-linux:lookup:dns-info:nameservers', []) %}
 
 script_{{ stig_id }}-describe:

@@ -3,10 +3,10 @@
 # Version:	RHEL-06-000135
 # Finding Level:	Medium
 #
-#     All rsyslog-generated log files must have mode 0600 or less 
-#     permissive. Log files can contain valuable information regarding 
-#     system configuration. If the system log files are not protected, 
-#     unauthorized users could change the logged data, eliminating their 
+#     All rsyslog-generated log files must have mode 0600 or less
+#     permissive. Log files can contain valuable information regarding
+#     system configuration. If the system log files are not protected,
+#     unauthorized users could change the logged data, eliminating their
 #     forensic value.
 #
 #  CCI: CCI-001314
@@ -29,26 +29,26 @@ script_{{ stigId }}-describe:
 #    These will be used to look for matching logging-targets
 #    within the {{ cfgFile }} file
 {%- set facilityList = [
-    'auth', 
-    'authpriv', 
-    'cron', 
-    'daemon', 
-    'kern', 
-    'lpr', 
-    'mail', 
-    'mark', 
-    'news', 
-    'security', 
-    'syslog', 
-    'user', 
-    'uucp', 
-    'local0', 
-    'local1', 
-    'local2', 
-    'local3', 
-    'local4', 
-    'local5', 
-    'local6', 
+    'auth',
+    'authpriv',
+    'cron',
+    'daemon',
+    'kern',
+    'lpr',
+    'mail',
+    'mark',
+    'news',
+    'security',
+    'syslog',
+    'user',
+    'uucp',
+    'local0',
+    'local1',
+    'local2',
+    'local3',
+    'local4',
+    'local5',
+    'local6',
     'local7',
   ]
 %}
@@ -57,7 +57,7 @@ script_{{ stigId }}-describe:
 # logging-targets defined
 {%- for logFacility in facilityList %}
   {%- set srchPat = '^' + logFacility + '\.' %}
-  {%- if not salt['cmd.run']('grep -c -E "' + srchPat + '" ' + cfgFile) == '0' %}
+  {%- if not salt['cmd.shell']('grep -c -E "' + srchPat + '" ' + cfgFile) == '0' %}
     {%- set cfgStruct = salt['file.grep'](cfgFile, srchPat) %}
     {%- set cfgLine = cfgStruct['stdout'] %}
     {%- set logTarg = cfgLine.split() %}

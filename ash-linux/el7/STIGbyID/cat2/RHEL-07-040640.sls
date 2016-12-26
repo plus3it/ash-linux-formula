@@ -14,7 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040640' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set keysList = salt.cmd.run('find / -name "*key.pub" -type f').split('\n') %}
+{%- set keysList = salt.cmd.shell('find / -name "*key.pub" -type f').split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

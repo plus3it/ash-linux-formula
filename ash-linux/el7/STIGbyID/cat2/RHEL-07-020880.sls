@@ -33,7 +33,7 @@
                    '/usr/bin/tcsh',
                    '/usr/bin/zsh'
                     ] %}
-{%- set oWrite = salt.cmd.run('find / \( -name sys -o -name proc \) -prune -o  -perm -002 -type f -print').split('\n') %}
+{%- set oWrite = salt.cmd.shell('find / \( -name sys -o -name proc \) -prune -o  -perm -002 -type f -print').split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

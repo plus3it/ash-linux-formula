@@ -18,7 +18,7 @@
 {%- set homeMode = salt.pillar.get('ash-linux:lookup:home-mode', '0750') %}
 {%- set loginDef = '/etc/login.defs' %}
 {%- if salt.file.search(loginDef, 'SYS_UID_MAX') %}
-  {%- set sysuserMax = salt.cmd.run("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+  {%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
 {%- else %}
   {%- set sysuserMax = 999 %}
 {%- endif %}

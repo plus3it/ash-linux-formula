@@ -3,12 +3,12 @@
 # Version:	RHEL-06-000173
 # Finding Level:	Low
 #
-#     The audit system must be configured to audit all attempts to alter 
-#     system time through /etc/localtime. Arbitrary changes to the system 
-#     time can be used to obfuscate nefarious activities in log files, as 
-#     well as to confuse network services that are highly dependent upon an 
-#     accurate system time (such as sshd). All changes to the system time 
-#     should be audited. 
+#     The audit system must be configured to audit all attempts to alter
+#     system time through /etc/localtime. Arbitrary changes to the system
+#     time can be used to obfuscate nefarious activities in log files, as
+#     well as to confuse network services that are highly dependent upon an
+#     accurate system time (such as sshd). All changes to the system time
+#     should be audited.
 #
 #  CCI: CCI-000169
 #  NIST SP 800-53 :: AU-12 a
@@ -29,11 +29,11 @@ script_V{{ stig_id }}-describe:
 {%- set checkFile = '/etc/localtime' %}
 {%- set newRule = '-w ' + checkFile + ' -p wa -k audit_time_rules' %}
 
-{%- if not salt['cmd.run']('grep -c -E -e "' + newRule + '" ' + auditRules ) == '0' %}
+{%- if not salt['cmd.shell']('grep -c -E -e "' + newRule + '" ' + auditRules ) == '0' %}
 file_V{{ stig_id }}_auditRules:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{%- elif not salt['cmd.run']('grep -c -E -e "' + checkFile + '" ' + auditRules ) == '0' %}
+{%- elif not salt['cmd.shell']('grep -c -E -e "' + checkFile + '" ' + auditRules ) == '0' %}
 file_V{{ stig_id }}_auditRules:
   file.replace:
     - name: '{{ auditRules }}'
@@ -44,7 +44,7 @@ file_V{{ stig_id }}_auditRules:
   file.append:
     - name: '{{ auditRules }}'
     - text: |
-        
+
         # Monitor {{ checkFile }} for changes (per STIG-ID V-{{ stig_id }})
         {{ newRule }}
 {%- endif %}

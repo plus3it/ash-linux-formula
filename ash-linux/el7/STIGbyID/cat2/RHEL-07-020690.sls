@@ -16,7 +16,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020690' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt.cmd.run("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
 {%- set userList = salt.user.list_users() %}
 {%- set iShells = [
                    '/bin/sh',
@@ -52,8 +52,8 @@ script_{{ stig_id }}-describe:
     {%- set findstr = '-group ' + uGrpLst.replace(',', ' -o -group') %}
     {%- set uhome = uinfo['home'] %}
     {%- set ugid = uinfo['gid'] %}
-    {%- set foundFiles = salt.cmd.run('find ' + uhome + ' -type f ! \( ' + findstr + ' \)').split('\n') %}
-    {%- set foundDirs = salt.cmd.run('find ' + uhome + ' -type d ! \( ' + findstr + ' \)').split('\n') %}
+    {%- set foundFiles = salt.cmd.shell('find ' + uhome + ' -type f ! \( ' + findstr + ' \)').split('\n') %}
+    {%- set foundDirs = salt.cmd.shell('find ' + uhome + ' -type d ! \( ' + findstr + ' \)').split('\n') %}
     {% for elem in foundFiles %}
       {% if elem %}
 file_{{ stig_id }}-{{ elem }}:

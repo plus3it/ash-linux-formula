@@ -14,7 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030390' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt.cmd.run("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
 {%- set act2mon = 'chmod' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
@@ -36,13 +36,13 @@ script_{{ stig_id }}-describe:
 # Monitoring of SELinux DAC config
 {%- if grains['cpuarch'] == 'x86_64' %}
   {%- for usertype,audit_options in usertypes.items() %}
-    {%- if not salt.cmd.run('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+    {%- if not salt.cmd.shell('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
 file_{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Appropriate audit rule already in place.''\n"'
     - cwd: /root
     - stateful: True
-    {%- elif not salt.cmd.run('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+    {%- elif not salt.cmd.shell('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
 file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'

@@ -10,12 +10,12 @@
 # Rule Summary: Record Attempts to Alter Process and Session
 #               Initiation Information
 #
-# Rule Text: The audit system already collects process information for 
-#            all users and root. This data is stored in the 
-#            '/var/run/utmp', '/var/log/btmp' and '/var/log/wtmp' files. 
-#            Manual editing of these files may indicate nefarious 
-#            activity, such as an attacker attempting to remove evidence 
-#            of an intrusion. Configure the audit subsystem to monitor 
+# Rule Text: The audit system already collects process information for
+#            all users and root. This data is stored in the
+#            '/var/run/utmp', '/var/log/btmp' and '/var/log/wtmp' files.
+#            Manual editing of these files may indicate nefarious
+#            activity, such as an attacker attempting to remove evidence
+#            of an intrusion. Configure the audit subsystem to monitor
 #            these files.
 #
 #################################################################
@@ -47,7 +47,7 @@ script_{{ scapId }}-describe:
   {%- set rule = '-w' + ' ' + file + ' ' + audit_options %}
 
   # See if the rule already exists
-  {%- if not salt['cmd.run']('grep -c -E -e "' + rule + '" ' + audRulCfg ) == '0' %}
+  {%- if not salt['cmd.shell']('grep -c -E -e "' + rule + '" ' + audRulCfg ) == '0' %}
 
 addRule_{{ scapId }}-auditRules_{{ file }}:
   cmd.run:
@@ -65,7 +65,7 @@ file_{{ scapId }}-auditRules_{{ file }}:
   file.append:
     - name: '{{ audRulCfg }}'
     - text: |
-        
+
         # Monitor {{ file }} for changes (per SCAP-ID {{ scapId }})
         {{ rule }}
   {%- endif %}

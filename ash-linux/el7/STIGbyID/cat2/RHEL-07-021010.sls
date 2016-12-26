@@ -59,7 +59,7 @@ script_{{ stig_id }}-describe:
   {%- if ( uinfo['uid'] > sysuserMax ) and
          ( uinfo['shell'] in iShells ) %}
     {%- set uhome = uinfo['home'] %}
-    {%- set homeMount = salt.cmd.run('df --output=target ' + uinfo['home'] + ' 2> /dev/null | tail -1') %}
+    {%- set homeMount = salt.cmd.shell('df --output=target ' + uinfo['home'] + ' 2> /dev/null | tail -1') %}
     {%- if not homeMount in homeDevs %}
       {%- do homeDevs.append(homeMount) %}
     {%- endif %}
