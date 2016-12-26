@@ -3,7 +3,7 @@
 # Version:	RHEL-06-000522
 # Finding Level:	Medium
 #
-#     Audit log files must be group-owned by root. If non-privileged users 
+#     Audit log files must be group-owned by root. If non-privileged users
 #     can write to audit logs, audit trails can be modified or destroyed.
 #
 #  CCI: <None specified in DISA documentation>
@@ -35,6 +35,5 @@ file_{{ stigId }}-{{ fileCheck }}:
   file.managed:
     - name: '{{ fileCheck }}'
     - group: 'root'
-    - replace: 'False'
 {%- endif %}
 {%- endfor %}
