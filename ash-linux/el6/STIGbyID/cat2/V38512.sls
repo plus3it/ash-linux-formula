@@ -3,10 +3,10 @@
 # Version:	RHEL-06-000117
 # Finding Level:	Medium
 #
-#     The operating system must prevent public IPv4 access into an 
-#     organizations internal networks, except as appropriately mediated by 
-#     managed interfaces employing boundary protection devices. The 
-#     "iptables" service provides the system's host-based firewalling 
+#     The operating system must prevent public IPv4 access into an
+#     organizations internal networks, except as appropriately mediated by
+#     managed interfaces employing boundary protection devices. The
+#     "iptables" service provides the system's host-based firewalling
 #     capability for IPv4 and ICMP.
 #
 #  CCI: CCI-001100
@@ -27,11 +27,17 @@ pkg_V{{ stig_id }}:
   pkg.installed:
     - name: iptables
 
+iptables_V{{ stig_id }}-listRules:
+  cmd.run:
+    - name: 'iptables --list'
+    - require:
+      - pkg: pkg_V{{ stig_id }}
+
 iptables_V{{ stig_id }}-saveRunning:
   module.run:
     - name: 'iptables.save'
     - require:
-      - pkg: pkg_V{{ stig_id }}
+      - cmd: iptables_V{{ stig_id }}-listRules
 
 service_V{{ stig_id }}:
   service.running:
