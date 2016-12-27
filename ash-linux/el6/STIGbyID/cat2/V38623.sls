@@ -57,7 +57,7 @@ script_{{ stigId }}-describe:
 # logging-targets defined
 {%- for logFacility in facilityList %}
   {%- set srchPat = '^' + logFacility + '\.' %}
-  {%- if not salt.cmd.shell('grep -c -E "' + srchPat + '" ' + cfgFile) == '0' %}
+  {%- if not salt.cmd.shell('grep -c -E "' + srchPat + '" ' + cfgFile, output_loglevel='quiet') == '0' %}
     {%- set cfgStruct = salt['file.grep'](cfgFile, srchPat) %}
     {%- set cfgLine = cfgStruct['stdout'] %}
     {%- set logTarg = cfgLine.split() %}
