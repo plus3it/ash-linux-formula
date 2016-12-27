@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000037
 # Finding Level:	Medium
 #
-#     The /etc/gshadow file must be group-owned by root. The "/etc/gshadow" 
-#     file contains group password hashes. Protection of this file is 
+#     The /etc/gshadow file must be group-owned by root. The "/etc/gshadow"
+#     file contains group password hashes. Protection of this file is
 #     critical for system security.
 #
 #  CCI: CCI-000366
@@ -36,5 +36,4 @@ file_{{ stigId }}-setOwn:
   file.managed:
     - name: '{{ checkFile }}'
     - group: 'root'
-    - replace: 'False'
 {%- endif %}
