@@ -28,10 +28,10 @@ script_{{ stigId }}-describe:
 # need to flesh it out for additional use-cases.
 {%- if salt.file.search('/etc/fstab', '[ 	]/home[ 	]') %}
 mount_{{ stigId }}-tmp:
-   cmd.run:
-     - name: 'echo "/home already mounted as its own filesystem"'
+  cmd.run:
+    - name: 'echo "/home already mounted as its own filesystem"'
 {%- else %}
 mount_{{ stigId }}-tmp:
-   cmd.run:
-     - name: 'echo "Manual intervention required: create and mount a device as /home"'
+  cmd.run:
+    - name: 'echo "Manual intervention required: create and mount a device as /home"'
 {%- endif %}

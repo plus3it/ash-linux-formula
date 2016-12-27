@@ -54,6 +54,6 @@ notify_{{ stigId }}-foundfile:
 # Alert if AIDE not installed
 {%- else %}
 warn_{{ stigId }}-noAide:
-   cmd.run:
-     - name: 'echo "WARN: The AIDE tools are not installed"'
+  cmd.run:
+    - name: 'echo "WARN: The AIDE tools are not installed"'
 {%- endif %}

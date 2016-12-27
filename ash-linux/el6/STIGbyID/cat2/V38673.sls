@@ -29,8 +29,8 @@ notice_{{ stigId }}:
 
 {%- if not salt.pkg.verify('aide') %}
 warn_{{ stigId }}-aideConf:
-   cmd.run:
-     - name: 'echo "Package unmodified (AIDE has not been configured)"'
+  cmd.run:
+    - name: 'echo "Package unmodified (AIDE has not been configured)"'
 {%- endif %}
 
 {%- if not salt.file.search(cronEtc, '/usr/sbin/aide') %}

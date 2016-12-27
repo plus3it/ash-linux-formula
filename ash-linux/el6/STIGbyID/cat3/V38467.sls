@@ -29,10 +29,10 @@ script_{{ stigId }}-describe:
 # need to flesh it out for additional use-cases.
 {%- if salt.file.search(chkFile, '[ 	]' + chkPtn + '[ 	]') %}
 mount_{{ stigId }}-tmp:
-   cmd.run:
-     - name: 'echo "{{ chkPtn }} already mounted as its own filesystem"'
+  cmd.run:
+    - name: 'echo "{{ chkPtn }} already mounted as its own filesystem"'
 {%- else %}
 mount_{{ stigId }}-tmp:
-   cmd.run:
-     - name: 'echo "Manual intervention required: create and mount a device as {{ chkPtn }}"'
+  cmd.run:
+    - name: 'echo "Manual intervention required: create and mount a device as {{ chkPtn }}"'
 {%- endif %}
