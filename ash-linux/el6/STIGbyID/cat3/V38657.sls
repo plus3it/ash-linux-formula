@@ -97,7 +97,7 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ##     - opts: '{{ optString }}'
 ##
 ##     # Update fstab (if necessary)
-##     {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+##     {%- if salt.file.search('/etc/fstab', '^' + remountDev + '[ 	]') %}
 ## notify_{{ stigId }}-{{ mountPoint }}-fixFstab:
 ##   cmd.run:
 ##     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'

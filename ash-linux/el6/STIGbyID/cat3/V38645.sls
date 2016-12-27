@@ -20,8 +20,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](checkFile, '^UMASK') %}
-  {%- if salt['file.search'](checkFile, '^UMASK	077') %}
+{%- if salt.file.search(checkFile, '^UMASK') %}
+  {%- if salt.file.search(checkFile, '^UMASK	077') %}
 file_{{ stigId }}-configSet:
   file.replace:
     - name: '{{ checkFile }}'

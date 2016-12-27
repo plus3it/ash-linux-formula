@@ -23,7 +23,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](svcName) %}
+{%- if salt.pkg.version(svcName) %}
 svc_{{ stigId }}-{{ svcName }}Enabled:
   service.disabled:
     - name: '{{ svcName }}'

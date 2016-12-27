@@ -52,7 +52,7 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if not salt['file.file_exists'](pam_cfg_file) %}
+{%- if not salt.file.file_exists(pam_cfg_file) %}
 
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
@@ -60,7 +60,7 @@ script_V{{ stig_id }}-describe:
 {{ pam_remember_password(stig_id, pam_cfg_file, pam_parameter, pam_param_value) }}
 
 
-{%- elif not salt['file.search'](pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value ~ '[\s]*') %}
+{%- elif not salt.file.search(pam_cfg_file, 'password[ \t]*sufficient[ \t]*pam_unix.so.*' ~ pam_parameter ~ '=' ~ pam_param_value ~ '[\s]*') %}
 
 #file {{ pam_cfg_file }} exists
 #'remember' parameter not yet configured

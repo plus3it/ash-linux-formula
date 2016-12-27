@@ -27,7 +27,7 @@ script_{{ stigId }}-describe:
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
-{%- if salt['file.search'](chkFile, '[ 	]'+ chkPtn + '[ 	]') %}
+{%- if salt.file.search(chkFile, '[ 	]'+ chkPtn + '[ 	]') %}
 mount_{{ stigId }}-tmp:
   cmd.run:
     - name: 'echo "{{ chkPtn }} already mounted as its own filesystem"'

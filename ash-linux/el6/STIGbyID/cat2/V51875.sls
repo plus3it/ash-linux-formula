@@ -54,13 +54,13 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if not salt['file.file_exists'](pamFile) %}
+{%- if not salt.file.file_exists(pamFile) %}
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #use macro to set the parameter
 {{ set_pam_rule(stig_id, pamFile, pamMod, failNotice) }}
 
-{%- elif not salt['file.search'](pamFile, pamMod + ' showfailed') %}
+{%- elif not salt.file.search(pamFile, pamMod + ' showfailed') %}
 
 #file {{ pamMod }} exists
 #{{ pamMod }} showfailed is not present

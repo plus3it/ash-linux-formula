@@ -28,11 +28,11 @@ script_V{{ stig_id }}-describe:
 {%- set auditRule = '-w ' + checkFile + ' -p wa -k actions' %}
 
 # Monitoring of /etc/sudoers file
-{%- if not salt['cmd.shell']('grep -c -E -e "' + auditRule + '" ' + ruleFile ) == '0' %}
+{%- if not salt.cmd.shell('grep -c -E -e "' + auditRule + '" ' + ruleFile ) == '0' %}
 file_V{{ stig_id }}-auditRules_sudoers:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{%- elif not salt['cmd.shell']('grep -c -E -e "' + checkFile + '" ' + ruleFile ) == '0' %}
+{%- elif not salt.cmd.shell('grep -c -E -e "' + checkFile + '" ' + ruleFile ) == '0' %}
 file_V{{ stig_id }}-auditRules_sudoers:
   file.replace:
     - name: '{{ ruleFile }}'

@@ -18,7 +18,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search']('/etc/profile', '^[ 	]*umask') %}
+{%- if salt.file.search('/etc/profile', '^[ 	]*umask') %}
 file_{{ stigId }}-configSet:
   file.replace:
     - name: '/etc/profile'

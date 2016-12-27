@@ -25,13 +25,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('pam_ldap') and salt['file.search'](ldapCnf, '^ssl') %}
+{%- if salt.pkg.version('pam_ldap') and salt.file.search(ldapCnf, '^ssl') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ ldapCnf }}'
     - pattern: '^ssl.*$'
     - repl: 'ssl start_tls'
-{%- elif salt['pkg.version']('pam_ldap') and not salt['file.search'](ldapCnf, '^ssl') %}
+{%- elif salt.pkg.version('pam_ldap') and not salt.file.search(ldapCnf, '^ssl') %}
 file_{{ stigId }}-append:
   file.append:
     - name: '{{ ldapCnf }}'
@@ -39,7 +39,7 @@ file_{{ stigId }}-append:
       - ' '
       - '# LDAP auth-queries must use TLS (per STIG V-38625)'
       - 'ssl start_tls'
-{%- elif not salt['pkg.version']('pam_ldap') %}
+{%- elif not salt.pkg.version('pam_ldap') %}
 cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "LDAP PAM modules not installed"'

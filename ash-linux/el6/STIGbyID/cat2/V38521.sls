@@ -30,22 +30,22 @@ script_{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Only look for rsyslog configuration if rsyslog is installed
-{%- if salt['pkg.version']('rsyslog') %}
+{%- if salt.pkg.version('rsyslog') %}
 
   # Check if UDP-logging to loghost
-  {%- if salt['file.search'](checkFile, '\*\.\*[ 	]*@[a-z0-9]') %}
+  {%- if salt.file.search(checkFile, '\*\.\*[ 	]*@[a-z0-9]') %}
 notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "Info: System is configured to do UDP-based logging to an\n\texternal host"'
 
   # Check if TCP-logging to loghost
-  {%- elif salt['file.search'](checkFile, '^\*\.\*[ 	]*@@[a-z0-9]') %}
+  {%- elif salt.file.search(checkFile, '^\*\.\*[ 	]*@@[a-z0-9]') %}
 notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "Info: System is configured to do TCP-based logging to an\n\texternal host"'
 
   # Check if RELP-logging to loghost
-  {%- elif salt['file.search'](checkFile, '^\*\.\*[ 	]*:omrelp:[a-z0-9]') %}
+  {%- elif salt.file.search(checkFile, '^\*\.\*[ 	]*:omrelp:[a-z0-9]') %}
 notify_{{ stig_id }}-extLogging:
   cmd.run:
     - name: 'printf "Info: System is configured to do RELP-based logging to an\n\texternal host\n"'

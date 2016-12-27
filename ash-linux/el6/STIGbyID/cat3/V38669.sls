@@ -24,11 +24,11 @@ script_{{ stigId }}-describe:
 
 {%- set wantedPkg = 'postfix' %}
 
-{%- if not salt['pkg.version'](wantedPkg) %}
+{%- if not salt.pkg.version(wantedPkg) %}
 notify_{{ stigId }}-noPostfix:
   cmd.run:
     - name: 'echo "Postfix not installed"'
-  {%- if salt['pkg.version']('sendmail') %}
+  {%- if salt.pkg.version('sendmail') %}
 notify_{{ stigId }}-sendmail:
   cmd.run:
     - name: 'echo "Sendmail installed instead of postfix"'

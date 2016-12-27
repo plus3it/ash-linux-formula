@@ -18,19 +18,19 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if not salt['pkg.version']('logrotate') %}
+{%- if not salt.pkg.version('logrotate') %}
 {{ stigId }}.sls:
 pkg_{{ stigId }}-logrotate:
   pkg.installed:
     - name: 'logrotate'
 {%- endif %}
 
-{%- if salt['file.file_exists']('/var/log/cron') and salt['file.search']('/var/log/cron', ' logrotate$') %}
+{%- if salt.file.file_exists('/var/log/cron') and salt.file.search('/var/log/cron', ' logrotate$') %}
 msg_{{ stigId }}-status:
   cmd.run:
     - name: 'echo "Logrotate service already configured to run"'
 {%- else %}
-  {%- if not salt['file.file_exists']('/etc/cron.daily/logrotate') %}
+  {%- if not salt.file.file_exists('/etc/cron.daily/logrotate') %}
 msg_{{ stigId }}-status:
   cmd.run:
     - name: 'echo "Logrotate not correctly-installed. Correcting..."'

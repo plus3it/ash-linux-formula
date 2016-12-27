@@ -24,7 +24,7 @@ script_{{ stigId }}-describe:
 
 {%- for user in salt['user.getent']('') %}
 {%- set ID = user['name'] %}
-{%- if not salt['file.search']('/etc/group', ':' + user['gid']|string() + ':' ) %}
+{%- if not salt.file.search('/etc/group', ':' + user.gid|string() + ':' ) %}
 notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'

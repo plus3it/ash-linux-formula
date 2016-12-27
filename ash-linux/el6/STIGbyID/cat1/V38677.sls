@@ -20,25 +20,25 @@ script_{{ stigId }}-describe:
 {%- set exportFile = '/etc/exports' %}
 {%- set badOpt = 'insecure_locks' %}
 
-{%- if salt['file.search'](exportFile, badOpt) %}
+{%- if salt.file.search(exportFile, badOpt) %}
 script_{{ stigId }}-helper:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stigId }}-helper.sh
     - cwd: /root
 {#
-  {%- if salt['file.search'](exportFile, ',' + insecure_locks) %}
+  {%- if salt.file.search(exportFile, ',' + insecure_locks) %}
 fix_{{ stigId }}-secondaryOpt:
   file.replace:
     - name: '{{ exportFile }}'
     - pattern: ',{{ badOpt }}'
     - repl: ''
-  {%- elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + ',') %}
+  {%- elif salt.file.search(exportFile, '[ 	]' + insecure_locks + ',') %}
 fix_{{ stigId }}-primaryOpt:
   file.replace:
     - name: '{{ exportFile }}'
     - pattern: '{{ badOpt }},'
     - repl: ''
-  {%- elif salt['file.search'](exportFile, '[ 	]' + insecure_locks + '[ 	]') %}
+  {%- elif salt.file.search(exportFile, '[ 	]' + insecure_locks + '[ 	]') %}
 fix_{{ stigId }}-onlyOpt:
   file.replace:
     - name: '{{ exportFile }}'

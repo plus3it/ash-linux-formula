@@ -20,7 +20,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](cfgFile, '^' + parmName + ' ' + parmVal) %}
+{%- if salt.file.search(cfgFile, '^' + parmName + ' ' + parmVal) %}
 file_{{ stigId }}-configExists:
   cmd.run:
     - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'

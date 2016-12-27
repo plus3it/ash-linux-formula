@@ -22,7 +22,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](swanPkg) %}
+{%- if salt.pkg.version(swanPkg) %}
 notify_{{ stigId }}-{{ swanPkg }}:
   cmd.run:
     - name: 'echo "OpenSwan utilities already installed"'

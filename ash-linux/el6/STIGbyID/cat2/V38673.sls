@@ -27,13 +27,13 @@ notice_{{ stigId }}:
   cmd.run:
     - name: 'echo "Implementation is system- and tenant-specific. This test will look for scheduled service in typical scheduler file locations. However, this tool cannot verify outside those locations or any frequencies discovered within those locations. **MANUAL VERIFICAION WILL BE REQUIRED.**"'
 
-{%- if not salt['pkg.verify']('aide') %}
+{%- if not salt.pkg.verify('aide') %}
 warn_{{ stigId }}-aideConf:
    cmd.run:
      - name: 'echo "Package unmodified (AIDE has not been configured)"'
 {%- endif %}
 
-{%- if not salt['file.search'](cronEtc, '/usr/sbin/aide') %}
+{%- if not salt.file.search(cronEtc, '/usr/sbin/aide') %}
 msg_{{ stigId }}-etcCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in {{ cronEtc }}"'
@@ -43,8 +43,8 @@ msg_{{ stigId }}-etcCrontab:
     - name: 'echo "Info: AIDE found in {{ cronEtc }}"'
 {%- endif %}
 
-{%- if salt['file.file_exists'](cronRoot) %}
-  {%- if not salt['file.search'](cronRoot, '/usr/sbin/aide') %}
+{%- if salt.file.file_exists(cronRoot) %}
+  {%- if not salt.file.search(cronRoot, '/usr/sbin/aide') %}
 msg_{{ stigId }}-rootCrontab:
   cmd.run:
     - name: 'echo "Info: AIDE not found in root users crontab ({{ cronRoot }})"'

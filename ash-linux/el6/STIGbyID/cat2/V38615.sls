@@ -25,7 +25,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search'](cfgFile, '^Banner')
+{%- if salt.file.search(cfgFile, '^Banner')
  %}
 file_{{ stigId }}-repl:
   file.replace:

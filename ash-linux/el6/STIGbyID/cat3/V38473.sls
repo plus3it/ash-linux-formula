@@ -26,7 +26,7 @@ script_{{ stigId }}-describe:
 # Not really happy with how the standard mount.mounted handler deals with 
 # updating the fstab. This is a bit of a hack to prevent entry-doubling, but
 # need to flesh it out for additional use-cases.
-{%- if salt['file.search']('/etc/fstab', '[ 	]/home[ 	]') %}
+{%- if salt.file.search('/etc/fstab', '[ 	]/home[ 	]') %}
 mount_{{ stigId }}-tmp:
    cmd.run:
      - name: 'echo "/home already mounted as its own filesystem"'

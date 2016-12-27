@@ -18,7 +18,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('gdm') %}
+{%- if salt.pkg.version('gdm') %}
 cmd_{{ stigId }}-setNoUserlist:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type string --set /apps/gnome-screensaver/mode blank-only'

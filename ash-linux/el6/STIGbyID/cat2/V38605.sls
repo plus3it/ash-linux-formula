@@ -21,7 +21,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if not salt['pkg.version']('cronie') %}
+{%- if not salt.pkg.version('cronie') %}
 pkg_{{ stigId }}-cronie:
   pkg.installed:
     - name: 'cronie'

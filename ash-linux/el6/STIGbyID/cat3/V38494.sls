@@ -20,7 +20,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](cfgFile, srchPtn) %}
+{%- if salt.file.search(cfgFile, srchPtn) %}
 replace_{{ stigId }}-serialTTY:
   file.replace:
     - name: '{{ cfgFile }}'

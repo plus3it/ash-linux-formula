@@ -27,7 +27,7 @@ notify_{{ stigId }}-NotApplicable:
   cmd.run:
     - name: 'printf "Not a technical control:\n\tReview local policies then determine\n\tif policies have been applied to system.\n\tModule will check for LUKS indicators.\n"'
 
-{%- if salt['file.file_exists']('/etc/crypttab') %}
+{%- if salt.file.file_exists('/etc/crypttab') %}
 notify_{{ stigId }}-CryptTab:
   cmd.run:
     - name: 'echo "System crypttab found."'
@@ -39,7 +39,7 @@ chk_{{ stigId }}-LUKSdevs:
 notify_{{ stigId }}-CryptTab:
   cmd.run:
     - name: 'echo "No crypttab file found: automated LUKS mounts not configured."'
-  {%- if not salt['pkg.version']('cryptsetup-luks') %}
+  {%- if not salt.pkg.version('cryptsetup-luks') %}
 notify_{{ stigId }}-LUKStools:
   cmd.run:
     - name: 'echo "LUKS tools not installed: LUKS device-management not possible."'

@@ -25,8 +25,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search'](checkFile, '^' + auditParm) %}
-  {%- if salt['file.search'](checkFile, '^' + auditParm + ' = suspend') %}
+{%- if salt.file.search(checkFile, '^' + auditParm) %}
+  {%- if salt.file.search(checkFile, '^' + auditParm + ' = suspend') %}
 notify_{{ stigId }}:
   cmd.run:
     - name: 'echo "{{ auditParm }} parameter already set in {{ checkFile }}"'

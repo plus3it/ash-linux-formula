@@ -26,7 +26,7 @@ script_V38577-describe:
     - cwd: '/root'
 
 # Conditional replace or append
-{%- if salt['file.search'](chkFile, '^' + parmName) %}
+{%- if salt.file.search(chkFile, '^' + parmName) %}
 file_V38577-repl:
   file.replace:
     - name: '{{ chkFile }}'

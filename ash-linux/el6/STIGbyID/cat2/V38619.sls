@@ -28,7 +28,7 @@ script_{{ stigId }}-describe:
   {%- set homeDir = user['home'] %}
   {%- set netRc = homeDir + '/.netrc' %}
 
-  {%- if salt['file.file_exists'](netRc) %}
+  {%- if salt.file.file_exists(netRc) %}
 notify_{{ stigId }}-{{ ID }}:
   cmd.run:
     - name: 'echo "Found netrc file at: ''{{ netRc }}''. Moving..."'

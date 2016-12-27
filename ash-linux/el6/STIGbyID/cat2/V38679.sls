@@ -44,12 +44,12 @@ script_{{ stigId }}-describe:
     {%- for listElem in ifInetList %}
       {%- set ifLabel = listElem['label'] %}
       # Check if there's a "network-scripts" config file
-      {%- if salt['file.file_exists'](netCfgRoot + ifLabel) %}
+      {%- if salt.file.file_exists(netCfgRoot + ifLabel) %}
 notify_{{ stigId }}-{{ ifLabel }}:
   cmd.run:
     - name: 'echo "Checking {{ netCfgRoot }}{{ ifLabel }} for DCHP use."'
         # Check if boot-time interface configuration uses DHCP and alert
-        {%- if salt['file.search'](netCfgRoot + ifLabel, 'dhcp') %}
+        {%- if salt.file.search(netCfgRoot + ifLabel, 'dhcp') %}
 notify_{{ stigId }}-{{ ifLabel }}_DHCP:
   cmd.run:
     - name: 'echo "WARNING: Interface ''{{ ifLabel }}'' configured for DHCP"'

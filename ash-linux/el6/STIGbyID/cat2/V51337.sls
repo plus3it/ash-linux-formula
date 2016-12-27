@@ -27,7 +27,7 @@ script_{{ stig_id }}-describe:
 
 #########################################
 # Ensure SELinux is active at kernel load
-{%- if salt['file.search'](chkFile, 'kernel.*selinux=0') %}
+{%- if salt.file.search(chkFile, 'kernel.*selinux=0') %}
 
 file_{{ stig_id }}-repl:
   file.replace:

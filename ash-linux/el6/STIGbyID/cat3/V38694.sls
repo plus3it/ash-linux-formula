@@ -29,9 +29,9 @@ script_{{ stigId }}-describe:
 {%- set parmName = 'INACTIVE' %}
 
 # If live 'INACTIVE' parameter is already set...
-{%- if salt['file.search'](checkFile, '^' + parmName + '=') %}
+{%- if salt.file.search(checkFile, '^' + parmName + '=') %}
   # ...Check if correct value
-  {%- if salt['file.search'](checkFile, '^' + parmName + '=35') %}
+  {%- if salt.file.search(checkFile, '^' + parmName + '=35') %}
 set_{{ stigId }}-inactive:
   cmd.run:
     - name: 'echo "Account inactivity-lockout already set to 35 days"'
@@ -46,7 +46,7 @@ set_{{ stigId }}-inactive:
 # If no live 'INACTIVE' parameter is set...
 {%- else %}
   # ...See if an appropriate commented value exists
-  {%- if salt['file.search'](checkFile, '#[ 	]*' + parmName + '=35') %}
+  {%- if salt.file.search(checkFile, '#[ 	]*' + parmName + '=35') %}
 set_{{ stigId }}-inactive:
   file.uncomment:
     - name: {{ checkFile }}

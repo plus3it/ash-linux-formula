@@ -23,7 +23,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('iputils') %}
+{%- if salt.pkg.version('iputils') %}
 svc_{{ stigId }}-rdiscEnabled:
   service.disabled:
     - name: 'rdisc'

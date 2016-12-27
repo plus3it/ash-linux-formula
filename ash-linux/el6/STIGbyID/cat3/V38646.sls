@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('oddjob') %}
+{%- if salt.pkg.version('oddjob') %}
 svc_{{ stigId }}-oddjobdEnabled:
   service.disabled:
     - name: 'oddjobd'

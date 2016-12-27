@@ -25,8 +25,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('nfs-utils') %}
-  {%- if salt['file.search'](checkFile, checkPtn) %}
+{%- if salt.pkg.version('nfs-utils') %}
+  {%- if salt.file.search(checkFile, checkPtn) %}
 file_{{ stigId }}-onlyOpt:
   file.replace:
     - name: '{{ checkFile }}'

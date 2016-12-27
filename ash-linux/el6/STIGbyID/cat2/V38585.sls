@@ -26,7 +26,7 @@ script_{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Check for compliant (SHA512) GRUB password - alert if not set
-{%- if salt['file.search'](chkFile, '^password --encrypted \$6') %}
+{%- if salt.file.search(chkFile, '^password --encrypted \$6') %}
 
 notify_{{ stig_id }}-wontFix:
   cmd.run:
@@ -37,7 +37,7 @@ notify_{{ stig_id }}-wontFix:
   # If this is an Amazon HVM, we can feel free to set a GRUB password
   #   (no console means won't matter if the value is valid
   #   or overridden)
-  {%- if salt['grains.get']('productname') == 'HVM domU' %}
+  {%- if salt.grains.get('productname') == 'HVM domU' %}
 
 insert_{{ stig_id }}-grubPasswd:
   file.replace:

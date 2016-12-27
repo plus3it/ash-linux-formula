@@ -37,11 +37,11 @@ script_V{{ stig_id }}-describe:
 # Monitoring of SELinux DAC config
 {%- if grains['cpuarch'] == 'x86_64' %}
   {%- for usertype,audit_options in usertypes.items() %}
-    {%- if not salt['cmd.shell']('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
+    {%- if not salt.cmd.shell('grep -c -E -e "' + audit_options['rule'] + '" ' + audit_cfg_file ) == '0' %}
 file_V{{ stig_id }}-auditRules_{{ usertype }}:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-    {%- elif not salt['cmd.shell']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
+    {%- elif not salt.cmd.shell('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file ) == '0' %}
 file_V{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'

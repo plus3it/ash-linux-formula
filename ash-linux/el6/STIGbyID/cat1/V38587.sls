@@ -21,7 +21,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](chkPkg) %}
+{%- if salt.pkg.version(chkPkg) %}
 pkg_{{ stigId }}-removeTelnet:
   pkg.removed:
     - name: '{{ chkPkg }}'

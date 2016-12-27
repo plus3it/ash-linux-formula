@@ -23,8 +23,8 @@ script_{{ stigId }}-describe:
     '/root/.rpmrc',
 ] %}
 {%- for checkFile in fileList %}
-{%- if salt['file.file_exists'](checkFile) %}
-  {%- if salt['file.search'](checkFile,'^nosignature') %}
+{%- if salt.file.file_exists(checkFile) %}
+  {%- if salt.file.search(checkFile,'^nosignature') %}
 notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
     - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'

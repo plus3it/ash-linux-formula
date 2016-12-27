@@ -24,7 +24,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('pam_ldap') and salt['file.search'](ldapCnf, '^tls_cacert') %}
+{%- if salt.pkg.version('pam_ldap') and salt.file.search(ldapCnf, '^tls_cacert') %}
 file_{{ stigId }}-replCertdir:
   file.replace:
     - name: '{{ ldapCnf }}'
@@ -37,7 +37,7 @@ file_{{ stigId }}-replCertfile:
     - pattern: '^tls_cacertfile.*$'
     - repl: 'tls_cacertfile /etc/pki/tls/CA/cacert.pem'
 
-{%- elif salt['pkg.version']('pam_ldap') and not salt['file.search'](ldapCnf, '^tls_cacert') %}
+{%- elif salt.pkg.version('pam_ldap') and not salt.file.search(ldapCnf, '^tls_cacert') %}
 file_{{ stigId }}-appendCertdir:
   file.append:
     - name: '{{ ldapCnf }}'
@@ -54,7 +54,7 @@ file_{{ stigId }}-appendCertfile:
         # LDAP TLS certificates must come from trusted CA (per STIG V-38626)
         tls_cacertfile /etc/pki/tls/CA/cacert.pem
 
-{%- elif not salt['pkg.version']('pam_ldap') %}
+{%- elif not salt.pkg.version('pam_ldap') %}
 cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "LDAP PAM modules not installed"'

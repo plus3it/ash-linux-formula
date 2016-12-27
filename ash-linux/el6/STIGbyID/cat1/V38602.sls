@@ -23,9 +23,9 @@ script_{{ stigId }}-describe:
 {%- set rSvcName = 'rlogin' %}
 
 # See if the rsh server package is even installed...
-{%- if salt['pkg.version']('rsh-server') %}
+{%- if salt.pkg.version('rsh-server') %}
   # If installed, and enabled, disable it
-  {%- if salt['service.enabled'](rSvcName) %}
+  {%- if salt.service.enabled(rSvcName) %}
 svc_{{ stigId }}-{{ rSvcName }}Disabled:
   service.disabled:
     - name: '{{ rSvcName }}'
