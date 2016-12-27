@@ -20,8 +20,8 @@ script_{{ stigId }}-describe:
 
 {%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 
-{%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords .*') %}
-  {%- if salt['file.search'](sshConfigFile, '^PermitEmptyPasswords no') %}
+{%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords .*') %}
+  {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords no') %}
 file_{{ stigId }}:
   cmd.run:
     - name: 'echo "Empty passwords already disabled in ''{{ sshConfigFile }}''"'

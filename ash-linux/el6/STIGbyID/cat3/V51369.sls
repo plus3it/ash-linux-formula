@@ -39,12 +39,12 @@ script_{{ stigId }}-describe:
     - cwd: /root
 
 # Set SELINUXTYPE based on highest, installed policy-set
-{%- if salt['pkg.version']('selinux-policy-mls') %}
+{%- if salt.pkg.version('selinux-policy-mls') %}
   {%- set typeMode = 'mls' %}
 notify_{{ stigId }}-selWarn:
   cmd.run:
     - name: 'printf "STIG only mandates ''targeted''\n   mode. Setting ''mls'' due to \n  presence of the associated policy-\n  modules. This may break many\n   things if ''SELINUX=enforcing''\n"'
-{%- elif salt['pkg.version']('selinux-policy-targeted') %}
+{%- elif salt.pkg.version('selinux-policy-targeted') %}
   {%- set typeMode = 'targeted' %}
 {%- else %}
 notify_{{ stigId }}-selWarn:
@@ -52,16 +52,16 @@ notify_{{ stigId }}-selWarn:
     - name: 'printf "STIG-compatible policy-modules not\n  installed. Install before\n  rebooting or system may fail\n  to properly restart."'
 {%- endif %}
 
-{%- if not salt['file.is_link'](selLink) %}
+{%- if not salt.file.is_link(selLink) %}
 symlink_{{ stigId }}-selinxCfg:
   file.symlink:
     - name: {{ selLink }}
     - target: {{ selConfig }}
 {%- endif %}
 
-{%- if salt['file.file_exists'](selConfig) %}
-  {%- if salt['file.search'](selConfig, '^' + selType + '=') %}
-    {%- if salt['file.search'](selConfig, '^' + selType + '=' + typeMode) %}
+{%- if salt.file.file_exists(selConfig) %}
+  {%- if salt.file.search(selConfig, '^' + selType + '=') %}
+    {%- if salt.file.search(selConfig, '^' + selType + '=' + typeMode) %}
 set_{{ stigId }}-selType:
   cmd.run:
     - name: 'echo "The SELinux ''{{ selType }}'' parameter already set to ''{{ typeMode }}''"'

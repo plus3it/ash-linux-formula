@@ -26,7 +26,7 @@ script_V{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Enable audit at kernel load
-{%- if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*audit=1') %}
+{%- if salt.file.search(grubCfgFile, 'kernel') and not salt.file.search(grubCfgFile, 'kernel.*audit=1') %}
 
 file_V{{ stig_id }}-repl:
   file.replace:

@@ -23,7 +23,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.get_user'](chkFile) == 'root' %}
+{%- if salt.file.get_user(chkFile) == 'root' %}
 notify_{{ stigId }}-ownership:
   cmd.run:
     - name: 'echo "Info: ''{{ chkFile }}'' file already owned by ''root''."'

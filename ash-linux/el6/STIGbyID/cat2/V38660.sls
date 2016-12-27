@@ -23,11 +23,11 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if not salt['pkg.version']('net-snmp') %}
+{%- if not salt.pkg.version('net-snmp') %}
 cmd_{{ stigId }}-notice:
   cmd.run:
     - name: 'echo "Info: SNMP packages not installed - nothing to address"'
-{%- elif salt['file.search'](snmpConf, '^[a-z].*(?:v1|v2c|om2sec)') %}
+{%- elif salt.file.search(snmpConf, '^[a-z].*(?:v1|v2c|om2sec)') %}
 file_{{ stigId }}-commentV1n2s:
   file.comment:
     - name: '{{ snmpConf }}'

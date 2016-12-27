@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('tftp-server') %}
+{%- if salt.pkg.version('tftp-server') %}
 file_{{ stigId }}:
   file.sed:
     - name: /etc/xinetd.d/tftp

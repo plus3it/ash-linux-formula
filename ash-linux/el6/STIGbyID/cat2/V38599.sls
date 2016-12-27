@@ -23,7 +23,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('nordugrid-arc-gridftpd') %}
+{%- if salt.pkg.version('nordugrid-arc-gridftpd') %}
 cmd_{{ stigId }}-NotImplemented:
   cmd.run:
     - name: 'echo "NOT YET IMPLEMENTED"'
@@ -32,13 +32,13 @@ cmd_{{ stigId }}-NotImplemented:
 ###################################
 # Banners for the proftpd service
 ###################################
-{%- if salt['pkg.version']('proftpd') and salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
+{%- if salt.pkg.version('proftpd') and salt.file.search('/etc/proftpd.conf', '^DisplayConnect') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/proftpd.conf'
     - pattern: '^DisplayConnect.*$'
     - repl: 'DisplayConnect	/etc/issue'
-{%- elif salt['pkg.version']('proftpd') and not salt['file.search']('/etc/proftpd.conf', '^DisplayConnect') %}
+{%- elif salt.pkg.version('proftpd') and not salt.file.search('/etc/proftpd.conf', '^DisplayConnect') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/proftpd.conf'
@@ -50,13 +50,13 @@ file_{{ stigId }}-repl:
 #####################################
 # Banners for the pure-ftpd service
 #####################################
-{%- if salt['pkg.version']('pure-ftpd') and salt['file.search']('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
+{%- if salt.pkg.version('pure-ftpd') and salt.file.search('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/pure-ftpd/pure-ftpd.conf'
     - pattern: '^FortunesFile.*$'
     - repl: 'FortunesFile	/etc/issue'
-{%- elif salt['pkg.version']('pure-ftpd') and not salt['file.search']('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
+{%- elif salt.pkg.version('pure-ftpd') and not salt.file.search('/etc/pure-ftpd/pure-ftpd.conf', '^FortunesFile') %}
 file_{{ stigId }}-append:
   file.append:
     - name: '/etc/pure-ftpd/pure-ftpd.conf'
@@ -71,13 +71,13 @@ file_{{ stigId }}-append:
 ##################################
 # Banners for the vsftpd service
 ##################################
-{%- if salt['pkg.version']('vsftpd') and salt['file.search']('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
+{%- if salt.pkg.version('vsftpd') and salt.file.search('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '/etc/vsftpd/vsftpd.conf'
     - pattern: '^banner_file.*$'
     - repl: 'banner_file=/etc/issue'
-{%- elif salt['pkg.version']('vsftpd') and not salt['file.search']('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
+{%- elif salt.pkg.version('vsftpd') and not salt.file.search('/etc/vsftpd/vsftpd.conf', '^banner_file') %}
 file_{{ stigId }}-append:
   file.append:
     - name: '/etc/vsftpd/vsftpd.conf'

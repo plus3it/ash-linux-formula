@@ -61,15 +61,15 @@ file_V{{ stig_id }}-repl:
     - onlyif:
       - 'test -f /etc/sysconfig/authconfig'
 
-{%- if salt['file.file_exists'](checkFile) %}
+{%- if salt.file.file_exists(checkFile) %}
 
 #file {{ checkFile }} exists
 
-  {%- if salt['file.search'](checkFile, ' pam_unix.so ') %}
+  {%- if salt.file.search(checkFile, ' pam_unix.so ') %}
 
 #pam_unix.so found in /etc/pam.d/system-auth-ac
 
-    {%- if salt['file.search'](checkFile, ' ' + hash_type) %}
+    {%- if salt.file.search(checkFile, ' ' + hash_type) %}
 
 #{{ hash_type }} already set
 set_V{{ stig_id }}-sha512:

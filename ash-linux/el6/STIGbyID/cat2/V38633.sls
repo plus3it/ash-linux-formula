@@ -26,8 +26,8 @@ script_{{ stigId }}-describe:
 {%- set auditConf = '/etc/audit/auditd.conf' %}
 {%- set logParm = 'max_log_file' %}
 
-{%- if salt['file.search'](auditConf, '^' + logParm + ' = ') %}
-  {%- if salt['file.search'](auditConf, '^' + logParm + ' = 6') %}
+{%- if salt.file.search(auditConf, '^' + logParm + ' = ') %}
+  {%- if salt.file.search(auditConf, '^' + logParm + ' = 6') %}
 notify_{{ stigId }}-Set:
   cmd.run:
     - name: 'echo "''{{ logParm }}'' value in ''{{ auditConf }}'' already matches recommended value [6]"'

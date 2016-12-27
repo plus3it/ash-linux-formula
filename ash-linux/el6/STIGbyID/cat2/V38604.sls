@@ -24,7 +24,7 @@ script_{{ stigId }}-describe:
     - cwd: '/root'
 
 {%- for svcNam in svcList %}
-  {%- if salt['pkg.version'](svcNam) %}
+  {%- if salt.pkg.version(svcNam) %}
 svc_{{ stigId }}-{{ svcNam }}:
   service.disabled:
     - name: '{{ svcNam }}'

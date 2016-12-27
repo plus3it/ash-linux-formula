@@ -24,19 +24,19 @@ script_{{ stigId }}-describe:
 
 {%- set syslogConf = '/etc/audisp/plugins.d/syslog.conf' %}
 
-{%- if salt['file.search'](syslogConf, 'active') %}
-  {%- if salt['file.search'](syslogConf, '^#.*active.*=.*yes') %}
+{%- if salt.file.search(syslogConf, 'active') %}
+  {%- if salt.file.search(syslogConf, '^#.*active.*=.*yes') %}
 file_{{ stigId }}-mkActive:
   file.uncomment:
     - name: '{{ syslogConf }}'
     - regex: 'active = yes'
-  {%- elif salt['file.search'](syslogConf, '^active.*=.*no') %}
+  {%- elif salt.file.search(syslogConf, '^active.*=.*no') %}
 file_{{ stigId }}-mkActive:
   file.replace:
     - name: '{{ syslogConf }}'
     - pattern: '^active.*=.*no'
     - repl: 'active = yes'
-  {%- elif salt['file.search'](syslogConf, '^.*active.*=.*yes') %}
+  {%- elif salt.file.search(syslogConf, '^.*active.*=.*yes') %}
 file_{{ stigId }}-mkActive:
   cmd.run:
     - name: 'echo "Audit service already configured to forward logs to syslog service"'

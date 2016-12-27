@@ -24,8 +24,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](checkFile, '^' + parmName) %}
-  {%- if salt['file.search'](checkFile, '^' + parmName + ' 0') %}
+{%- if salt.file.search(checkFile, '^' + parmName) %}
+  {%- if salt.file.search(checkFile, '^' + parmName + ' 0') %}
 file_{{ stigId }}-configSet:
   cmd.run:
     - name: 'echo "{{ parmName }} already meets STIG-defined requirements"'

@@ -23,7 +23,7 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ sls.split('.')[:-1] | join('/') }}/files/V{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](MSFEpkg) %}
+{%- if salt.pkg.version(MSFEpkg) %}
 
 # If MSFE is installed, check the 'freshness' of its scan dbs and history
 
@@ -46,7 +46,7 @@ cmd_V{{ stig_id }}-cleanChck:
 
 {%- else %}
 
-    {%- if salt['pkg.latest_version'](MSFEpkg) %}
+    {%- if salt.pkg.latest_version(MSFEpkg) %}
 
 # If not installed, see if it's available in the Yum repos
 pkg_V{{ stig_id }}:

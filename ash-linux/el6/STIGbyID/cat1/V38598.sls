@@ -20,9 +20,9 @@ script_{{ stigId }}-describe:
     - cwd: /root
 
 # See if the {{ svcNam }} server package is even installed...
-{%- if salt['pkg.version']('rsh-server') %}
+{%- if salt.pkg.version('rsh-server') %}
   # If installed, and enabled, disable it
-  {%- if salt['service.enabled'](svcNam) %}
+  {%- if salt.service.enabled(svcNam) %}
 svc_{{ stigId }}-{{ svcNam }}Disabled:
   service.disabled:
     - name: '{{ svcNam }}'

@@ -22,7 +22,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']('/etc/init.d/bluetooth') %}
+{%- if salt.file.file_exists('/etc/init.d/bluetooth') %}
 # Ensure bluetooth service is disabled and stopped
 svc_{{ stigId }}-bluetoothEnabled:
   service.disabled:

@@ -28,7 +28,7 @@ script_{{ stigId }}-describe:
 
 # Purely informational - we're going to force the value, any way,
 # via 'sysctl.present' since it forces entry in {{ cfgFile }}
-{%- if salt['sysctl.get'](parmName) == parmVal %}
+{%- if salt.sysctl.get(parmName) == parmVal %}
 sysctl_{{ stigId }}-inMemCheck:
   cmd.run:
     - name: 'printf "**************************************************\n* NOTE: In-memory configuration already disables *\n*       accepting source-routed packet requests  *\n**************************************************\n"'

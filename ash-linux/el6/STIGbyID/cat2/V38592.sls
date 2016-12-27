@@ -60,21 +60,21 @@ script_V{{ stig_id }}-describe:
 # Iterate files to alter...
 {%- for checkFile in pamFiles %}
 
-  {%- if not salt['file.file_exists'](checkFile) %}
+  {%- if not salt.file.file_exists(checkFile) %}
 
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #Use macro to add necessary rules
 {{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
 
-  {%- elif not salt['file.search'](checkFile, pamMod) %}
+  {%- elif not salt.file.search(checkFile, pamMod) %}
 
 #file {{ checkFile }} exists
 #{{ pamMod }} not yet present in file
 #Use macro to add necessary rules
 {{ pammod_template(stig_id, checkFile, pamMod, preAuth, authFail, authSucc, lockTO) }}
 
-  {%- elif not salt['file.search'](checkFile, preAuth) %}
+  {%- elif not salt.file.search(checkFile, preAuth) %}
 
 #file {{ checkFile }} exists
 #{{ pamMod }} present in file

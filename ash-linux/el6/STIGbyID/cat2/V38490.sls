@@ -26,7 +26,7 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists']('{{ file_modprobe }}') %}
+{%- if salt.file.file_exists('{{ file_modprobe }}') %}
 file_V{{ stig_id }}-replModprobe:
   file.replace:
     - name: /etc/modprobe.conf

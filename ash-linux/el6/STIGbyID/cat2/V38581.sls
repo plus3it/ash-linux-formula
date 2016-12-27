@@ -41,7 +41,7 @@ file_{{ stig_id }}-menuLst:
 
 # Any grub.conf or menu.lst that exists in "/boot" are superfluous
 {%- for chkFile in grubFiles %}
-{%- if salt['file.file_exists']('/boot/' + chkFile) %}
+{%- if salt.file.file_exists('/boot/' + chkFile) %}
 notify_{{ stig_id }}-{{ chkFile }}:
   cmd.run:
     - name: 'printf "

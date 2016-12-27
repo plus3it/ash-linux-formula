@@ -25,7 +25,7 @@ script_{{ stigId }}-describe:
     - cwd: '/root'
 
 # Conditional replace or append
-{%- if salt['file.search'](chkFile, '^SINGLE') %}
+{%- if salt.file.search(chkFile, '^SINGLE') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ chkFile }}'

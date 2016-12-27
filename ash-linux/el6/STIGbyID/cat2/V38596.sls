@@ -25,7 +25,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search'](chkFile, '^' + parmName) %}
+{%- if salt.file.search(chkFile, '^' + parmName) %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ chkFile }}'

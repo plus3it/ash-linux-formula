@@ -18,8 +18,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.search'](sshConfigFile, '^Protocol .*') %}
-  {%- if salt['file.search'](sshConfigFile, '^Protocol 2') %}
+{%- if salt.file.search(sshConfigFile, '^Protocol .*') %}
+  {%- if salt.file.search(sshConfigFile, '^Protocol 2') %}
 file_{{ stigId }}:
   cmd.run:
     - name: 'echo "Protocol version 2 already forced in ''{{ sshConfigFile }}''"'

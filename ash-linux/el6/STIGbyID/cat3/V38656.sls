@@ -23,10 +23,10 @@ script_{{ stigId }}-describe:
     - cwd: /root
 
 # If the Samba config files are installed...
-{%- if salt['pkg.version']('samba-common') %}
+{%- if salt.pkg.version('samba-common') %}
   # and the "client signing" option is already set to some value,
   # override as necessary
-  {%- if salt['file.search']('/etc/samba/smb.conf', '^[ 	]*client signing') or salt['file.search']('/etc/samba/smb.conf', '^client signing') %}
+  {%- if salt.file.search('/etc/samba/smb.conf', '^[ 	]*client signing') or salt.file.search('/etc/samba/smb.conf', '^client signing') %}
 paramSet_{{ stigId }}-clientSigning:
   file.replace:
     - name: '/etc/samba/smb.conf'

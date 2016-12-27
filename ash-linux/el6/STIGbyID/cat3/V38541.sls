@@ -24,11 +24,11 @@ script_V{{ stig_id }}-describe:
 {%- set rule = '-w ' + audit_path + ' -p wa -k MAC-policy' %}
 {%- set audit_cfg_file = '/etc/audit/audit.rules' %}
 
-{%- if not salt['cmd.shell']('grep -c -E -e "' + rule + '" ' + audit_cfg_file ) == '0' %}
+{%- if not salt.cmd.shell('grep -c -E -e "' + rule + '" ' + audit_cfg_file , output_loglevel='quiet') == '0' %}
 file_V{{ stig_id }}-auditRules_selMAC:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{%- elif not salt['cmd.shell']('grep -c -E -e "' + audit_path + '" ' + audit_cfg_file ) == '0' %}
+{%- elif not salt.cmd.shell('grep -c -E -e "' + audit_path + '" ' + audit_cfg_file , output_loglevel='quiet') == '0' %}
 file_V{{ stig_id }}-auditRules_selMAC:
   file.replace:
     - name: '{{ audit_cfg_file }}'

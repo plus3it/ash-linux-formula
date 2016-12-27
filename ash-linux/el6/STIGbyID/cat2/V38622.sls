@@ -23,13 +23,13 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('postfix') and salt['file.search'](cfgFile, '^inet_interfaces') %}
+{%- if salt.pkg.version('postfix') and salt.file.search(cfgFile, '^inet_interfaces') %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ cfgFile }}'
     - pattern: '^inet_interfaces.*$'
     - repl: 'inet_interfaces = localhost'
-{%- elif salt['pkg.version']('postfix') and not salt['file.search'](cfgFile, '^inet_interfaces') %}
+{%- elif salt.pkg.version('postfix') and not salt.file.search(cfgFile, '^inet_interfaces') %}
 file_{{ stigId }}-append:
   file.append:
     - name: '{{ cfgFile }}'
@@ -37,11 +37,11 @@ file_{{ stigId }}-append:
       - ' '
       - '# SMTP service must not allow relaying (per STIG V-38622)'
       - 'inet_interfaces = localhost'
-{%- elif salt['pkg.version']('sendmail') %}
+{%- elif salt.pkg.version('sendmail') %}
 cmd_{{ stigId }}-NotImplemented:
   cmd.run:
     - name: 'echo "Sendmail auto-remediation not supported: manual intervention may be required"'
-{%- elif salt['pkg.version']('exim') %}
+{%- elif salt.pkg.version('exim') %}
 cmd_{{ stigId }}-NotImplemented:
   cmd.run:
     - name: 'echo "Exim auto-remediation not supported: manual intervention may be required"'

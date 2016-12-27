@@ -25,20 +25,20 @@ script_{{ stigId }}-describe:
     - cwd: /root
 
 # Check to see if vsftpd service is installed
-{%- if salt['pkg.version']('vsftpd') %}
+{%- if salt.pkg.version('vsftpd') %}
   {%- set vsftpdConf = '/etc/vsftpd/vsftpd.conf' %}
   {%- set logEnable = 'xferlog_enable' %}
   {%- set logFormat = 'xferlog_std_format' %}
   {%- set logVerbosity = 'log_ftp_protocol' %}
 
   # ...and see if transfer-logging is already enabled
-  {%- if salt['file.search'](vsftpdConf, '^' + logEnable + '=YES') %}
+  {%- if salt.file.search(vsftpdConf, '^' + logEnable + '=YES') %}
 file_{{ stigId }}-xferLog:
   cmd.run:
     - name: 'echo "The {{ logEnable }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
-  {%- elif salt['file.search'](vsftpdConf, '^' + logEnable + '=NO') %}
+  {%- elif salt.file.search(vsftpdConf, '^' + logEnable + '=NO') %}
 file_{{ stigId }}-xferLog:
   file.replace:
     - name: {{ vsftpdConf }}
@@ -57,13 +57,13 @@ file_{{ stigId }}-xferLog:
   {%- endif %}
 
   # ...and see if standard-logging is explicitly disabled
-  {%- if salt['file.search'](vsftpdConf, '^' + logFormat + '=NO') %}
+  {%- if salt.file.search(vsftpdConf, '^' + logFormat + '=NO') %}
 file_{{ stigId }}-logFmt:
   cmd.run:
     - name: 'echo "The {{ logFormat }} option is already appropriately set"'
 
   # ...set it to disabled if already explicitly enabled
-  {%- elif salt['file.search'](vsftpdConf, '^' + logFormat + '=YES') %}
+  {%- elif salt.file.search(vsftpdConf, '^' + logFormat + '=YES') %}
 file_{{ stigId }}-logFmt:
   file.replace:
     - name: {{ vsftpdConf }}
@@ -82,13 +82,13 @@ file_{{ stigId }}-logFmt:
   {%- endif %}
 
   # ...and see if verbose-logging is already enabled
-  {%- if salt['file.search'](vsftpdConf, '^' + logVerbosity + '=YES') %}
+  {%- if salt.file.search(vsftpdConf, '^' + logVerbosity + '=YES') %}
 file_{{ stigId }}-logVerbose:
   cmd.run:
     - name: 'echo "The {{ logVerbosity }} option is already appropriately set"'
 
   # ...set it to enabled if already explicitly disabled
-  {%- elif salt['file.search'](vsftpdConf, '^' + logVerbosity + '=NO') %}
+  {%- elif salt.file.search(vsftpdConf, '^' + logVerbosity + '=NO') %}
 file_{{ stigId }}-logVerbose:
   file.replace:
     - name: {{ vsftpdConf }}

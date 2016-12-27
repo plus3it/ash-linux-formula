@@ -27,7 +27,7 @@ script_V{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Alter the running system-state
-{%- if salt['pkg.version']('policycoreutils-python') %}
+{%- if salt.pkg.version('policycoreutils-python') %}
 
 sel_V{{ stig_id }}:
   selinux:
@@ -37,9 +37,9 @@ sel_V{{ stig_id }}:
 {%- endif %}
 
 # Verify that the reboot system-state is acceptable
-{%- if salt['file.file_exists'](selCfgFile) %}
+{%- if salt.file.file_exists(selCfgFile) %}
 
-  {%- if salt['file.search'](selCfgFile, '^SELINUX=disabled') %}
+  {%- if salt.file.search(selCfgFile, '^SELINUX=disabled') %}
 
 file_V{{ stig_id }}-enableSEL:
   file.replace:

@@ -24,7 +24,7 @@ script_{{ stigId }}-describe:
     - cwd: '/root'
 
 # Make sure GDM is installed and enable GDM login banners
-{%- if salt['pkg.version']('gdm') %}
+{%- if salt.pkg.version('gdm') %}
 cmd_{{ stigId }}-enableBanner:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --type bool --set /apps/gdm/simple-greeter/banner_message_enable true'

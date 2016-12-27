@@ -25,7 +25,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if not salt['pkg.version'](svcNam) %}
+{%- if not salt.pkg.version(svcNam) %}
 pkg_{{ stigId }}-{{ svcNam }}:
   pkg.installed:
     - name: '{{ svcNam }}'

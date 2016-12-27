@@ -21,7 +21,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search'](initTab, '^id:5:') %}
+{%- if salt.file.search(initTab, '^id:5:') %}
 cmd_{{ stigId }}-x11warn:
   cmd.run:
     - name: 'echo "Default run-level enables X11. Will be disabled at next system-boot."'

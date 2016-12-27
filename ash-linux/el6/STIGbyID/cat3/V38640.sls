@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('abrt') %}
+{%- if salt.pkg.version('abrt') %}
 svc_{{ stigId }}-abrtdEnabled:
   service.disabled:
     - name: 'abrtd'

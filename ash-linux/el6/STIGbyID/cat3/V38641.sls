@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('at') %}
+{%- if salt.pkg.version('at') %}
 svc_{{ stigId }}-atdEnabled:
   service.disabled:
     - name: 'atd'

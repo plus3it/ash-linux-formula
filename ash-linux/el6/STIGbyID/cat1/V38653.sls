@@ -19,7 +19,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version'](pkgName) %}
+{%- if salt.pkg.version(pkgName) %}
 file_{{ stigId }}-snmpd:
   file.comment:
     - name: '{{ chkFile }}'

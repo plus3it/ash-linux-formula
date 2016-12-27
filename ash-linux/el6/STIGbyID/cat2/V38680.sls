@@ -25,7 +25,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.file_exists'](checkFile) %}
+{%- if salt.file.file_exists(checkFile) %}
 file_{{ stigId }}-repl:
   file.replace:
     - name: '{{ checkFile }}'

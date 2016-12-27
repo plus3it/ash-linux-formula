@@ -33,8 +33,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['pkg.version']('gdm') %}
-  {%- if salt['file.file_exists']('/etc/issue') %}
+{%- if salt.pkg.version('gdm') %}
+  {%- if salt.file.file_exists('/etc/issue') %}
 cmd_{{ stigId }}-setBanner:
   cmd.run:
     - name: '/usr/bin/gconftool-2 --direct --config-source=xml:readwrite:$HOME/.gconf --type string --set /apps/gdm/simple-greeter/banner_message_text "$(cat /etc/issue)"'

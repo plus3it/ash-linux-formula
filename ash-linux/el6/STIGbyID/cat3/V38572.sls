@@ -59,14 +59,14 @@ script_V{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
     - cwd: /root
 
-{%- if not salt['file.file_exists'](checkFile) %}
+{%- if not salt.file.file_exists(checkFile) %}
 
 #file did not exist when jinja templated the file; file will be configured 
 #by authconfig.sls in the include statement. 
 #use macro to set the parameter
 {{ set_pam_param(stig_id, checkFile, param_name, param_value, notify_change) }}
 
-{%- elif not salt['file.search'](checkFile, '[ \t]*' + param_name + '=' + param_value + '[\s]+') %}
+{%- elif not salt.file.search(checkFile, '[ \t]*' + param_name + '=' + param_value + '[\s]+') %}
 
 #file {{ checkFile }} exists
 #parameter {{ param_name }} not set, or not set correctly

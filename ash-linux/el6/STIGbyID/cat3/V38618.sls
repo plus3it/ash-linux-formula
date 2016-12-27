@@ -18,7 +18,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('avahi') %}
+{%- if salt.pkg.version('avahi') %}
 svc_{{ stigId }}-avahiDisabled:
   service.disabled:
     - name: 'avahi-daemon'

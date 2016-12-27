@@ -24,9 +24,9 @@ script_{{ stigId }}-describe:
 
 {%- set svcName = 'netconsole' %}
 
-{%- if salt['pkg.version']('initscripts') %}
+{%- if salt.pkg.version('initscripts') %}
 # Ensure netconsole service is disabled and deactivated
-  {%- if salt['service.enabled'](svcName) %}
+  {%- if salt.service.enabled(svcName) %}
 svc_{{ stigId }}-{{ svcName }}Disabled:
   service.disabled:
     - name: '{{ svcName }}'
@@ -39,7 +39,7 @@ notify_{{ stigId }}-{{ svcName }}Disabled:
     - name: 'echo "The ''{{ svcName }}'' service is already disabled"'
   {%- endif %}
 
-  {%- if salt['service.status'](svcName) %}
+  {%- if salt.service.status(svcName) %}
 svc_{{ stigId }}-{{ svcName }}Dead:
   service.dead:
     - name: '{{ svcName }}'

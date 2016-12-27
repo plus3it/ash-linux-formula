@@ -19,7 +19,7 @@
 
 {%- set auditConf = '/etc/audit/auditd.conf' %}
 {%- set logParm = 'space_left' %}
-{%- if salt['file.directory_exists']('/var/log/audit') %}
+{%- if salt.file.directory_exists('/var/log/audit') %}
   {%- set auditDir = '/var/log/audit' %}
 {%- else %}
   {%- set auditDir = '/var/log/' %}
@@ -44,7 +44,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- if salt['file.search'](auditConf, logParm + ' = ') %}
+{%- if salt.file.search(auditConf, logParm + ' = ') %}
 
 file_{{ stigId }}-setVal:
   file.replace:

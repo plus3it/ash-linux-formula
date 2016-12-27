@@ -65,7 +65,7 @@ remount_V38654-{{ mountPoint }}:
     - opts: '{{ optString }}'
 
     # Update fstab (if necessary)
-    {%- if salt['file.search']('/etc/fstab', '^' + remountDev + '[ 	]') %}
+    {%- if salt.file.search('/etc/fstab', '^' + remountDev + '[ 	]') %}
 notify_V38654-{{ mountPoint }}-fixFstab:
   cmd.run:
     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'

@@ -26,7 +26,7 @@ notify_{{ stigId }}-status:
 
 {%- set fileList = salt['file.find'](chkDir, type='f') %}
 {%- for fileCheck in fileList %}
-{%- if not salt['file.get_group'](fileCheck) == 'root' %}
+{%- if not salt.file.get_group(fileCheck) == 'root' %}
 notify_{{ stigId }}-{{ fileCheck }}:
   cmd.run:
     - name: 'echo "Info: resetting ''{{ fileCheck }}'' group-ownership to ''root''."'

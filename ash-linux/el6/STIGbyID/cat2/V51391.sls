@@ -24,7 +24,7 @@ script_{{ stigId }}-describe:
     - cwd: '/root'
 
 # See if AIDE package is installed
-{%- if salt['pkg.version']('aide') %}
+{%- if salt.pkg.version('aide') %}
   # Extract DB directory-path from AIDE config file
   {%- set aideDbDir = salt['cmd.shell']('grep "define DBDIR" /etc/aide.conf | cut -d" " -f 3') %}
   {%- if aideDbDir %}
@@ -34,7 +34,7 @@ script_{{ stigId }}-describe:
     {%- set aideDbPath = aideDbDir + '/' + aideDbFile %}
 
     # Check if DB file-path exists
-    {%- if salt['file.file_exists'](aideDbPath) %}
+    {%- if salt.file.file_exists(aideDbPath) %}
 notify_{{ stigId }}-foundfile:
   cmd.run:
     - name: 'echo "The configured AIDE database [{{ aideDbPath }}] exists" && exit 0'
@@ -54,6 +54,6 @@ notify_{{ stigId }}-foundfile:
 # Alert if AIDE not installed
 {%- else %}
 warn_{{ stigId }}-noAide:
-   cmd.run:
-     - name: 'echo "WARN: The AIDE tools are not installed"'
+  cmd.run:
+    - name: 'echo "WARN: The AIDE tools are not installed"'
 {%- endif %}

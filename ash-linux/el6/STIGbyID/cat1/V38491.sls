@@ -18,7 +18,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['file.file_exists'](hostsEquiv) %}
+{%- if salt.file.file_exists(hostsEquiv) %}
 file_{{ stigId }}-hostsEquiv:
   file.absent:
     - name: {{ hostsEquiv }}
@@ -33,7 +33,7 @@ file_{{ stigId }}-hostsEquiv:
 {%- set userInfo = salt['user.info'](userName) %}
 {%- set userHome = userInfo['home'] %}
 {%- set userRhost = userHome + '/.rhosts' %}
-{%- if salt['file.file_exists'](userRhost) %}
+{%- if salt.file.file_exists(userRhost) %}
 notify-{{ userName }}:
   cmd.run: 
     - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..." ; exit 1'

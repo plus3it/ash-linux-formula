@@ -17,7 +17,7 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- if salt['pkg.version']('openldap-servers') %}
+{%- if salt.pkg.version('openldap-servers') %}
 svc_{{ stigId }}-openldapEnabled:
   service.disabled:
     - name: 'slapd'
