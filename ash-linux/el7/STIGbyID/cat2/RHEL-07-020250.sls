@@ -38,8 +38,8 @@ notify_{{ stig_id }}-lastUpdate:
     - cwd: /root
     - stateful: True
 
-upgrade__{{ stig_id }}:
-  pkg.uptodate
+upgrade_{{ stig_id }}:
+  pkg.uptodate:
     - require:
       - cmd: notify_{{ stig_id }}-lastUpdate
 {%- endif %}
