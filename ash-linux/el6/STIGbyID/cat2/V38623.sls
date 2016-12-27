@@ -73,7 +73,6 @@ owner_{{ stigId }}-{{ logFacility }}:
   file.managed:
     - name: '{{ logFile }}'
     - mode: '0600'
-    - replace: false
 
     {%- else %}
 {%- set logFile = logFile[1:] %}
@@ -85,7 +84,6 @@ owner_{{ stigId }}-{{ logFacility }}:
   file.managed:
     - name: '{{ logFile }}'
     - user: root
-    - replace: false
 
     {%- endif %}
   {%- endif %}
