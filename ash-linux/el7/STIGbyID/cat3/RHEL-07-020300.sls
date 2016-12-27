@@ -26,7 +26,7 @@ script_{{ stig_id }}-describe:
 {%- else %}
   {%- for user in userList %}
     {%- set gid = salt.user.info(user)['gid'] %}
-    {%- if not salt.cmd.run('grep :' + gid|string  + ': /etc/group') %}
+    {%- if not salt.cmd.shell('grep :' + gid|string  + ': /etc/group') %}
 test_{{ stig_id }}-{{ user }}:
   group.present:
     - name: 'stig_{{ user }}'

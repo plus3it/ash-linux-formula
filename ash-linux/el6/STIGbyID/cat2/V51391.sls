@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000018
 # Finding Level:	Medium
 #
-#     A file integrity baseline must be created. For AIDE to be effective, 
-#     an initial database of "known-good" information about files must be 
-#     captured and it should be able to be verified against the installed 
+#     A file integrity baseline must be created. For AIDE to be effective,
+#     an initial database of "known-good" information about files must be
+#     captured and it should be able to be verified against the installed
 #     files.
 #
 #  CCI: CCI-000366
@@ -26,10 +26,10 @@ script_{{ stigId }}-describe:
 # See if AIDE package is installed
 {%- if salt['pkg.version']('aide') %}
   # Extract DB directory-path from AIDE config file
-  {%- set aideDbDir = salt['cmd.run']('grep "define DBDIR" /etc/aide.conf | cut -d" " -f 3') %}
+  {%- set aideDbDir = salt['cmd.shell']('grep "define DBDIR" /etc/aide.conf | cut -d" " -f 3') %}
   {%- if aideDbDir %}
     # Extract DB file name from AIDE config file
-    {%- set aideDbFile = salt['cmd.run']('grep -e "^database=.*/" /etc/aide.conf | cut -d "/" -f 2') %}
+    {%- set aideDbFile = salt['cmd.shell']('grep -e "^database=.*/" /etc/aide.conf | cut -d "/" -f 2') %}
     # Assemble DB file-path from prior
     {%- set aideDbPath = aideDbDir + '/' + aideDbFile %}
 

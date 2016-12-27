@@ -5,9 +5,9 @@
 # SCAP Security ID:	CCE-26648-6
 # Finding Level:	Low
 #
-#     The audit system must be configured to audit modifications to the 
-#     systems network configuration. The network environment should not be 
-#     modified by anything other than administrator action. Any change to 
+#     The audit system must be configured to audit modifications to the
+#     systems network configuration. The network environment should not be
+#     modified by anything other than administrator action. Any change to
 #     network parameters should be audited.
 #
 ############################################################
@@ -36,7 +36,7 @@ script_V{{ stig_id }}-describe:
 # Will probably want to look at method to do all the edits in one pass:
 # Current method limits rollback capability
 ######################################################################
-{%- if not salt['cmd.run']('grep -c -E -e "' + sPattern + '" ' + audRulCfg ) == '0' %}
+{%- if not salt['cmd.shell']('grep -c -E -e "' + sPattern + '" ' + audRulCfg ) == '0' %}
 file_V{{ stig_id }}-sethostname_setdomainname:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'
@@ -45,7 +45,7 @@ file_V{{ stig_id }}-sethostname_setdomainname:
   file.append:
     - name: '{{ audRulCfg }}'
     - text: |
-        
+
         # Audit all network configuration modifications (per STIG-ID V-{{ stig_id }})
         {{ sPattern }}
 {%- endif %}
@@ -72,7 +72,7 @@ fileAdd_V{{ stig_id }}-auditRules_{{ file }}:
   file.append:
     - name: '{{ audRulCfg }}'
     - text: |
-        
+
         # Monitor {{ file }} for changes (per STIG-ID V-{{ stig_id }})
         {{ fullRule }}
     - unless: 'grep -c -E -e "{{ fullRule }}" {{ audRulCfg }}'

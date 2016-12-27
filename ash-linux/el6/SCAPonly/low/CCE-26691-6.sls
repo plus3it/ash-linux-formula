@@ -45,7 +45,7 @@ script_{{ scapId }}-describe:
   {%- set rule = '-w' + ' ' + file + ' ' + audit_options %}
 
   # See if the rule already exists
-  {%- if not salt['cmd.run']('grep -c -E -e "' + rule + '" ' + audRulCfg ) == '0' %}
+  {%- if not salt['cmd.shell']('grep -c -E -e "' + rule + '" ' + audRulCfg ) == '0' %}
 
 addRule_{{ scapId }}-auditRules_{{ file }}:
   cmd.run:
