@@ -1,13 +1,67 @@
 language: python
+sudo: required
+env:
+  global:
+    - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
+    - SEGFAULT_SIGNALS=all
+    - SALT_PILLARROOT=$TRAVIS_BUILD_DIR/tests/pillar/test-linux-main
+  matrix:
+    - OS_VERSION=6 SALT_STATE=ash-linux.el6
+    - OS_VERSION=7 SALT_STATE=ash-linux.el7
 
-python:
-  - "2.6"
-  - "2.7"
-  - "3.3"
-  - "3.4"
+services:
+  - docker
 
-sudo: false
+before_install:
+  - sudo apt-get update
+  - |
+    echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | \
+      sudo tee /etc/default/docker > /dev/null
+  - sudo service docker restart
+  - sleep 5
+  - sudo docker pull centos:centos${OS_VERSION}
 
-install: true
+install:
+  - |
+    sudo docker run --detach --privileged \
+      --volume="${TRAVIS_BUILD_DIR}":"${TRAVIS_BUILD_DIR}":ro \
+      --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
+      --name centos-${OS_VERSION} centos:${OS_VERSION} init
+  - |
+    sudo docker exec centos-${OS_VERSION} yum -y install \
+      https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el${OS_VERSION}.noarch.rpm
+  - |
+    sudo docker exec centos-${OS_VERSION} yum -y install \
+      $(<${TRAVIS_BUILD_DIR}/tests/requirements.txt) \
+      $(<${TRAVIS_BUILD_DIR}/tests/requirements-el${OS_VERSION}.txt)
+  - sudo docker exec centos-${OS_VERSION} salt-call --versions-report
 
-script: true
+script:
+  - |
+    sudo docker exec centos-${OS_VERSION} salt-call --local \
+      --retcode-passthrough --log-file-level debug \
+      --file-root=$TRAVIS_BUILD_DIR \
+      --pillar-root=$SALT_PILLARROOT \
+      state.show_sls \
+      $SALT_STATE
+  - |
+    sudo docker exec centos-${OS_VERSION} salt-call --local \
+      --retcode-passthrough --log-file-level debug \
+      --file-root=$TRAVIS_BUILD_DIR \
+      --pillar-root=$SALT_PILLARROOT \
+      state.sls \
+      $SALT_STATE \
+      mock=True
+
+after_failure:
+  - sudo docker exec centos-${OS_VERSION} salt-call --local grains.items
+  - sudo docker exec centos-${OS_VERSION} sh -c set
+  - sudo docker exec centos-${OS_VERSION} more /var/log/salt/* | cat
+
+after_script:
+  - sudo docker stop centos-${OS_VERSION}
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
