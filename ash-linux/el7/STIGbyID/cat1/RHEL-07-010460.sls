@@ -19,7 +19,7 @@
 {%- set mainCfg = '/boot/grub2/grub.cfg' %}
 {%- set srcCfg = '/etc/grub.d/10_linux' %}
 {%- set dummyPass = '4BadPassw0rd' %}
-{%- set grubPass = salt.cmd.run('printf "' + dummyPass + 
+{%- set grubPass = salt.cmd.run('printf "' + dummyPass +
                        '\n' + dummyPass + '\n" | grub2-mkpasswd-pbkdf2 ' +
                        '2>&1 | grep "password is" ' +
                        '| sed "s/^.*password is //"') %}
@@ -29,7 +29,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(mainCfg, 'password_pbkdf2') %}
+{%- if salt.file.search(mainCfg, 'password_pbkdf2', ignore_if_missing=True) %}
 script_{{ stig_id }}-{{ mainCfg }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Password - or pointer - already set in {{ mainCfg }}.''\n"'
@@ -53,7 +53,7 @@ cmd_{{ stig_id }}-{{ mainCfg }}:
     - watch:
       - file: file_{{ stig_id }}-{{ srcCfg }}
   {%- endif %}
-{%- else %}
+{%- elif salt.file.file_exists(srcCfg) %}
 file_{{ stig_id }}-{{ srcCfg }}:
   file.append:
     - name: '{{ srcCfg }}'
@@ -67,4 +67,3 @@ cmd_{{ stig_id }}-{{ mainCfg }}:
     - watch:
       - file: file_{{ stig_id }}-{{ srcCfg }}
 {%- endif %}
-
