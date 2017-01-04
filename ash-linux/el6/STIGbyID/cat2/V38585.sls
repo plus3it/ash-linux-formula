@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000068
 # Finding Level:	Medium
 #
-#     The system boot loader must require authentication. Password 
-#     protection on the boot loader configuration ensures users with 
-#     physical access cannot trivially alter important bootloader settings. 
+#     The system boot loader must require authentication. Password
+#     protection on the boot loader configuration ensures users with
+#     physical access cannot trivially alter important bootloader settings.
 #     These include which kernel to use, and whether to enter ...
 #
 #  CCI: CCI-000213
@@ -26,7 +26,7 @@ script_{{ stig_id }}-describe:
     - cwd: '/root'
 
 # Check for compliant (SHA512) GRUB password - alert if not set
-{%- if salt.file.search(chkFile, '^password --encrypted \$6') %}
+{%- if salt.file.search(chkFile, '^password --encrypted \$6', ignore_if_missing=True) %}
 
 notify_{{ stig_id }}-wontFix:
   cmd.run:

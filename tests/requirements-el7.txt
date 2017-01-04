@@ -1,0 +1,4 @@
+grub2
+firewalld
+postfix
+sudo
