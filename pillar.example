@@ -61,3 +61,12 @@
 ##       nameservers
 ##         - nameserver1.I.P.addr
 ##         - nameserver2.I.P.addr
+#
+    # If using oscap to harden, which profile to select
+    # If unsure of available profiles, use `oscap info \
+    # "/usr/share/xml/scap/ssg/content/ssg-${OSVERS}-xccdf.xml"`
+    ## scap-profile: 'stig-rhel7-server-gui-upstream'
+    ## scap-profile: 'standard'
+    ## scap-profile: 'pci-dss'
+    ## scap-profile: 'C2S'
+    ## scap-profile: 'common.

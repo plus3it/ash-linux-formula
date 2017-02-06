@@ -63,10 +63,11 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ cfgFile }}'
     - pattern: '^\s{{ parmName }} .*$'
     - repl: '{{ parmName }} {{ parmValu }}'
-    - append_if_not_found: True
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} {{ parmValu }}
+        
+    - append_if_not_found: True
 
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:

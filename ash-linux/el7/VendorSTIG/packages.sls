@@ -1,0 +1,15 @@
+# This Salt state downloads the tools necessary to scan, 
+# remediate and report on the compliance-state of an EL7-based
+# instance.
+#
+#################################################################
+{%- set stig_id = 'VendorSTIG-top' %}
+{%- set helperLoc = 'ash-linux-formula/ash-linux/el7/VendorSTIG/files' %}
+
+packages_{{ stig_id }}-installed:
+  pkg.installed:
+    - pkgs:
+      - openscap
+      - openscap-scanner
+      - openscap-engine-sce
+      - scap-security-guide
