@@ -12,10 +12,10 @@
 {%- set dsXml = contentDir + '/ssg-' + dsos + osrel + '-ds.xml' %}
 {%- set cpeXml = contentDir + '/ssg-rhel7-cpe-dictionary.xml' %}
 {%- set xccdfXml = contentDir + '/ssg-' + dsos + osrel + '-xccdf.xml' %}
-{%- set scapProf = 'C2S' %}
+{%- set pillProf = salt.pillar.get('ash-linux:lookup:scap-profile', 'common') %}
 
 run_{{ stig_id }}-report:
   cmd.run:
-    - name: 'oscap xccdf eval --profile {{ scapProf }} --report {{ repDir }}/oscap-report_$(date "+%Y%m%d%H%M").html --results {{ repDir }}/oscap-results_$(date "+%Y%m%d%H%M").xml --cpe {{ cpeXml }} {{ xccdfXml }} > /dev/null 2&>1 || /bin/true'
+    - name: '(oscap xccdf eval --profile {{ pillProf }} --report {{ repDir }}/oscap-report_$(date "+%Y%m%d%H%M").html --results {{ repDir }}/oscap-results_$(date "+%Y%m%d%H%M").xml --cpe {{ cpeXml }} {{ xccdfXml }} ) > /dev/null || /bin/true'
     - cwd: '/root' 
 

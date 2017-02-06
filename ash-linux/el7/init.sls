@@ -1,2 +1,2 @@
 include:
-  - ash-linux.el7.STIGbyID
+  - ash-linux.el7.VendorSTIG

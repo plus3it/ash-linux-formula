@@ -9,7 +9,8 @@
 {%- set osrel = salt.grains.get('osmajorrelease') %}
 {%- set contentDir = '/usr/share/xml/scap/ssg/content' %}
 {%- set dsfile = 'ssg-' + dsos + osrel + '-ds.xml' %}
-{%- set scapProf = 'xccdf_org.ssgproject.content_profile_C2S' %}
+{%- set pillProf = salt.pillar.get('ash-linux:lookup:scap-profile', 'common') %}
+{%- set scapProf = 'xccdf_org.ssgproject.content_profile_' + pillProf %}
 
 run_{{ stig_id }}-remediate:
   cmd.run:
