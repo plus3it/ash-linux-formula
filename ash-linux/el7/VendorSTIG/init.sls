@@ -7,3 +7,5 @@
 
 include:
   - ash-linux.el7.VendorSTIG.packages
+  - ash-linux.el7.VendorSTIG.remediate
+  - ash-linux.el7.VendorSTIG.report
