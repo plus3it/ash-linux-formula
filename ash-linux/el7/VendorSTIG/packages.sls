@@ -9,6 +9,7 @@
 packages_{{ stig_id }}-installed:
   pkg.installed:
     - pkgs:
-      - openscap-scanner
       - openscap
+      - openscap-scanner
+      - openscap-engine-sce
       - scap-security-guide
