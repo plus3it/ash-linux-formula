@@ -13,5 +13,5 @@
 
 run_{{ stig_id }}-remediate:
   cmd.run:
-    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ contentDir }}/{{ dsfile }}'
+    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ contentDir }}/{{ dsfile }} > /dev/null 2>&1 || true'
     - cwd: '/root' 
