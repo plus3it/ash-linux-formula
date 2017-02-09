@@ -18,15 +18,6 @@
 #    CIS RHEL 7 Benchmark 1.1.0 :: 1.1.2
 #
 #################################################################
-{%- set stig_id = 'mount_option_tmp_nodev' %}
-{%- set helperLoc = 'ash-linux/el7/VendorSTIG/cat3/files' %}
-
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-
-
 # Standard outputter function
 diag_out() {
    echo "${1}"
