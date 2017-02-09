@@ -6,7 +6,11 @@
 {%- set stig_id = 'VendorSTIG-top' %}
 {%- set helperLoc = 'ash-linux-formula/ash-linux/el7/VendorSTIG/files' %}
 {%- set repDir = '/var/tmp' %}
-{%- set dsos = salt.grains.get('os')|lower %}
+{%- if salt.grains.get('os')|lower == 'redhat' %}
+  {%- set dsos = 'rhel' %}
+{%- else %}
+  {%- set dsos = salt.grains.get('os')|lower %}
+{%- endif %}
 {%- set osrel = salt.grains.get('osmajorrelease') %}
 {%- set contentDir = '/usr/share/xml/scap/ssg/content' %}
 {%- set dsXml = contentDir + '/ssg-' + dsos + osrel + '-ds.xml' %}
