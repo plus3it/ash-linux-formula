@@ -4,6 +4,4 @@
 #################################################################
 
 include:
-  - ash-linux.el7.VendorSTIG.cat3.mount_option_tmp_nodev
-  - ash-linux.el7.VendorSTIG.cat3.mount_option_tmp_noexec
-  - ash-linux.el7.VendorSTIG.cat3.mount_option_tmp_nosuid
+  - ash-linux.el7.VendorSTIG.cat3.mount_options_tmp
