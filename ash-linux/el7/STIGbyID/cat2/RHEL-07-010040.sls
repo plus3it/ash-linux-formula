@@ -29,5 +29,5 @@ file_{{ stig_id }}:
     - source: salt://{{ bannerText }}
     - user: root
     - group: root
-    - mode: 0444
+    - mode: 0644
 
