@@ -56,7 +56,7 @@ file_{{ stig_id }}-{{ parmValu }}:
     - source: salt://{{ helperLoc }}/issue.txt
     - user: 'root'
     - group: 'root'
-    - mode: 0444
+    - mode: 0644
 
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:

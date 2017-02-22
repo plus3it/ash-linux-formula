@@ -1,24 +1,22 @@
 # Finding ID:	
-# Version:	mount_option_tmp_noexec
+# Version:	mount_option_dev_shm_noexec
 # SRG ID:	
 # Finding Level:	low
 #
 # Rule Summary:
-#       The noexec mount option can be used to prevent binaries
-#       from being executed out of /tmp. Add the noexec option
-#       to the fourth column of /etc/fstab for the line which
-#       controls mounting of /tmp.
+#	Allowing users to execute binaries from world-writable
+#	directories such as /dev/shm can expose the system to
+#	potential compromise.
 #
 # CCI-xxxxxx CCI-xxxxxx
 #    NIST SP 800-53 Revision 4 :: CM-7
 #    NIST SP 800-53 Revision 4 :: MP-2
-#    CIS RHEL 7 Benchmark 1.1.0 :: 1.1.4
+#    CIS RHEL 7 Benchmark 1.1.0 :: 1.1.16
 #
 #################################################################
-
-{%- set stig_id = 'mount_option_tmp_noexec' %}
+{%- set stig_id = 'mount_option_dev_shm_noexec' %}
 {%- set helperLoc = 'ash-linux/el7/VendorSTIG/cat3/files' %}
-{%- set targMnt = '/tmp' %}
+{%- set targMnt = '/dev/shm' %}
 {%- set mntOpt = 'noexec' %}
 
 script_{{ stig_id }}-describe:
@@ -55,11 +53,14 @@ fix_{{ stig_id }}-{{ targMnt }}:
 
   {%- endif %}
 {%- else %}
-  {%- set mntDev = 'tmpfs' %}
-  {%- set mntDump = '0' %}
-  {%- set mntOpts = [ 'noauto', mntOpt ] %}
-  {%- set mntPass = '0' %}
-  {%- set mntFstype = 'tmpfs' %}
+  {%- set fstabMnts = salt.mount.active() %}
+  {%- set mntDev = fstabMnts[targMnt]['device'] %}
+  {%- set mntOpts = fstabMnts[targMnt]['opts'] %}
+  {%- set mntFstype = fstabMnts[targMnt]['fstype'] %}
+
+  {%- if not mntOpt in mntOpts %}
+    {% do mntOpts.append(mntOpt) %} 
+  {%- endif %}
 
 fix_{{ stig_id }}-{{ targMnt }}:
   module.run:
@@ -68,7 +69,7 @@ fix_{{ stig_id }}-{{ targMnt }}:
     - device: '{{ mntDev }}'
     - fstype: '{{ mntFstype }}'
     - opts: '{{ mntOpts|join(",") }}'
-    - dump: '{{ mntDump }}'
-    - pass_num: '{{ mntPass }}'
+    - dump: '0'
+    - pass_num: '0'
 
 {%- endif %}
