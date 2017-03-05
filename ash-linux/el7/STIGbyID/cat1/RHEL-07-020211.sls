@@ -2,13 +2,13 @@
 # Version:	RHEL-07-020211_rule
 # SRG ID:	SRG-OS-000445-GPOS-00199
 # Finding Level:	high
-# 
+#
 # Rule Summary:
 #	The operating system must enable the SELinux targeted policy.
 #
-# CCI-002165 CCI-002696 
-#    NIST SP 800-53 Revision 4 :: AC-3 (4) 
-#    NIST SP 800-53 Revision 4 :: SI-6 a 
+# CCI-002165 CCI-002696
+#    NIST SP 800-53 Revision 4 :: AC-3 (4)
+#    NIST SP 800-53 Revision 4 :: SI-6 a
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-020211' %}
@@ -39,5 +39,5 @@ set_{{ stig_id }}-selType:
 {%- else %}
 notify_{{ stig_id }}-selWarn:
   cmd.run:
-    - name: 'printf "STIG-compatible policy-modules not\n  installed. Install before\n  rebooting or system may fail\n  to properly restart." && exit 1'
+    - name: 'printf "WARNING: STIG-compatible policy-modules not\n  installed. Install before\n  rebooting or system may fail\n  to properly restart."'
 {%- endif %}

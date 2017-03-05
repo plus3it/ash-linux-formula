@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000273
 # Finding Level:	Low
 #
-#     The system must use SMB client signing for connecting to samba 
-#     servers using mount.cifs. Packet signing can prevent 
+#     The system must use SMB client signing for connecting to samba
+#     servers using mount.cifs. Packet signing can prevent
 #     man-in-the-middle attacks which modify SMB packets in transit.
 #
 #  CCI: CCI-000366
@@ -75,7 +75,7 @@ Cannot safely auto-remediate: no way of ensuring that\n
 CIFS server supports signed-connections - cannot assure\n
 the mount will continue to function if client-side\n
 mount-options are altered.\n
-MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
+MANUAL REMEDIATION REQUIRED.\n"'
 
 ##################################################################
 ## Following sections commented out as it's not safe to attempt
@@ -101,7 +101,7 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ## notify_{{ stigId }}-{{ mountPoint }}-fixFstab:
 ##   cmd.run:
 ##     - name: 'printf "\t* Updating /etc/fstab as necessary\n"'
-## 
+##
 ## fstab_{{ stigId }}-{{ mountPoint }}:
 ##   module.run:
 ##     - name: 'mount.set_fstab'
@@ -113,5 +113,5 @@ MANUAL REMEDIATION REQUIRED.\n" ; exit 1'
 ##################################################################
 
   {%- endif %}
-{%- endif %} 
+{%- endif %}
 {%- endfor %}

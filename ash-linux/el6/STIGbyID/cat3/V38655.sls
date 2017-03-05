@@ -5,8 +5,8 @@
 # SCAP Security ID:	CCE-27196-5
 # Finding Level:	Low
 #
-#     The noexec option must be added to removable media partitions. 
-#     Allowing users to execute binaries from removable media such as USB 
+#     The noexec option must be added to removable media partitions.
+#     Allowing users to execute binaries from removable media such as USB
 #     keys exposes the system to potential compromise.
 #
 #  CCI: CCI-000087
@@ -52,7 +52,7 @@ file_{{ stigId }}-appendUSBconf:
       - 'test -f {{ usbConf }}'
 
 ####################################################################
-# Define list of filesystem types that are normally only found on 
+# Define list of filesystem types that are normally only found on
 # mounted media devices
 ####################################################################
 {%- set mediaFStypes = 'iso9660 ntfs udf msdos fat vfat' %}
@@ -151,7 +151,7 @@ crosscheck_{{ stigId }}-{{ mountPoint }}:
   {%- else %}
 crosscheck_{{ stigId }}-{{ mountPoint }}:
   cmd.run:
-    - name: 'printf "NOTICE: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n" ; exit 1'
+    - name: 'printf "WARNING: ''{{ mountPoint }}'' ({{ fsType }}) not defined in /etc/fstab\n"'
   {%- endif %}
 
   # See if mounted filesystem has 'noexec' opton set

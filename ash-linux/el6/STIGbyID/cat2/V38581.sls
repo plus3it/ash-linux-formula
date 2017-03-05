@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000066
 # Finding Level:	Medium
 #
-#     The system boot loader configuration file(s) must be group-owned by 
-#     root. The "root" group is a highly-privileged group. Furthermore, the 
+#     The system boot loader configuration file(s) must be group-owned by
+#     root. The "root" group is a highly-privileged group. Furthermore, the
 #     group-owner of this file should not have any access privileges anyway.
 #
 #  CCI: CCI-000366
@@ -49,7 +49,6 @@ notify_{{ stig_id }}-{{ chkFile }}:
 * NOTE: /boot/{{ chkFile }} is superfluous. Remove\n
 *       file to prevent unexpected behaviors.\n
 *********************************************\n
-" >&2 && exit 1'
+"'
 {%- endif %}
 {%- endfor %}
-
