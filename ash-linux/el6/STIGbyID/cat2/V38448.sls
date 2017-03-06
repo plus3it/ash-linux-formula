@@ -30,7 +30,7 @@ notify_{{ stigId }}-ownership:
 {%- else %}
 notify_{{ stigId }}-ownership:
   cmd.run:
-    - name: 'echo "WARNING: ''{{ checkFile }}'' not group-owned by ''root''. Fixing..." ; exit 1'
+    - name: 'echo "WARNING: ''{{ checkFile }}'' not group-owned by ''root''. Fixing..."'
 
 file_{{ stigId }}-setOwn:
   file.managed:

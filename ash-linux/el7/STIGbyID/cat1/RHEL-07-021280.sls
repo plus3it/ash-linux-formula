@@ -46,7 +46,7 @@ notify_{{ stig_id }}-{{ grub2cfg }}:
   {%- else %}
 notify_{{ stig_id }}-{{ grub2cfg }}:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''No boot-menu entries have FIPS-mode enabled.''\n" && exit 1'
+    - name: 'printf "\nchanged=no comment=''WARNING: No boot-menu entries have FIPS-mode enabled.''\n"'
     - cwd: /root
     - stateful: True
   {%- endif %}
@@ -59,14 +59,14 @@ notify_{{ stig_id }}-{{ fipsChk }}:
   {%- else %}
 notify_{{ stig_id }}-{{ fipsChk }}:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''FIPS-mode not active in {{ fipsChk }}.''\n" && exit 1'
+    - name: 'printf "\nchanged=no comment=''WARNING: FIPS-mode not active in {{ fipsChk }}.''\n"'
     - cwd: /root
     - stateful: True
   {%- endif %}
 {%- else %}
 notify_{{ stig_id }}-kernWarn:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''STIG-compatible kernel-extensions not available.''\n" && exit 1'
+    - name: 'printf "\nchanged=no comment=''WARNING: STIG-compatible kernel-extensions not available.''\n"'
     - cwd: /root
     - stateful: True
 {%- endif %}

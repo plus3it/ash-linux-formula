@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000019
 # Finding Level:	High
 #
-#     There must be no .rhosts or hosts.equiv files on the system. Trust 
-#     files are convenient, but when used in conjunction with the 
+#     There must be no .rhosts or hosts.equiv files on the system. Trust
+#     files are convenient, but when used in conjunction with the
 #     R-services, they can allow unauthenticated access to a system.
 #
 ############################################################
@@ -35,14 +35,14 @@ file_{{ stigId }}-hostsEquiv:
 {%- set userRhost = userHome + '/.rhosts' %}
 {%- if salt.file.file_exists(userRhost) %}
 notify-{{ userName }}:
-  cmd.run: 
-    - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..." ; exit 1'
+  cmd.run:
+    - name: 'echo "WARNING: User ''{{ userName }}'' has an ''.rhosts'' file. Removing..."'
 cmd_{{ stigId }}-{{ userRhost }}_remove:
-  file.absent: 
+  file.absent:
     - name: '{{ userRhost }}'
 {%- else %}
 notify-{{ userName }}:
-  cmd.run: 
+  cmd.run:
     - name: 'echo "Info: User ''{{ userName }}'' does not have an ''.rhosts'' file."'
 {%- endif %}
 {%- endfor %}

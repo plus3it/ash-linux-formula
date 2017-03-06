@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000067
 # Finding Level:	Medium
 #
-#     The system boot loader configuration file(s) must have mode 0600 or 
-#     less permissive. Proper permissions ensure that only the root user 
+#     The system boot loader configuration file(s) must have mode 0600 or
+#     less permissive. Proper permissions ensure that only the root user
 #     can modify important boot parameters.
 #
 #  CCI: CCI-000366
@@ -49,7 +49,6 @@ notify_{{ stig_id }}-{{ chkFile }}:
 * NOTE: /boot/{{ chkFile }} is superfluous. Remove\n
 *       file to prevent unexpected behaviors.\n
 *********************************************\n
-" >&2 && exit 1'
+"'
 {%- endif %}
 {%- endfor %}
-

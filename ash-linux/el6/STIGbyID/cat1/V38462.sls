@@ -4,7 +4,7 @@
 #
 #      Ensuring all packages' cryptographic signatures are valid prior
 #      to installation ensures the provenance of the software and
-#      protects against malicious tampering. 
+#      protects against malicious tampering.
 #
 ###########################################################################
 
@@ -27,7 +27,7 @@ script_{{ stigId }}-describe:
   {%- if salt.file.search(checkFile,'^nosignature') %}
 notify_{{ stigId }}-{{ checkFile }}:
   cmd.run:
-    - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing." ; exit 1'
+    - name: 'echo "WARNING: ''nosignature'' option set in ''{{ checkFile }}''. Fixing."'
 
 comment_{{ stigId }}-{{ checkFile }}:
   file.comment:
@@ -44,4 +44,3 @@ notify_{{ stigId }}-{{ checkFile }}:
     - name: 'echo "Info: Configuration-file ''{{ checkFile }}'' does not exist"'
 {%- endif %}
 {%- endfor %}
-

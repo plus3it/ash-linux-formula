@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000036
 # Finding Level:	Medium
 #
-#     The /etc/gshadow file must be owned by root. The "/etc/gshadow" file 
-#     contains group password hashes. Protection of this file is critical 
+#     The /etc/gshadow file must be owned by root. The "/etc/gshadow" file
+#     contains group password hashes. Protection of this file is critical
 #     for system security.
 #
 #  CCI: CCI-000366
@@ -30,7 +30,7 @@ notify_{{ stigId }}-ownership:
 {%- else %}
 notify_{{ stigId }}-ownership:
   cmd.run:
-    - name: 'echo "WARNING: ''{{ chkFile }}'' not owned by ''root''. Fixing..." ; exit 1'
+    - name: 'echo "WARNING: ''{{ chkFile }}'' not owned by ''root''. Fixing..."'
 
 file_{{ stigId }}:
   file.managed:

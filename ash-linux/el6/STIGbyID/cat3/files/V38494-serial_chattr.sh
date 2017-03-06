@@ -46,8 +46,8 @@ else
       exit 0
    else
       printf "\n"
-      printf "changed=no comment='Faile to set immutable flag "
+      printf "changed=no comment='Failed to set immutable flag "
       printf "on ${MODFILE}.'\n"
-      exit x
+      exit 1
    fi
 fi

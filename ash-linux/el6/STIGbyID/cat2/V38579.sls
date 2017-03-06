@@ -3,7 +3,7 @@
 # Version:	RHEL-06-000065
 # Finding Level:	Medium
 #
-#     The system boot loader configuration file(s) must be owned by root. 
+#     The system boot loader configuration file(s) must be owned by root.
 #     Only root should be able to modify important boot parameters.
 #
 #  CCI: CCI-000366
@@ -47,6 +47,6 @@ notify_{{ stig_id }}-{{ chkFile }}:
 * NOTE: /boot/{{ chkFile }} is superfluous. Remove\n
 *       file to prevent unexpected behaviors.\n
 *********************************************\n
-" >&2 && exit 1'
+"'
 {%- endif %}
 {%- endfor %}
