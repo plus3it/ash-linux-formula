@@ -1,20 +1,18 @@
-# STIG URL: http://www.stigviewer.com/stig/red_hat_enterprise_linux_6/2014-06-11/finding/V-38617
-# Finding ID:	V-38617
-# Version:	RHEL-06-000243
-# Finding Level:	Medium
+# Finding URL:	https://www.tenable.com/plugins/index.php?view=single&id=71049
+# Family:	Miscellaneous
+# Nessus ID:	71049
+# Bugtraq ID:	
+# CVE ID:	
+# Finding Level:	low
 #
-#     The SSH daemon must be configured to use only FIPS 140-2 approved 
-#     ciphers. Approved algorithms should impart some level of confidence 
-#     in their implementation. These are also required for compliance.
-#
-#  CCI: CCI-001144
-#  NIST SP 800-53 :: SC-13
-#  NIST SP 800-53A :: SC-13.1
+#     The SSH daemon must be configured to use only strong MAC
+#     algorithms. Configured algorithms should not allow MD5
+#     or 96-bit MAC algorithms.
 #
 ############################################################
 
-{%- set stigId = 'V38617' %}
-{%- set helperLoc = 'ash-linux/el6/STIGbyID/cat2/files' %}
+{%- set stigId = 'Nessus-71049' %}
+{%- set helperLoc = 'ash-linux/el6/Nessus/low/files' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'Ciphers' %}
 {%- set parmVal = 'aes128-ctr,aes192-ctr,aes256-ctr,arcfour256,arcfour128,arcfour' %}
@@ -37,7 +35,7 @@ file_{{ stigId }}-append:
     - name: '{{ cfgFile }}'
     - text:
       - ' '
-      - '# SSH service must allow only FIPS 140-2 ciphers (per STIG V-38617)'
+      - '# SSH service must allow only FIPS 140-2 ciphers (per {{ stigId }})'
       - '{{ parmName }} {{ parmVal }}'
 {%- endif %}
 
