@@ -1,13 +1,13 @@
 # Finding URL:	https://www.tenable.com/plugins/index.php?view=single&id=71049
 # Family:	Miscellaneous
-# Nessus ID:	71049
+# Nessus ID:	70658
 # Bugtraq ID:	
 # CVE ID:	
 # Finding Level:	low
 #
-#     The SSH daemon must be configured to use only strong MAC
-#     algorithms. Configured algorithms should not allow MD5
-#     or 96-bit MAC algorithms.
+#     The SSH daemon must be configured to use only strong 
+#     encryption-ciphers. Configured ciphers should not allow
+#     use of CBC-based modes.
 #
 ############################################################
 
