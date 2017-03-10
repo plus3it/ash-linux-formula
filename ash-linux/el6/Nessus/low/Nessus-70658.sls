@@ -1,4 +1,4 @@
-# Finding URL:	https://www.tenable.com/plugins/index.php?view=single&id=71049
+# Finding URL:	https://www.tenable.com/plugins/index.php?view=single&id=70658
 # Family:	Miscellaneous
 # Nessus ID:	70658
 # Bugtraq ID:	
@@ -11,7 +11,7 @@
 #
 ############################################################
 
-{%- set stigId = 'Nessus-71049' %}
+{%- set stigId = 'Nessus-70658' %}
 {%- set helperLoc = 'ash-linux/el6/Nessus/low/files' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'Ciphers' %}
