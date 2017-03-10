@@ -95,7 +95,6 @@ include:
   - ash-linux.el6.STIGbyID.cat2.V38612
   - ash-linux.el6.STIGbyID.cat2.V38613
   - ash-linux.el6.STIGbyID.cat2.V38615
-  - ash-linux.el6.STIGbyID.cat2.V38617
   - ash-linux.el6.STIGbyID.cat2.V38619
   - ash-linux.el6.STIGbyID.cat2.V38620
   - ash-linux.el6.STIGbyID.cat2.V38621
