@@ -5,4 +5,5 @@ include:
 include:
   - ash-linux.stig
   - ash-linux.scap
+  - ash-linux.iavm
 {%- endif %}
