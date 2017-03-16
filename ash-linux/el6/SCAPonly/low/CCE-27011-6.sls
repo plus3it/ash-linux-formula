@@ -8,9 +8,9 @@
 #
 # Rule Summary: Disable Kernel Support for USB via Bootloader Configuration
 #
-# Rule Text: Disabling the USB subsystem within the Linux kernel at 
-#            system boot will protect against potentially malicious USB 
-#            devices, although it is only practical in specialized 
+# Rule Text: Disabling the USB subsystem within the Linux kernel at
+#            system boot will protect against potentially malicious USB
+#            devices, although it is only practical in specialized
 #            systems.
 #
 #################################################################
@@ -25,7 +25,10 @@ script_{{ scapId }}-describe:
     - cwd: '/root'
 
 # Disable USB at kernel load
-{%- if salt['file.search'](grubCfgFile, 'kernel') and not salt['file.search'](grubCfgFile, 'kernel.*nousb') %}
+{%-
+    if salt['file.search'](grubCfgFile, 'kernel', ignore_if_missing=True) and not
+       salt['file.search'](grubCfgFile, 'kernel.*nousb', ignore_if_missing=True)
+%}
 
 file_{{ scapId }}-repl:
   file.replace:
@@ -45,4 +48,3 @@ status_{{ scapId }}:
     - name: 'echo "Auditing already enabled at boot"'
 
 {%- endif %}
-

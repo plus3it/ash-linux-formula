@@ -6,8 +6,15 @@ env:
     - SEGFAULT_SIGNALS=all
     - SALT_PILLARROOT=$TRAVIS_BUILD_DIR/tests/pillar/test-linux-main
   matrix:
-    - OS_VERSION=6 SALT_STATE=ash-linux.el6
-    - OS_VERSION=7 SALT_STATE=ash-linux.el7
+    - OS_VERSION=6 SALT_STATE=ash-linux.stig
+    - OS_VERSION=7 SALT_STATE=ash-linux.stig
+    - OS_VERSION=6 SALT_STATE=ash-linux.iavm
+    - OS_VERSION=7 SALT_STATE=ash-linux.iavm
+    - OS_VERSION=6 SALT_STATE=ash-linux.scap
+    - OS_VERSION=7 SALT_STATE=ash-linux.scap
+    - OS_VERSION=6 SALT_STATE=ash-linux.vendor
+    - OS_VERSION=7 SALT_STATE=ash-linux.vendor
+    - OS_VERSION=7 SALT_STATE=ash-linux.el7.stig
 
 services:
   - docker
