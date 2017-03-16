@@ -1,4 +1,5 @@
-include:
-  - ash-linux.el7.STIGbyID.cat1
-  - ash-linux.el7.STIGbyID.cat2
-  - ash-linux.el7.STIGbyID.cat3
+Print ash-linux el7 stig baseline help:
+  test.show_notification:
+    - text: |
+        The `ash-linux.stig` baseline for EL7 is currently in beta. To apply
+        it, please use the state: `ash-linux.el7.stig`

@@ -1,9 +1,9 @@
-{%- if grains['osmajorrelease'] == '7' %}
-include:
-  - ash-linux.el7
-{%- elif grains['osmajorrelease'] == '6' %}
-include:
-  - ash-linux.stig
-  - ash-linux.scap
-  - ash-linux.iavm
-{%- endif %}
+Print ash-linux baseline help:
+  test.show_notification:
+    - text: |
+        Available ash-linux baselines include:
+            ash-linux.stig
+            ash-linux.scap (EL6 only)
+            ash-linux.iavm
+            ash-linux.vendor (EL7 only)
+        See https://github.com/plus3it/ash-linux-formula for more details.
