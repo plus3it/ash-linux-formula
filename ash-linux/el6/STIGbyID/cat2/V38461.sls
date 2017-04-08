@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000044
 # Finding Level:	Medium
 #
-#     The /etc/group file must have mode 0644 or less permissive. The 
-#     "/etc/group" file contains information regarding groups that are 
-#     configured on the system. Protection of this file is important for 
+#     The /etc/group file must have mode 0644 or less permissive. The
+#     "/etc/group" file contains information regarding groups that are
+#     configured on the system. Protection of this file is important for
 #     system security.
 #
 #  CCI: CCI-000366
@@ -28,3 +28,4 @@ file_{{ stigId }}:
   file.managed:
     - name: '{{ chkFile }}'
     - mode: '0644'
+    - replace: False

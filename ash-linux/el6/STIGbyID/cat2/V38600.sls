@@ -5,9 +5,9 @@
 # SCAP Security ID:	CCE-27001-7
 # Finding Level:	Medium
 #
-#     The system must not send ICMPv4 redirects by default. Sending ICMP 
-#     redirects permits the system to instruct other systems to update 
-#     their routing information. The ability to send ICMP redirects is only 
+#     The system must not send ICMPv4 redirects by default. Sending ICMP
+#     redirects permits the system to instruct other systems to update
+#     their routing information. The ability to send ICMP redirects is only
 #     appropriate for routers.
 #
 #  CCI: CCI-000366
@@ -39,10 +39,11 @@ sysctl_V{{ stig_id }}-noRedirects:
 # This should *NEVER* be needed on a normal system
 create_V{{ stig_id }}-{{ checkFile }}:
   file.managed:
-  - name: '{{ checkFile }}'
-  - onlyif: 'test -f {{ checkFile }}'
+    - name: '{{ checkFile }}'
+    - replace: False
+    - onlyif: 'test -f {{ checkFile }}'
 
-# Need to run the next two because security scanners often 
+# Need to run the next two because security scanners often
 # don't understand "secure by default" settings
 comment_V{{ stig_id }}-{{ parmName }}:
   file.append:

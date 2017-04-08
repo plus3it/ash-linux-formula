@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000034
 # Finding Level:	Medium
 #
-#     The /etc/shadow file must be group-owned by root. The "/etc/shadow" 
-#     file stores password hashes. Protection of this file is critical for 
+#     The /etc/shadow file must be group-owned by root. The "/etc/shadow"
+#     file stores password hashes. Protection of this file is critical for
 #     system security.
 #
 #  CCI: CCI-000366
@@ -26,3 +26,4 @@ file_{{ stigId }}:
   file.managed:
     - name: /etc/shadow
     - group: root
+    - replace: False

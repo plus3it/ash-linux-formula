@@ -25,6 +25,7 @@ script_{{ stig_id }}-describe:
 file_{{ stig_id }}-bootGrubGrub:
   file.managed:
     - name: '/boot/grub/grub.conf'
+    - replace: False
     - user: root
 
 file_{{ stig_id }}-etcGrub:

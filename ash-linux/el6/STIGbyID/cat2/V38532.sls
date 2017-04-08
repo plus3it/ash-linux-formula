@@ -5,9 +5,9 @@
 # SCAP Security ID:	CCE-26831-8
 # Finding Level:	Medium
 #
-#     The system must not accept ICMPv4 secure redirect packets by default. 
-#     Accepting "secure" ICMP redirects (from those gateways listed as 
-#     default gateways) has few legitimate uses. It should be disabled 
+#     The system must not accept ICMPv4 secure redirect packets by default.
+#     Accepting "secure" ICMP redirects (from those gateways listed as
+#     default gateways) has few legitimate uses. It should be disabled
 #     unless it is absolutely required.
 #
 #  CCI: CCI-000366
@@ -40,10 +40,11 @@ sysctl_{{ stig_id }}-noRedirects:
 # This should *NEVER* be needed on a normal system
 create_{{ stig_id }}-{{ checkFile }}:
   file.managed:
-  - name: '{{ checkFile }}'
-  - onlyif: 'test -f {{ checkFile }}'
+    - name: '{{ checkFile }}'
+    - replace: False
+    - onlyif: 'test -f {{ checkFile }}'
 
-# Need to run the next two because security scanners often 
+# Need to run the next two because security scanners often
 # don't understand "secure by default" settings
 comment_{{ stig_id }}-{{ parmName }}:
   file.append:
