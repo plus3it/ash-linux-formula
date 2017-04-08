@@ -14,7 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020860' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
 {%- set userList =  salt.user.list_users() %}
 {%- set shinitFiles = [
                        '.bash_login',

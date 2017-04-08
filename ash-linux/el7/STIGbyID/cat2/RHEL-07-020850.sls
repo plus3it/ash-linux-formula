@@ -15,7 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020850' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
 {%- set userList =  salt.user.list_users() %}
 {%- set shinitFiles = [
                        '.bash_login',
@@ -42,7 +42,7 @@ script_{{ stig_id }}-describe:
   {%- set userUid = userInfo['uid']|int %}
   {%- set userGid = userInfo['gid']|string %}
   {%- set gidmap = 'getent group ' + userGid + ' | cut -d : -f 1' %}
-  {%- set userGroup = salt.cmd.shell(gidmap)|string %}
+  {%- set userGroup = salt['cmd.shell'](gidmap)|string %}
   {%- if userUid > sysuserMax %}
     {%- for shinitFile in shinitFiles%}
       {%- if salt.file.file_exists(userHome + '/' + shinitFile) %}

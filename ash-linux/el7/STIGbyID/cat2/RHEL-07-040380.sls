@@ -18,7 +18,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.icmp_echo_ignore_broadcasts' %}
-{%- set parmValuCurr = salt.cmd.shell('sysctl -n ' + parmName) %}
+{%- set parmValuCurr = salt['cmd.shell']('sysctl -n ' + parmName) %}
 {%- set parmValuTarg = '1' %}
 
 script_{{ stig_id }}-describe:

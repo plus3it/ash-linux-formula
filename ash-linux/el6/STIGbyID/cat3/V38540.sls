@@ -36,7 +36,7 @@ script_V{{ stig_id }}-describe:
 # Will probably want to look at method to do all the edits in one pass:
 # Current method limits rollback capability
 ######################################################################
-{%- if not salt.cmd.shell('grep -c -E -e "' + sPattern + '" ' + audRulCfg , output_loglevel='quiet') == '0' %}
+{%- if not salt['cmd.shell']('grep -c -E -e "' + sPattern + '" ' + audRulCfg , output_loglevel='quiet') == '0' %}
 file_V{{ stig_id }}-sethostname_setdomainname:
   cmd.run:
     - name: 'echo "Appropriate audit-rule already present"'

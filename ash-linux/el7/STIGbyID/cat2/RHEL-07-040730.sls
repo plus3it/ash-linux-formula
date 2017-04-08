@@ -17,7 +17,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.ip_forward' %}
-{%- set parmValuCurr = salt.cmd.shell('sysctl -n ' + parmName) %}
+{%- set parmValuCurr = salt['cmd.shell']('sysctl -n ' + parmName) %}
 {%- set parmValuTarg = '0' %}
 
 script_{{ stig_id }}-describe:

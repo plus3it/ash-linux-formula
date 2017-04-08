@@ -14,7 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010490' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
 {%- set userList =  salt.user.list_users() %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set bannedAccts = salt.pillar.get('ash-linux:lookup:banned-accts', [

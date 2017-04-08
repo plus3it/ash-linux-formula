@@ -29,11 +29,11 @@ script_V{{ stig_id }}-describe:
 {%- set checkFile = '/etc/localtime' %}
 {%- set newRule = '-w ' + checkFile + ' -p wa -k audit_time_rules' %}
 
-{%- if not salt.cmd.shell('grep -c -E -e "' + newRule + '" ' + auditRules , output_loglevel='quiet') == '0' %}
+{%- if not salt['cmd.shell']('grep -c -E -e "' + newRule + '" ' + auditRules , output_loglevel='quiet') == '0' %}
 file_V{{ stig_id }}_auditRules:
   cmd.run:
     - name: 'echo "Appropriate audit rule already in place"'
-{%- elif not salt.cmd.shell('grep -c -E -e "' + checkFile + '" ' + auditRules , output_loglevel='quiet') == '0' %}
+{%- elif not salt['cmd.shell']('grep -c -E -e "' + checkFile + '" ' + auditRules , output_loglevel='quiet') == '0' %}
 file_V{{ stig_id }}_auditRules:
   file.replace:
     - name: '{{ auditRules }}'

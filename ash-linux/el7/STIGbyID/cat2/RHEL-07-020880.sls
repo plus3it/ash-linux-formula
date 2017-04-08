@@ -14,7 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020880' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs
 ")|int %}
 {%- set userList = salt.user.list_users() %}
 {%- set iShells = [
@@ -33,7 +33,7 @@
                    '/usr/bin/tcsh',
                    '/usr/bin/zsh'
                     ] %}
-{%- set oWrite = salt.cmd.shell('find / \( -name sys -o -name proc \) -prune -o  -perm -002 -type f -print').split('\n') %}
+{%- set oWrite = salt['cmd.shell']('find / \( -name sys -o -name proc \) -prune -o  -perm -002 -type f -print').split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

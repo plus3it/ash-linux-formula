@@ -36,7 +36,7 @@ touch_{{ stig_id }}-{{ ruleFile }}:
 
 {%- for mount in mntList %}
   {%- if mntStruct[mount]['fstype'] in localFstypes %}
-    {%- set foundList = salt.cmd.shell('find ' + mount + ' -xdev -type f \( -perm -4000 -o -perm -2000 \)').split('\n') %}
+    {%- set foundList = salt['cmd.shell']('find ' + mount + ' -xdev -type f \( -perm -4000 -o -perm -2000 \)').split('\n') %}
     {%- do privFiles.extend(foundList) %}
   {%- endif %}
 {%- endfor %}
