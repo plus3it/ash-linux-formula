@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000098
 # Finding Level:	Medium
 #
-#     The IPv6 protocol handler must not be bound to the network stack 
-#     unless needed. Any unnecessary network stacks - including IPv6 - 
+#     The IPv6 protocol handler must not be bound to the network stack
+#     unless needed. Any unnecessary network stacks - including IPv6 -
 #     should be disabled, to reduce the vulnerability to exploitation.
 #
 #  CCI: CCI-000366
@@ -17,11 +17,6 @@
 {%- set stig_id = '38546' %}
 {%- set helperLoc = 'ash-linux/el6/STIGbyID/cat2/files' %}
 {%- set file = '/etc/modprobe.d/disabled.conf' %}
-
-script_V{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/V{{ stig_id }}.sh
-    - cwd: '/root'
 
 file-V{{ stig_id }}-touchRules:
   file.touch:
