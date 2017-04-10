@@ -21,11 +21,6 @@
 {%- set parmName = 'net.ipv6.conf.all.disable_ipv6' %}
 {%- set parmValu = '1' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-
 file_{{ stig_id }}-{{ ruleFile }}:
   file.replace:
     - name: '{{ ruleFile }}'
@@ -35,11 +30,11 @@ file_{{ stig_id }}-{{ ruleFile }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} = {{ parmValu }}
-{%if not salt.file.file_exists(ruleFile) %}
-    - require:
-      - file: touch_{{ stig_id }}-{{ ruleFile }}
 
+{%- if not salt.file.file_exists(ruleFile) %}
 touch_{{ stig_id }}-{{ ruleFile }}:
   file.touch:
     - name: '{{ ruleFile }}'
+    - require_in:
+      - file: file_{{ stig_id }}-{{ ruleFile }}
 {%- endif %}
