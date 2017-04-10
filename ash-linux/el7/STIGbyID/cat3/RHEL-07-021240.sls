@@ -14,7 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021240' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs")|int %}
 {%- set userList =  salt.user.list_users() %}
 {%- set iShells = [
                    '/bin/sh',
@@ -57,7 +57,7 @@ script_{{ stig_id }}-describe:
     {%- if ( userUid >= sysuserMax ) and
            ( userShell in iShells ) %}
       {%- if salt.cmd.retcode('test -d ' + userHome) == 0 %}
-        {%- set homeMount = salt.cmd.shell('df --output=target ' + userHome + ' | tail -1') %}
+        {%- set homeMount = salt['cmd.shell']('df --output=target ' + userHome + ' | tail -1') %}
         {%- if homeMount in banMnt %}
 homedir_{{ stig_id }}-{{ user }}:
   cmd.run:

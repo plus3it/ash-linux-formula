@@ -19,7 +19,7 @@
 {%- set mainCfg = '/boot/grub2/grub.cfg' %}
 {%- set srcCfg = '/etc/grub.d/10_linux' %}
 {%- set dummyPass = '4BadPassw0rd' %}
-{%- set grubPass = salt.cmd.shell('printf "' + dummyPass +
+{%- set grubPass = salt['cmd.shell']('printf "' + dummyPass +
                        '\n' + dummyPass + '\n" | grub2-mkpasswd-pbkdf2 ' +
                        '2>&1 | grep "password is" ' +
                        '| sed "s/^.*password is //"') %}

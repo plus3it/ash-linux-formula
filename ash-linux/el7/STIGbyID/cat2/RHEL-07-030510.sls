@@ -21,7 +21,7 @@
 {%- set stig_id = 'RHEL-07-030510' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set ruleFile = '/etc/audit/rules.d/priv_acts.rules' %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
 {%- set path2mon = '/usr/bin/passwd' %}
 {%- set key2mon = 'privileged-passwd' %}
 

@@ -17,7 +17,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nsswitchConf = '/etc/nsswitch.conf' %}
 {%- set resolvConf = '/etc/resolv.conf' %}
-{%- set dnsList = salt.cmd.shell("awk '/^nameserver/ {print $2}' " + resolvConf).split('\n') %}
+{%- set dnsList = salt['cmd.shell']("awk '/^nameserver/ {print $2}' " + resolvConf).split('\n') %}
 {%- set dnsList_add = salt.pillar.get('ash-linux:lookup:dns-info:nameservers', []) %}
 
 script_{{ stig_id }}-describe:

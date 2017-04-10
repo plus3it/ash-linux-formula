@@ -28,7 +28,7 @@
 {%- set helperLoc = 'ash-linux/el7/VendorSTIG/cat2/files' %}
 {%- set badVal = 'kernelrandomizevaspace' %}
 {%- set gudVal = 'kernel.randomize_va_space' %}
-{%- set fixFiles = salt.cmd.shell('find /etc -type f ! -name "*.bak" | xargs grep -l ' + badVal).split('\n') %}
+{%- set fixFiles = salt['cmd.shell']('find /etc -type f ! -name "*.bak" | xargs grep -l ' + badVal).split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

@@ -24,7 +24,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- for if in ifList %}
-  {%- if salt.cmd.shell('ip link show ' + if + ' | grep ' + ifMode) %}
+  {%- if salt['cmd.shell']('ip link show ' + if + ' | grep ' + ifMode) %}
 property_{{ stig_id }}-{{ if }}:
   cmd.run:
     - name: 'printf "Turning off promiscuous mode on {{ if }} " && ip link set {{ if }} promisc {{ modeTarg }} && echo "...SUCCESS" || echo "...FAILED"'

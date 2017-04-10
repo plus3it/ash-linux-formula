@@ -27,8 +27,8 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set badDevNodes = [] %}
 {%- if salt.cmd.which('semanage') %}
-  {%- do badDevNodes.extend(salt.cmd.shell('find / -context *:device_t:* \( -type c -o -type b \)').split('\n')) %}
-  {%- do badDevNodes.extend(salt.cmd.shell('find / -context *:unlabeled_t:* \( -type c -o -type b \)').split('\n')) %}
+  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:device_t:* \( -type c -o -type b \)').split('\n')) %}
+  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:unlabeled_t:* \( -type c -o -type b \)').split('\n')) %}
 {%- endif %}
 
 script_{{ stig_id }}-describe:

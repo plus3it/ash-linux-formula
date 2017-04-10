@@ -25,7 +25,7 @@
                     '/usr/local/bin',
                     '/var'
                      ] %}
-{%- set sysuserMax = salt.cmd.shell("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs
 ")|int %}
 {%- set iShells = [
                    '/bin/sh',
@@ -59,7 +59,7 @@ script_{{ stig_id }}-describe:
   {%- if ( uinfo['uid'] > sysuserMax ) and
          ( uinfo['shell'] in iShells ) %}
     {%- set uhome = uinfo['home'] %}
-    {%- set homeMount = salt.cmd.shell('df --output=target ' + uinfo['home'] + ' 2> /dev/null | tail -1') %}
+    {%- set homeMount = salt['cmd.shell']('df --output=target ' + uinfo['home'] + ' 2> /dev/null | tail -1') %}
     {%- if not homeMount in homeDevs %}
       {%- do homeDevs.append(homeMount) %}
     {%- endif %}

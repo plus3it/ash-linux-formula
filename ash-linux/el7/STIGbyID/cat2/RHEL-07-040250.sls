@@ -15,7 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040250' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set fwRule = salt.cmd.shell('firewall-cmd --direct --get-rule ipv4 filter IN_public_allow') %}
+{%- set fwRule = salt['cmd.shell']('firewall-cmd --direct --get-rule ipv4 filter IN_public_allow') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

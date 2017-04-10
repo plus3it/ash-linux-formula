@@ -15,7 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021050' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set globWrDirs = salt.cmd.shell('find / -perm /002 -type d').split('\n') %}
+{%- set globWrDirs = salt['cmd.shell']('find / -perm /002 -type d').split('\n') %}
 {%- set okUsers = [
                    'root',
                    'sys',
@@ -28,7 +28,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- for globWrDir in globWrDirs %}
-  {%- set wrDirOwn = salt.cmd.shell('stat -c %G ' + globWrDir) %}
+  {%- set wrDirOwn = salt['cmd.shell']('stat -c %G ' + globWrDir) %}
   {%- if not wrDirOwn in okUsers %}
 fix_{{ stig_id }}-{{ globWrDir }}:
   file.directory:
