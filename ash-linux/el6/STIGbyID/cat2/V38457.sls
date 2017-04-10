@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000041
 # Finding Level:	Medium
 #
-#     The /etc/passwd file must have mode 0644 or less permissive. If the 
-#     "/etc/passwd" file is writable by a group-owner or the world the risk 
-#     of its compromise is increased. The file contains the list of 
+#     The /etc/passwd file must have mode 0644 or less permissive. If the
+#     "/etc/passwd" file is writable by a group-owner or the world the risk
+#     of its compromise is increased. The file contains the list of
 #     accounts on the system and associated information, and ...
 #
 #  CCI: CCI-000366
@@ -27,3 +27,4 @@ file_{{ stigId }}:
   file.managed:
     - name: '/etc/passwd'
     - mode: '0644'
+    - replace: False

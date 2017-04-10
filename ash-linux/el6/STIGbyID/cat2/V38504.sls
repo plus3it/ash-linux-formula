@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000035
 # Finding Level:	Medium
 #
-#     The /etc/shadow file must have mode 0000. The "/etc/shadow" file 
-#     contains the list of local system accounts and stores password 
-#     hashes. Protection of this file is critical for system security. 
+#     The /etc/shadow file must have mode 0000. The "/etc/shadow" file
+#     contains the list of local system accounts and stores password
+#     hashes. Protection of this file is critical for system security.
 #     Failure to give ownership of this file to root ...
 #
 #  CCI: CCI-000366
@@ -27,3 +27,4 @@ file_{{ stigId }}:
   file.managed:
     - name: /etc/shadow
     - mode: 0000
+    - replace: False

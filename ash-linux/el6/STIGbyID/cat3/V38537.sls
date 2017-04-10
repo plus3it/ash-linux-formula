@@ -5,8 +5,8 @@
 # SCAP Security ID:	CCE-26993-6
 # Finding Level:	Low
 #
-#     The system must ignore ICMPv4 bogus error responses. Ignoring bogus 
-#     ICMP error responses reduces log size, although some activity would 
+#     The system must ignore ICMPv4 bogus error responses. Ignoring bogus
+#     ICMP error responses reduces log size, although some activity would
 #     not be logged.
 #
 ############################################################
@@ -34,10 +34,11 @@ sysctl_{{ stig_id }}-noRedirects:
 # This should *NEVER* be needed on a normal system
 create_{{ stig_id }}-{{ checkFile }}:
   file.managed:
-  - name: '{{ checkFile }}'
-  - onlyif: 'test -f {{ checkFile }}'
+    - name: '{{ checkFile }}'
+    - replace: False
+    - onlyif: 'test -f {{ checkFile }}'
 
-# Need to run the next two because security scanners often 
+# Need to run the next two because security scanners often
 # don't understand "secure by default" settings
 comment_{{ stig_id }}-{{ parmName }}:
   file.append:

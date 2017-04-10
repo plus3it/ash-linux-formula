@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000038
 # Finding Level:	Medium
 #
-#     The /etc/gshadow file must have mode 0000. The /etc/gshadow file 
-#     contains group password hashes. Protection of this file is critical 
+#     The /etc/gshadow file must have mode 0000. The /etc/gshadow file
+#     contains group password hashes. Protection of this file is critical
 #     for system security.
 #
 #  CCI: CCI-000366
@@ -26,3 +26,4 @@ file_{{ stigId }}:
   file.managed:
     - name: '/etc/gshadow'
     - mode: '0000'
+    - replace: False

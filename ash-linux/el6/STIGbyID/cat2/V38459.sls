@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000043
 # Finding Level:	Medium
 #
-#     The /etc/group file must be group-owned by root. The "/etc/group" 
-#     file contains information regarding groups that are configured on the 
+#     The /etc/group file must be group-owned by root. The "/etc/group"
+#     file contains information regarding groups that are configured on the
 #     system. Protection of this file is important for system security.
 #
 #  CCI: CCI-000366
@@ -26,3 +26,4 @@ file_{{ stigId }}:
   file.managed:
     - name: '/etc/group'
     - group: root
+    - replace: False

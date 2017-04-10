@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000033
 # Finding Level:	Medium
 #
-#     The /etc/shadow file must be owned by root. The "/etc/shadow" file 
-#     contains the list of local system accounts and stores password 
-#     hashes. Protection of this file is critical for system security. 
+#     The /etc/shadow file must be owned by root. The "/etc/shadow" file
+#     contains the list of local system accounts and stores password
+#     hashes. Protection of this file is critical for system security.
 #     Failure to give ownership of this file to root ...
 #
 #  CCI: CCI-000366
@@ -27,3 +27,4 @@ file_{{ stigId }}:
   file.managed:
     - name: /etc/shadow
     - user: root
+    - replace: False

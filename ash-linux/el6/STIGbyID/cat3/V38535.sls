@@ -5,9 +5,9 @@
 # SCAP Security ID:	CCE-26883-9
 # Finding Level:	Low
 #
-#     The system must not respond to ICMPv4 sent to a broadcast address. 
-#     Ignoring ICMP echo requests (pings) sent to broadcast or multicast 
-#     addresses makes the system slightly more difficult to enumerate on 
+#     The system must not respond to ICMPv4 sent to a broadcast address.
+#     Ignoring ICMP echo requests (pings) sent to broadcast or multicast
+#     addresses makes the system slightly more difficult to enumerate on
 #     the network.
 #
 #  CCI: CCI-000366
@@ -39,10 +39,11 @@ sysctl_V{{ stig_id }}-noRedirects:
 # This should *NEVER* be needed on a normal system
 create_V{{ stig_id }}-{{ checkFile }}:
   file.managed:
-  - name: '{{ checkFile }}'
-  - onlyif: 'test -f {{ checkFile }}'
+    - name: '{{ checkFile }}'
+    - replace: False
+    - onlyif: 'test -f {{ checkFile }}'
 
-# Need to run the next two because security scanners often 
+# Need to run the next two because security scanners often
 # don't understand "secure by default" settings
 comment_V{{ stig_id }}-{{ parmName }}:
   file.append:

@@ -2,15 +2,15 @@
 # Version:	RHEL-07-020840_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	All local initialization files for interactive users must be
 #	owned by the home directory user or root.
 #
-# CCI-000366 
-#    NIST SP 800-53 :: CM-6 b 
-#    NIST SP 800-53A :: CM-6.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: CM-6 b 
+# CCI-000366
+#    NIST SP 800-53 :: CM-6 b
+#    NIST SP 800-53A :: CM-6.1 (iv)
+#    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-020840' %}
@@ -47,7 +47,8 @@ script_{{ stig_id }}-describe:
 fixown_{{ stig_id }}-{{ user }}-{{ shinitFile }}:
   file.managed:
     - name: '{{ userHome }}/{{ shinitFile }}'
-      user: '{{ user }}'
+    - user: '{{ user }}'
+    - replace: False
       {%- endif  %}
     {%- endfor %}
   {%- endif  %}
