@@ -1,4 +1,4 @@
-# This Salt state downloads the tools necessary to scan, 
+# This Salt state downloads the tools necessary to scan,
 # remediate and report on the compliance-state of an EL7-based
 # instance.
 #
@@ -12,11 +12,14 @@
 {%- endif %}
 {%- set osrel = salt.grains.get('osmajorrelease') %}
 {%- set contentDir = '/usr/share/xml/scap/ssg/content' %}
-{%- set dsfile = 'ssg-' + dsos + osrel + '-ds.xml' %}
+{%- set dsfile = salt.pillar.get('ash-linux:lookup:scap-ds') | default(
+    contentDir ~ '/ssg-' ~ dsos ~ osrel ~ '-ds.xml',
+    true
+) %}
 {%- set pillProf = salt.pillar.get('ash-linux:lookup:scap-profile', 'common') %}
-{%- set scapProf = 'xccdf_org.ssgproject.content_profile_' + pillProf %}
+{%- set scapProf = 'xccdf_org.ssgproject.content_profile_' ~ pillProf %}
 
 run_{{ stig_id }}-remediate:
   cmd.run:
-    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ contentDir }}/{{ dsfile }} > /dev/null 2>&1 || true'
-    - cwd: '/root' 
+    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} || true'
+    - cwd: '/root'
