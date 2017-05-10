@@ -42,6 +42,12 @@ install:
       $(<${TRAVIS_BUILD_DIR}/tests/requirements.txt) \
       $(<${TRAVIS_BUILD_DIR}/tests/requirements-el${OS_VERSION}.txt)
   - sudo docker exec centos-${OS_VERSION} salt-call --versions-report
+  - |
+    sudo docker exec centos-${OS_VERSION} salt-call --local \
+      --retcode-passthrough \
+      --file-root=$TRAVIS_BUILD_DIR \
+      --pillar-root=$SALT_PILLARROOT \
+      saltutil.sync_all
 
 script:
   - |

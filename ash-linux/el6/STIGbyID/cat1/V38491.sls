@@ -29,7 +29,7 @@ file_{{ stigId }}-hostsEquiv:
 {%- endif %}
 
 # Iterate locally-managed users to look for .rhosts files
-{%- for userName in salt['user.list_users']() %}
+{%- for userName in salt['ash.shadow_list_users']() %}
 {%- set userInfo = salt['user.info'](userName) %}
 {%- set userHome = userInfo['home'] %}
 {%- set userRhost = userHome + '/.rhosts' %}

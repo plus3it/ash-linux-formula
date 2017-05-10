@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000029
 # Finding Level:	Medium
 #
-#     Default operating system accounts, other than root, must be locked. 
-#     Disabling authentication for default system accounts makes it more 
+#     Default operating system accounts, other than root, must be locked.
+#     Disabling authentication for default system accounts makes it more
 #     difficult for attackers to make use of them to compromise a system.
 #
 #  CCI: CCI-000366
@@ -26,7 +26,7 @@ notify_{{ stigId }}-userScan:
   cmd.run:
     - name: 'printf "Scanning locally-managed users:\n\t* Examing users with uid 0 >< 500\n\t* Looking for set or null passwords\n"'
 
-{%- set userList = salt['user.list_users']() %}
+{%- set userList = salt['ash.shadow_list_users']() %}
 {%- for userName in userList %}
 {%- set userInfo =  salt['user.info'](userName) %}
 {%- set userShadow =  salt['shadow.info'](userName) %}
