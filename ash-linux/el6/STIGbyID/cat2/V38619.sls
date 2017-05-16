@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000347
 # Finding Level:	Medium
 #
-#     There must be no .netrc files on the system. Unencrypted passwords 
-#     for remote FTP servers may be stored in ".netrc" files. DoD policy 
-#     requires passwords be encrypted in storage and not used in access 
+#     There must be no .netrc files on the system. Unencrypted passwords
+#     for remote FTP servers may be stored in ".netrc" files. DoD policy
+#     requires passwords be encrypted in storage and not used in access
 #     scripts.
 #
 #  CCI: CCI-000196
@@ -23,9 +23,10 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- for user in salt['user.getent']('') %}
-  {%- set ID = user['name'] %}
-  {%- set homeDir = user['home'] %}
+{%- for user in salt.ash.shadow_list_users() %}
+  {%- set userinfo = salt.user.info(user) %}
+  {%- set ID = userinfo['name'] %}
+  {%- set homeDir = userinfo['home'] %}
   {%- set netRc = homeDir + '/.netrc' %}
 
   {%- if salt.file.file_exists(netRc) %}
@@ -52,4 +53,3 @@ warnfile_{{ stigId }}-{{ ID }}:
 
 {%- endif %}
 {%- endfor %}
-

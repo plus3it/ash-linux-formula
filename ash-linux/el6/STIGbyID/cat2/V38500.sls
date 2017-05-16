@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000032
 # Finding Level:	Medium
 #
-#     The root account must be the only account having a UID of 0. An 
-#     account has root authority if it has a UID of 0. Multiple accounts 
-#     with a UID of 0 afford more opportunity for potential intruders to 
+#     The root account must be the only account having a UID of 0. An
+#     account has root authority if it has a UID of 0. Multiple accounts
+#     with a UID of 0 afford more opportunity for potential intruders to
 #     guess a password for a privileged account. Proper ...
 #
 #  CCI: CCI-000366
@@ -27,8 +27,8 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: '/root'
 
-{%- for user in salt['user.list_users']() %}
-  {%- set userInfo = salt['user.info'](user) %}
+{%- for user in salt.ash.shadow_list_users() %}
+  {%- set userInfo = salt.user.info(user) %}
   {%- set userId = userInfo['uid'] %}
   {%- if userId == 0 %}
     #########################################

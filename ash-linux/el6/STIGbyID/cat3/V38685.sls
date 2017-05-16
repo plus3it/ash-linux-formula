@@ -3,9 +3,9 @@
 # Version:	RHEL-06-000297
 # Finding Level:	Low
 #
-#     Temporary accounts must be provisioned with an expiration date. When 
-#     temporary accounts are created, there is a risk they may remain in 
-#     place and active after the need for them no longer exists. Account 
+#     Temporary accounts must be provisioned with an expiration date. When
+#     temporary accounts are created, there is a risk they may remain in
+#     place and active after the need for them no longer exists. Account
 #     expiration greatly reduces the risk of accounts being misused or
 #     hijacked.
 #
@@ -29,17 +29,16 @@ notify_{{ stigId }}-generic:
     - name: 'printf "******************************************\n** This is an informational test, only! **\n******************************************\nTest cannot auto-ID temporary accounts:\n  Each locally-managed user will be queried.\n  Expiry settings will be enumerated but not\n  modified\n"'
 
 # Generate a user-list to iterate
-{%- for user in salt['user.getent']('') %}
-  {%- set ID = user['name'] %}
-  {%- set ShadowData = salt['shadow.info'](ID) %}
+{%- for user in salt.ash.shadow_list_users() %}
+  {%- set ShadowData = salt.shadow.info(user) %}
 
   {%- if ShadowData.expire == -1 %}
-notify_{{ stigId }}-{{ ID }}:
+notify_{{ stigId }}-{{ user }}:
   cmd.run:
-    - name: 'echo "Userid ''{{ ID }}'' is not set to expire"'
+    - name: 'echo "Userid ''{{ user }}'' is not set to expire"'
   {%- else %}
-notify_{{ stigId }}-{{ ID }}:
+notify_{{ stigId }}-{{ user }}:
   cmd.run:
-    - name: 'echo "Userid ''{{ ID }}'' is set to expire [{{ ShadowData.expire }}]"'
+    - name: 'echo "Userid ''{{ user }}'' is set to expire [{{ ShadowData.expire }}]"'
   {%- endif %}
 {%- endfor %}

@@ -7,18 +7,18 @@
 # Security identifiers:
 # - CCE-26981-1
 #
-# Rule Summary: Ensure that User Home Directories are not Group-Writable or 
+# Rule Summary: Ensure that User Home Directories are not Group-Writable or
 #               World-Readable.
 #
-# Rule Text: User home directories contain many configuration files 
-#            which affect the behavior of a user's account. No user 
-#            should ever have write permission to another user's home 
-#            directory. Group shared directories can be configured in 
-#            sub-directories or elsewhere in the filesystem if they are 
-#            needed. Typically, user home directories should not be 
-#            world-readable, as it would disclose file names to other 
-#            users. If a subset of users need read access to one 
-#            another's home directories, this can be provided using 
+# Rule Text: User home directories contain many configuration files
+#            which affect the behavior of a user's account. No user
+#            should ever have write permission to another user's home
+#            directory. Group shared directories can be configured in
+#            sub-directories or elsewhere in the filesystem if they are
+#            needed. Typically, user home directories should not be
+#            world-readable, as it would disclose file names to other
+#            users. If a subset of users need read access to one
+#            another's home directories, this can be provided using
 #            groups or ACLs.
 #
 # Note: This finding only requires setting user's home-directory
@@ -35,10 +35,11 @@ script_{{ scapId }}-describe:
     - source: salt://{{ helperLoc }}/{{ scapId }}.sh
     - cwd: '/root'
 
-{%- for user in salt['user.getent']('') %}
-  {%- set userId = user['name'] %}
-  {%- set Uid = user['uid'] %}
-  {%- set homeDir = user['home'] %}
+{%- for user in salt.ash.shadow_list_users() %}
+  {%- set userinfo = salt.user.info(user) %}
+  {%- set userId = userinfo['name'] %}
+  {%- set Uid = userinfo['uid'] %}
+  {%- set homeDir = userinfo['home'] %}
 
   # Only change things if it's not a system account
   {%- if Uid >= 500 or '/home/' in homeDir %}

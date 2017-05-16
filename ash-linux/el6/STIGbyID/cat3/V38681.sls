@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000294
 # Finding Level:	Low
 #
-#     All GIDs referenced in /etc/passwd must be defined in /etc/group 
-#     Inconsistency in GIDs between /etc/passwd and /etc/group could lead 
+#     All GIDs referenced in /etc/passwd must be defined in /etc/group
+#     Inconsistency in GIDs between /etc/passwd and /etc/group could lead
 #     to a user having unintended rights.
 #
 #  CCI: CCI-000366
@@ -22,12 +22,12 @@ script_{{ stigId }}-describe:
     - source: salt://{{ helperLoc }}/{{ stigId }}.sh
     - cwd: /root
 
-{%- for user in salt['user.getent']('') %}
-{%- set ID = user['name'] %}
-{%- if not salt.file.search('/etc/group', ':' + user.gid|string() + ':' ) %}
+{%- for user in salt.ash.shadow_list_users() %}
+{%- set userinfo = salt.user.info(user) %}
+{%- if not salt.file.search('/etc/group', ':' + userinfo.gid|string() + ':' ) %}
 notify_{{ stigId }}-{{ ID }}:
   cmd.run:
-    - name: 'echo "The {{ ID }} users GID [{{ user['gid'] }}] is not mapped in /etc/group."'
+    - name: 'echo "The {{ user }} users GID [{{ userinfo['gid'] }}] is not mapped in /etc/group."'
 {%- endif %}
 {%- endfor %}
 
