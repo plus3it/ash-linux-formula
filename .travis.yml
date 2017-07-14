@@ -37,7 +37,7 @@ install:
       --name centos-${OS_VERSION} local/centos:${OS_VERSION} init
   - |
     sudo docker exec centos-${OS_VERSION} yum -y install \
-      https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el${OS_VERSION}.noarch.rpm
+      https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el${OS_VERSION}.noarch.rpm
   - |
     sudo docker exec centos-${OS_VERSION} yum -y install \
       $(<${TRAVIS_BUILD_DIR}/tests/requirements.txt) \
