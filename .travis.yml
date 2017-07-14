@@ -27,13 +27,14 @@ before_install:
   - sudo service docker restart
   - sleep 5
   - sudo docker pull centos:centos${OS_VERSION}
+  - sudo docker build -t local/centos:${OS_VERSION} tests/docker/centos${OS_VERSION}
 
 install:
   - |
     sudo docker run --detach --privileged \
       --volume="${TRAVIS_BUILD_DIR}":"${TRAVIS_BUILD_DIR}":ro \
       --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
-      --name centos-${OS_VERSION} centos:${OS_VERSION} init
+      --name centos-${OS_VERSION} local/centos:${OS_VERSION} init
   - |
     sudo docker exec centos-${OS_VERSION} yum -y install \
       https://repo.saltstack.com/yum/redhat/salt-repo-latest-1.el${OS_VERSION}.noarch.rpm
