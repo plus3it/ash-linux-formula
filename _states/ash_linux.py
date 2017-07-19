@@ -41,10 +41,6 @@ def fips_state(name, value=None):
         ret['comment'] = 'System is now FIPS-{0}.'.format(value)
         return ret
 
-    current_state = __salt__['ash.fips_status']()
-    if current_state == value:
-        return ret
-
     if not value:
         raise SaltInvocationError(
             'No FIPS state has been provided for `value`.'
