@@ -33,7 +33,8 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021350' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
-{%- set fipsMode = 'enabled' if salt['pillar.get']('ash-linux:lookup:fips-enabled') else 'disabled' %}
+{%- set fipsMode = 'disabled' if salt['pillar.get']('ash-linux:lookup:fips-disabled') else 'enabled' %}
+{%- set fipsMode = 'disabled' if salt['grains.get']('ash-linux:lookup:fips-disabled') else 'enabled' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
