@@ -34,9 +34,9 @@
 {%- set stig_id = 'RHEL-07-021350' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set fipsMode = salt.grains.get('ash-linux:lookup:fips-state') | default(
-	salt.pillar.get('ash-linux:lookup:fips-state') | default(
-		'enabled',true),
-	true) %}
+        salt.pillar.get('ash-linux:lookup:fips-state') | default(
+            'enabled',true),
+        true) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
