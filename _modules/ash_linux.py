@@ -45,7 +45,7 @@ def _move_boot_kernel(restore_bak):
 def _modify_grub_file(rmv_fips_arg):
     """
     Insert/remove fips argument from GRUB file in /etc/default.
-    
+
     Args:
         rmv_fips_arg:  (`obj`: `bool`)
         True if removing fips argument. False to add it.
@@ -123,7 +123,7 @@ def fips_disable():
     Disables FIPS on RH/CentOS system. Note that you must reboot the
     system in order for FIPS to be disabled.  This routine prepares
     the system to disable FIPS.
-    
+
     CLI Example:
     .. code-block:: bash
         salt '*' ash.fips_disable
@@ -156,7 +156,7 @@ def fips_disable():
         diff = _modify_grub_file(True)
         if diff:
             new['/etc/default/grub'] = diff
-    except:
+    except Exception:
         _rollback_fips_disable(installed_fips_pkgs)
         ret['result'] = False
         ret['changes'] = {}
@@ -177,6 +177,8 @@ def fips_disable():
                 ret['comment'] = ret['comment'] + msg
             else:
                 ret['comment'] = msg[1:]
+        if 'changes' not in ret:
+            ret['comment'] = 'FIPS mode is already disabled. No changes.'
     finally:
         return ret
 
@@ -203,7 +205,7 @@ def fips_enable():
     Enables FIPS on RH/CentOS system.  Note that you must reboot the
     system in order for FIPS to be disabled.  This routine prepares
     the system to disable FIPS.
-    
+
     CLI Example:
     .. code-block:: bash
         salt '*' ash.fips_enable
@@ -235,7 +237,7 @@ def fips_enable():
         diff = _modify_grub_file(False)
         if diff:
             new['/etc/default/grub'] = diff
-    except:
+    except Exception:
         _rollback_fips_enable()
         ret['result'] = False
         ret['comment'] = 'Unable to change state of system to FIPS-enabled.'
@@ -249,6 +251,8 @@ def fips_enable():
                 ret['comment'] = ret['comment'] + msg
             else:
                 ret['comment'] = msg[1:]
+        if 'changes' not in ret:
+            ret['comment'] = 'FIPS mode is already enabled. No changes.'
     finally:
         return ret
 
@@ -256,7 +260,7 @@ def fips_enable():
 def fips_status():
     """
     Returns the status of fips on the currently running system.
-    
+
     Returns a `str` of "enabled" if FIPS is enabled. Otherwise,
     returns a `str` of "disabled".
 
