@@ -41,12 +41,6 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-notify_{{ stig_id }}-fipsMode:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Target FIPS-mode is \"{{ fipsMode }}\".''\n"'
-    - cwd: /root
-    - stateful: True
-
 fips_state-{{ stig_id }}:
   ash.fips_state:
     - value: {{ fipsMode }}
