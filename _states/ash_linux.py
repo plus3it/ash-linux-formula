@@ -16,13 +16,13 @@ def __virtual__():
         return False, 'ash_linux module works only on Linux systems'
 
 
-def fips_state(name, value=None):
+def fips_state(name, value):
     '''
     Prepare a system to be FIPS-enabled or FIPS-disabled.
 
     name
         assigned name to the process
-    
+
     value
         Status for FIPS - either 'enabled' or 'disabled'.
         For example:
@@ -41,17 +41,14 @@ def fips_state(name, value=None):
         ret['comment'] = 'System is now FIPS-{0}.'.format(value)
         return ret
 
-    if not value:
-        raise SaltInvocationError(
-            'No FIPS state has been provided for `value`.'
-        )
-    elif value == 'enabled':
+    if value == 'enabled':
         ret.update(__salt__['ash.fips_enable']())
     elif value == 'disabled':
         ret.update(__salt__['ash.fips_disable']())
     else:
         raise SaltInvocationError(
-            'State {0} is not a valid option.'.format(value)
+            '"{0}" is not a valid `value`. Must be "enabled" or "disabled"'
+            .format(value)
         )
 
     return ret
