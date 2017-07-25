@@ -5,4 +5,3 @@
 
 include:
   - ash-linux.el7.VendorSTIG.cat2.sysctl_kernel_ipv6_disable
-  - ash-linux.el7.VendorSTIG.cat2.sysctl_kernel_randomize_va_space-patch
