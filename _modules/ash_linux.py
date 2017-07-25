@@ -177,7 +177,7 @@ def fips_disable():
                 ret['comment'] = ret['comment'] + msg
             else:
                 ret['comment'] = msg[1:]
-        if 'changes' not in ret:
+        if 'changes' not in ret and 'comment' not in ret:
             ret['comment'] = 'FIPS mode is already disabled. No changes.'
     finally:
         return ret
@@ -251,7 +251,7 @@ def fips_enable():
                 ret['comment'] = ret['comment'] + msg
             else:
                 ret['comment'] = msg[1:]
-        if 'changes' not in ret:
+        if 'changes' not in ret and 'comment' not in ret:
             ret['comment'] = 'FIPS mode is already enabled. No changes.'
     finally:
         return ret
