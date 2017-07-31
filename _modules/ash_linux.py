@@ -42,6 +42,20 @@ def _move_boot_kernel(restore_bak):
     return old_path
 
 
+def _get_default_kernel():
+    """Obtain default kernel from grubby command."""
+    cmd = 'grubby --default-kernel'
+    return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
+
+
+def _get_boot_mount():
+    """Obtain mount to path that kernel is located in."""
+    boot_path = _get_default_kernel()
+    boot_path = boot_path[:boot_path.rindex('/')] or '/'
+    cmd = 'findmnt -no source -T ' + boot_path
+    return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
+
+
 def _modify_grub_file(rmv_fips_arg):
     """
     Insert/remove fips argument from GRUB file in /etc/default.
@@ -54,14 +68,27 @@ def _modify_grub_file(rmv_fips_arg):
     if rmv_fips_arg:
         result = __salt__['file.replace'](filepath, 'fips=1[ ]', '')
     else:
-        result = __salt__['file.search'](filepath, 'fips=1')
-        if not result:
+        grub_marker = 'GRUB_CMDLINE_LINUX="'
+        grub_args = []
+        check = __salt__['file.search'](filepath, 'boot=')
+        if not check:
+            # No boot= in grub, so find mount where kernel is located.
+            boot_mount = _get_boot_mount()
+            # Add boot= argument.
+            grub_args.append('boot={0} '.format(boot_mount))
+
+        check = __salt__['file.search'](filepath, 'fips=1')
+        if not check:
+            grub_args.append('fips=1 ')
+
+        if grub_args:
             result = __salt__['file.replace'](
-                filepath, 'GRUB_CMDLINE_LINUX="',
-                'GRUB_CMDLINE_LINUX="fips=1 '
+                filepath, grub_marker,
+                '{0}{1}'.format(grub_marker, ''.join(grub_args))
             )
         else:
             result = None
+
     return result
 
 
@@ -90,7 +117,7 @@ def _get_installed_dracutfips_pkgs():
 
 def _get_grub_args():
     """Obtain arguments line in grubby command."""
-    cmd = "grubby --info=ALL | grep args="
+    cmd = 'grubby --info=' + _get_default_kernel() + ' | grep args='
     return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
 
 
@@ -226,10 +253,17 @@ def fips_enable():
             _move_boot_kernel(False)
             __salt__['cmd.run']("dracut -f", python_shell=False)
 
-        # Update grub.cfg file to add the fips agurment.
+        # Update grub.cfg file to add the fips and boot agurments.
+        grubby_args = []
         grub_args = _get_grub_args()
         if 'fips=1' not in grub_args:
-            cmd = 'grubby --update-kernel=ALL --args=fips=1'
+            grubby_args.append('fips=1')
+        if 'boot=' not in grub_args:
+            grubby_args.append('boot={0}'.format(_get_boot_mount()))
+        if grubby_args:
+            cmd = 'grubby --update-kernel=ALL --args="{0}"'.format(
+                ' '.join(grubby_args)
+            )
             __salt__['cmd.run'](cmd, python_shell=False)
             new['grubby'] = cmd
 
