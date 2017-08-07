@@ -17,7 +17,7 @@
 
 {%- set stigId = 'V38511' %}
 {%- set helperLoc = 'ash-linux/el6/STIGbyID/cat2/files' %}
-{%- set chkFile = '/etc/sysctl.conf' %}
+{%- set chkFile = '/etc/sysctl.d/99-ip_forward.conf' %}
 {%- set parmName = 'net.ipv4.ip_forward' %}
 {%- set parmVal = '0' %}
 
@@ -27,18 +27,27 @@ script_{{ stigId }}-describe:
     - cwd: '/root'
 
 file_{{ stigId }}-repl:
-  file.replace:
+  file.managed:
     - name: '{{ chkFile }}'
-    - pattern: '^{{ parmName }} =.*$'
-    - repl: |
-        # Added {{ parmName }} define per STIG-ID: {{ stigId }}
-        {{ parmName }} = {{ parmVal }}
-    - unless: 'grep -Ew "{{ parmName }}" {{ chkFile }} && \
-               grep -Ew "{{ parmName }}" {{ chkFile }} | \
-               grep -E "{{ parmVal }}$"'
+    - contents: |
+        # Disable IPv4 forwarding per {{ stigId }}
+        net.ipv4.conf.all.forwarding = 0
+        net.ipv4.ip_forward = 0
+        
+        # ...and IPv6 just to be sure
+        net.ipv6.conf.all.forwarding = 0
+        net.ipv6.ip_forward = 0 
+
 
 setting_{{ stigId }}-{{ parmName }}:
   sysctl.present:
     - name: '{{ parmName }}'
     - value: '{{ parmVal }}'
     - unless: 'grep -E "^{{ parmName }} = {{ parmVal }}" {{ chkFile }}'
+
+# Just in case using an AMI that installs it...
+remove_NATstuff:
+  pkg.removed:
+    - pkgs:
+      - aws-vpc-nat
+      
