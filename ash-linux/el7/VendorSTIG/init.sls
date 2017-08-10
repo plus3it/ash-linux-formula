@@ -12,4 +12,5 @@ include:
   - ash-linux.el7.VendorSTIG.cat3
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010040
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040170
+  - ash-linux.el7.Miscellaneous.firewalld_safeties
   - ash-linux.el7.VendorSTIG.report
