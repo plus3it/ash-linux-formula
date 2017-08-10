@@ -2,14 +2,14 @@
 # Version:	RHEL-07-040334_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	The SSH daemon must not allow authentication using rhosts authentication.
 #
-# CCI-000366 
-#    NIST SP 800-53 :: CM-6 b 
-#    NIST SP 800-53A :: CM-6.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: CM-6 b 
+# CCI-000366
+#    NIST SP 800-53 :: CM-6 b
+#    NIST SP 800-53A :: CM-6.1 (iv)
+#    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040334' %}
@@ -27,7 +27,7 @@ script_{{ stig_id }}-describe:
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
     - name: '{{ cfgFile }}'
-    - pattern: '^\s{{ parmName }} .*$'
+    - pattern: '^\s*{{ parmName }} .*$'
     - repl: '{{ parmName }} {{ parmValu }}'
     - append_if_not_found: True
     - not_found_content: |-
