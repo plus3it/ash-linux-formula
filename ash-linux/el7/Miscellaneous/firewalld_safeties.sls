@@ -16,4 +16,4 @@ firewalld_file-safeties:
         firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 20 -i lo -j ACCEPT > /dev/null 2>&1
         firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 30 -d 127.0.0.0/8 '!' -i lo -j DROP > /dev/null 2>&1
         firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 50 -p tcp -m tcp --dport 22 -j ACCEPT > /dev/null 2>&1
-        systemctl reload firewalld
+        systemctl try-restart firewalld
