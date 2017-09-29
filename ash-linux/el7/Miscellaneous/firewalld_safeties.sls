@@ -8,12 +8,12 @@
 #    after a firewalld zone-change action.
 #
 #################################################################
+{%- set helperLoc = 'ash-linux/el7/Miscellaneous/files' %}
+{%- set statename = 'firewalld_safeties'%}
 
-firewalld_file-safeties:
-  cmd.run:
-    - name: |
-        firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 10 -m state --state RELATED,ESTABLISHED -m comment --comment 'Allow related and established connections' -j ACCEPT > /dev/null 2>&1
-        firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 20 -i lo -j ACCEPT > /dev/null 2>&1
-        firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 30 -d 127.0.0.0/8 '!' -i lo -j DROP > /dev/null 2>&1
-        firewall-offline-cmd --direct --add-rule ipv4 filter INPUT_direct 50 -p tcp -m tcp --dport 22 -j ACCEPT > /dev/null 2>&1
-        systemctl try-restart firewalld
+{{ statename }}:
+  cmd.script:
+    - name: '{{ statename }}.sh'
+    - source: 'salt://{{ helperLoc }}/{{ statename }}.sh'
+    - cwd: '/root'
+    - stateful: true
