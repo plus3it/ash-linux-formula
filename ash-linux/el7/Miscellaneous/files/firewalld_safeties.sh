@@ -52,7 +52,7 @@ ${FWCMD} ${FWCMDARGS} 50 -p tcp -m tcp --dport 22 -j ACCEPT || \
 ${FWCMD} --permanent ${FWCMDARGS} 10 -m state --state RELATED,ESTABLISHED -m comment \
   --comment 'Allow related and established connections' || \
   err_exit 'Failed to add RELATED/ESTABLISHED exception to permanent config'
-${FWCMD} --permanent ${FWCMDARGS} 20 -i lo -j ACCEPT --permenent || \
+${FWCMD} --permanent ${FWCMDARGS} 20 -i lo -j ACCEPT || \
   err_exit 'Failed to add loopback exception to permanent config'
 ${FWCMD} --permanent ${FWCMDARGS} 30 -d 127.0.0.0/8 '!' -i lo -j DROP || \
   err_exit 'Failed to add loopback-spoofing to permanent config'
