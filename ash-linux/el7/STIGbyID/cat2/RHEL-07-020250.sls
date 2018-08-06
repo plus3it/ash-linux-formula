@@ -17,7 +17,7 @@
 {%- set maxDays = salt.pillar.get('ash-linux:lookup:mustpatch-days', 30) %}
 {%- set daysToSec = maxDays * 24 * 60 * 60 %}
 {%- set todaysdt = salt['cmd.shell']('date "+%s"') %}
-{%- set lastUpdt = salt['cmd.shell']("date -d $(yum history 2> /dev/null | awk -F '|' '$4 ~ / U/{print $3}' | head -1 | sed -e 's/^ *//' -e 's/ .*$//') +%s") %}
+{%- set lastUpdt = salt['cmd.shell']("date -d $(yum history 2> /dev/null | grep -E 'update|upgrade' | awk -F '|' '$4 ~ / U/{print $3}' | head -1 | sed -e 's/^ *//' -e 's/ .*$//') +%s 2> /dev/null || echo 0") %}
 {%- set dateDiff = todaysdt|int - lastUpdt|int %}
 
 script_{{ stig_id }}-describe:
@@ -28,13 +28,13 @@ script_{{ stig_id }}-describe:
 {%- if daysToSec >= todaysdt|int - lastUpdt|int %} 
 notify_{{ stig_id }}-lastUpdate:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''System updated less than {{ maxDays }} ago.''\n"'
+    - name: 'printf "\nchanged=no comment=''System updated less than {{ maxDays }} days ago.''\n"'
     - cwd: /root
     - stateful: True
 {%- else %}
 notify_{{ stig_id }}-lastUpdate:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''System last updated more than {{ maxDays }} ago: updating.''\n"'
+    - name: 'printf "\nchanged=no comment=''System last updated more than {{ maxDays }} days ago.''\n"'
     - cwd: /root
     - stateful: True
 {%- endif %}
