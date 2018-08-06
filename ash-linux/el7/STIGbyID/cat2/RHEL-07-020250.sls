@@ -37,9 +37,9 @@ notify_{{ stig_id }}-lastUpdate:
     - name: 'printf "\nchanged=no comment=''System last updated more than {{ maxDays }} ago: updating.''\n"'
     - cwd: /root
     - stateful: True
+{%- endif %}
 
 upgrade_{{ stig_id }}:
   pkg.uptodate:
     - require:
       - cmd: notify_{{ stig_id }}-lastUpdate
-{%- endif %}

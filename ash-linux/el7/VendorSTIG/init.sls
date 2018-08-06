@@ -6,6 +6,7 @@
 #################################################################
 
 include:
+  - ash-linux.el7.STIGbyID.cat2.RHEL-07-020250
   - ash-linux.el7.VendorSTIG.packages
   - ash-linux.el7.VendorSTIG.remediate
   - ash-linux.el7.VendorSTIG.cat2
