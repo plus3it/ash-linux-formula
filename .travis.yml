@@ -36,6 +36,8 @@ install:
       --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
       --name centos-${OS_VERSION} local/centos:${OS_VERSION} init
   - |
+    sudo docker exec centos-${OS_VERSION} touch /etc/fstab
+  - |
     sudo docker exec centos-${OS_VERSION} yum -y install \
       https://repo.saltstack.com/yum/redhat/salt-repo-latest-2.el${OS_VERSION}.noarch.rpm
   - |
