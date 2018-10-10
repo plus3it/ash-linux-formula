@@ -1,4 +1,4 @@
-FROM centos:centos6@sha256:b358c4a16ef77db3a07eaaaf62c707f51aa15bca820489392cc9d97046bc483a
+FROM centos:centos6@sha256:ff13c94bcdb26332f55f1fe0e0d393c84e540872bca20748e913bc2cb589400a
 
 RUN yum -y install upstart && yum clean all
 
