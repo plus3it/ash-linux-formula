@@ -8,7 +8,10 @@ import os
 import re
 import spwd
 
-import salt.utils
+try:
+    from salt.utils.files import fopen
+except ImportError:
+    from salt.utils import fopen
 
 __virtualname__ = 'ash'
 
@@ -303,7 +306,7 @@ def fips_status():
         salt '*' ash.fips_status
     """
     try:
-        with salt.utils.fopen('/proc/sys/crypto/fips_enabled', 'r') as fle:
+        with fopen('/proc/sys/crypto/fips_enabled', 'r') as fle:
             return 'enabled' if fle.read().strip() == '1' else 'disabled'
     except (IOError, FileNotFoundError):
         return 'disabled'
