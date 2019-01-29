@@ -20,6 +20,8 @@
 {%- set ruleFile = '/etc/sysctl.d/ipv6.conf' %}
 {%- set parmName = 'net.ipv6.conf.all.disable_ipv6' %}
 {%- set parmValu = '1' %}
+{%- set postfixParam = 'inet_protocols' %}
+{%- set postfixValue = 'ipv4' %}
 
 file_{{ stig_id }}-{{ ruleFile }}:
   file.replace:
@@ -38,3 +40,12 @@ touch_{{ stig_id }}-{{ ruleFile }}:
     - require_in:
       - file: file_{{ stig_id }}-{{ ruleFile }}
 {%- endif %}
+
+# Set Postfix to user only ipv4 when ipv6 is disabled
+set_postfix_param_{{ postfixParam }}_{{ stig_id }}:
+  module.run:
+    - name: postfix.set_main
+    - key: {{ postfixParam }}
+    - value: {{ postfixValue }}
+    - require:
+      - file: file_{{ stig_id }}-{{ ruleFile }}
