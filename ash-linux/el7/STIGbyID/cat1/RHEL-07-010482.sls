@@ -27,6 +27,8 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if not salt.file.file_exists(grubFile) %}
+
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
     - name: {{ grubFile }}
@@ -48,3 +50,13 @@ user_cfg_content-{{ stig_id }}:
     - cwd: /root
     - require:
       - file: user_cfg_permissions-{{ stig_id }}
+
+{%- else %}
+
+notify_{{ stig_id }}-noAction:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} skipped due to pre-existence of {{ grubFile }}.''\n"'
+    - stateful: True
+    - cwd: /root
+
+{%- endif %}
