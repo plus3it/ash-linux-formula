@@ -61,7 +61,11 @@
 ##       nameservers
 ##         - nameserver1.I.P.addr
 ##         - nameserver2.I.P.addr
-#
+
+
+##  Set a localized/custom password on the GRUB boot-loader
+##     grub-passwd: <POLICY_COMPLIANT_PASSWORD_STRING>
+
     # If using oscap to harden, which profile to select
     # If unsure of available profiles, use `oscap info \
     # "/usr/share/xml/scap/ssg/content/ssg-${OSVERS}-xccdf.xml"`
