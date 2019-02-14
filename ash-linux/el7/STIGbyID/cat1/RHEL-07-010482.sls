@@ -32,17 +32,19 @@ user_cfg_permissions-{{ stig_id }}:
     - name: {{ grubFile }}
     - user: 'root'
     - owner: 'root'
-    - mode: '400'
+    - mode: '000600'
     - replace: false
 
 user_cfg_selLabels-{{ stig_id }}:
   cmd.run:
     - name: 'chcon -u system_u -r object_r -t boot_t {{ grubFile }}'
     - cwd: /root
-    - require: user_cfg_permissions-{{ stig_id }}
+    - require:
+      - file: user_cfg_permissions-{{ stig_id }}
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
     - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubFile }}'
     - cwd: /root
-    - require: user_cfg_permissions-{{ stig_id }}
+    - require:
+      - file: user_cfg_permissions-{{ stig_id }}
