@@ -18,9 +18,9 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010482' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
 {%- set grubFile = '/boot/grub2/user.cfg' %}
 {%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
-{%- set grubPass = 'AR34llyB4dP4ssw*rd' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
