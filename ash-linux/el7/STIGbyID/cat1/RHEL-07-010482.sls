@@ -18,6 +18,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010482' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
 {%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
 {%- set grubFile = '/boot/grub2/user.cfg' %}
 {%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
@@ -27,7 +28,7 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if not salt.file.file_exists(grubFile) %}
+{%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubFile) ) %}
 
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
