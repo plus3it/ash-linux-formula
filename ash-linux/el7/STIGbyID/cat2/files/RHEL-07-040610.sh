@@ -1,14 +1,13 @@
 #!/bin/sh
-# Vuln ID:      V-72243
-# Finding ID:	RHEL-07-040350
-# Version:	SV-86867r3_rule
+# Vuln ID:      V-72283
+# Finding ID:	RHEL-07-040610
+# Version:      SV-86907r2_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The Red Hat Enterprise Linux operating system must be
-#	configured so that the SSH daemon does not allow
-#	authentication using rhosts authentication.
+#	The system must not forward Internet Protocol version 4 (IPv4)
+#	source-routed packets.
 #
 # CCI-000366 
 #    NIST SP 800-53 :: CM-6 b 
@@ -22,8 +21,8 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-040350"
-diag_out "   Ooperating system must be configured" 
-diag_out "   so that the SSH daemon does not allow"
-diag_out "   use of rhosts-based authentication."
+diag_out "STIG Finding ID: RHEL-07-040610"
+diag_out "   The system must not forward Internet"
+diag_out "   Protocol version 4 (IPv4)"
+diag_out "   source-routed packets."
 diag_out "----------------------------------------"
