@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-040350
-# Version:	RHEL-07-040350_rule
+# Vuln ID:      V-72283
+# Finding ID:	RHEL-07-040610
+# Version:	SV-86907r2_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
 # 
@@ -13,7 +14,7 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-040350' %}
+{%- set stig_id = 'RHEL-07-040610' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/sysctl.conf' %}
 {%- set parmName = 'net.ipv4.conf.all.accept_source_route' %}

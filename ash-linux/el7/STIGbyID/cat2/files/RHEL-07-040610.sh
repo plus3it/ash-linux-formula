@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-040350
-# Version:	RHEL-07-040350_rule
+# Vuln ID:      V-72283
+# Finding ID:	RHEL-07-040610
+# Version:      SV-86907r2_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
 # 
@@ -20,7 +21,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-040350"
+diag_out "STIG Finding ID: RHEL-07-040610"
 diag_out "   The system must not forward Internet"
 diag_out "   Protocol version 4 (IPv4)"
 diag_out "   source-routed packets."
