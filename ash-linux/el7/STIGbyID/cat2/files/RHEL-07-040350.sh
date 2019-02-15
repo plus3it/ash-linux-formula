@@ -1,6 +1,6 @@
 #!/bin/sh
 # Vuln ID:      V-72243
-# Finding ID:	RHEL-07-040610
+# Finding ID:	RHEL-07-040350
 # Version:	SV-86867r3_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
@@ -22,7 +22,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-040610"
+diag_out "STIG Finding ID: RHEL-07-040350"
 diag_out "   Ooperating system must be configured" 
 diag_out "   so that the SSH daemon does not allow"
 diag_out "   use of rhosts-based authentication."

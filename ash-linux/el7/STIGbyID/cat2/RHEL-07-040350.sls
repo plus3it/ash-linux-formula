@@ -1,5 +1,5 @@
 # Vuln ID:      V-72243
-# Finding ID:	RHEL-07-040610
+# Finding ID:	RHEL-07-040350
 # Version:	SV-86867r3_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
@@ -15,7 +15,7 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-040610' %}
+{%- set stig_id = 'RHEL-07-040350' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
