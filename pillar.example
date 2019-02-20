@@ -66,6 +66,11 @@
 ##  Set a localized/custom password on the GRUB boot-loader
 ##     grub-passwd: <POLICY_COMPLIANT_PASSWORD_STRING>
 
+##  Ensure that the LogLevel parm in sshd_config is set to the
+##  site-mandated value
+##     sshd-loglevel:  <QUIET|FATAL|ERROR|INFO|VERBOSE|DEBUG|DEBUG1|DEBUG2|DEBUG3>
+##  (See man page for valid values and associated output/warnings)
+
     # If using oscap to harden, which profile to select
     # If unsure of available profiles, use `oscap info \
     # "/usr/share/xml/scap/ssg/content/ssg-${OSVERS}-xccdf.xml"`
