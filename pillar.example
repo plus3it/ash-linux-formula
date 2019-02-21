@@ -64,6 +64,7 @@
 
 
 ##  Set a localized/custom password on the GRUB boot-loader
+##     grub-user: <ANY_STRING_OTHER_THAN_root>
 ##     grub-passwd: <POLICY_COMPLIANT_PASSWORD_STRING>
 
 ##  Ensure that the LogLevel parm in sshd_config is set to the

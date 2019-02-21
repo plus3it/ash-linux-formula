@@ -19,8 +19,10 @@
 {%- set stig_id = 'RHEL-07-010482' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
+{%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
 {%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
-{%- set grubFile = '/boot/grub2/user.cfg' %}
+{%- set grubUserFile = '/etc/grub.d/01_users' %}
+{%- set grubPassFile = '/boot/grub2/user.cfg' %}
 {%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
 
 script_{{ stig_id }}-describe:
@@ -28,11 +30,11 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubFile) ) %}
+{%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubPassFile) ) %}
 
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
-    - name: {{ grubFile }}
+    - name: {{ grubPassFile }}
     - user: 'root'
     - owner: 'root'
     - mode: '000600'
@@ -40,23 +42,43 @@ user_cfg_permissions-{{ stig_id }}:
 
 user_cfg_selLabels-{{ stig_id }}:
   cmd.run:
-    - name: 'chcon -u system_u -r object_r -t boot_t {{ grubFile }}'
+    - name: 'chcon -u system_u -r object_r -t boot_t {{ grubPassFile }}'
     - cwd: /root
     - require:
       - file: user_cfg_permissions-{{ stig_id }}
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
-    - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubFile }}'
+    - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubPassFile }}'
     - cwd: /root
     - require:
       - file: user_cfg_permissions-{{ stig_id }}
+
+grubuser_superDef-{{ grubUserFile }}:
+  file.replace:
+    - name: {{ grubUserFile }}
+    - pattern: 'superusers=".*"'
+    - repl: 'superusers="{{ grubUser }}"'
+
+grubuser_userSub-{{ grubUserFile }}:
+  file.replace:
+    - name: {{ grubUserFile }}
+    - pattern: 'password_pbkdf2 .* \\'
+    - repl: 'password_pbkdf2 {{ grubUser }} \\'
+
+regen_grubCfg:
+  cmd.run:
+    - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg '
+    - cwd: /root
+    - require:
+      - file: grubuser_superDef-{{ grubUserFile }}
+      - file: grubuser_userSub-{{ grubUserFile }}
 
 {%- else %}
 
 notify_{{ stig_id }}-noAction:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} skipped due to pre-existence of {{ grubFile }}.''\n"'
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} skipped due to pre-existence of {{ grubPassFile }}.''\n"'
     - stateful: True
     - cwd: /root
 
