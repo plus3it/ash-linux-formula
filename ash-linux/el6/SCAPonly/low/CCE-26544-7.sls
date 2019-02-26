@@ -26,7 +26,6 @@ script_{{ scapId }}-describe:
 append_{{ scapId }}-directive:
   file.append:
     - name: '{{ moduleConf }}'
-    - mode: '0644'
     - text: |
         # Added per SCAP-ID {{ scapId }}
         install {{ fsDrv }} /bin/false
