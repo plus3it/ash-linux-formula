@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-040620
-# Version:	RHEL-07-040620_rule
+# Finding ID:	RHEL-07-040400
+# Vuln-ID:      V-72253
+# Rue ID:       SV-86877r3_rule (sshd_use_approved_macs)
 # SRG ID:	SRG-OS-000250-GPOS-00093
 # Finding Level:	medium
 #
@@ -14,12 +15,12 @@
 #    NIST SP 800-53 Revision 4 :: AC-17 (2)
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-040620' %}
+{%- set stig_id = 'RHEL-07-040400' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'MACs' %}
-{%- set parmValu = 'hmac-sha2-256,hmac-sha2-512' %}
+{%- set parmValu = 'hmac-sha2-512,hmac-sha2-256' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

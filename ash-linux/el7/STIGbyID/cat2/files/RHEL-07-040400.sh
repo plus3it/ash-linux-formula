@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-040620
-# Version:	RHEL-07-040620_rule
+# Finding ID:	RHEL-07-040400
+# Vuln-ID:      V-72253
+# Rue ID:       SV-86877r3_rule (sshd_use_approved_macs)
 # SRG ID:	SRG-OS-000250-GPOS-00093
 # Finding Level:	medium
 # 
@@ -21,10 +22,11 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-040620"
+diag_out "STIG Finding ID: RHEL-07-040400"
 diag_out "   The SSH daemon must be configured to"
 diag_out "   only use Message Authentication"
 diag_out "   Codes (MACs) employing FIPS 140-2"
 diag_out "   approved cryptographic hash"
 diag_out "   algorithms."
 diag_out "----------------------------------------"
+
