@@ -157,6 +157,7 @@ include:
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040350
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040351
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040380
+  - ash-linux.el7.STIGbyID.cat2.RHEL-07-040400
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040410
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040420
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040421
@@ -165,7 +166,6 @@ include:
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040520
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040560
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040610
-  - ash-linux.el7.STIGbyID.cat2.RHEL-07-040620
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040640
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040650
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040660
