@@ -16,7 +16,8 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010040' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set bannerText = 'ash-linux/el7/banner-consent_full.txt' %}
+{%- import_text "ash-linux/el7/banner-consent_full.txt" as default_banner %}
+{%- set bannerText = salt.pillar.get('ash-linux:lookup:banner-plain', default_banner) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -26,8 +27,8 @@ script_{{ stig_id }}-describe:
 file_{{ stig_id }}:
   file.managed:
     - name: '/etc/issue'
-    - source: salt://{{ bannerText }}
     - user: root
     - group: root
     - mode: 0644
+    - contents: {{ bannerText|yaml(False)|indent(8) }}
 
