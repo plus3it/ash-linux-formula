@@ -17,7 +17,8 @@
 {%- set stig_id = 'RHEL-07-010040' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- import_text "ash-linux/el7/banner-consent_full.txt" as default_banner %}
-{%- set bannerText = salt.pillar.get('ash-linux:lookup:banner-plain', default_banner) %}
+{%- set bannerText = salt.pillar.get('ash-linux:lookup:login-banners:/etc/issue', default_banner) %}
+
 
 script_{{ stig_id }}-describe:
   cmd.script:

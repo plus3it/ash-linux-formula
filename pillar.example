@@ -86,20 +86,21 @@
     ## scap-xccdf:   # Path to scap xccdf.xml file
     ## scap-output:  # Path to directory where scap results will be saved
 
-#
+
 ##     banner-plain: |
-##       Place content to override the default (DoD) consent banner 
-##       that will be placed into the /etc/issue file
-##
-##       This pillar-key can be formatted as multi-line text. Multi-
-##       line text will be rendered verbatim into the managed /etc/issue
-##       file.
-##
-##       Wholly blank lines need not be padded with leading spaces.
-##
-##       Testing has not turned up any constraints on valid, ASCII
-##       contents. Alternate character-sets (i.e., UTF8/UNICODE) have
-##       not been tested.
-##
-##     banner-gconf: |
-##       GDM's gconf wants banner text as single line with linefeeds injected as '\n' literals
+##     login-banners:
+##       /etc/issue: |
+##           Place content to override the default (DoD) consent banner 
+##           that will be placed into the /etc/issue file
+##    
+##           This pillar-key can be formatted as multi-line text. Multi-
+##           line text will be rendered verbatim into the managed /etc/issue
+##           file.
+##    
+##           Wholly blank lines need not be padded with leading spaces.
+##    
+##           Testing has not turned up any constraints on valid, ASCII
+##           contents. Alternate character-sets (i.e., UTF8/UNICODE) have
+##           not been tested.
+##       gconf:  This banner-content overrides the standard, STIG-specified, DoD warning banner content that is bundled with the ASH-linux formula. Note that GDM's `gconf` utility wants banner text specified as a single line of text with any required linefeeds injected as '\n' literals. Beyond that, this override content is not constrained.\n\nBasically, "go nuts".
+##       
