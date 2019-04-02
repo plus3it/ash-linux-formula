@@ -85,3 +85,22 @@
     ## scap-ds:      # Path to scap ds.xml file
     ## scap-xccdf:   # Path to scap xccdf.xml file
     ## scap-output:  # Path to directory where scap results will be saved
+
+
+##     banner-plain: |
+##     login-banners:
+##       /etc/issue: |
+##           This banner-content overrides the standard, STIG-specified, DoD warning banner content that is bundled with the ASH-linux formula. This overridden content is placed into the '/etc/issue' file.
+##
+##           Notes on content-limitations:
+##
+##           * There is, currently, no tested limit to the length of the content deliverable by this content-block.
+##           * This override content may exceed an 80-column (or other) width.
+##           * This content may also be specified as multi-line content.
+##           * Wholly blank lines need not be padded with leading spaces.
+##           * The only current recommendation is to limit content to standad ASCII character-set. Alternate character-sets (i.e., UTF8/UNICODE) have not been tested.
+##
+##           Beyond that, "go nuts".
+##    
+##       gconf:  This banner-content overrides the standard, STIG-specified, DoD warning banner content that is bundled with the ASH-linux formula. Note that GDM's `gconf` utility wants banner text specified as a single line of text with any required linefeeds injected as '\n' literals. Beyond that, this override content is not constrained.\n\nBasically, "go nuts".
+##       
