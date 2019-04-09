@@ -50,14 +50,6 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-file_{{ stig_id }}-{{ parmValu }}:
-  file.managed:
-    - name: '{{ parmValu }}'
-    - source: salt://{{ helperLoc }}/issue.txt
-    - user: 'root'
-    - group: 'root'
-    - mode: 0644
-
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
     - name: '{{ cfgFile }}'
