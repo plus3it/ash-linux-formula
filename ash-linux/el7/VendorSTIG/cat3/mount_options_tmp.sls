@@ -45,9 +45,9 @@ file_{{ stig_id }}-{{ targMnt }}:
     - name: '{{ optionsFile }}'
     - user: 'root'
     - grou: 'root'
-    - mode: '0600'
+    - mode: '0644'
     - makedirs: True
-    - dir_mode: '0700'
+    - dir_mode: '0755'
     - contents: |-
         [Mount]
         Options=mode=1777,strictatime,{{ mntOpt|join(",") }}
