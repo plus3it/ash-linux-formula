@@ -33,3 +33,13 @@ fixcfg_{{ stig_id }}-{{ cfgFile }}:
              else print $0}'' {{ cfgFile }} > /tmp/{{ stig_id }} && mv
              /tmp/{{ stig_id }} {{ cfgFile }}'
     - cwd: /root
+    - require:
+      - pkg: 'pkg_{{ stig_id }}-aide'
+
+setDefault_{{ stig_id }}-{{ cfgFile }}:
+  file.replace:
+    - name: {{ cfgFile }}
+    - pattern: '^\s*NORMAL\s*=\s*.*$'
+    - repl: 'NORMAL = FIPSR+sha512'
+    - require:
+      - cmd: 'fixcfg_{{ stig_id }}-{{ cfgFile }}'
