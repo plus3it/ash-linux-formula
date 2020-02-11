@@ -26,6 +26,10 @@
                       'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
                       'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=perm_mod',
                     },
+    'regUser'     : { 'search_string' : ' ' + act2mon + ' -F auid>' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -k perm_mod',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -k perm_mod',
+                    },
 } %}
 
 script_{{ stig_id }}-describe:
@@ -54,7 +58,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
     - name: '{{ audit_cfg_file }}'
     - text: |-
         
-        # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
+        # Monitor all uses of the {{ act2mon }} syscall (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}
     {%- endif %}
