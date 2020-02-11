@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-030010
-# Version:	RHEL-07-030010_rule
+# STIG ID:	RHEL-07-030000
+# Rule ID:	SV-86703r3_rule
+# Vuln ID:	V-72079
 # SRG ID:	SRG-OS-000038-GPOS-00016
 # Finding Level:	high
 #
@@ -20,7 +21,7 @@
 #    NIST SP 800-53 Revision 4 :: AU-2 d
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030010' %}
+{%- set stig_id = 'RHEL-07-030000' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set svcName = 'auditd.service' %}
 

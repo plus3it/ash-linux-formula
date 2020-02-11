@@ -22,7 +22,7 @@ include:
   - ash-linux.el7.STIGbyID.cat1.RHEL-07-020310
   - ash-linux.el7.STIGbyID.cat1.RHEL-07-021280
   - ash-linux.el7.STIGbyID.cat1.RHEL-07-021910
-  - ash-linux.el7.STIGbyID.cat1.RHEL-07-030010
+  - ash-linux.el7.STIGbyID.cat1.RHEL-07-030000
   - ash-linux.el7.STIGbyID.cat1.RHEL-07-030810
   - ash-linux.el7.STIGbyID.cat1.RHEL-07-040330
   - ash-linux.el7.STIGbyID.cat1.RHEL-07-040331
