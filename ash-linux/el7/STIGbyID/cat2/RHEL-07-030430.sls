@@ -3,14 +3,14 @@
 # Vuln ID:	V-72109
 # SRG ID:	SRG-OS-000458-GPOS-00203
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	All uses of the fchmodat command must be audited.
 #
-# CCI-000172 
-#    NIST SP 800-53 :: AU-12 c 
-#    NIST SP 800-53A :: AU-12.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: AU-12 c 
+# CCI-000172
+#    NIST SP 800-53 :: AU-12 c
+#    NIST SP 800-53A :: AU-12.1 (iv)
+#    NIST SP 800-53 Revision 4 :: AU-12 c
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030430' %}
@@ -58,7 +58,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
     - name: '{{ audit_cfg_file }}'
     - text: |-
-        
+
         # Monitor all uses of the {{ act2mon }} syscall (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}

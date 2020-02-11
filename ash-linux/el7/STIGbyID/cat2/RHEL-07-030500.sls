@@ -3,16 +3,16 @@
 # Vuln ID:	V-72123
 # SRG ID:	SRG-OS-000064-GPOS-00033
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	All uses of the creat command must be audited.
 #
-# CCI-000172 
-# CCI-002884 
-#    NIST SP 800-53 :: AU-12 c 
-#    NIST SP 800-53A :: AU-12.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: AU-12 c 
-#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
+# CCI-000172
+# CCI-002884
+#    NIST SP 800-53 :: AU-12 c
+#    NIST SP 800-53A :: AU-12.1 (iv)
+#    NIST SP 800-53 Revision 4 :: AU-12 c
+#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a)
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030500' %}
@@ -64,7 +64,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
     - name: '{{ audit_cfg_file }}'
     - text: |-
-        
+
         # Monitor all uses of the {{ act2mon }} syscall (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}
