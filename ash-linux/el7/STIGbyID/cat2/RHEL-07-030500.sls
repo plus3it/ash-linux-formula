@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-030420
-# Version:	RHEL-07-030420_rule
+# STIG ID:	RHEL-07-030500
+# Rule ID:	SV-86747r5_rule
+# Vuln ID:	V-72123
 # SRG ID:	SRG-OS-000064-GPOS-00033
 # Finding Level:	medium
 # 
@@ -14,20 +15,28 @@
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030420' %}
+{%- set stig_id = 'RHEL-07-030500' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
 {%- set act2mon = 'creat' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>' + sysuserMax + ' ',
+    'selDACusers'   : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>' + sysuserMax + ' ',
                       'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
                       'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
-                    },
-    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid=0 ',
+                      },
+    'selDACroot'    : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid=0 ',
                       'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
                       'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=access',
-                    },
+                      },
+    'regUsersEacces': { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EACCES -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      },
+    'regUsersEperm' : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      },
 } %}
 
 script_{{ stig_id }}-describe:
@@ -56,7 +65,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
     - name: '{{ audit_cfg_file }}'
     - text: |-
         
-        # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
+        # Monitor all uses of the {{ act2mon }} syscall (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}
     {%- endif %}
