@@ -63,7 +63,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
     - name: '{{ audit_cfg_file }}'
     - text: |-
         
-        # Monitor all uses of the chown syscall (per STIG-ID {{ stig_id }})
+        # Monitor all uses of the {{ act2mon }} syscall (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}
     {%- endif %}
