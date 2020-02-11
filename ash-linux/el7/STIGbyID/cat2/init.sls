@@ -66,7 +66,7 @@ include:
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-021230
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-021620
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-021760
-  - ash-linux.el7.STIGbyID.cat2.RHEL-07-030090
+  - ash-linux.el7.STIGbyID.cat2.RHEL-07-030010
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-030310
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-030330
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-030331

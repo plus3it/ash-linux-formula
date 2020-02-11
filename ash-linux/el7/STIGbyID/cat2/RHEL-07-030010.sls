@@ -1,7 +1,9 @@
-# Finding ID:	RHEL-07-030090
-# Version:	RHEL-07-030090_rule
-# SRG ID:	SRG-OS-000046-GPOS-00022
-# Finding Level:	medium
+# STIG ID:      RHEL-07-030010
+# Rule ID:      SV-86705r4_rule
+# Vuln ID:      V-72081
+# SRG ID:       SRG-OS-000046-GPOS-00022
+# Finding Level:        medium
+
 # 
 # Rule Summary:
 #	The operating system must shut down upon audit processing
@@ -17,7 +19,7 @@
 #    NIST SP 800-53 Revision 4 :: AU-5 a 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030090' %}
+{%- set stig_id = 'RHEL-07-030010' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
 {%- set oflowVal = salt.pillar.get('ash-linux:lookup:audit-overflow', '2') %}
