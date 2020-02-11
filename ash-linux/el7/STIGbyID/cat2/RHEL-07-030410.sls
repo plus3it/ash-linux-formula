@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-030390
-# Version:	RHEL-07-030390_rule
+# STIG ID:	RHEL-07-030410
+# Rule ID:	SV-86729r5_rule
+# Vuln ID:	V-72105
 # SRG ID:	SRG-OS-000458-GPOS-00203
 # Finding Level:	medium
 #
@@ -12,7 +13,7 @@
 #    NIST SP 800-53 Revision 4 :: AU-12 c
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030390' %}
+{%- set stig_id = 'RHEL-07-030410' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
 {%- set act2mon = 'chmod' %}
