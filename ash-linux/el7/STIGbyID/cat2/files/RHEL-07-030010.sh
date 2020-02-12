@@ -1,6 +1,6 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030090
-# Version:	RHEL-07-030090_rule
+# Finding ID:	RHEL-07-030010
+# Version:	RHEL-07-030010_rule
 # SRG ID:	SRG-OS-000046-GPOS-00022
 # Finding Level:	medium
 # 
@@ -24,7 +24,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030090"
+diag_out "STIG Finding ID: RHEL-07-030010"
 diag_out "   The operating system must shut down"
 diag_out "   upon audit processing failure,"
 diag_out "   unless availability is an overriding"

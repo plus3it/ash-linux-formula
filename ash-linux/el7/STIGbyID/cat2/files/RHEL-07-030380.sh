@@ -5,7 +5,7 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the chown command must be audited.
+#	All uses of the fchown command must be audited.
 #
 # CCI-000172 
 # CCI-000126 
@@ -24,6 +24,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030380"
-diag_out "   All uses of the chown command must"
+diag_out "   All uses of the fchown command must"
 diag_out "   be audited."
 diag_out "----------------------------------------"

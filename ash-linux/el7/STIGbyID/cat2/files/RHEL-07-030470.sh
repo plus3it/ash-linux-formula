@@ -1,11 +1,11 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030405
-# Version:	RHEL-07-030405_rule
+# Finding ID:	RHEL-07-030470
+# Version:	RHEL-07-030470_rule
 # SRG ID:	SRG-OS-000458-GPOS-00203
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the lremovexattr command must be audited.
+#	All uses of the removexattr command must be audited.
 #
 # CCI-000172 
 #    NIST SP 800-53 :: AU-12 c 
@@ -19,7 +19,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030405"
-diag_out "   All uses of the lremovexattr command "
+diag_out "STIG Finding ID: RHEL-07-030470"
+diag_out "   All uses of the removexattr command "
 diag_out "   must be audited."
 diag_out "----------------------------------------"

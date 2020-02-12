@@ -1,10 +1,11 @@
-# Finding ID:	RHEL-07-030405
-# Version:	RHEL-07-030405_rule
+# STIG ID:	RHEL-07-030470
+# Rule ID:	SV-86741r5_rule
+# Vuln ID:	V-72117
 # SRG ID:	SRG-OS-000458-GPOS-00203
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the lremovexattr command must be audited.
+#	All uses of the removexattr command must be audited.
 #
 # CCI-000172 
 #    NIST SP 800-53 :: AU-12 c 
@@ -12,10 +13,10 @@
 #    NIST SP 800-53 Revision 4 :: AU-12 c 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030405' %}
+{%- set stig_id = 'RHEL-07-030470' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
-{%- set act2mon = 'lremovexattr' %}
+{%- set act2mon = 'removexattr' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
     'selDACusers' : { 'search_string' : ' ' + act2mon + ' -F auid>' + sysuserMax + ' ',
@@ -54,7 +55,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
     - name: '{{ audit_cfg_file }}'
     - text: |-
         
-        # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
+        # Monitor all uses of the {{ act2mon }} syscall (per STIG-ID {{ stig_id }})
         {{ audit_options['rule32'] }}
         {{ audit_options['rule'] }}
     {%- endif %}

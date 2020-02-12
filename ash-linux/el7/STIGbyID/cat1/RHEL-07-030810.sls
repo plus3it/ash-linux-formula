@@ -14,7 +14,7 @@
 {%- set stig_id = 'RHEL-07-030810' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set primeAV = 'MFEcma' %}
-{%- set primeSvc = 'nails' %}
+{%- set primeSvc = 'mcafee.ma' %}
 {%- set secondAV = 'clamav' %}
 {%- set secondSvc = 'clamd' %}
 
