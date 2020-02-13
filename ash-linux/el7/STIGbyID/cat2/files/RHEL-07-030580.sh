@@ -1,11 +1,12 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030424
-# Version:	RHEL-07-030424_rule
-# SRG ID:	SRG-OS-000064-GPOS-00033
+# STIG ID:	RHEL-07-030580
+# Rule ID:	SV-86763r4_rule
+# Vuln ID:	V-72139
+# SRG ID:	SRG-OS-000392-GPOS-00172
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the truncate command must be audited.
+#	All uses of the chcon command must be audited.
 #
 # CCI-000172 
 # CCI-002884 
@@ -21,7 +22,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030424"
-diag_out "   All uses of the truncate command"
-diag_out "   must be audited."
+diag_out "STIG Finding ID: RHEL-07-030580"
+diag_out "   All uses of the chcon command must"
+diag_out "   be audited."
 diag_out "----------------------------------------"

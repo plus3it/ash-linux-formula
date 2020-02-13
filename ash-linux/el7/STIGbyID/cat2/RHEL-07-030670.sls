@@ -18,14 +18,14 @@
 {%- set key2mon = 'module-change' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' ' + act2mon + ' ' ,
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
-                    },
-    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' ',
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
-                    },
+    'rootUser': { 'search_string' : ' ' + act2mon + ' ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+                },
+    'regUsers': { 'search_string' : ' ' + act2mon + ' ' ,
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+                },
 } %}
 
 script_{{ stig_id }}-describe:

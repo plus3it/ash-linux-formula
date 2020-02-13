@@ -21,12 +21,12 @@
 {%- set actKey = 'privileged-priv_change' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
-                      'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=' + actKey,
-                    },
-    'selDACroot'  : { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid=0 ',
-                      'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=' + actKey,
-                    },
+    'rootUser': { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid=0 ',
+                  'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid=0 -k ' + actKey,
+                },
+    'regUsers': { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
+                  'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + actKey,
+                },
 } %}
 
 script_{{ stig_id }}-describe:

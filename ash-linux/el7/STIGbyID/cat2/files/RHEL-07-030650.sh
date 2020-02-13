@@ -1,14 +1,19 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030423
-# Version:	RHEL-07-030423_rule
-# SRG ID:	SRG-OS-000064-GPOS-00033
+# STIG ID:	RHEL-07-030650
+# Rule ID:	SV-86777r5_rule
+# Vuln ID:	V-72153
+# SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the open_by_handle_at command must be audited.
+#	All uses of the gpasswd command must be audited.
 #
+# CCI-000135 
 # CCI-000172 
 # CCI-002884 
+#    NIST SP 800-53 :: AU-3 (1) 
+#    NIST SP 800-53A :: AU-3 (1).1 (ii) 
+#    NIST SP 800-53 Revision 4 :: AU-3 (1) 
 #    NIST SP 800-53 :: AU-12 c 
 #    NIST SP 800-53A :: AU-12.1 (iv) 
 #    NIST SP 800-53 Revision 4 :: AU-12 c 
@@ -21,7 +26,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030423"
-diag_out "   All uses of the open_by_handle_at"
-diag_out "   command must be audited."
+diag_out "STIG Finding ID: RHEL-07-030650"
+diag_out "   All uses of the gpasswd command must"
+diag_out "   be audited."
 diag_out "----------------------------------------"

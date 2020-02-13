@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Finding ID:	RHEL-07-030810
-# Version:	RHEL-07-030810_rule
+# Finding ID:	RHEL-07-032000
+# Version:	RHEL-07-032000_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	high
 # 
@@ -19,7 +19,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030810"
+diag_out "STIG Finding ID: RHEL-07-032000"
 diag_out "   The system must use a DoD-approved"
 diag_out "   virus scan program."
 diag_out "----------------------------------------"

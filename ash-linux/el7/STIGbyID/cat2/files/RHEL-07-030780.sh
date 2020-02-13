@@ -1,27 +1,22 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-030780
 # Version:	RHEL-07-030780_rule
-# SRG ID:	SRG-OS-000480-GPOS-00227
+# SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The rsyslog daemon must not accept log messages from other
-#	servers unless the server is being used for log aggregation.
+#	All uses of the ssh-keysign command must be audited.
 #
-# CCI-000368 
-# CCI-000318 
-# CCI-001812 
-# CCI-001813 
-# CCI-001814 
-#    NIST SP 800-53 :: CM-6 c 
-#    NIST SP 800-53A :: CM-6.1 (v) 
-#    NIST SP 800-53 Revision 4 :: CM-6 c 
-#    NIST SP 800-53 :: CM-3 e 
-#    NIST SP 800-53A :: CM-3.1 (v) 
-#    NIST SP 800-53 Revision 4 :: CM-3 f 
-#    NIST SP 800-53 Revision 4 :: CM-11 (2) 
-#    NIST SP 800-53 Revision 4 :: CM-5 (1) 
-#    NIST SP 800-53 Revision 4 :: CM-5 (1) 
+# CCI-000135 
+# CCI-000172 
+# CCI-002884 
+#    NIST SP 800-53 :: AU-3 (1) 
+#    NIST SP 800-53A :: AU-3 (1).1 (ii) 
+#    NIST SP 800-53 Revision 4 :: AU-3 (1) 
+#    NIST SP 800-53 :: AU-12 c 
+#    NIST SP 800-53A :: AU-12.1 (iv) 
+#    NIST SP 800-53 Revision 4 :: AU-12 c 
+#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
 # Standard outputter function
@@ -31,8 +26,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030780"
-diag_out "   The rsyslog daemon must not accept"
-diag_out "   log messages from other servers"
-diag_out "   unless the server is being used for"
-diag_out "   log aggregation."
+diag_out "   All uses of the ssh-keysign command"
+diag_out "   must be audited."
 diag_out "----------------------------------------"

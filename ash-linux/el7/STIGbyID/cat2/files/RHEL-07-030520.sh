@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030422
-# Version:	RHEL-07-030422_rule
+# STIG ID:	RHEL-07-030520
+# Rule ID:	SV-86751r5_rule
+# Vuln ID:	V-72127
 # SRG ID:	SRG-OS-000064-GPOS-00033
 # Finding Level:	medium
 # 
@@ -21,7 +22,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030422"
+diag_out "STIG Finding ID: RHEL-07-030520"
 diag_out "   All uses of the openat command must"
 diag_out "   be audited."
 diag_out "----------------------------------------"

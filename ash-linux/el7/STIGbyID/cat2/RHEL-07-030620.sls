@@ -1,5 +1,5 @@
-# Finding ID:	RHEL-07-030492
-# Version:	RHEL-07-030492_rule
+# Finding ID:	RHEL-07-030620
+# Version:	RHEL-07-030620_rule
 # SRG ID:	SRG-OS-000392-GPOS-00172
 # Finding Level:	medium
 # 
@@ -19,7 +19,7 @@
 #    NIST SP 800-53 Revision 4 :: AU-2 d 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030492' %}
+{%- set stig_id = 'RHEL-07-030620' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set watchFile = '/var/log/lastlog' %}

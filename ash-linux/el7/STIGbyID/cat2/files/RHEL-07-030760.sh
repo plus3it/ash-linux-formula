@@ -1,17 +1,17 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030425
-# Version:	RHEL-07-030425_rule
-# SRG ID:	SRG-OS-000064-GPOS-00033
+# Finding ID:	RHEL-07-030760
+# Version:	RHEL-07-030760_rule
+# SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the ftruncate command must be audited.
+#	All uses of the postdrop command must be audited.
 #
-# CCI-000172 
+# CCI-000135 
 # CCI-002884 
-#    NIST SP 800-53 :: AU-12 c 
-#    NIST SP 800-53A :: AU-12.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: AU-12 c 
+#    NIST SP 800-53 :: AU-3 (1) 
+#    NIST SP 800-53A :: AU-3 (1).1 (ii) 
+#    NIST SP 800-53 Revision 4 :: AU-3 (1) 
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
@@ -21,7 +21,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030425"
-diag_out "   All uses of the ftruncate command"
+diag_out "STIG Finding ID: RHEL-07-030760"
+diag_out "   All uses of the postdrop command"
 diag_out "   must be audited."
 diag_out "----------------------------------------"

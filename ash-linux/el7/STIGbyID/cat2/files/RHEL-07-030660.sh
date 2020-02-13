@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030513
-# Version:	RHEL-07-030513_rule
+# STIG ID:	RHEL-07-030660
+# Rule ID:	SV-86779r5_rule
+# Vuln ID:	V-72155
 # SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
@@ -25,7 +26,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030513"
+diag_out "STIG Finding ID: RHEL-07-030660"
 diag_out "   All uses of the chage command must"
 diag_out "   be audited."
 diag_out "----------------------------------------"

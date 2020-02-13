@@ -1,11 +1,11 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030512
-# Version:	RHEL-07-030512_rule
+# Finding ID:	RHEL-07-030560
+# Version:	RHEL-07-030560_rule
 # SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the gpasswd command must be audited.
+#	All uses of the pt_chown command must be audited.
 #
 # CCI-000135 
 # CCI-000172 
@@ -25,7 +25,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030512"
-diag_out "   All uses of the gpasswd command must"
-diag_out "   be audited."
+diag_out "STIG Finding ID: RHEL-07-030560"
+diag_out "   All uses of the pt_chown command"
+diag_out "   must be audited."
 diag_out "----------------------------------------"

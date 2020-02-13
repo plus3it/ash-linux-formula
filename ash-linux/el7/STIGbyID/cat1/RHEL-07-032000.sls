@@ -1,5 +1,5 @@
-# Finding ID:	RHEL-07-030810
-# Version:	RHEL-07-030810_rule
+# Finding ID:	RHEL-07-032000
+# Version:	RHEL-07-032000_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	high
 # 
@@ -11,7 +11,7 @@
 #    NIST SP 800-53A :: SI-3.1 (ii) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030810' %}
+{%- set stig_id = 'RHEL-07-032000' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set primeAV = 'MFEcma' %}
 {%- set primeSvc = 'mcafee.ma' %}

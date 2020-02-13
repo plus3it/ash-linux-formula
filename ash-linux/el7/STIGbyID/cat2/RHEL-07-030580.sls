@@ -1,10 +1,11 @@
-# Finding ID:	RHEL-07-030442
-# Version:	RHEL-07-030442_rule
+# STIG ID:	RHEL-07-030580
+# Rule ID:	SV-86763r4_rule
+# Vuln ID:	V-72139
 # SRG ID:	SRG-OS-000392-GPOS-00172
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the setsebool command must be audited.
+#	All uses of the chcon command must be audited.
 #
 # CCI-000172 
 # CCI-002884 
@@ -14,19 +15,19 @@
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030442' %}
+{%- set stig_id = 'RHEL-07-030580' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
-{%- set path2mon = '/usr/sbin/sebool' %}
+{%- set path2mon = '/usr/bin/chcon' %}
 {%- set actKey = 'privileged-priv_change' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
-                      'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=' + actKey,
-                    },
-    'selDACroot'  : { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid=0 ',
-                      'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid=0 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key=' + actKey,
-                    },
+    'rootUser': { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid=0 ',
+                  'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid=0 -k ' + actKey,
+                },
+    'regUsers': { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
+                  'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + actKey,
+                },
 } %}
 
 script_{{ stig_id }}-describe:
@@ -55,7 +56,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
     - name: '{{ audit_cfg_file }}'
     - text: |-
         
-        # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
+        # Monitor all uses of the {{ path2mon }} command (per STIG-ID {{ stig_id }})
         {{ audit_options['rule'] }}
     {%- endif %}
   {%- endfor %}

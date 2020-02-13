@@ -1,10 +1,11 @@
-# Finding ID:	RHEL-07-030512
-# Version:	RHEL-07-030512_rule
+# STIG ID:	RHEL-07-030660
+# Rule ID:	SV-86779r5_rule
+# Vuln ID:	V-72155
 # SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the gpasswd command must be audited.
+#	All uses of the chage command must be audited.
 #
 # CCI-000135 
 # CCI-000172 
@@ -18,11 +19,11 @@
 #    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030512' %}
+{%- set stig_id = 'RHEL-07-030660' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set ruleFile = '/etc/audit/rules.d/priv_acts.rules' %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
-{%- set path2mon = '/usr/bin/gpasswd' %}
+{%- set path2mon = '/usr/bin/chage' %}
 {%- set key2mon = 'privileged-passwd' %}
 
 script_{{ stig_id }}-describe:
@@ -40,6 +41,6 @@ file_{{ stig_id }}-{{ ruleFile }}:
   file.replace:
     - name: '{{ ruleFile }}'
     - pattern: '^-a always,exit -F path={{ path2mon }}.*$'
-    - repl: '-a always,exit -F path={{ path2mon }} -F perm=x -F auid>{{ sysuserMax }} -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key={{ key2mon }}'
+    - repl: '-a always,exit -F path={{ path2mon }} -F auid>{{ sysuserMax }} -F auid!=4294967295 -k {{ key2mon }}'
     - append_if_not_found: True
 
