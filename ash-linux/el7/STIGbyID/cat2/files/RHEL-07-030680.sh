@@ -1,11 +1,12 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030524
-# Version:	RHEL-07-030524_rule
+# STIG ID:	RHEL-07-030680
+# Rule ID:	SV-86783r5_rule
+# Vuln ID:	V-72159
 # SRG ID:	SRG-OS-000037-GPOS-00015
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the newgrp command must be audited.
+#	All uses of the su command must be audited.
 #
 # CCI-000130 
 # CCI-000135 
@@ -29,7 +30,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030524"
-diag_out "   All uses of the newgrp command must"
-diag_out "   be audited."
+diag_out "STIG Finding ID: RHEL-07-030680"
+diag_out "   All uses of the su command must be"
+diag_out "   audited."
 diag_out "----------------------------------------"

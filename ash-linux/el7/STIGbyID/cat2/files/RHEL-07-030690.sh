@@ -1,11 +1,12 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030521
-# Version:	RHEL-07-030521_rule
+# STIG ID:	RHEL-07-030690
+# Rule ID:	SV-86785r4_rule
+# Vuln ID:	V-72161
 # SRG ID:	SRG-OS-000037-GPOS-00015
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the su command must be audited.
+#	All uses of the sudo command must be audited.
 #
 # CCI-000130 
 # CCI-000135 
@@ -29,7 +30,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030521"
-diag_out "   All uses of the su command must be"
+diag_out "STIG Finding ID: RHEL-07-030690"
+diag_out "   All uses of the sudo command must be"
 diag_out "   audited."
 diag_out "----------------------------------------"

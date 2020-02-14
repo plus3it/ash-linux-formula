@@ -1,30 +1,33 @@
-# Finding ID:	RHEL-07-030820
-# Version:	RHEL-07-030820_rule
-# SRG ID:	SRG-OS-000471-GPOS-00216
+# Finding ID:	RHEL-07-030880
+# Version:	RHEL-07-030880_rule
+# SRG ID:	SRG-OS-000466-GPOS-00210
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All uses of the init_module command must be audited.
+#	All uses of the rename command must be audited.
 #
 # CCI-000172 
+# CCI-002884 
 #    NIST SP 800-53 :: AU-12 c 
 #    NIST SP 800-53A :: AU-12.1 (iv) 
 #    NIST SP 800-53 Revision 4 :: AU-12 c 
+#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-030820' %}
+{%- set stig_id = 'RHEL-07-030880' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set act2mon = 'init_module' %}
-{%- set key2mon = 'module-change' %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set act2mon = 'rename' %}
+{%- set key2mon = 'delete' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'rootUser': { 'search_string' : ' ' + act2mon + ' ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+    'rootUser': { 'search_string' : ' ' + act2mon + ' -F perm=x -F auid=0 ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F perm=x -F auid=0 -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F perm=x -F auid=0 -k ' + key2mon,
                 },
-    'regUsers': { 'search_string' : ' ' + act2mon + ' ' ,
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+    'regUsers': { 'search_string' : ' ' + act2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
                 },
 } %}
 
