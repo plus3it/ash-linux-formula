@@ -1,7 +1,8 @@
 #!/bin/bash
 #
-# Finding ID:	RHEL-07-010270
-# Version:	RHEL-07-010270_rule
+# STIG ID:	RHEL-07-010300
+# Rule ID:	SV-86563r3_rule
+# Vuln ID:	V-71939
 # SRG ID:	SRG-OS-000106-GPOS-00053
 # Finding Level:	high
 #
@@ -21,7 +22,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-010270"
+diag_out "STIG Finding ID: RHEL-07-010300"
 diag_out "   The SSH daemon must not allow"
 diag_out "   authentication using an empty"
 diag_out "   password."

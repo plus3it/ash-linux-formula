@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-010260
-# Version:	RHEL-07-010260_rule
+# STIG ID:	RHEL-07-010290
+# Rule ID:	SV-86561r3_rule
+# Vuln ID:	V-71937
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	high
 # 
@@ -12,7 +13,7 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-010260' %}
+{%- set stig_id = 'RHEL-07-010290' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set sysauthroot = '/etc/pam.d/system-auth' %}
 {%- if salt.file.file_exists(sysauthroot + '-ac') %}

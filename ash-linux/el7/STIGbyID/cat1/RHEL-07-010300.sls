@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-010270
-# Version:	RHEL-07-010270_rule
+# STIG ID:	RHEL-07-010300
+# Rule ID:	SV-86563r3_rule
+# Vuln ID:	V-71939
 # SRG ID:	SRG-OS-000106-GPOS-00053
 # Finding Level:	high
 # 
@@ -12,7 +13,7 @@
 #    NIST SP 800-53 Revision 4 :: IA-2 (2) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-010270' %}
+{%- set stig_id = 'RHEL-07-010300' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 
