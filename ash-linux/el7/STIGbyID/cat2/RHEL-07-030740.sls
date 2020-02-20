@@ -17,7 +17,7 @@
 {%- set stig_id = 'RHEL-07-030740' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
-{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set act2mon = 'mount' %}
 {%- set path2mon = '/bin/mount' %}
 {%- set key2mon = 'privileged-mount' %}
@@ -26,9 +26,9 @@
                   'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid=0 -k ' + key2mon,
                   'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid=0 -k ' + key2mon,
                 },
-    'regUsers': { 'search_string' : ' ' + act2mon + ' -F auid>' + sysuserMax + ' ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+    'regUsers': { 'search_string' : ' ' + act2mon + ' -F auid>=' + sysuserMax + ' ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
                 },
 } %}
 
@@ -47,7 +47,7 @@ file_{{ stig_id }}-{{ audit_cfg_file }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'
     - pattern: '^-a always,exit -F path={{ path2mon }}.*$'
-    - repl: '-a always,exit -F path={{ path2mon }} -F perm=x -F auid>{{ sysuserMax }} -F auid!=4294967295 --k {{ key2mon }}'
+    - repl: '-a always,exit -F path={{ path2mon }} -F auid>={{ sysuserMax }} -F auid!=4294967295 --k {{ key2mon }}'
     - append_if_not_found: True
 
 # Monitoring of SELinux DAC config
@@ -60,8 +60,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
     - name: 'printf "\nchanged=no comment=''Appropriate audit rule already in place.''\n"'
     - cwd: /root
     - stateful: True
-    {%- elif not salt['cmd.shell']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file , output_loglevel='qui
-et') == '0' %}
+    {%- elif not salt['cmd.shell']('grep -c -E -e "' + audit_options['search_string'] + '" ' + audit_cfg_file , output_loglevel='quiet') == '0' %}
 file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'

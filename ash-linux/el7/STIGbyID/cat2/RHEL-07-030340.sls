@@ -1,59 +1,38 @@
-# Finding ID:	RHEL-07-030340
-# Version:	RHEL-07-030340_rule
-# SRG ID:	SRG-OS-000342-GPOS-00133
+# STIG ID:	RHEL-07-030340
+# Rule ID:	SV-86715r2_rule
+# Vuln ID:	V-72091
+# SRG ID:	SRG-OS-000343-GPOS-00134
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The audit system must take appropriate action when the audit
-#	storage volume is full.
+#	The operating system must immediately notify the System
+#	Administrator (SA) and Information System Security Officer
+#	(ISSO) (at a minimum) via email when the threshold for the
+#	repository maximum audit record storage capacity is reached.
 #
-# CCI-001851 
-#    NIST SP 800-53 Revision 4 :: AU-4 (1) 
+# CCI-001855 
+#    NIST SP 800-53 Revision 4 :: AU-5 (1) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030340' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set remoteCfg = '/etc/audisp/audisp-remote.conf' %}
-{%- set nfParm = 'network_failure_action'%}
-{%- set dfParm = 'disk_full_action'%}
-{%- set aurmtNetFail = salt.pillar.get('ash-linux:lookup:audisp-net-fail', 'syslog') %}
-{%- set auDiskFull = salt.pillar.get('ash-linux:lookup:audisp-disk-full', 'syslog') %}
+{%- set audCfg = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'space_left_action'%}
+{%- set alrtMeth = salt.pillar.get('ash-linux:lookup:audit-space-action', 'email') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-# STIG doesn't enumerate this, but the handler's kinda pointless
-# if this package isn't installed
-pkg_{{ stig_id }}-audispRemote:
-  pkg.installed:
-    - name: audispd-plugins
-
-{%- if salt.file.file_exists(remoteCfg) %}
-file_{{ stig_id }}-{{ nfParm }}:
+{%- if salt.file.file_exists(audCfg) %}
+file_{{ stig_id }}-{{ parmName }}:
   file.replace:
-    - name: '{{ remoteCfg }}'
-    - pattern: '^\s{{ nfParm }}.*$'
-    - repl: '{{ nfParm }} = {{ aurmtNetFail }}'
+    - name: '{{ audCfg }}'
+    - pattern: '^[ 	]*{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ alrtMeth }}'
     - append_if_not_found: True
-
-file_{{ stig_id }}-{{ dfParm }}:
-  file.replace:
-    - name: '{{ remoteCfg }}'
-    - pattern: '^\s{{ dfParm }}.*$'
-    - repl: '{{ dfParm }} = {{ auDiskFull }}'
-    - append_if_not_found: True
-{%- else %}
-file_{{ stig_id }}-{{ nfParm }}:
-  file.append:
-    - name: '{{ remoteCfg }}'
-    - text: '{{ nfParm }} = {{ aurmtNetFail }}'
-    - makedirs: True
-
-file_{{ stig_id }}-{{ dfParm }}:
-  file.append:
-    - name: '{{ remoteCfg }}'
-    - text: '{{ dfParm }} = {{ auDiskFull }}'
-    - makedirs: True
+    - not_found_content: |-
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} = {{ alrtMeth }}
 {%- endif %}

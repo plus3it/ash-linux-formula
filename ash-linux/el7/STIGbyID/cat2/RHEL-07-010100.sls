@@ -1,43 +1,95 @@
-# Finding ID:	RHEL-07-010100
-# Version:	RHEL-07-010100_rule
-# SRG ID:	SRG-OS-000070-GPOS-00038
+# STIG ID:	RHEL-07-010100
+# Rule ID:	SV-86523r5_rule
+# Vuln ID:	V-71899
+# SRG ID:	SRG-OS-000029-GPOS-00010
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed or new passwords are established,
-#	the new password must contain at least one lower-case
-#	character.
+#	The operating system must initiate a session lock for the
+#	screensaver after a period of inactivity for graphical user
+#	interfaces.
 #
-# CCI-000193 
-#    NIST SP 800-53 :: IA-5 (1) (a) 
-#    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
+# CCI-000057 
+#    NIST SP 800-53 :: AC-11 a 
+#    NIST SP 800-53A :: AC-11.1 (ii) 
+#    NIST SP 800-53 Revision 4 :: AC-11 a 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010100' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'lcredit' %}
-{%- set parmValu = '-1' %}
-{%- set parmDesc = 'lowercase' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set pkgName = 'dconf' %}
+{%- set dconfDir = '/etc/dconf/db/local.d' %}
+{%- set dconfFile = dconfDir + '/00-screensaver' %}
+{%- set headerLabel = 'org/gnome/desktop/screensaver' %}
+{%- set dconfHeader = '[' + headerLabel + ']' %}
+{%- set parmName = 'idle-activation-enabled' %}
+{%- set parmValu = 'true' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(cfgFile, '^' + parmName) %}
-file_{{ stig_id }}-{{ cfgFile }}:
+# Handler was selected for skipping...
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+# The dconf RPM is present
+{%- elif salt.pkg.version(pkgName) %}
+  # The config file exists
+  {%- if salt.file.file_exists(dconfFile) %}
+    # The parameter is present and defined
+    {%- if salt.file.search(dconfFile, parmName) %}
+file_{{ stig_id }}-setVal:
   file.replace:
-    - name: '{{ cfgFile }}'
-    - pattern: '^{{ parmName }}.*$'
-    - repl: '{{ parmName }} = {{ parmValu }}'
-{%- else %}
-file_{{ stig_id }}-{{ cfgFile }}:
+    - name: '{{ dconfFile }}'
+    - pattern: '^[ 	]*{{ parmName }}=.*$'
+    - repl: '{{ parmName }}={{ parmValu }}'
+    # The parameter is absent but section-header is present
+    {%- elif salt.file.search(dconfFile, dconfHeader) %}
+file_{{ stig_id }}-setVal:
+  file.replace:
+    - name: '{{ dconfFile }}'
+    - pattern: '^(?P<srctok>\{{ dconfHeader }}.*$)'
+    - repl: |-
+        \g<srctok>
+        {{ parmName }}={{ parmValu }}
+    # The parameter and section-header are absent
+    {%- else %}
+file_{{ stig_id }}-setVal:
   file.append:
-    - name: '{{ cfgFile }}'
+    - name: '{{ dconfFile }}'
     - text: |-
-        # Inserted per STIG-ID {{ stig_id }}:
-        # * Require new passwords to have at least one {{ parmDesc }} character
-        {{ parmName }} = {{ parmValu }}
+        {{ dconfHeader }}
+        {{ parmName }}={{ parmValu }}
+    {%- endif %}
+  # The config file does not exist
+  {%- else %}
+file_{{ stig_id }}-setVal:
+  file.managed:
+    - name: '{{ dconfFile }}'
+    - user: 'root'
+    - contents: |-
+        {{ dconfHeader }}
+        {{ parmName }}={{ parmValu }}
+    - group: 'root'
+    - mode: '0644'
+  {%- endif %}
+update_{{ stig_id }}-dconf:
+  cmd.run:
+    - name: '/usr/bin/dconf update'
+    - cwd: /root
+    - onchanges:
+      - file: file_{{ stig_id }}-setVal
+# The dconf RPM is not present
+{%- else %}
+notify_{{ stig_id }}-noRPM:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''RPM {{ pkgName }} not installed: skipping...''\n"'
+    - stateful: True
+    - cwd: /root
 {%- endif %}

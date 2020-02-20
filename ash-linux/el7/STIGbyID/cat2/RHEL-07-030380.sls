@@ -19,7 +19,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030380' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set act2mon = 'fchown' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
@@ -28,8 +28,8 @@
                   'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid=0 -k perm_mod',
                 },
     'regUsers': { 'search_string' : ' ' + act2mon + ' -F auid=0 ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -k perm_mod',
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>' + sysuserMax + ' -F auid!=4294967295 -k perm_mod',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k perm_mod',
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k perm_mod',
                 },
 } %}
 

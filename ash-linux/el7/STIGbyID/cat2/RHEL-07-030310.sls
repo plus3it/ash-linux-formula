@@ -1,55 +1,45 @@
-# Finding ID:	RHEL-07-030310
-# Version:	RHEL-07-030310_rule
-# SRG ID:	SRG-OS-000327-GPOS-00127
+# STIG ID:	RHEL-07-030310
+# Rule ID:	SV-86709r2_rule
+# Vuln ID:	V-72085
+# SRG ID:	SRG-OS-000342-GPOS-00133
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	All privileged function executions must be audited.
+#	The operating system must encrypt the transfer of audit records
+#	off-loaded onto a different system or media from the system
+#	being audited.
 #
-# CCI-002234 
-#    NIST SP 800-53 Revision 4 :: AC-6 (9) 
+# CCI-001851 
+#    NIST SP 800-53 Revision 4 :: AU-4 (1) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030310' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set ruleFile = '/etc/audit/rules.d/setuid_setgid.rules' %}
-{%- set localFstypes = [
-                         'ext2',
-                         'ext3',
-                         'ext4',
-                         'xfs',
-                         'jfs',
-                         'btrfs'
-                        ] %}
-{%- set privFiles = [] %}
-{%- set mntStruct = salt.mount.active() %}
-{%- set mntList = mntStruct.keys() %}
+{%- set remoteCfg = '/etc/audisp/audisp-remote.conf' %}
+{%- set parmName = 'enable_krb5' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-touch_{{ stig_id }}-{{ ruleFile }}:
-  file.touch:
-    - name: '{{ ruleFile }}'
+# STIG doesn't enumerate this, but the handler's kinda pointless
+# if this package isn't installed
+pkg_{{ stig_id }}-audispRemote:
+  pkg.installed:
+    - name: audispd-plugins
 
-{%- for mount in mntList %}
-  {%- if mntStruct[mount]['fstype'] in localFstypes %}
-    {%- set foundList = salt['cmd.shell']('find ' + mount + ' -xdev -type f \( -perm -4000 -o -perm -2000 \)').split('\n') %}
-    {%- do privFiles.extend(foundList) %}
-  {%- endif %}
-{%- endfor %}
-
-{%- for privFile in privFiles %}
-  {%- if privFile %}
-audit_{{ stig_id }}-{{ privFile }}:
+{%- if salt.file.file_exists(remoteCfg) %}
+file_{{ stig_id }}-{{ remoteCfg }}:
   file.replace:
-    - name: '{{ ruleFile }}'
-    - pattern: '^.*{{ privFile }}.*$'
-    - repl: '-a always,exit -F path={{ privFile }} -F perm=x -F auid>=1000 -F auid!=4294967295 -k setuid/setgid'
+    - name: '{{ remoteCfg }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} = yes'
     - append_if_not_found: True
-    - require:
-      - file: touch_{{ stig_id }}-{{ ruleFile }}
-  {%- endif %}
-{%- endfor %}
+{%- else %}
+file_{{ stig_id }}-{{ remoteCfg }}:
+  file.append:
+    - name: '{{ remoteCfg }}'
+    - text: '{{ parmName }} = yes'
+    - makedirs: True
+{%- endif %}

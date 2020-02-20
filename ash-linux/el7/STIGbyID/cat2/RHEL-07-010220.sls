@@ -1,22 +1,24 @@
-# Finding ID:	RHEL-07-010220
-# Version:	RHEL-07-010220_rule
-# SRG ID:	SRG-OS-000076-GPOS-00044
+# STIG ID:	RHEL-07-010220
+# Rule ID:	SV-86547r3_rule
+# Vuln ID:	V-71923
+# SRG ID:	SRG-OS-000073-GPOS-00041
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords for new users must be restricted to a 60-day maximum lifetime.
+#	User and group account administration utilities must be
+#	configured to store only encrypted representations of
+#	passwords.
 #
-# CCI-000199 
-#    NIST SP 800-53 :: IA-5 (1) (d) 
+# CCI-000196 
+#    NIST SP 800-53 :: IA-5 (1) (c) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (c) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010220' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set targFile = '/etc/login.defs' %}
-{%- set searchRoot = 'PASS_MAX_DAYS' %}
-{%- set targVal = '60' %}
+{%- set targFile = '/etc/libuser.conf' %}
+{%- set searchRoot = 'crypt_style' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -28,12 +30,11 @@ file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: '{{ targFile }}'   
     - pattern: '^{{ searchRoot }}.*$'
-    - repl: '{{ searchRoot }}	{{ targVal }}'
+    - repl: '{{ searchRoot }} = sha512'
 {%- else %}
 file_{{ stig_id }}-{{ targFile }}:
-  file.append:
+  file.replace:
     - name: '{{ targFile }}'   
-    - text: |-
-        # Inserted per STIG {{ stig_id }}
-        {{ searchRoot }}	{{ targVal }}
+    - pattern: '^(?P<srctok>^\[defaults\].*$)'
+    - repl: '\g<srctok>\n{{ searchRoot }} = sha512'
 {%- endif %}

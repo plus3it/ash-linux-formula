@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-030880
-# Version:	RHEL-07-030880_rule
+# STIG ID:	RHEL-07-030880
+# Rule ID:	SV-86823r5_rule
+# Vuln ID:	V-72199
 # SRG ID:	SRG-OS-000466-GPOS-00210
 # Finding Level:	medium
 # 
@@ -16,18 +17,18 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030880' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set act2mon = 'rename' %}
 {%- set key2mon = 'delete' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'rootUser': { 'search_string' : ' ' + act2mon + ' -F perm=x -F auid=0 ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F perm=x -F auid=0 -k ' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F perm=x -F auid=0 -k ' + key2mon,
+    'rootUser': { 'search_string' : ' ' + act2mon + ' -F auid=0 ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid=0 -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid=0 -k ' + key2mon,
                 },
-    'regUsers': { 'search_string' : ' ' + act2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+    'regUsers': { 'search_string' : ' ' + act2mon + ' -F auid>=' + sysuserMax + ' ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
                 },
 } %}
 

@@ -33,6 +33,6 @@ file_{{ stig_id }}-{{ ruleFile }}:
   file.replace:
     - name: '{{ ruleFile }}'
     - pattern: '^-w {{ path2mon }}.*$'
-    - repl: '-w {{ path2mon }} -F perm=x -F auid!=4294967295 -F subj_role=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 -F key={{ key2mon }}'
+    - repl: '-w {{ path2mon }} -F auid!=4294967295 -k {{ key2mon }}'
     - append_if_not_found: True
 

@@ -17,16 +17,16 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030560' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set path2mon = '/usr/sbin/semanage' %}
 {%- set actKey = 'privileged-priv_change' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'rootUser': { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid=0 ',
-                  'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid=0 -k ' + actKey,
+    'rootUser': { 'search_string' : ' ' + path2mon + ' -F auid=0 ',
+                  'rule' : '-a always,exit -F path=' + path2mon + ' -F auid=0 -k ' + actKey,
                 },
-    'regUsers': { 'search_string' : ' ' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' ',
-                  'rule' : '-a always,exit -F path=' + path2mon + ' -F perm=x -F auid>' + sysuserMax + ' -F auid!=4294967295 -k ' + actKey,
+    'regUsers': { 'search_string' : ' ' + path2mon + ' -F auid>=' + sysuserMax + ' ',
+                  'rule' : '-a always,exit -F path=' + path2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + actKey,
                 },
 } %}
 

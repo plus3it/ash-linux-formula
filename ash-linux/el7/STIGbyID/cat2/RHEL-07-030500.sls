@@ -17,17 +17,17 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030500' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs") %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set act2mon = 'creat' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'regUsersEacces': { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>' + sysuserMax + ' ',
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EACCES -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
+    'regUsersEacces': { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>=' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EACCES -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
                       },
-    'regUsersEperm' : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>' + sysuserMax + ' ',
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid>' + sysuserMax + ' -F auid!=4294967295 -k access',
+    'regUsersEperm' : { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>=' + sysuserMax + ' ',
+                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EPERM -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
                       },
 } %}
 

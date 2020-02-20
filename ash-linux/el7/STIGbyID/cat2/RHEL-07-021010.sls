@@ -25,7 +25,7 @@
                     '/usr/local/bin',
                     '/var'
                      ] %}
-{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{print $2}' /etc/login.defs
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs
 ")|int %}
 {%- set iShells = [
                    '/bin/sh',

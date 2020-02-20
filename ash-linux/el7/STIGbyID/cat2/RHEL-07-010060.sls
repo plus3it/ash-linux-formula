@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-010060
-# Version:	RHEL-07-010060_rule
+# STIG ID:	RHEL-07-010060
+# Rule ID:	SV-86515r6_rule
+# Vuln ID:	V-71891
 # SRG ID:	SRG-OS-000028-GPOS-00009
 # Finding Level:	medium
 # 

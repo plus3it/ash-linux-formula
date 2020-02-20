@@ -1,58 +1,40 @@
-# Finding ID:	RHEL-07-010210
-# Version:	RHEL-07-010210_rule
-# SRG ID:	SRG-OS-000075-GPOS-00043
+# STIG ID:	RHEL-07-010210
+# Rule ID:	SV-86545r2_rule
+# Vuln ID:	V-71921
+# SRG ID:	SRG-OS-000073-GPOS-00041
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords must be restricted to a 24 hours/1 day minimum lifetime.
+#	The shadow file must be configured to store only encrypted
+#	representations of passwords.
 #
-# CCI-000198 
-#    NIST SP 800-53 :: IA-5 (1) (d) 
+# CCI-000196 
+#    NIST SP 800-53 :: IA-5 (1) (c) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (c) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010210' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set targExp = 1 %}
-{%- set goodUsers = [] %}
+{%- set targFile = '/etc/login.defs' %}
+{%- set searchRoot = 'ENCRYPT_METHOD' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for userName in salt.user.list_users() %}
-{%- set shadowInfo = salt.shadow.info(userName) %}
-{%- set userPasswd = shadowInfo.passwd %}
-{%- set passwdMin = shadowInfo.min %}
-  {%- if (
-          userPasswd.startswith("$") and
-          passwdMin < targExp 
-         )
-    %}
-{%- do goodUsers.append(userName) %}
-notify_{{ stig_id }}-{{ userName }}:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''{{ userName }} min-change value ({{ passwdMin }}) is less than {{ targExp }}. Changing...''\n"'
-    - cwd: /root
-    - stateful: True
-
-setmin_{{ stig_id }}-{{ userName }}:
-  module.run:
-    - name: shadow.set_mindays
-    - m_name: '{{ userName }}'
-    - mindays: {{ targExp }}
-    - require: 
-      - cmd: notify_{{ stig_id }}-{{ userName }}
-
-  {%- endif %}
-{%- endfor %}
-
-{%- if not goodUsers %}
-notify_{{ stig_id }}-FoundNone:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Found no users with non-compliant minimum password lifetime.''\n"'
-    - cwd: /root
-    - stateful: True
+{%- if salt.file.search(targFile, '^' + searchRoot) %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.replace:
+    - name: '{{ targFile }}'   
+    - pattern: '^{{ searchRoot }}.*$'
+    - repl: '{{ searchRoot }} SHA512'
+{%- else %}
+file_{{ stig_id }}-{{ targFile }}:
+  file.append:
+    - name: '{{ targFile }}'   
+    - text: |-
+        # Inserted per STIG {{ stig_id }}
+        {{ searchRoot }} SHA512
 {%- endif %}
