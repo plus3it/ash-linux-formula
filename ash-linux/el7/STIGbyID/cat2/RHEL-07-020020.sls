@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-020090
-# Version:	RHEL-07-020090_rule
+# STIG ID:	RHEL-07-020020
+# Rule ID:	SV-86595r2_rule
+# Vuln ID:	V-71971
 # SRG ID:	SRG-OS-000324-GPOS-00125
 # Finding Level:	medium
 # 
@@ -15,7 +16,7 @@
 #    NIST SP 800-53 Revision 4 :: AC-6 (10) 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-020090' %}
+{%- set stig_id = 'RHEL-07-020020' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set stig_role = 'user_u' %}
 {%- set regUserGid = 1000 %}
