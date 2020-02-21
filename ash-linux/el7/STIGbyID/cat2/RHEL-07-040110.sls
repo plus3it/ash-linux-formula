@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-040110
-# Version:	RHEL-07-040110_rule
+# STIG ID:	RHEL-07-040110
+# Rule ID:	SV-86845r3_rule
+# Vuln ID:	V-72221
 # SRG ID:	SRG-OS-000033-GPOS-00014
 # Finding Level:	medium
 #
