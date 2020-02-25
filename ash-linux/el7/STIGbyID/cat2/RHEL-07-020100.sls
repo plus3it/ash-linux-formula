@@ -46,7 +46,7 @@ file_{{ stig_id }}-foundin-{{ modFile }}-blacklist:
   file.replace:
     - name: '{{ modFile }}'
     - pattern: '^\\[\\\\s\\]*blacklist\\[\\\\s\\]*usb-storage.*$'
-    - repl: 'blackist usb-storage'
+    - repl: 'blacklist usb-storage'
     - append_if_not_found: True
     - backup: False
   {%- endif %}
@@ -59,5 +59,5 @@ file_{{ stig_id }}-nousbstorage:
     - name: '/etc/modprobe.d/nousbstorage.conf'
     - text: |-
         install usb-storage /bin/true
-        blackist usb-storage
+        blacklist usb-storage
 {%- endif %}
