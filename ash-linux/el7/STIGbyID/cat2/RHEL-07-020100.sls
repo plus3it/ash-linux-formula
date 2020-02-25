@@ -1,5 +1,6 @@
-# Finding ID:	RHEL-07-020160
-# Version:	RHEL-07-020160_rule
+# STIG ID:	RHEL-07-020100
+# Rule ID:	SV-86607r4_rule
+# Vuln ID:	V-71983
 # SRG ID:	SRG-OS-000114-GPOS-00059
 # Finding Level:	medium
 # 
@@ -18,7 +19,7 @@
 #    NIST SP 800-53 Revision 4 :: IA-3 
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-020160' %}
+{%- set stig_id = 'RHEL-07-020100' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set foundMods = [] %}
 {%- set modFiles = [] %}
@@ -34,11 +35,19 @@ script_{{ stig_id }}-describe:
 {%- for modFile in modFiles %}
   {%- if salt.file.search(modFile, '^[a-z]*\susb') %}
     {%- do foundMods.append(modFile) %}
-file_{{ stig_id }}-foundin-{{ modFile }}:
+file_{{ stig_id }}-foundin-{{ modFile }}-install:
   file.replace:
     - name: '{{ modFile }}'
-    - pattern: '^[a-z]*\susb.*$'
+    - pattern: '^\\[\\\\s\\]*install\\[\\\\s\\]*usb-storage\\[\\\\s\\]*/bin/true.*$'
     - repl: 'install usb-storage /bin/true'
+    - append_if_not_found: True
+    - backup: False
+file_{{ stig_id }}-foundin-{{ modFile }}-blacklist:
+  file.replace:
+    - name: '{{ modFile }}'
+    - pattern: '^\\[\\\\s\\]*blacklist\\[\\\\s\\]*usb-storage.*$'
+    - repl: 'blackist usb-storage'
+    - append_if_not_found: True
     - backup: False
   {%- endif %}
 
@@ -47,6 +56,8 @@ file_{{ stig_id }}-foundin-{{ modFile }}:
 {%- if not foundMods %}
 file_{{ stig_id }}-nousbstorage:
   file.append:
-    - name: '/etc/modprobe.d/nousbstorage'
-    - text: 'install usb-storage /bin/true'
+    - name: '/etc/modprobe.d/nousbstorage.conf'
+    - text: |-
+        install usb-storage /bin/true
+        blackist usb-storage
 {%- endif %}
