@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030530
-# Version:	RHEL-07-030530_rule
+# STIG ID:	RHEL-07-030740
+# Rule ID:	SV-86795r7_rule
+# Vuln ID:	V-72171
 # SRG ID:	SRG-OS-000042-GPOS-00020
 # Finding Level:	medium
 # 
@@ -21,7 +22,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030530"
+diag_out "STIG Finding ID: RHEL-07-030740"
 diag_out "   All uses of the mount command must"
 diag_out "   be audited."
 diag_out "----------------------------------------"

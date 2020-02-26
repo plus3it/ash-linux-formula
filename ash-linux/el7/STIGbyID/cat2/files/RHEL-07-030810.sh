@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-030630
-# Version:	RHEL-07-030630_rule
+# STIG ID:	RHEL-07-030810
+# Rule ID:	SV-86809r4_rule
+# Vuln ID:	V-72185
 # SRG ID:	SRG-OS-000471-GPOS-00215
 # Finding Level:	medium
 # 
@@ -19,7 +20,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-030630"
+diag_out "STIG Finding ID: RHEL-07-030810"
 diag_out "   All uses of the pam_timestamp_check"
 diag_out "   command must be audited."
 diag_out "----------------------------------------"
