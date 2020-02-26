@@ -30,10 +30,17 @@ touch_{{ stig_id }}-{{ ruleFile }}:
     - name: '{{ ruleFile }}'
 {%- endif %}
 
-file_{{ stig_id }}-{{ ruleFile }}:
+file_{{ stig_id }}-{{ ruleFile }}-bin:
   file.replace:
     - name: '{{ ruleFile }}'
     - pattern: '^-w {{ path2mon }}.*$'
     - repl: '-w {{ path2mon }} -p x -F auid!=4294967295 -k {{ key2mon }}'
+    - append_if_not_found: True
+
+file_{{ stig_id }}-{{ ruleFile }}-ubin:
+  file.replace:
+    - name: '{{ ruleFile }}'
+    - pattern: '^-w {{ path2mon }}.*$'
+    - repl: '-w /usr{{ path2mon }} -p x -F auid!=4294967295 -k {{ key2mon }}'
     - append_if_not_found: True
 
