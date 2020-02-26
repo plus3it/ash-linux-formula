@@ -21,14 +21,22 @@
 {%- set act2mon = 'open' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
-    'rootUser': { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid=0 ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid=0 -k access',
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid=0 -k access',
-                },
-    'regUsers': { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>=' + sysuserMax + ' ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EPERM -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
-                },
+    'rootUserEPERM':  { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid=0 ',
+                        'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EPERM -F auid=0 -k access',
+                        'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid=0 -k access',
+                      },
+    'rootUserEACCES': { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid=0 ',
+                        'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid=0 -k access',
+                        'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EACCES -F auid=0 -k access',
+                      },
+    'regUsersEPERM':  { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>=' + sysuserMax + ' ',
+                        'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EPERM -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
+                        'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EPERM -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      },
+    'regUsersEACCES':  { 'search_string' : ' ' + act2mon + ' -F exit=E[A-Z]* -F auid>=' + sysuserMax + ' ',
+                        'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F exit=-EACCES -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
+                        'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F exit=-EACCES -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k access',
+                      },
 } %}
 
 script_{{ stig_id }}-describe:
