@@ -6,7 +6,7 @@
 # 
 # Rule Summary:
 #	When passwords are changed the number of repeating consecutive
-#	characters must not be more than four characters.
+#	characters must not be more than three characters.
 #
 # CCI-000195 
 #    NIST SP 800-53 :: IA-5 (1) (b) 
@@ -18,7 +18,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/security/pwquality.conf' %}
 {%- set parmName = 'maxrepeat' %}
-{%- set parmValu = '2' %}
+{%- set parmValu = '3' %}
 {%- set parmDesc = 'repeating' %}
 
 script_{{ stig_id }}-describe:
