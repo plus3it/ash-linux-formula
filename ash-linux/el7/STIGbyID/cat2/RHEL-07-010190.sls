@@ -1,39 +1,45 @@
-# Finding ID:	RHEL-07-010190
-# Version:	RHEL-07-010190_rule
-# SRG ID:	SRG-OS-000073-GPOS-00041
+# STIG ID:	RHEL-07-010190
+# Rule ID:	SV-86541r2_rule
+# Vuln ID:	V-71917
+# SRG ID:	SRG-OS-000072-GPOS-00040
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	User and group account administration utilities must be
-#	configured to store only encrypted representations of
-#	passwords.
+#	When passwords are changed the number of repeating characters
+#	of the same character class must not be more than four
+#	characters.
 #
-# CCI-000196 
-#    NIST SP 800-53 :: IA-5 (1) (c) 
+# CCI-000195 
+#    NIST SP 800-53 :: IA-5 (1) (b) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (c) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010190' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set targFile = '/etc/libuser.conf' %}
-{%- set searchRoot = 'crypt_style' %}
+{%- set cfgFile = '/etc/security/pwquality.conf' %}
+{%- set parmName = 'maxclassrepeat' %}
+{%- set parmValu = '4' %}
+{%- set parmDesc = 'consecutive' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(targFile, '^' + searchRoot) %}
-file_{{ stig_id }}-{{ targFile }}:
+{%- if salt.file.search(cfgFile, '^' + parmName) %}
+file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
-    - name: '{{ targFile }}'   
-    - pattern: '^{{ searchRoot }}.*$'
-    - repl: '{{ searchRoot }} = sha512'
+    - name: '{{ cfgFile }}'
+    - pattern: '^{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ parmValu }}'
 {%- else %}
-file_{{ stig_id }}-{{ targFile }}:
-  file.replace:
-    - name: '{{ targFile }}'   
-    - pattern: '^(?P<srctok>^\[defaults\].*$)'
-    - repl: '\g<srctok>\n{{ searchRoot }} = sha512'
+file_{{ stig_id }}-{{ cfgFile }}:
+  file.append:
+    - name: '{{ cfgFile }}'
+    - text: |-
+        # Inserted per STIG-ID {{ stig_id }}:
+        # * Prohibit new passwords from including more than {{ parmValu }} {{ parmDesc }}
+        #   characters from the same class
+        {{ parmName }} = {{ parmValu }}
 {%- endif %}

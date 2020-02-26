@@ -1,17 +1,16 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-010090
 # Version:	RHEL-07-010090_rule
-# SRG ID:	SRG-OS-000069-GPOS-00037
+# SRG ID:	SRG-OS-000029-GPOS-00010
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed or new passwords are established,
-#	the new password must contain at least one upper-case character.
+#	The operating system must have the screen package installed.
 #
-# CCI-000192 
-#    NIST SP 800-53 :: IA-5 (1) (a) 
-#    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
+# CCI-000057 
+#    NIST SP 800-53 :: AC-11 a 
+#    NIST SP 800-53A :: AC-11.1 (ii) 
+#    NIST SP 800-53 Revision 4 :: AC-11 a 
 #
 #################################################################
 # Standard outputter function
@@ -21,8 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010090"
-diag_out "   When passwords are changed or new"
-diag_out "   passwords are established, the new"
-diag_out "   password must contain at least one"
-diag_out "   upper-case character."
+diag_out "   The operating system must have the"
+diag_out "   screen package installed."
 diag_out "----------------------------------------"

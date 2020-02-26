@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-010070
-# Version:	RHEL-07-010070_rule
+# STIG ID:	RHEL-07-010070
+# Rule ID:	SV-86517r5_rule
+# Vuln ID:	V-71893
 # SRG ID:	SRG-OS-000029-GPOS-00010
 # Finding Level:	medium
 # 

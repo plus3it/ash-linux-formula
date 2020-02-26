@@ -1,13 +1,14 @@
-# Finding ID:	RHEL-07-010120
-# Version:	RHEL-07-010120_rule
-# SRG ID:	SRG-OS-000266-GPOS-00101
+# STIG ID:	RHEL-07-010120
+# Rule ID:	SV-86527r3_rule
+# Vuln ID:	V-71903
+# SRG ID:	SRG-OS-000069-GPOS-00037
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed or new passwords are assigned, the
-#	new password must contain at least one special character.
+#	When passwords are changed or new passwords are established,
+#	the new password must contain at least one upper-case character.
 #
-# CCI-001619 
+# CCI-000192 
 #    NIST SP 800-53 :: IA-5 (1) (a) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
 #    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
@@ -16,9 +17,9 @@
 {%- set stig_id = 'RHEL-07-010120' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'ocredit' %}
+{%- set parmName = 'ucredit' %}
 {%- set parmValu = '-1' %}
-{%- set parmDesc = 'special' %}
+{%- set parmDesc = 'uppercase' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

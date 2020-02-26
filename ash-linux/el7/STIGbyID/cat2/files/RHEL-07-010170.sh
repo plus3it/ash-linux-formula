@@ -1,17 +1,17 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-010170
 # Version:	RHEL-07-010170_rule
-# SRG ID:	SRG-OS-000073-GPOS-00041
+# SRG ID:	SRG-OS-000072-GPOS-00040
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The PAM system service must be configured to store only
-#	encrypted representations of passwords.
+#	When passwords are changed a minimum of four character classes
+#	must be changed.
 #
-# CCI-000196 
-#    NIST SP 800-53 :: IA-5 (1) (c) 
+# CCI-000195 
+#    NIST SP 800-53 :: IA-5 (1) (b) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (c) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
 #
 #################################################################
 # Standard outputter function
@@ -21,7 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010170"
-diag_out "   The PAM system service must be"
-diag_out "   configured to store only encrypted"
-diag_out "   representations of passwords."
+diag_out "   When passwords are changed a minimum"
+diag_out "   of four character classes must be"
+diag_out "   changed."
 diag_out "----------------------------------------"

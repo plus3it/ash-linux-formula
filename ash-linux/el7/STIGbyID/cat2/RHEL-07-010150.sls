@@ -1,24 +1,25 @@
-# Finding ID:	RHEL-07-010150
-# Version:	RHEL-07-010150_rule
-# SRG ID:	SRG-OS-000072-GPOS-00040
+# STIG ID:	RHEL-07-010150
+# Rule ID:	SV-86533r2_rule
+# Vuln ID:	V-71909
+# SRG ID:	SRG-OS-000266-GPOS-00101
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed the number of repeating consecutive
-#	characters must not be more than four characters.
+#	When passwords are changed or new passwords are assigned, the
+#	new password must contain at least one special character.
 #
-# CCI-000195 
-#    NIST SP 800-53 :: IA-5 (1) (b) 
+# CCI-001619 
+#    NIST SP 800-53 :: IA-5 (1) (a) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010150' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'maxrepeat' %}
-{%- set parmValu = '2' %}
-{%- set parmDesc = 'repeating' %}
+{%- set parmName = 'ocredit' %}
+{%- set parmValu = '-1' %}
+{%- set parmDesc = 'special' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -37,6 +38,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ cfgFile }}'
     - text: |-
         # Inserted per STIG-ID {{ stig_id }}:
-        # * Prohibit new passwords from including more than {{ parmValu }} {{ parmDesc }} characters
+        # * Require new passwords to have at least one {{ parmDesc }} character
         {{ parmName }} = {{ parmValu }}
 {%- endif %}

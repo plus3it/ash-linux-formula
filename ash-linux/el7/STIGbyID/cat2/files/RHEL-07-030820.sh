@@ -1,16 +1,16 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-030820
 # Version:	RHEL-07-030820_rule
-# SRG ID:	SRG-OS-000480-GPOS-00227
+# SRG ID:	SRG-OS-000471-GPOS-00216
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The system must update the DoD-approved virus scan program
-#	every seven days or more frequently.
+#	All uses of the init_module command must be audited.
 #
-# CCI-001668 
-#    NIST SP 800-53 :: SI-3 a 
-#    NIST SP 800-53A :: SI-3.1 (ii) 
+# CCI-000172 
+#    NIST SP 800-53 :: AU-12 c 
+#    NIST SP 800-53A :: AU-12.1 (iv) 
+#    NIST SP 800-53 Revision 4 :: AU-12 c 
 #
 #################################################################
 # Standard outputter function
@@ -20,7 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-030820"
-diag_out "   The system must update the DOD-"
-diag_out "   approved virus scan program every"
-diag_out "   seven days or more frequently."
+diag_out "   All uses of the init_module command"
+diag_out "   must be audited."
 diag_out "----------------------------------------"

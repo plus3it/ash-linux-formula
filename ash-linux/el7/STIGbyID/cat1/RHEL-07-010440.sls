@@ -1,11 +1,12 @@
-# Finding ID:	RHEL-07-010440
-# Version:	RHEL-07-010440_rule
+# STIG ID:	RHEL-07-010440
+# Rule ID:	SV-86577r2_rule
+# Vuln ID:	V-71953
 # SRG ID:	SRG-OS-000480-GPOS-00229
 # Finding Level:	high
 #
 # Rule Summary:
-#	The operating system must not allow empty passwords for SSH
-#	logon to the system.
+#	The operating system must not allow an unattended or
+#	automatic logon to the system via a graphical user interface.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b
@@ -15,45 +16,30 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010440' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
-{%- set svcName = 'sshd' %}
-{%- set sshConfigFile = '/etc/ssh/sshd_config' %}
+{%- set checkFile = '/etc/gdm/custom.conf'%}
+{%- set checkParm = 'AutomaticLoginEnable'%}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords .*') %}
-  {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords no') %}
-file_{{ stig_id }}:
+{%- if not salt.pkg.version('gdm') %}
+eval_{{ stig_id }}:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''Empty passwords already disabled in {{ sshConfigFile }}.''\n"'
+    - name: 'printf "\nchanged=no comment=''GDM susbsystem is not installed.''\n"'
     - cwd: /root
     - stateful: True
-    {%- set runtype = 'cmd' %}
-  {%- else %}
+{% elif salt.file.search(checkFile, '^' + checkParm) %}
 file_{{ stig_id }}:
   file.replace:
-    - name: '{{ sshConfigFile }}'
-    - pattern: "^PermitEmptyPasswords .*"
-    - repl: "PermitEmptyPasswords no"
-    {%- set runtype = 'file' %}
-  {%- endif %}
+    - name: {{ checkFile }}
+    - pattern: '^{{ checkParm }}.*$'
+    - repl: '{{ checkParm }}=false'
 {%- else %}
 file_{{ stig_id }}:
-  file.append:
-    - name: '{{ sshConfigFile }}'
-    - text: |-
-        
-        # SSH Must not allow empty passwords (per STIG {{ stig_id }})
-        PermitEmptyPasswords no
-  {%- set runtype = 'file' %}
+  file.replace:
+    - name: {{ checkFile }}
+    - pattern: '^\[daemon]'
+    - repl: '[daemon]\n{{ checkParm }}=false'
 {%- endif %}
-
-# Bleah: this is a mild botch. If above performs a 'cmd.run', this state
-# will always cause a service restart event.
-service_{{ stig_id }}-sshd:
-  service.running:
-    - name: '{{ svcName }}'
-    - watch:
-      - {{ runtype }}: file_{{ stig_id }}

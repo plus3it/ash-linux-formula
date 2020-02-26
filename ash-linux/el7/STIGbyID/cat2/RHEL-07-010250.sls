@@ -1,41 +1,40 @@
-# Finding ID:	RHEL-07-010250
-# Version:	RHEL-07-010250_rule
-# SRG ID:	SRG-OS-000078-GPOS-00046
+# STIG ID:	RHEL-07-010250
+# Rule ID:	SV-86553r2_rule
+# Vuln ID:	V-71929
+# SRG ID:	SRG-OS-000076-GPOS-00044
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords must be a minimum of 15 characters in length.
+#	Passwords for new users must be restricted to a 60-day maximum lifetime.
 #
-# CCI-000205 
-#    NIST SP 800-53 :: IA-5 (1) (a) 
-#    NIST SP 800-53A :: IA-5 (1).1 (i) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
+# CCI-000199 
+#    NIST SP 800-53 :: IA-5 (1) (d) 
+#    NIST SP 800-53A :: IA-5 (1).1 (v) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010250' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'minlen' %}
-{%- set parmValu = '15' %}
-{%- set parmDesc = 'in length' %}
+{%- set targFile = '/etc/login.defs' %}
+{%- set searchRoot = 'PASS_MAX_DAYS' %}
+{%- set targVal = '60' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(cfgFile, '^' + parmName) %}
-file_{{ stig_id }}-{{ cfgFile }}:
+{%- if salt.file.search(targFile, '^' + searchRoot) %}
+file_{{ stig_id }}-{{ targFile }}:
   file.replace:
-    - name: '{{ cfgFile }}'
-    - pattern: '^{{ parmName }}.*$'
-    - repl: '{{ parmName }} = {{ parmValu }}'
+    - name: '{{ targFile }}'   
+    - pattern: '^{{ searchRoot }}.*$'
+    - repl: '{{ searchRoot }}	{{ targVal }}'
 {%- else %}
-file_{{ stig_id }}-{{ cfgFile }}:
+file_{{ stig_id }}-{{ targFile }}:
   file.append:
-    - name: '{{ cfgFile }}'
+    - name: '{{ targFile }}'   
     - text: |-
-        # Inserted per STIG-ID {{ stig_id }}:
-        # * Prohibit setting passwords shorter than {{ parmValu }} {{ parmDesc }}
-        {{ parmName }} = {{ parmValu }}
+        # Inserted per STIG {{ stig_id }}
+        {{ searchRoot }}	{{ targVal }}
 {%- endif %}

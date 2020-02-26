@@ -1,18 +1,16 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-010280
 # Version:	RHEL-07-010280_rule
-# SRG ID:	SRG-OS-000118-GPOS-00060
+# SRG ID:	SRG-OS-000078-GPOS-00046
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must disable account identifiers
-#	(individuals, groups, roles, and devices) if the password
-#	expires.
+#	Passwords must be a minimum of 15 characters in length.
 #
-# CCI-000795 
-#    NIST SP 800-53 :: IA-4 e 
-#    NIST SP 800-53A :: IA-4.1 (iii) 
-#    NIST SP 800-53 Revision 4 :: IA-4 e 
+# CCI-000205 
+#    NIST SP 800-53 :: IA-5 (1) (a) 
+#    NIST SP 800-53A :: IA-5 (1).1 (i) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
 # Standard outputter function
@@ -22,8 +20,6 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010280"
-diag_out "   The operating system must disable"
-diag_out "   account identifiers (individuals,"
-diag_out "   groups, roles, and devices) if the"
-diag_out "   password expires."
+diag_out "   Passwords must be a minimum of 15"
+diag_out "   characters in length."
 diag_out "----------------------------------------"

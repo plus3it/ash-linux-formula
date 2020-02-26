@@ -17,15 +17,16 @@
 {%- set act2mon = 'delete_module' %}
 {%- set key2mon = 'module-change' %}
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
+{%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set usertypes = {
-    'selDACusers' : { 'search_string' : ' ' + act2mon + ' ' ,
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
-                    },
-    'selDACroot'  : { 'search_string' : ' ' + act2mon + ' ',
-                      'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                      'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
-                    },
+    'rootUser': { 'search_string' : ' ' + act2mon + ' ',
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -k ' + key2mon,
+                },
+    'regUsers': { 'search_string' : ' ' + act2mon + ' ' ,
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F auid>=' + sysuserMax + ' -F auid!=4294967295 -k ' + key2mon,
+                },
 } %}
 
 script_{{ stig_id }}-describe:

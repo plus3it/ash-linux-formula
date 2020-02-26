@@ -1,52 +1,46 @@
-# Finding ID:	RHEL-07-030330
-# Version:	RHEL-07-030330_rule
-# SRG ID:	SRG-OS-000342-GPOS-00133
+# STIG ID:	RHEL-07-030330
+# Rule ID:	SV-86713r4_rule
+# Vuln ID:	V-72089
+# SRG ID:	SRG-OS-000343-GPOS-00134
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The operating system must off-load audit records onto a different
-#	system or media from the system being audited.
+#	The operating system must immediately notify the System
+#	Administrator (SA) and Information System Security Officer
+#	ISSO (at a minimum) when allocated audit record storage
+#	volume reaches 75% of the repository maximum audit record
+#	storage capacity.
 #
-# CCI-001851 
-#    NIST SP 800-53 Revision 4 :: AU-4 (1) 
+# CCI-001855 
+#    NIST SP 800-53 Revision 4 :: AU-5 (1) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030330' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set remoteCfg = '/etc/audisp/audisp-remote.conf' %}
-{%- set audSrv = salt.pillar.get('ash-linux:lookup:audisp-server', '') %}
-{%- set outpt = '/usr/bin/printf'%}
+{%- set audCfg = '/etc/audit/auditd.conf' %}
+{%- set parmName = 'space_left'%}
+{%- set fullPct = 0.75 %}
+{%- set auditVol = '/var/log/audit' %}
+{%- set usageDict = salt.status.diskusage(auditVol) %}
+{%- set audSzMB = usageDict[auditVol]['total'] // 1024 // 1024 %}
+{%- set alrtFull = (( audSzMB * 0.75 )|int)|string %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-# STIG doesn't enumerate this, but the handler's kinda pointless
-# if this package isn't installed
-pkg_{{ stig_id }}-audispRemote:
-  pkg.installed:
-    - name: audispd-plugins
-
-{%- if audSrv %}
-  {%- if salt.file.file_exists(remoteCfg) %}
-file_{{ stig_id }}-{{ remoteCfg }}:
+{%- if salt.file.file_exists(audCfg) %}
+file_{{ stig_id }}-{{ parmName }}:
   file.replace:
-    - name: '{{ remoteCfg }}'
-    - pattern: '^\sremote_server.*$'
-    - repl: 'remote_server = {{ audSrv }}'
+    - name: '{{ audCfg }}'
+    - pattern: '^\s{{ parmName }}.*$'
+    - repl: '{{ parmName }} = {{ alrtFull }}'
     - append_if_not_found: True
-  {%- else %}
-file_{{ stig_id }}-{{ remoteCfg }}:
-  file.append:
-    - name: '{{ remoteCfg }}'
-    - text: 'remote_server = {{ audSrv }}'
-    - makedirs: True
-  {%- endif %}
 {%- else %}
-file_{{ stig_id }}-{{ remoteCfg }}:
-  cmd.run:
-    - name: '{{ outpt }} "\nchanged=no comment=''ALERT: No remote audit-server is defined''\n"'
-    - cwd: /root
-    - stateful: True
+file_{{ stig_id }}-{{ parmName }}:
+  file.append:
+    - name: '{{ audCfg }}'
+    - text: '{{ parmName }} = {{ alrtFull }}'
+    - makedirs: True
 {%- endif %}

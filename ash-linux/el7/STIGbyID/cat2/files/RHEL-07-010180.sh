@@ -1,17 +1,17 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-010180
 # Version:	RHEL-07-010180_rule
-# SRG ID:	SRG-OS-000073-GPOS-00041
+# SRG ID:	SRG-OS-000072-GPOS-00040
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	The shadow file must be configured to store only encrypted
-#	representations of passwords.
+#	When passwords are changed the number of repeating consecutive
+#	characters must not be more than four characters.
 #
-# CCI-000196 
-#    NIST SP 800-53 :: IA-5 (1) (c) 
+# CCI-000195 
+#    NIST SP 800-53 :: IA-5 (1) (b) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (c) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
 #
 #################################################################
 # Standard outputter function
@@ -21,7 +21,8 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010180"
-diag_out "   The shadow file must be configured"
-diag_out "   to store only encrypted"
-diag_out "   representations of passwords."
+diag_out "   When passwords are changed the"
+diag_out "   number of repeating consecutive"
+diag_out "   characters must not be more than"
+diag_out "   four characters."
 diag_out "----------------------------------------"

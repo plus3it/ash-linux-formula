@@ -5,9 +5,8 @@
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed the number of repeating characters
-#	of the same character class must not be more than four
-#	characters.
+#	When passwords are changed a minimum of eight of the total
+#	number of characters must be changed.
 #
 # CCI-000195 
 #    NIST SP 800-53 :: IA-5 (1) (b) 
@@ -22,8 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010160"
-diag_out "   When passwords are changed the"
-diag_out "   number of repeating characters of"
-diag_out "   the same character class must not be"
-diag_out "   more than four characters."
+diag_out "   When passwords are changed a minimum"
+diag_out "   of eight of the total number of"
+diag_out "   characters must be changed."
 diag_out "----------------------------------------"

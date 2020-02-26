@@ -1,24 +1,26 @@
-# Finding ID:	RHEL-07-010130
-# Version:	RHEL-07-010130_rule
-# SRG ID:	SRG-OS-000072-GPOS-00040
+# STIG ID:	RHEL-07-010130
+# Rule ID:	SV-86529r5_rule
+# Vuln ID:	V-71905
+# SRG ID:	SRG-OS-000070-GPOS-00038
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed a minimum of eight of the total
-#	number of characters must be changed.
+#	When passwords are changed or new passwords are established,
+#	the new password must contain at least one lower-case
+#	character.
 #
-# CCI-000195 
-#    NIST SP 800-53 :: IA-5 (1) (b) 
+# CCI-000193 
+#    NIST SP 800-53 :: IA-5 (1) (a) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010130' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'difok' %}
-{%- set parmValu = '8' %}
-{%- set parmDesc = 'new' %}
+{%- set parmName = 'lcredit' %}
+{%- set parmValu = '-1' %}
+{%- set parmDesc = 'lowercase' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -37,6 +39,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ cfgFile }}'
     - text: |-
         # Inserted per STIG-ID {{ stig_id }}:
-        # * Require new passwords to have at least {{ parmName }} {{ parmDesc }} characters
+        # * Require new passwords to have at least one {{ parmDesc }} character
         {{ parmName }} = {{ parmValu }}
 {%- endif %}

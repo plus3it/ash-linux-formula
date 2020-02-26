@@ -1,24 +1,25 @@
-# Finding ID:	RHEL-07-010140
-# Version:	RHEL-07-010140_rule
-# SRG ID:	SRG-OS-000072-GPOS-00040
+# STIG ID:	RHEL-07-010140
+# Rule ID:	SV-86531r3_rule
+# Vuln ID:	V-71907
+# SRG ID:	SRG-OS-000071-GPOS-00039
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed a minimum of four character classes
-#	must be changed.
+#	When passwords are changed or new passwords are assigned, the
+#	new password must contain at least one numeric character.
 #
-# CCI-000195 
-#    NIST SP 800-53 :: IA-5 (1) (b) 
+# CCI-000194 
+#    NIST SP 800-53 :: IA-5 (1) (a) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (b) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010140' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'minclass' %}
-{%- set parmValu = '4' %}
-{%- set parmDesc = 'changes' %}
+{%- set parmName = 'dcredit' %}
+{%- set parmValu = '-1' %}
+{%- set parmDesc = 'numeric' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -37,6 +38,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ cfgFile }}'
     - text: |-
         # Inserted per STIG-ID {{ stig_id }}:
-        # * Require new passwords to include {{ parmValu }} character-class {{ parmDesc }}
+        # * Require new passwords to have at least one {{ parmDesc }} character
         {{ parmName }} = {{ parmValu }}
 {%- endif %}

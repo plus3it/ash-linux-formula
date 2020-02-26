@@ -1,42 +1,27 @@
-# Finding ID:	RHEL-07-010090
-# Version:	RHEL-07-010090_rule
-# SRG ID:	SRG-OS-000069-GPOS-00037
+# STIG ID:	RHEL-07-010090
+# Rule ID:	SV-86521r3_rule
+# Vuln ID:	V-71897
+# SRG ID:	SRG-OS-000029-GPOS-00010
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	When passwords are changed or new passwords are established,
-#	the new password must contain at least one upper-case character.
+#	The operating system must have the screen package installed.
 #
-# CCI-000192 
-#    NIST SP 800-53 :: IA-5 (1) (a) 
-#    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
+# CCI-000057 
+#    NIST SP 800-53 :: AC-11 a 
+#    NIST SP 800-53A :: AC-11.1 (ii) 
+#    NIST SP 800-53 Revision 4 :: AC-11 a 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010090' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set cfgFile = '/etc/security/pwquality.conf' %}
-{%- set parmName = 'ucredit' %}
-{%- set parmValu = '-1' %}
-{%- set parmDesc = 'uppercase' %}
+{%- set pkgName = 'screen' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(cfgFile, '^' + parmName) %}
-file_{{ stig_id }}-{{ cfgFile }}:
-  file.replace:
-    - name: '{{ cfgFile }}'
-    - pattern: '^{{ parmName }}.*$'
-    - repl: '{{ parmName }} = {{ parmValu }}'
-{%- else %}
-file_{{ stig_id }}-{{ cfgFile }}:
-  file.append:
-    - name: '{{ cfgFile }}'
-    - text: |-
-        # Inserted per STIG-ID {{ stig_id }}:
-        # * Require new passwords to have at least one {{ parmDesc }} character
-        {{ parmName }} = {{ parmValu }}
-{%- endif %}
+package_{{ pkgName }}:
+  pkg.installed:
+    - name: '{{ pkgName }}'

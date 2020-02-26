@@ -1,54 +1,59 @@
-# Finding ID:	RHEL-07-010240
-# Version:	RHEL-07-010240_rule
-# SRG ID:	SRG-OS-000077-GPOS-00045
+# STIG ID:	RHEL-07-010240
+# Rule ID:	SV-86551r2_rule
+# Vuln ID:	V-71927
+# SRG ID:	SRG-OS-000075-GPOS-00043
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords must be prohibited from reuse for a minimum of five generations.
+#	Passwords must be restricted to a 24 hours/1 day minimum lifetime.
 #
-# CCI-000200 
-#    NIST SP 800-53 :: IA-5 (1) (e) 
+# CCI-000198 
+#    NIST SP 800-53 :: IA-5 (1) (d) 
 #    NIST SP 800-53A :: IA-5 (1).1 (v) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (e) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d) 
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-010240' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set targFile = '/etc/pam.d/system-auth' %}
-{%- if salt.file.is_link(targFile) %}
-  {%- set targFile = targFile + '-ac' %}
-{%- endif %}
-{%- set searchRoot = '^password\s+sufficient\s+pam_unix.so\s+' %}
+{%- set targExp = 1 %}
+{%- set goodUsers = [] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(targFile, searchRoot + '.*remember=5') %}
-file_{{ stig_id }}-{{ targFile }}:
+{%- for userName in salt.user.list_users() %}
+{%- set shadowInfo = salt.shadow.info(userName) %}
+{%- set userPasswd = shadowInfo.passwd %}
+{%- set passwdMin = shadowInfo.min %}
+  {%- if (
+          userPasswd.startswith("$") and
+          passwdMin < targExp 
+         )
+    %}
+{%- do goodUsers.append(userName) %}
+notify_{{ stig_id }}-{{ userName }}:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''Found target config in {{ targFile }}.''\n"'
+    - name: 'printf "\nchanged=no comment=''{{ userName }} min-change value ({{ passwdMin }}) is less than {{ targExp }}. Changing...''\n"'
     - cwd: /root
     - stateful: True
-{%- elif salt.file.search(targFile, searchRoot) %}
-file_{{ stig_id }}-{{ targFile }}:
-  file.replace:
-    - name: {{ targFile }}
-    - pattern: '^(?P<srctok>{{ searchRoot }}.*$)'
-    - repl: '\g<srctok> remember=5'
-file_{{ stig_id }}-{{ targFile }}-cleanup:
-  file.replace:
-    - name: {{ targFile }}
-    - pattern: '(md5|bigcrypt|sha256|blowfish) '
-    - repl: ''
-    - onchanges:
-      - file: file_{{ stig_id }}-{{ targFile }}
-{%- else %}
-file_{{ stig_id }}-{{ targFile }}:
-  file.replace:
-    - name: {{ targFile }}
-    - pattern: '^(?P<srctok>^password\s+requisite\s+pam_pwquality.so.*)'
-    - repl: '\g<srctok>\npassword sufficient pam_unix.so remember=5'
-{%- endif %}
 
+setmin_{{ stig_id }}-{{ userName }}:
+  module.run:
+    - name: shadow.set_mindays
+    - m_name: '{{ userName }}'
+    - mindays: {{ targExp }}
+    - require: 
+      - cmd: notify_{{ stig_id }}-{{ userName }}
+
+  {%- endif %}
+{%- endfor %}
+
+{%- if not goodUsers %}
+notify_{{ stig_id }}-FoundNone:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Found no users with non-compliant minimum password lifetime.''\n"'
+    - cwd: /root
+    - stateful: True
+{%- endif %}

@@ -1,16 +1,17 @@
 #!/bin/sh
 # Finding ID:	RHEL-07-010250
 # Version:	RHEL-07-010250_rule
-# SRG ID:	SRG-OS-000078-GPOS-00046
+# SRG ID:	SRG-OS-000076-GPOS-00044
 # Finding Level:	medium
 # 
 # Rule Summary:
-#	Passwords must be a minimum of 15 characters in length.
+#	Passwords for new users must be restricted to a 60-day
+#       maximum lifetime.
 #
-# CCI-000205 
-#    NIST SP 800-53 :: IA-5 (1) (a) 
-#    NIST SP 800-53A :: IA-5 (1).1 (i) 
-#    NIST SP 800-53 Revision 4 :: IA-5 (1) (a) 
+# CCI-000199 
+#    NIST SP 800-53 :: IA-5 (1) (d) 
+#    NIST SP 800-53A :: IA-5 (1).1 (v) 
+#    NIST SP 800-53 Revision 4 :: IA-5 (1) (d) 
 #
 #################################################################
 # Standard outputter function
@@ -20,6 +21,7 @@ diag_out() {
 
 diag_out "----------------------------------------"
 diag_out "STIG Finding ID: RHEL-07-010250"
-diag_out "   Passwords must be a minimum of 15"
-diag_out "   characters in length."
+diag_out "   Passwords for new users must be"
+diag_out "   restricted to a 60-day maximum"
+diag_out "   lifetime."
 diag_out "----------------------------------------"
