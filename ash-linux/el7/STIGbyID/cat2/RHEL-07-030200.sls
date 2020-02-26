@@ -15,7 +15,7 @@
 {%- set stig_id = 'RHEL-07-030200' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set remoteCfg = '/etc/audisp/plugins.d/au-remote.conf' %}
-{%- set audSrv = salt.pillar.get('ash-linux:lookup:audisp-use-remote', 'active') %}
+{%- set audSrv = salt.pillar.get('ash-linux:lookup:audisp-use-remote', 'yes') %}
 {%- set outpt = '/usr/bin/printf'%}
 
 script_{{ stig_id }}-describe:
@@ -33,7 +33,7 @@ pkg_{{ stig_id }}-audispRemote:
 file_{{ stig_id }}-{{ remoteCfg }}:
   file.replace:
     - name: '{{ remoteCfg }}'
-    - pattern: '^\sactive.*$'
+    - pattern: '^\\[\\\\s\\]*active.*$'
     - repl: 'active = {{ audSrv }}'
     - append_if_not_found: True
 {%- else %}
