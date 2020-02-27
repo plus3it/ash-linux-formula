@@ -33,7 +33,7 @@ pkg_{{ stig_id }}-audispRemote:
 file_{{ stig_id }}-{{ remoteCfg }}:
   file.replace:
     - name: '{{ remoteCfg }}'
-    - pattern: '^\\[\\\\s\\]*active.*$'
+    - pattern: ^[\s]*active[\s]*=[\s]*.*$
     - repl: 'active = {{ audSrv }}'
     - append_if_not_found: True
 {%- else %}
