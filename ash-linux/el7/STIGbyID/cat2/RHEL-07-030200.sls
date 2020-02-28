@@ -16,7 +16,6 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set remoteCfg = '/etc/audisp/plugins.d/au-remote.conf' %}
 {%- set audSrv = salt.pillar.get('ash-linux:lookup:audisp-use-remote', 'yes') %}
-{%- set outpt = '/usr/bin/printf'%}
 
 script_{{ stig_id }}-describe:
   cmd.script:

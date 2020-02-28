@@ -38,14 +38,14 @@ script_{{ stig_id }}-describe:
 file_{{ stig_id }}-foundin-{{ modFile }}-install:
   file.replace:
     - name: '{{ modFile }}'
-    - pattern: '^\\[\\\\s\\]*install\\[\\\\s\\]*usb-storage\\[\\\\s\\]*/bin/true.*$'
+    - pattern: ^[s]*install[s]*usb-storage[s]*/bin/true.*$
     - repl: 'install usb-storage /bin/true'
     - append_if_not_found: True
     - backup: False
 file_{{ stig_id }}-foundin-{{ modFile }}-blacklist:
   file.replace:
     - name: '{{ modFile }}'
-    - pattern: '^\\[\\\\s\\]*blacklist\\[\\\\s\\]*usb-storage.*$'
+    - pattern: ^[s]*blacklist[s]*usb-storage.*$
     - repl: 'blacklist usb-storage'
     - append_if_not_found: True
     - backup: False
