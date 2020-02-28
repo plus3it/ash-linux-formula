@@ -47,7 +47,7 @@ file_{{ stig_id }}-{{ audit_cfg_file }}:
   file.replace:
     - name: '{{ audit_cfg_file }}'
     - pattern: '^-a always,exit -F path={{ path2mon }}.*$'
-    - repl: '-a always,exit -F path={{ path2mon }} -F auid>={{ sysuserMax }} -F auid!=4294967295 --k {{ key2mon }}'
+    - repl: '-a always,exit -F path={{ path2mon }} -F auid>={{ sysuserMax }} -F auid!=4294967295 -k {{ key2mon }}'
     - append_if_not_found: True
 
 # Monitoring of SELinux DAC config

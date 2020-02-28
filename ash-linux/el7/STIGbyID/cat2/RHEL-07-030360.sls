@@ -22,8 +22,8 @@
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
     'chkSetGid': { 'search_string' : ' ' + act2mon + ' -F auid=0 ',
-                   'rule'  : '-a always,exit -F arch=b64 -S ' + act2mon + ' -C uid!=euid -F euid=0 -k setgid',
-                   'rule32': '-a always,exit -F arch=b32 -S ' + act2mon + ' -C uid!=euid -F euid=0 -k setgid',
+                   'rule'  : '-a always,exit -F arch=b64 -S ' + act2mon + ' -C gid!=egid -F egid=0 -k setgid',
+                   'rule32': '-a always,exit -F arch=b32 -S ' + act2mon + ' -C gid!=egid -F egid=0 -k setgid',
                  },
     'chkSetUid': { 'search_string' : ' ' + act2mon + ' -F auid>=' + sysuserMax + ' ',
                    'rule'  : '-a always,exit -F arch=b64 -S ' + act2mon + ' -C uid!=euid -F euid=0 -k setuid',

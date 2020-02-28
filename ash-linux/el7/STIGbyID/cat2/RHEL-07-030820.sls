@@ -19,12 +19,12 @@
 {%- set audit_cfg_file = '/etc/audit/rules.d/audit.rules' %}
 {%- set usertypes = {
     'rootUser': { 'search_string' : ' ' + act2mon + ' ',
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -k ' + key2mon,
                 },
     'regUsers': { 'search_string' : ' ' + act2mon + ' ' ,
-                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -F key=' + key2mon,
-                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -F key=' + key2mon,
+                  'rule' : '-a always,exit -F arch=b64 -S ' + act2mon + ' -k ' + key2mon,
+                  'rule32' : '-a always,exit -F arch=b32 -S ' + act2mon + ' -k ' + key2mon,
                 },
 } %}
 

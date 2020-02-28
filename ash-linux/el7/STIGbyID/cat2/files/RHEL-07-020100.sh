@@ -1,6 +1,7 @@
 #!/bin/sh
-# Finding ID:	RHEL-07-020160
-# Version:	RHEL-07-020160_rule
+# STIG ID:	RHEL-07-020100
+# Rule ID:	SV-86607r4_rule
+# Vuln ID:	V-71983
 # SRG ID:	SRG-OS-000114-GPOS-00059
 # Finding Level:	medium
 # 
@@ -25,6 +26,6 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-020160"
+diag_out "STIG Finding ID: RHEL-07-020100"
 diag_out "   USB mass storage must be disabled."
 diag_out "----------------------------------------"
