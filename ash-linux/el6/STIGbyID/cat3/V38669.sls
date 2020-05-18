@@ -3,8 +3,8 @@
 # Version:	RHEL-06-000287
 # Finding Level:	Low
 #
-#     The postfix service must be enabled for mail delivery. Local mail 
-#     delivery is essential to some system maintenance and notification 
+#     The postfix service must be enabled for mail delivery. Local mail
+#     delivery is essential to some system maintenance and notification
 #     tasks.
 #
 #  CCI: CCI-000366
@@ -40,22 +40,47 @@ notify_{{ stigId }}-postfix:
 pkg_{{ stigId }}-postfix:
   pkg.installed:
     - name: '{{ wantedPkg }}'
+    - retry:
+        attempts: 10
+        until: True
+        interval: 10
+        splay: 10
 
 svc_{{ stigId }}-postfixEnabled:
   service.enabled:
     - name: '{{ wantedPkg }}'
+    - retry:
+        attempts: 5
+        until: True
+        interval: 10
+        splay: 10
 
 svc_{{ stigId }}-postfixRunning:
   service.running:
     - name: '{{ wantedPkg }}'
+    - retry:
+        attempts: 20
+        until: True
+        interval: 2
+        splay: 10    
   {%- endif %}
 {%- else %}
 # Ensure postfix service is enabled and running
 svc_{{ stigId }}-postfixEnabled:
   service.enabled:
     - name: '{{ wantedPkg }}'
+    - retry:
+        attempts: 5
+        until: True
+        interval: 10
+        splay: 10
 
 svc_{{ stigId }}-postfixRunning:
   service.running:
     - name: '{{ wantedPkg }}'
+    - retry:
+        attempts: 20
+        until: True
+        interval: 2
+        splay: 10    
 {%- endif %}
