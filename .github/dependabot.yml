@@ -1,0 +1,12 @@
+version: 2
+updates:
+- package-ecosystem: docker
+  directory: "/tests/docker/centos6"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: docker
+  directory: "/tests/docker/centos7"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
