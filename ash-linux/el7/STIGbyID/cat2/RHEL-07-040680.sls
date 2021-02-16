@@ -46,6 +46,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
     - name: '{{ svcName }}'
-    - watch:
+    - listen:
       - file: file_{{ stig_id }}-{{ cfgFile }}
 {%- endif %}
