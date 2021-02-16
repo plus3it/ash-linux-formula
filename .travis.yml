@@ -5,6 +5,7 @@ env:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
     - SALT_PILLARROOT=$TRAVIS_BUILD_DIR/tests/pillar/test-linux-main
+    - SALT_REPO_URL=https://archive.repo.saltstack.com/yum/redhat/7/x86_64/2019.2.repo
   matrix:
     - OS_VERSION=7 SALT_STATE=ash-linux.stig
     - OS_VERSION=7 SALT_STATE=ash-linux.iavm
@@ -33,8 +34,7 @@ install:
   - |
     sudo docker exec centos-${OS_VERSION} touch /etc/fstab
   - |
-    sudo docker exec centos-${OS_VERSION} yum -y install \
-      https://repo.saltstack.com/yum/redhat/salt-repo-2019.2-2.el${OS_VERSION}.noarch.rpm
+    sudo docker exec centos-${OS_VERSION} curl -sSL -o /etc/yum.repos.d/salt.repo ${SALT_REPO_URL}
   - |
     sudo docker exec centos-${OS_VERSION} yum -y install \
       $(<${TRAVIS_BUILD_DIR}/tests/requirements.txt) \
