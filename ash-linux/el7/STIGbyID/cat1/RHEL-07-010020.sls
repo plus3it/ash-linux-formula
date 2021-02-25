@@ -21,6 +21,11 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 {%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
 {%- else %}
 # Check for (and fix as necessary) RPMs with bad MD5s
 fix_{{ stig_id }}-perms:
