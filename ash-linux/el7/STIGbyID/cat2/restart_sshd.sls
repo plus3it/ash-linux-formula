@@ -6,7 +6,6 @@
 {%- set stig_id = 'restart_sshd' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set svcName = 'sshd' %}
-{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
