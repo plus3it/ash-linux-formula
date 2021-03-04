@@ -3,7 +3,7 @@
 # Cause changes to the /etc/ssh/sshd_config file
 #
 #################################################################
-{%- set stig_id = 'SSHD_restart' %}
+{%- set stig_id = 'restart_sshd' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set svcName = 'sshd' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
