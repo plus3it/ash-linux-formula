@@ -53,10 +53,4 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} {{ parmValu }}
-
-service_{{ stig_id }}-{{ cfgFile }}:
-  service.running:
-    - name: '{{ svcName }}' 
-    - listen:
-      - file: file_{{ stig_id }}-{{ cfgFile }}
 {%- endif %}
