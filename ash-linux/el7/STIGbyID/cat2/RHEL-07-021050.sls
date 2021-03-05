@@ -15,7 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021050' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set globWrDirs = salt['cmd.shell']('find / -perm /002 -type d').split('\n') %}
+{%- set globWrDirs = salt['cmd.shell']('find / -perm /002 -type d -print').split('\n') %}
 {%- set okUsers = [
                    'root',
                    'sys',

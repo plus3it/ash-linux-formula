@@ -28,8 +28,8 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set badDevNodes = [] %}
 {%- if salt.cmd.which('semanage') %}
-  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:device_t:* \( -type c -o -type b \)').split('\n')) %}
-  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:unlabeled_t:* \( -type c -o -type b \)').split('\n')) %}
+  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:device_t:* \( -type c -o -type b \) -print ').split('\n')) %}
+  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:unlabeled_t:* \( -type c -o -type b \) -print ').split('\n')) %}
 {%- endif %}
 
 script_{{ stig_id }}-describe:
