@@ -31,6 +31,9 @@ notify_{{ stig_id }}-skipSet:
     - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - cwd: /root
 {%- else %}
+include:
+  - ash-linux.el7.STIGbyID.cat2.restart_sshd
+
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
     - name: '{{ cfgFile }}'
@@ -40,10 +43,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} {{ parmValu }}
-
-service_{{ stig_id }}-{{ cfgFile }}:
-  service.running:
-    - name: '{{ svcName }}'
-    - listen:
-      - file: file_{{ stig_id }}-{{ cfgFile }}
+    - onchanges_in:
+      - service: service_sshd_restart
 {%- endif %}
