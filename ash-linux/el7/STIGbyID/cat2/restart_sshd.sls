@@ -15,9 +15,3 @@ script_{{ stig_id }}-describe:
 service_sshd_restart:
   service.running:
     - name: '{{ svcName }}'
-    - onchanges:
-      - file: file_RHEL-07-040690-/etc/ssh/sshd_config
-      - file: file_RHEL-07-040680-/etc/ssh/sshd_config
-      - file: file_RHEL-07-040660-/etc/ssh/sshd_config
-      - file: file_RHEL-07-040700-/etc/ssh/sshd_config
-      - file: file_RHEL-07-040670-/etc/ssh/sshd_config
