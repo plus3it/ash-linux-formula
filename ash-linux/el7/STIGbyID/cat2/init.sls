@@ -182,4 +182,3 @@ include:
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040820
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040830
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-040860
-  - ash-linux.el7.STIGbyID.cat2.restart_sshd
