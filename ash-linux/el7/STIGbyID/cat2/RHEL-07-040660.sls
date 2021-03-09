@@ -44,6 +44,9 @@ notify_{{ stig_id }}-skipSet:
     - cwd: /root
     - stateful: True
 {%- else %}
+include:
+  - ash-linux.el7.STIGbyID.cat2.restart_sshd
+
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
     - name: '{{ cfgFile }}'
@@ -53,4 +56,6 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} {{ parmValu }}
+    - onchanges_in:
+      - service: service_sshd_restart
 {%- endif %}
