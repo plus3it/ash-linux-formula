@@ -23,17 +23,25 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for if in ifList %}
-  {%- if salt['cmd.shell']('ip link show ' + if + ' | grep ' + ifMode) %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- for if in ifList %}
+    {%- if salt['cmd.shell']('ip link show ' + if + ' | grep ' + ifMode) %}
 property_{{ stig_id }}-{{ if }}:
   cmd.run:
     - name: 'printf "Turning off promiscuous mode on {{ if }} " && ip link set {{ if }} promisc {{ modeTarg }} && echo "...SUCCESS" || echo "...FAILED"'
     - cwd: /root
-  {%- else %}
+    {%- else %}
 property_{{ stig_id }}-{{ if }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Interface {{ if }} (already) not in promicuous mode.''\n"'
     - cwd: /root
     - stateful: True
-  {%- endif %}
-{%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}

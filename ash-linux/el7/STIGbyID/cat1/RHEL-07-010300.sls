@@ -15,6 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010300' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set sshConfigFile = '/etc/ssh/sshd_config' %}
 
 script_{{ stig_id }}-describe:
@@ -22,23 +23,30 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords .*') %}
-  {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords no') %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords .*') %}
+    {%- if salt.file.search(sshConfigFile, '^PermitEmptyPasswords no') %}
 file_{{ stig_id }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Empty passwords already disabled in {{ sshConfigFile }}''.\n"'
     - cwd: /root
     - stateful: True
-    {%- set runtype = 'cmd' %}
-  {%- else %}
+      {%- set runtype = 'cmd' %}
+    {%- else %}
 file_{{ stig_id }}:
   file.replace:
     - name: '{{ sshConfigFile }}'
     - pattern: "^PermitEmptyPasswords .*"
     - repl: "PermitEmptyPasswords no"
-    {%- set runtype = 'file' %}
-  {%- endif %}
-{%- else %}
+      {%- set runtype = 'file' %}
+    {%- endif %}
+  {%- else %}
 file_{{ stig_id }}:
   file.append:
     - name: '{{ sshConfigFile }}'
@@ -46,8 +54,8 @@ file_{{ stig_id }}:
         
         # SSH Must not allow empty passwords (per STIG {{ stig_id }})
         PermitEmptyPasswords no
-  {%- set runtype = 'file' %}
-{%- endif %}
+    {%- set runtype = 'file' %}
+  {%- endif %}
 
 # Bleah: this is a mild botch. If above performs a 'cmd.run', this state
 # will always cause a service restart event.
@@ -56,3 +64,4 @@ service_{{ stig_id }}-sshd:
     - name: 'sshd'
     - watch:
       - {{ runtype }}: file_{{ stig_id }}
+{%- endif %}
