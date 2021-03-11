@@ -14,6 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040060' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set pkgChk = 'pam_pkcs11' %}
 {%- set cfgFile = '/etc/pam_pkcs11/cn_map' %}
 

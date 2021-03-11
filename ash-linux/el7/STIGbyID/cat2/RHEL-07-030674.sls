@@ -14,6 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030674' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
 {%- set path2mon = '/sbin/modprobe' %}
 {%- set key2mon = 'module-change' %}

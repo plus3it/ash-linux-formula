@@ -21,6 +21,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030630' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set ruleFile = '/etc/audit/rules.d/priv_acts.rules' %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set path2mon = '/usr/bin/passwd' %}
