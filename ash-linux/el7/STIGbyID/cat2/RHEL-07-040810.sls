@@ -2,14 +2,14 @@
 # Version:	RHEL-07-040810_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	The system must use a local firewall.
 #
-# CCI-000366 
-#    NIST SP 800-53 :: CM-6 b 
-#    NIST SP 800-53A :: CM-6.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: CM-6 b 
+# CCI-000366
+#    NIST SP 800-53 :: CM-6 b
+#    NIST SP 800-53A :: CM-6.1 (iv)
+#    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040810' %}
@@ -44,7 +44,7 @@ package_{{ stig_id }}-present:
     - name: firewalld
 
 # Start firewalld.service if running
-service_{{ stig_id }}-dead:
+service_{{ stig_id }}-running:
   service.running:
     - name: firewalld
     - enable: True
