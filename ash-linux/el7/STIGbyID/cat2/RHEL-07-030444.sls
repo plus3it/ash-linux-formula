@@ -2,21 +2,20 @@
 # Version:	RHEL-07-030444_rule
 # SRG ID:	SRG-OS-000392-GPOS-00172
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	All uses of the restorecon command must be audited.
 #
-# CCI-000172 
-# CCI-002884 
-#    NIST SP 800-53 :: AU-12 c 
-#    NIST SP 800-53A :: AU-12.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: AU-12 c 
-#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a) 
+# CCI-000172
+# CCI-002884
+#    NIST SP 800-53 :: AU-12 c
+#    NIST SP 800-53A :: AU-12.1 (iv)
+#    NIST SP 800-53 Revision 4 :: AU-12 c
+#    NIST SP 800-53 Revision 4 :: MA-4 (1) (a)
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030444' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
-{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs") %}
 {%- set path2mon = '/usr/sbin/restorecon' %}
@@ -63,7 +62,7 @@ file_{{ stig_id }}-auditRules_{{ usertype }}:
   file.append:
     - name: '{{ audit_cfg_file }}'
     - text: |-
-        
+
         # Monitor for SELinux DAC changes (per STIG-ID {{ stig_id }})
         {{ audit_options['rule'] }}
       {%- endif %}
