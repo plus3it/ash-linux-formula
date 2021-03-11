@@ -37,6 +37,12 @@ sysctl_{{ stig_id }}-{{ parmName }}:
     - name: '{{ parmName }}'
     - value: '{{ parmValuTarg }}'
 
+  {%- if not salt.file.file_exists(cfgFile) %}
+file-exists_{{ stig_id }}-{{ parmName }}:
+  file.touch:
+    - name: '{{ cfgFile }}'
+  {%- endif %}
+
 file_{{ stig_id }}-{{ parmName }}:
   file.replace:
     - name: '{{ cfgFile }}'
