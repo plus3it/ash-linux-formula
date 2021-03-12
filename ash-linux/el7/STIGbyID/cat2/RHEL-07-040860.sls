@@ -44,3 +44,5 @@ file_{{ stig_id }}-{{ parmName }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         {{ parmName }} = {{ parmValuTarg }}
+    - require:
+      - file: 'file-exists_{{ stig_id }}-{{ cfgFile }}'
