@@ -16,7 +16,6 @@
 #    NIST SP 800-53 Revision 4 :: AU-9 (3)
 #
 #################################################################
-
 {%- set stig_id = 'RHEL-07-010010' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}

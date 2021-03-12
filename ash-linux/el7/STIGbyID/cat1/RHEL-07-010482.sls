@@ -18,6 +18,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010482' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
 {%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
 {%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
@@ -30,8 +31,14 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubPassFile) ) %}
-
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubPassFile) ) %}
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
     - name: {{ grubPassFile }}
@@ -74,12 +81,12 @@ regen_grubCfg:
       - file: grubuser_superDef-{{ grubUserFile }}
       - file: grubuser_userSub-{{ grubUserFile }}
 
-{%- else %}
+  {%- else %}
 
 notify_{{ stig_id }}-noAction:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} skipped due to pre-existence of {{ grubPassFile }}.''\n"'
     - stateful: True
     - cwd: /root
-
+  {%- endif %}
 {%- endif %}
