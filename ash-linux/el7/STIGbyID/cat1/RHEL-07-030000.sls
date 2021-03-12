@@ -23,6 +23,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030000' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set svcName = 'auditd.service' %}
 
 script_{{ stig_id }}-describe:
@@ -30,11 +31,15 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
 start_{{ stig_id }}-{{ svcName }}:
   service.running:
     - name: '{{ svcName }}'
-
-enable_{{ stig_id }}-{{ svcName }}:
-  service.enabled:
-    - name: '{{ svcName }}'
-
+    - enable: True
+{%- endif %}

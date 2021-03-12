@@ -15,6 +15,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020840' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs")|int %}
 {%- set userList =  salt.user.list_users() %}
 {%- set shinitFiles = [
@@ -36,20 +37,28 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for user in userList %}
-  {%- set userInfo = salt.user.info(user) %}
-  {%- set userHome = userInfo['home'] %}
-  {%- set userUid = userInfo['uid']|int %}
-  {%- set userGid = userInfo['gid']|int %}
-  {%- if userUid > sysuserMax %}
-    {%- for shinitFile in shinitFiles%}
-      {%- if salt.file.file_exists(userHome + '/' + shinitFile) %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- for user in userList %}
+    {%- set userInfo = salt.user.info(user) %}
+    {%- set userHome = userInfo['home'] %}
+    {%- set userUid = userInfo['uid']|int %}
+    {%- set userGid = userInfo['gid']|int %}
+    {%- if userUid > sysuserMax %}
+      {%- for shinitFile in shinitFiles%}
+        {%- if salt.file.file_exists(userHome + '/' + shinitFile) %}
 fixown_{{ stig_id }}-{{ user }}-{{ shinitFile }}:
   file.managed:
     - name: '{{ userHome }}/{{ shinitFile }}'
     - user: '{{ user }}'
     - replace: False
-      {%- endif  %}
-    {%- endfor %}
-  {%- endif  %}
-{%- endfor %}
+        {%- endif  %}
+      {%- endfor %}
+    {%- endif  %}
+  {%- endfor %}
+{%- endif %}

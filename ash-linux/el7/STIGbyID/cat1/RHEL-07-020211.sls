@@ -13,6 +13,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020211' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set selConfig = '/etc/selinux/config' %}
 {%- set selLink = '/etc/sysconfig/selinux' %}
 {%- set selType = 'SELINUXTYPE' %}
@@ -24,7 +25,14 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.pkg.version(selPolModule) %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- if salt.pkg.version(selPolModule) %}
 symlink_{{ stig_id }}-selinxCfg:
   file.symlink:
     - name: {{ selLink }}
@@ -36,8 +44,9 @@ set_{{ stig_id }}-selType:
     - pattern: '^{{ selType }}=.*$'
     - repl: '{{ selType }}={{ typeMode }}'
     - append_if_not_found: True
-{%- else %}
+  {%- else %}
 notify_{{ stig_id }}-selWarn:
   cmd.run:
     - name: 'printf "WARNING: STIG-compatible policy-modules not\n  installed. Install before\n  rebooting or system may fail\n  to properly restart."'
+  {%- endif %}
 {%- endif %}
