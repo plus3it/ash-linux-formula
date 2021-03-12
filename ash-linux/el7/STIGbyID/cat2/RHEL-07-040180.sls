@@ -16,6 +16,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040180' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set authCfg = '/etc/sysconfig/authconfig' %}
 {%- set ldapCfg = '/etc/pam_ldap.conf' %}
 
