@@ -46,11 +46,11 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
   {%- else %}
-    {%- if not salt.file.file_exists(ruleFile) %}
 touch_{{ stig_id }}-{{ ruleFile }}:
   file.touch:
     - name: '{{ ruleFile }}'
-    {%- endif %}
+    - unless:
+      - 'test -e {{ ruleFile }}'
 
 file_{{ stig_id }}-{{ ruleFile }}:
   file.replace:
