@@ -35,13 +35,6 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if stig_id in skipIt %}
-notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - cwd: /root
-    - stateful: True
-  {%- else %}
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:
     - name: '{{ cfgFile }}'
@@ -57,5 +50,4 @@ service_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ svcName }}'
     - watch:
       - file: file_{{ stig_id }}-{{ cfgFile }}
-  {%- endif %}
 {%- endif %}

@@ -39,13 +39,6 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if stig_id in skipIt %}
-notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - stateful: True
-    - cwd: /root
-  {%- else %}
 touch_{{ stig_id }}-{{ ruleFile }}:
   file.touch:
     - name: '{{ ruleFile }}'
@@ -58,5 +51,4 @@ file_{{ stig_id }}-{{ ruleFile }}:
     - pattern: '^-a always,exit -F path={{ path2mon }}.*$'
     - repl: '-a always,exit -F path={{ path2mon }} -F auid>={{ sysuserMax }} -F auid!=4294967295 -k {{ key2mon }}'
     - append_if_not_found: True
-  {%- endif %}
 {%- endif %}
