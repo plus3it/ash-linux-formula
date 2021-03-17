@@ -45,5 +45,5 @@ file_{{ stig_id }}-{{ cfgExtra }}:
     - backup: False
     - name: '{{ cfgExtra }}'
     - pattern: '^([\s]*)(|readonly|declare -r)([\s]*TMOUT=.*)$'
-    - repl: '# \1\2\3'
+    - repl: '#\1\2\3'
 {%- endfor %}
