@@ -2,7 +2,7 @@
 # Version:	RHEL-07-040160_rule
 # SRG ID:	SRG-OS-000163-GPOS-00072
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	All network connections associated with a communication
 #	session must be terminated at the end of the session or after
@@ -10,12 +10,12 @@
 #	except to fulfill documented and validated mission
 #	requirements.
 #
-# CCI-001133 
-# CCI-002361 
-#    NIST SP 800-53 :: SC-10 
-#    NIST SP 800-53A :: SC-10.1 (ii) 
-#    NIST SP 800-53 Revision 4 :: SC-10 
-#    NIST SP 800-53 Revision 4 :: AC-12 
+# CCI-001133
+# CCI-002361
+#    NIST SP 800-53 :: SC-10
+#    NIST SP 800-53A :: SC-10.1 (ii)
+#    NIST SP 800-53 Revision 4 :: SC-10
+#    NIST SP 800-53 Revision 4 :: AC-12
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040160' %}
@@ -46,4 +46,13 @@ file_{{ stig_id }}-{{ cfgFile }}:
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
         readonly {{ parmName }}={{ parmValu }}
-{%- endif %} 
+
+  {%- for cfgExtra in salt.file.find('/etc/profile.d', maxdepth='0', type='f') %}
+file_{{ stig_id }}-{{ cfgExtra }}:
+  file.replace:
+    - backup: False
+    - name: '{{ cfgExtra }}'
+    - pattern: '^([\s]*)(|readonly|declare -r)([\s]*TMOUT=.*)$'
+    - repl: '#\1\2\3'
+  -{%- endfor %}
+{%- endif %}
