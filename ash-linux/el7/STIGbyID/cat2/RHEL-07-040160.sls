@@ -41,7 +41,9 @@ file_{{ stig_id }}-{{ cfgFile }}:
 
 {%- for cfgExtra in salt.file.find('/etc/profile.d', maxdepth='0', type='f') %}
 file_{{ stig_id }}-{{ cfgExtra }}:
-  file.comment:
+  file.replace:
+    - backup: False
     - name: '{{ cfgExtra }}'
-    - regex: ^[\s]*(|readonly|declare -r)[\s]*TMOUT=
+    - pattern: '^([\s]*)(|readonly|declare -r)([\s]*TMOUT=.*)$'
+    - repl: '# \1\2\3'
 {%- endfor %}
