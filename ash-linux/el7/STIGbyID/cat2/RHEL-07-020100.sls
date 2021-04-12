@@ -23,7 +23,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set foundMods = [] %}
 {%- set modFiles = [] %}
-{%- for modFile in salt.file.find('/etc/modprobe.d', maxdepth='0', type='f') %}
+{%- for modFile in salt.file.find('/etc/modprobe.d', maxdepth=1, type='f') %}
   {%- do modFiles.append(modFile) %}
 {%- endfor %}
 

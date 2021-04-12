@@ -60,7 +60,7 @@ script_{{ stig_id }}-describe:
   {%- if ( uinfo['uid'] > sysuserMax ) and
          ( uinfo['shell'] in iShells ) %}
     {%- set uhome = uinfo['home'] %}
-    {%- set dotfiles = salt.file.find(uhome, name='.*', type='f', maxdepth='0') %}
+    {%- set dotfiles = salt.file.find(uhome, name='.*', type='f', maxdepth=1) %}
     {%- for dotfile in dotfiles %}
       {%- for chkFile in oWrite %}
         {%- if chkFile and salt.file.search(dotfile, chkFile) %}
