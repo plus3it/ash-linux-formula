@@ -24,7 +24,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
 {%- set kernType = 'dracut-fips' %}
 {%- set grub2cfg = '/boot/grub2/grub.cfg' %}
-{%- set fipsChk = '/proc/sys/crypto/fips_enabled' %}
+{%- set fipsChk = 'crypto.fips_enabled' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -50,7 +50,7 @@ notify_{{ stig_id }}-{{ grub2cfg }}:
     - cwd: /root
     - stateful: True
   {%- endif %}
-  {%- if salt.file.search(fipsChk, '^1') %}
+  {%- if salt.sysctl.get(fipsChk) %}
 notify_{{ stig_id }}-{{ fipsChk }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''FIPS-mode active in {{ fipsChk }}.''\n"'
