@@ -28,8 +28,8 @@ notify_{{ stig_id }}-skipSet:
     - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
     - stateful: True
     - cwd: /root
-  {%- for key in keysList %}
 {%- else %}
+  {%- for key in keysList %}
 file_{{ stig_id }}-{{ key }}:
   file.managed:
     - name: '{{ key }}'
