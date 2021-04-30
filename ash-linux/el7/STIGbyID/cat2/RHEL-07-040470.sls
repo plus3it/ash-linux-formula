@@ -32,7 +32,7 @@ notify_{{ stig_id }}-skipSet:
     - cwd: /root
 {%- else %}
   {%- for if in ifList %}
-    {%- if salt.cmd.shell('ip link show ' + if + ' | grep ' + ifMode , ignore_retcode='True') %}
+    {%- if salt.cmd.shell('ip link show ' + if + ' | grep ' + ifMode, ignore_retcode=True) %}
 property_{{ stig_id }}-{{ if }}:
   cmd.run:
     - name: 'printf "Turning off promiscuous mode on {{ if }} " && ip link set {{ if }} promisc {{ modeTarg }} && echo "...SUCCESS" || echo "...FAILED"'
