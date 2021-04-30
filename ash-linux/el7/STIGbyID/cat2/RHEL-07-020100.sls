@@ -24,7 +24,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set foundMods = [] %}
 {%- set modFiles = [] %}
-{%- for modFile in salt.file.find('/etc/modprobe.d', maxdepth='0', type='f') %}
+{%- for modFile in salt.file.find('/etc/modprobe.d', maxdepth=1, type='f') %}
   {%- do modFiles.append(modFile) %}
 {%- endfor %}
 
