@@ -15,7 +15,7 @@
 {%- set stig_id = 'RHEL-07-040640' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set keysList = salt['cmd.shell']('find / -name "*key.pub" -type f | grep -v "/proc" ').split('\n') %}
+{%- set keysList = salt.cmd.shell('find / -name "*key.pub" -type f | grep -v "/proc" ' , ignore_retcode=True).split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
