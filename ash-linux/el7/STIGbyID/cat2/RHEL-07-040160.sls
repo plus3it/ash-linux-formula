@@ -47,7 +47,7 @@ file_{{ stig_id }}-{{ cfgFile }}:
         # Inserted per STIG {{ stig_id }}
         readonly {{ parmName }}={{ parmValu }}
 
-  {%- for cfgExtra in salt.file.find('/etc/profile.d', maxdepth='0', type='f') %}
+  {%- for cfgExtra in salt.file.find('/etc/profile.d', maxdepth=1, type='f') %}
 file_{{ stig_id }}-{{ cfgExtra }}:
   file.replace:
     - backup: False
