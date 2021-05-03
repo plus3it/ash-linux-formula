@@ -1,10 +1,10 @@
-# Finding ID:	RHEL-07-040470
-# Version:	RHEL-07-040470_rule
-# SRG ID:	SRG-OS-000480-GPOS-00227
-# Finding Level:	medium
+# Finding ID:   RHEL-07-040470
+# Version:      RHEL-07-040470_rule
+# SRG ID:       SRG-OS-000480-GPOS-00227
+# Finding Level:        medium
 #
 # Rule Summary:
-#	Network interfaces must not be in promiscuous mode.
+#       Network interfaces must not be in promiscuous mode.
 #
 # CCI-000366
 #    NIST SP 800-53 :: CM-6 b
@@ -32,7 +32,7 @@ notify_{{ stig_id }}-skipSet:
     - cwd: /root
 {%- else %}
   {%- for if in ifList %}
-    {%- if salt['cmd.shell']('ip link show ' + if + ' | grep ' + ifMode) %}
+    {%- if salt.cmd.shell('ip link show ' + if + ' | grep ' + ifMode, ignore_retcode=True) %}
 property_{{ stig_id }}-{{ if }}:
   cmd.run:
     - name: 'printf "Turning off promiscuous mode on {{ if }} " && ip link set {{ if }} promisc {{ modeTarg }} && echo "...SUCCESS" || echo "...FAILED"'
