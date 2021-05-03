@@ -3,16 +3,16 @@
 # Version:	SV-86867r3_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	The Red Hat Enterprise Linux operating system must be
 #	configured so that the SSH daemon does not allow
 #	authentication using rhosts authentication.
 #
-# CCI-000366 
-#    NIST SP 800-53 :: CM-6 b 
-#    NIST SP 800-53A :: CM-6.1 (iv) 
-#    NIST SP 800-53 Revision 4 :: CM-6 b 
+# CCI-000366
+#    NIST SP 800-53 :: CM-6 b
+#    NIST SP 800-53A :: CM-6.1 (iv)
+#    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-040350' %}
@@ -32,8 +32,8 @@ script_{{ stig_id }}-describe:
 notify_{{ stig_id }}-skipSet:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - cwd: /root
     - stateful: True
+    - cwd: /root
 {%- else %}
 file_{{ stig_id }}-{{ cfgFile }}:
   file.replace:

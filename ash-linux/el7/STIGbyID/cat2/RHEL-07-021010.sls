@@ -16,6 +16,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-021010' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set fstabMnts = salt.mount.fstab() %}
 {%- set wantOpt = 'nosuid' %}
 {%- set protMnts = [
@@ -51,31 +52,38 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
 # Iterate local user-list
-{%- for user in userList %}
-  {%- set uinfo = salt.user.info(user) %}
+  {%- for user in userList %}
+    {%- set uinfo = salt.user.info(user) %}
   # Regular interactive-users will have UID > SYS_USER_MAX and
   # will have an interactive shell assigned.
-  {%- if ( uinfo['uid'] > sysuserMax ) and
+    {%- if ( uinfo['uid'] > sysuserMax ) and
          ( uinfo['shell'] in iShells ) %}
-    {%- set uhome = uinfo['home'] %}
-    {%- set homeMount = salt['cmd.shell']('df --output=target ' + uinfo['home'] + ' 2> /dev/null | tail -1') %}
-    {%- if not homeMount in homeDevs %}
-      {%- do homeDevs.append(homeMount) %}
+      {%- set uhome = uinfo['home'] %}
+      {%- set homeMount = salt['cmd.shell']('df --output=target ' + uinfo['home'] + ' 2> /dev/null | tail -1') %}
+      {%- if not homeMount in homeDevs %}
+        {%- do homeDevs.append(homeMount) %}
+      {%- endif %}
     {%- endif %}
-  {%- endif %}
-{%- endfor %}
+  {%- endfor %}
 
-{%- if homeDevs %}
-  {%- for homeDev in homeDevs %}
-    {%- set mntOpts = fstabMnts[homeDev]['opts'] %}
-    {%- if not wantOpt in mntOpts and
+  {%- if homeDevs %}
+    {%- for homeDev in homeDevs %}
+      {%- set mntOpts = fstabMnts[homeDev]['opts'] %}
+      {%- if not wantOpt in mntOpts and
            not homeDev in protMnts %}
-      {%- do mntOpts.append(wantOpt) %}
-      {%- set fstabDevice = fstabMnts[homeDev]['device'] %}
-      {%- set fstabDump = fstabMnts[homeDev]['dump'] %}
-      {%- set fstabFstype = fstabMnts[homeDev]['fstype'] %}
-      {%- set fstabPass =  fstabMnts[homeDev]['pass'] %}
+        {%- do mntOpts.append(wantOpt) %}
+        {%- set fstabDevice = fstabMnts[homeDev]['device'] %}
+        {%- set fstabDump = fstabMnts[homeDev]['dump'] %}
+        {%- set fstabFstype = fstabMnts[homeDev]['fstype'] %}
+        {%- set fstabPass =  fstabMnts[homeDev]['pass'] %}
 
 fix_{{ stig_id }}-{{ homeDev }}:
   module.run:
@@ -86,12 +94,13 @@ fix_{{ stig_id }}-{{ homeDev }}:
     - opts: '{{ mntOpts|join(",") }}'
     - dump: '{{ fstabDump }}'
     - pass_num: '{{ fstabPass }}'
-    {%- else %}
+      {%- else %}
 fix_{{ stig_id }}-{{ homeDev }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''{{ homeDev }} already has {{ wantOpt }} option set: state ok.''\n"'
     - cwd: /root
     - stateful: True
-    {%- endif %}
-  {%- endfor %}
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
 {%- endif %}

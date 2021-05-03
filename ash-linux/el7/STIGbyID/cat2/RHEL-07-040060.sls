@@ -14,6 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040060' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set pkgChk = 'pam_pkcs11' %}
 {%- set cfgFile = '/etc/pam_pkcs11/cn_map' %}
 
@@ -22,6 +23,13 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
 touch_{{ stig_id }}-{{ cfgFile }}:
   file.touch:
     - name: '{{ cfgFile }}'
@@ -35,3 +43,4 @@ mode_{{ stig_id }}-{{ cfgFile }}:
     - replace: False
     - require:
       - file: 'touch_{{ stig_id }}-{{ cfgFile }}'
+{%- endif %}

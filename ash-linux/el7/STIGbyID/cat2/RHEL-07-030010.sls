@@ -21,6 +21,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-030010' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set ruleFile = '/etc/audit/rules.d/audit.rules' %}
 {%- set oflowVal = salt.pillar.get('ash-linux:lookup:audit-overflow', '2') %}
 {%- set oflowStr = '-f '+ oflowVal|string %}
@@ -30,13 +31,20 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if oflowVal|string in ruleFile %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- if oflowVal|string in ruleFile %}
 setval_{{ stig_id }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Target audit-overflow value ({{ oflowVal|string }})already set.''\n"'
     - cwd: /root
     - stateful: True
-{%- else %}
+  {%- else %}
 setval_{{ stig_id }}:
   file.replace:
     - name: '{{ ruleFile }}'
@@ -45,4 +53,5 @@ setval_{{ stig_id }}:
         # Inserted per STIG {{ stig_id }}
         {{ oflowStr }}
     - append_if_not_found: True
+  {%- endif %}
 {%- endif %}

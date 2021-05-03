@@ -3,17 +3,18 @@
 # Vuln ID:	V-72087
 # SRG ID:	SRG-OS-000342-GPOS-00133
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	The audit system must take appropriate action when the audit
 #	storage volume is full.
 #
-# CCI-001851 
-#    NIST SP 800-53 Revision 4 :: AU-4 (1) 
+# CCI-001851
+#    NIST SP 800-53 Revision 4 :: AU-4 (1)
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-030320' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set remoteCfg = '/etc/audisp/audisp-remote.conf' %}
 {%- set nfParm = 'network_failure_action'%}
 {%- set dfParm = 'disk_full_action'%}
@@ -25,13 +26,20 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
 # STIG doesn't enumerate this, but the handler's kinda pointless
 # if this package isn't installed
 pkg_{{ stig_id }}-audispRemote:
   pkg.installed:
     - name: audispd-plugins
 
-{%- if salt.file.file_exists(remoteCfg) %}
+  {%- if salt.file.file_exists(remoteCfg) %}
 file_{{ stig_id }}-{{ nfParm }}:
   file.replace:
     - name: '{{ remoteCfg }}'
@@ -45,7 +53,7 @@ file_{{ stig_id }}-{{ dfParm }}:
     - pattern: '^\s{{ dfParm }}.*$'
     - repl: '{{ dfParm }} = {{ auDiskFull }}'
     - append_if_not_found: True
-{%- else %}
+  {%- else %}
 file_{{ stig_id }}-{{ nfParm }}:
   file.append:
     - name: '{{ remoteCfg }}'
@@ -57,4 +65,5 @@ file_{{ stig_id }}-{{ dfParm }}:
     - name: '{{ remoteCfg }}'
     - text: '{{ dfParm }} = {{ auDiskFull }}'
     - makedirs: True
+  {%- endif %}
 {%- endif %}

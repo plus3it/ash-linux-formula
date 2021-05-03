@@ -16,6 +16,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-010440' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat1/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set checkFile = '/etc/gdm/custom.conf'%}
 {%- set checkParm = 'AutomaticLoginEnable'%}
 
@@ -24,22 +25,30 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if not salt.pkg.version('gdm') %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- if not salt.pkg.version('gdm') %}
 eval_{{ stig_id }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''GDM susbsystem is not installed.''\n"'
     - cwd: /root
     - stateful: True
-{% elif salt.file.search(checkFile, '^' + checkParm) %}
+  {%- elif salt.file.search(checkFile, '^' + checkParm) %}
 file_{{ stig_id }}:
   file.replace:
     - name: {{ checkFile }}
     - pattern: '^{{ checkParm }}.*$'
     - repl: '{{ checkParm }}=false'
-{%- else %}
+  {%- else %}
 file_{{ stig_id }}:
   file.replace:
     - name: {{ checkFile }}
     - pattern: '^\[daemon]'
     - repl: '[daemon]\n{{ checkParm }}=false'
+  {%- endif %}
 {%- endif %}

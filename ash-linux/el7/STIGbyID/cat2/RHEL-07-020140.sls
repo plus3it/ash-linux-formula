@@ -2,17 +2,18 @@
 # Version:	RHEL-07-020140_rule
 # SRG ID:	SRG-OS-000363-GPOS-00150
 # Finding Level:	medium
-# 
+#
 # Rule Summary:
 #	Designated personnel must be notified if baseline configurations
 #	are changed in an unauthorized manner.
 #
-# CCI-001744 
-#    NIST SP 800-53 Revision 4 :: CM-3 (5) 
+# CCI-001744
+#    NIST SP 800-53 Revision 4 :: CM-3 (5)
 #
 #################################################################
 {%- set stig_id = 'RHEL-07-020140' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set hostname = salt.grains.get('fqdn') %}
 {%- set ntfyMail = salt.pillar.get('ash-linux:lookup:notifier-email', 'root') %}
 {%- set cronRoot = '/var/spool/cron/root' %}
@@ -41,20 +42,27 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- if salt.pkg.version('aide') %} 
-  {%- for cronFile in cronFiles %}
-    {%- if salt.file.search(cronFile, '\/aide ') %}
-      {% do foundCrons.extend(cronFile) %}
-    {%- endif %}
-  {%- endfor %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- if salt.pkg.version('aide') %}
+    {%- for cronFile in cronFiles %}
+      {%- if salt.file.search(cronFile, '\/aide ') %}
+        {%- do foundCrons.extend(cronFile) %}
+      {%- endif %}
+    {%- endfor %}
 
-  {%- if foundCrons %}
+    {%- if foundCrons %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Found cron entries for AIDE.''\n"'
     - cwd: /root
     - stateful: True
-  {%- else %}
+    {%- else %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Found no cron entries for AIDE: fixing...''\n"'
@@ -73,11 +81,12 @@ cron_{{ stig_id }}-service:
     - watch:
       - file: cron_{{ stig_id }}-file
 
-  {%- endif %}
-{%- else %}
+    {%- endif %}
+  {%- else %}
 notify_{{ stig_id }}-aideFound:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''AIDE subsystem not installed.''\n"'
     - cwd: /root
     - stateful: True
+  {%- endif %}
 {%- endif %}

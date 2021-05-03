@@ -25,10 +25,11 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020940' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set badDevNodes = [] %}
 {%- if salt.cmd.which('semanage') %}
-  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:device_t:* \( -type c -o -type b \)').split('\n')) %}
-  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:unlabeled_t:* \( -type c -o -type b \)').split('\n')) %}
+  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:device_t:* \( -type c -o -type b \) -print ').split('\n')) %}
+  {%- do badDevNodes.extend(salt['cmd.shell']('find / -context *:unlabeled_t:* \( -type c -o -type b \) -print ').split('\n')) %}
 {%- endif %}
 
 script_{{ stig_id }}-describe:
@@ -36,21 +37,30 @@ script_{{ stig_id }}-describe:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for file in badDevNodes %}
-  {%- if file %}
-    {%- if salt.lowpkg.owner(file) %}
-      {%- set fixRPM = salt.lowpkg.owner(file) %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- for file in badDevNodes %}
+    {%- if file %}
+      {%- if salt.lowpkg.owner(file) %}
+        {%- set fixRPM = salt.lowpkg.owner(file) %}
 dev_{{ stig_id }}-{{ file }}:
   pkg.install:
     - name: '{{ fixRPM }}'
     - reinstall: True
-    {%- else %}
+      {%- else %}
 dev_{{ stig_id }}-{{ file }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Bad device {{ file }} not installed by an RPM: cannot attempt fix.''\n"'
     - cwd: /root
     - stateful: True
-    {%- endif %}
+      {%- endif %}
 
-  {%- endif %}
-{%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
+

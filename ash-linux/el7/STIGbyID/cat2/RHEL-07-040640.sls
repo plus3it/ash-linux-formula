@@ -14,17 +14,26 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-040640' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
-{%- set keysList = salt['cmd.shell']('find / -name "*key.pub" -type f').split('\n') %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set keysList = salt.cmd.shell('find / -name "*key.pub" -type f | grep -v "/proc" ' , ignore_retcode=True).split('\n') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
 
-{%- for key in keysList %}
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- for key in keysList %}
 file_{{ stig_id }}-{{ key }}:
   file.managed:
     - name: '{{ key }}'
     - mode: '0644'
     - replace: False
-{%- endfor %}
+  {%- endfor %}
+{%- endif %}

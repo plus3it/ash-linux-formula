@@ -14,6 +14,7 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020880' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set sysuserMax = salt['cmd.shell']("awk '/SYS_UID_MAX/{ IDVAL = $2 + 1} END { print IDVAL }' /etc/login.defs
 ")|int %}
 {%- set userList = salt.user.list_users() %}
@@ -52,25 +53,33 @@ script_{{ stig_id }}-describe:
 #      to 0755.
 
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
 # Iterate local user-list
-{%- for user in userList %}
-  {%- set uinfo = salt.user.info(user) %}
+  {%- for user in userList %}
+    {%- set uinfo = salt.user.info(user) %}
   # Regular interactive-users will have UID > SYS_USER_MAX and
   # will have an interactive shell assigned.
-  {%- if ( uinfo['uid'] > sysuserMax ) and
+    {%- if ( uinfo['uid'] > sysuserMax ) and
          ( uinfo['shell'] in iShells ) %}
-    {%- set uhome = uinfo['home'] %}
-    {%- set dotfiles = salt.file.find(uhome, name='.*', type='f', maxdepth=1) %}
-    {%- for dotfile in dotfiles %}
-      {%- for chkFile in oWrite %}
-        {%- if chkFile and salt.file.search(dotfile, chkFile) %}
+      {%- set uhome = uinfo['home'] %}
+      {%- set dotfiles = salt.file.find(uhome, name='.*', type='f', maxdepth='0') %}
+      {%- for dotfile in dotfiles %}
+        {%- for chkFile in oWrite %}
+          {%- if chkFile and salt.file.search(dotfile, chkFile) %}
 fixperm_{{ stig_id }}-{{ chkFile }}:
   cmd.run:
     - name: 'chmod o-w "{{ chkFile }}" && printf "\nchanged=yes comment=''found {{ chkFile }} referenced in {{ dotfile }}: stripping global-write perms.''\n"'
     - cwd: /root
     - stateful: True
-        {%- endif %}
+          {%- endif %}
+        {%- endfor %}
       {%- endfor %}
-    {%- endfor %}
-  {%- endif %}
-{%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
