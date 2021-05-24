@@ -36,7 +36,7 @@ service_{{ stig_id }}-dead:
 # Remove iptables.service if present
 package_{{ stig_id }}-absent:
   pkg.removed:
-    - name: iptables
+    - name: iptables-services
 
 # Install firewalld if absent
 package_{{ stig_id }}-present:
