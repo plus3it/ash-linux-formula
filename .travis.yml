@@ -12,6 +12,9 @@ env:
     - OS_VERSION=7 SALT_STATE=ash-linux.scap
     - OS_VERSION=7 SALT_STATE=ash-linux.vendor
     - OS_VERSION=7 SALT_STATE=ash-linux.el7.stig
+    - OS_VERSION=7 SALT_STATE=ash-linux.el7.STIGbyID.cat1
+    - OS_VERSION=7 SALT_STATE=ash-linux.el7.STIGbyID.cat2
+    - OS_VERSION=7 SALT_STATE=ash-linux.el7.STIGbyID.cat3
 
 services:
   - docker
