@@ -51,10 +51,14 @@ def _get_default_kernel():
     return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
 
 
-def _get_boot_mount():
-    """Obtain mount to path that kernel is located in."""
+def _get_boot_path():
+    """Obtain path that kernel is located in."""
     boot_path = _get_default_kernel()
-    boot_path = boot_path[:boot_path.rindex('/')] or '/'
+    return boot_path[:boot_path.rindex('/')] or '/'
+
+
+def _get_boot_mount(boot_path):
+    """Obtain mount to path that kernel is located in."""
     cmd = 'findmnt -no source -T ' + boot_path
     return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
 
@@ -76,9 +80,10 @@ def _modify_grub_file(rmv_fips_arg):
         check = __salt__['file.search'](filepath, 'boot=')
         if not check:
             # No boot= in grub, so find mount where kernel is located.
-            boot_mount = _get_boot_mount()
-            # Add boot= argument.
-            grub_args.append('boot={0} '.format(boot_mount))
+            # Add boot= argument if a boot path exists.
+            boot_mount = _get_boot_mount(_get_boot_path())
+            if boot_mount != _get_boot_mount('/'):
+                grub_args.append('boot={0} '.format(boot_mount))
 
         check = __salt__['file.search'](filepath, 'fips=1')
         if not check:
@@ -261,8 +266,11 @@ def fips_enable():
         grub_args = _get_grub_args()
         if 'fips=1' not in grub_args:
             grubby_args.append('fips=1')
-        if 'boot=' not in grub_args:
-            grubby_args.append('boot={0}'.format(_get_boot_mount()))
+			
+        # Add boot= argument if a boot path exists.
+        boot_mount = _get_boot_mount(_get_boot_path())
+        if 'boot=' not in grub_args and boot_mount != _get_boot_mount('/'):
+            grubby_args.append('boot={0}'.format(boot_mount))
         if grubby_args:
             cmd = 'grubby --update-kernel=ALL --args="{0}"'.format(
                 ' '.join(grubby_args)
