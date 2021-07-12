@@ -22,7 +22,7 @@
 
 run_{{ stig_id }}-remediate:
   cmd.run:
-    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} || true'
+    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }}'
     - cwd: '/root'
 
 # Restore NOPASSWD remediation to sudoers.d files
