@@ -1,3 +1,4 @@
+dist: focal
 language: python
 sudo: required
 env:
@@ -5,16 +6,13 @@ env:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
     - SALT_PILLARROOT=$TRAVIS_BUILD_DIR/tests/pillar/test-linux-main
-    - SALT_REPO_URL=https://archive.repo.saltstack.com/yum/redhat/7/x86_64/2019.2.repo
+    - SALT_REPO_URL=https://repo.saltproject.io/py3/redhat/7/x86_64/3004.repo
   matrix:
     - OS_VERSION=7 SALT_STATE=ash-linux.stig
     - OS_VERSION=7 SALT_STATE=ash-linux.iavm
     - OS_VERSION=7 SALT_STATE=ash-linux.scap
     - OS_VERSION=7 SALT_STATE=ash-linux.vendor
     - OS_VERSION=7 SALT_STATE=ash-linux.el7.stig
-    - OS_VERSION=7 SALT_STATE=ash-linux.el7.STIGbyID.cat1
-    - OS_VERSION=7 SALT_STATE=ash-linux.el7.STIGbyID.cat2
-    - OS_VERSION=7 SALT_STATE=ash-linux.el7.STIGbyID.cat3
 
 services:
   - docker
