@@ -41,10 +41,10 @@ notify_{{ stig_id }}-skipSet:
 {%- else %}
   {%- if salt.file.directory_exists('/sys/firmware/efi') %}
     {%- if salt.file.file_exists(mainCfg) %}
-      {%- set grubPass = salt['cmd.shell']('printf "' + dummyPass +
-                       '\n' + dummyPass + '\n" | grub2-mkpasswd-pbkdf2 ' +
-                       '2>&1 | grep "password is" ' +
-                       '| sed "s/^.*password is //"') %}
+{%- set grubPass = salt['cmd.shell']('printf "' + dummyPass +
+                 '\n' + dummyPass + '\n" | grub2-mkpasswd-pbkdf2 ' +
+                 '2>&1 | grep "password is" ' +
+                 '| sed "s/^.*password is //"') %}
       {%- if salt.file.search(mainCfg, 'password_pbkdf2') %}
 script_{{ stig_id }}-{{ mainCfg }}:
   cmd.run:
@@ -85,6 +85,12 @@ cmd_{{ stig_id }}-{{ mainCfg }}:
     - watch:
       - file: file_{{ stig_id }}-{{ srcCfg }}
       {%- endif %}
+    {%- else %}
+cmd_{{ stig_id }}-{{ mainCfg }}:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''{{ mainCfg }} does not exist.''\n"'
+    - cwd: /root
+    - stateful: True
     {%- endif %}
   {%- else %}
 cmd_{{ stig_id }}-notice:
