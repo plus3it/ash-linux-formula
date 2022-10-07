@@ -17,7 +17,7 @@
 {%- set osrel = salt.grains.get('osmajorrelease') %}
 {%- set contentDir = '/usr/share/xml/scap/ssg/content' %}
 {%- set cpeXml = salt.pillar.get('ash-linux:lookup:scap-cpe') | default(
-    contentDir ~ '/ssg-rhel7-cpe-dictionary.xml',
+    contentDir ~ '/ssg-rhel8-cpe-dictionary.xml',
     true
 ) %}
 {%- set xccdfXml = salt.pillar.get('ash-linux:lookup:scap-xccdf') | default(
