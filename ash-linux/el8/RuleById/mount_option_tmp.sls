@@ -40,40 +40,14 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # /tmp owned by systemd...
-{%- if salt.service.available('tmp.mount') %}
 file_{{ stig_id }}-{{ targMnt }}:
   file.managed:
     - name: '{{ optionsFile }}'
     - user: 'root'
-    - grou: 'root'
+    - group: 'root'
     - mode: '0644'
     - makedirs: True
     - dir_mode: '0755'
-    - selinux:
-        seuser: system_u
-        serole: object_r
-        setype: systemd_unit_file_t
-        seranage: s0
     - contents: |-
         [Mount]
         Options=mode=1777,strictatime,{{ mntOpt|join(",") }}
-
-# /tmp is standard filesystem...
-{%- elif salt.file.search('/etc/fstab', targMnt) %}
-  {%- set fstabMnts = salt.mount.fstab() %}
-  {%- set mntDev = fstabMnts[targMnt]['device'] %}
-  {%- set mntDump = fstabMnts[targMnt]['dump'] %}
-  {%- set mntOpts = fstabMnts[targMnt]['opts'] %}
-  {%- set mntPass = fstabMnts[targMnt]['pass'] %}
-  {%- set mntFstype = fstabMnts[targMnt]['fstype'] %}
-
-file_{{ stig_id }}-{{ targMnt }}:
-  module.run:
-    - name: 'mount.set_fstab'
-    - m_name: '{{ targMnt }}'
-    - device: '{{ mntDev }}'
-    - fstype: '{{ mntFstype }}'
-    - opts: '{{ mntOpts|join(",") }},{{ mntOpt|join(",") }}'
-    - dump: '{{ mntDump }}'
-    - pass_num: '{{ mntPass }}'
-{%- endif %}
