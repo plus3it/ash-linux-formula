@@ -27,7 +27,7 @@
 #################################################################
 {%- set stig_id = 'configure_bashrc_exec_tmux' %}
 {%- set helperLoc = 'ash-linux/el8/RuleById/files' %}
-{%- set profilFile ='/etc/profile.d/tmux.sh' %}
+{%- set profileFile ='/etc/profile.d/tmux.sh' %}
 
 # Log a description of what we're setting
 script_{{ stig_id }}-describe:
