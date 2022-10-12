@@ -49,6 +49,11 @@ file_{{ stig_id }}-{{ targMnt }}:
     - mode: '0644'
     - makedirs: True
     - dir_mode: '0755'
+    - selinux:
+        seuser: system_u
+        serole: object_r
+        setype: systemd_unit_file_t
+        seranage: s0
     - contents: |-
         [Mount]
         Options=mode=1777,strictatime,{{ mntOpt|join(",") }}
