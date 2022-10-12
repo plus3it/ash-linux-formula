@@ -22,7 +22,7 @@
 
 run_{{ stig_id }}-remediate:
   cmd.run:
-    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }}'
+    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} 2>&1 | tee /var/log/oscap.out'
     - cwd: '/root'
     - success_retcodes:
       - 2
