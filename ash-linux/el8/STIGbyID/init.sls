@@ -1,5 +1,6 @@
 include:
   - ash-linux.el8.STIGbyID.cat2
+  - ash-linux.el8.STIGbyID.cat3
 
 
 Print ash-linux el8 stig baseline help:
