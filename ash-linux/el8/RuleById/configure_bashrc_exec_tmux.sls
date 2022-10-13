@@ -46,7 +46,7 @@ file_{{ stig_id }}-{{ profileFile }}:
     - dir_mode: '0755'
     - contents: |-
         # Check if shell is interactive
-        if [[ $- == *i* ]]
+        if [[ $- == *i* ]] && [[ $( rpm --quiet -q tmux )$? -eq 0 ]]
         then
            parent=$( ps -o ppid= -p $$ )
            name=$( ps -o comm= -p $parent )
