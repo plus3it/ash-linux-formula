@@ -111,35 +111,6 @@
 #   - SV-230513r627750_rule
 #
 #################################################################
-{%- set stig_id = 'mount_options_tmp' %}
-{%- set helperLoc = 'ash-linux/el8/RuleById/files' %}
-{%- set optionsFile ='/etc/systemd/system/tmp.mount.d/options.conf' %}
-{%- set mntOpt = [
-                  'nosuid',
-                  'noexec',
-                  'nodev'
-                    ]%}
-{%- set targMnt = '/tmp' %}
-
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-
-# /tmp owned by systemd...
-file_{{ stig_id }}-{{ targMnt }}:
-  file.managed:
-    - name: '{{ optionsFile }}'
-    - user: 'root'
-    - group: 'root'
-    - mode: '0644'
-    - makedirs: True
-    - dir_mode: '0755'
-    - contents: |-
-        [Mount]
-        Options=mode=1777,strictatime,{{ mntOpt|join(",") }}
-#
-#################################################################
 # Standard outputter function
 diag_out() {
    echo "${1}"

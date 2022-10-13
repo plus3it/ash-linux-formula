@@ -39,33 +39,6 @@
 #   - SV-230300r743959_rule
 #
 #################################################################
-{%- set stig_id = 'mount_options_boot' %}
-{%- set helperLoc = 'ash-linux/el8/RuleById/files' %}
-{%- set optionsFile ='/etc/systemd/system/boot.mount.d/options.conf' %}
-{%- set mntOpt = [
-                  'nosuid',
-                    ]%}
-{%- set targMnt = '/boot' %}
-
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-
-# /boot owned by systemd...
-file_{{ stig_id }}-{{ targMnt }}:
-  file.managed:
-    - name: '{{ optionsFile }}'
-    - user: 'root'
-    - group: 'root'
-    - mode: '0644'
-    - makedirs: True
-    - dir_mode: '0755'
-    - contents: |-
-        [Mount]
-        Options=mode=1777,strictatime,{{ mntOpt|join(",") }}
-#
-#################################################################
 # Standard outputter function
 diag_out() {
    echo "${1}"
