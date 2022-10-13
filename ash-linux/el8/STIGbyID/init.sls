@@ -1,7 +1,9 @@
-Print ash-linux el8 STIGbyID baseline help:
+include:
+  - ash-linux.el8.STIGbyID.cat2
+
+
+Print ash-linux el8 stig baseline help:
   test.show_notification:
     - text: |
-        No ash-linux content appropriate for executiong on a STIG-by-ID basis
-        has yet been identified for EL8 systems. As such, this state is provided
-        only as a notification message and a placeholder. On its own, this state
-        does not modify the system in any way.
+        The full, item-by-item `ash-linux.stig` baseline for EL8 is in beta.
+        Use this content at your own risk.
