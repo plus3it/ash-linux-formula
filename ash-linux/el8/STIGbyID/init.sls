@@ -1,4 +1,5 @@
 include:
+  - ash-linux.el8.STIGbyID.cat1
   - ash-linux.el8.STIGbyID.cat2
   - ash-linux.el8.STIGbyID.cat3
 
