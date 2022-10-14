@@ -37,27 +37,9 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  # Entry exists and is correct
-  {%- if salt.file.search(targFile, searchRoot + '.*remember=5') %}
-file_{{ stig_id }}-{{ targFile }}:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Found target config in {{ targFile }}.''\n"'
-    - cwd: /root
-    - stateful: True
-  # Entry exists and is incorrect
-  {%- elif salt.file.search(targFile, searchRoot) %}
-file_{{ stig_id }}-{{ targFile }}:
-  file.replace:
-    - name: {{ targFile }}
-    - pattern: '^(?P<srctok>{{ searchRoot }}.*$)'
-    - repl: '\g<srctok> remember=5'
-  # Entry is missing
-  {%- else %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}
     - pattern: '(^.*\s*)(nullok\s*)(.*$)'
-    - repl: '\1\3'
-  {%- endif %}
+    - repl: '# Removed ''nullok'' token per STIG-ID {{ stig_id }}\n\1\3\n'
 {%- endif %}
-
