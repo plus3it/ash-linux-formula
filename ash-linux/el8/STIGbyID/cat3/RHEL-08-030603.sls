@@ -38,7 +38,7 @@ file_{{ stig_id }}_{{ targFile }}:
   file.replace:
     - name: '{{ targFile }}'
     - append_if_not_found: True
-    - pattern: '(^(\s*|#*\s*))AuditBackend\s*=.*$'
+    - pattern: '(^(\s*|#*\s*|))AuditBackend\s*=.*$'
     - repl: 'AuditBackend=LinuxAudit'
   {%- else %}
 file_{{ stig_id }}_{{ targFile }}:
