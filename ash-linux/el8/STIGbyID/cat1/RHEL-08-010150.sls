@@ -1,7 +1,8 @@
-# Vuln ID:	V-230235
-# STIG ID:	RHEL-08-010150
-# Rule ID:      SV-230235r743925_rule
-# SRG ID(s):    SRG-OS-000080-GPOS-00048
+# Ref Doc:    STIG - RHEL 9 v1r7
+# Finding ID: V-230235
+# STIG ID:    RHEL-08-010150
+# Rule ID:    SV-230235r743925_rule
+# SRG ID(s):  SRG-OS-000080-GPOS-00048
 # Finding Level:        high
 #
 # Rule Summary:
