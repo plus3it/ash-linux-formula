@@ -16,7 +16,7 @@
 #   NIST SP 800-53 Revision 4 :: AU-12 a
 #
 ###########################################################################
-{%- set stig_id = 'RHEL-08-030470' %}
+{%- set stig_id = 'RHEL-08-030603' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat3/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/usbguard/usbguard-daemon.conf' %}
@@ -33,15 +33,13 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
+  {%- if salt.file.file_exists(targFile) %}
 file_{{ stig_id }}_{{ targFile }}:
-  file.line:
+  file.replace:
     - name: '{{ targFile }}'
-    - create: true
-    - user: 'root'
-    - group: 'root'
-    - file_mode: 0644
-    - match: '^AuditBackend'
-    - mode: 'replace'
-    - content: 'AuditBackend=LinuxAudit'
+    - append_if_not_found: True
+    - pattern: '(^(\s*|#*\s*))AuditBackend'
+    - repl: 'AuditBackend=LinuxAudit'
+  {%- endif %}
 {%- endif %}
 
