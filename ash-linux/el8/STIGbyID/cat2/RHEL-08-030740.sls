@@ -46,12 +46,15 @@ file_{{ stig_id }}-{{ targFile }}:
     - name: {{ targFile }}
     - pattern: '^(?P<srctok>^(|\s*)pool\s* .*$)'
     - repl: '# Set per STIG-ID {{ stig_id }}\n# \g<srctok>\n'
-  {%- endif %}
-  {%- for ntpServer in ntpServerList.items() %}
-file_{{ stig_id }}-{{ targFile }}-{{ ntpServer }}:
+
+file_{{ stig_id }}-{{ targFile }}-servers:
   file.append:
     - name: {{ targFile }}
-    - text:
-      - server {{ ntpServer }} iburst maxpoll 16
+    - text: |
+
+        # NTP server-list
+  {%- for ntpServer in ntpServerList %}
+        server {{ ntpServer }} iburst maxpoll 16
+  {%- endfor %}
 {%- endif %}
 
