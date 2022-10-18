@@ -20,14 +20,20 @@
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/chrony.conf' %}
-{%- if salt.grains.get('os')|lower == 'redhat' %}
-  {%- set ntpVendor = 'rhel' %}
-{%- endif %}
-{%- set ntpServerList = salt.pillar.get('ash-linux:lookup:ntp-servers', [
-    "0.{{ ntpVendor }}.pool.ntp.org",
-    "1.{{ ntpVendor }}.pool.ntp.org",
-    "2.{{ ntpVendor }}.pool.ntp.org"
-]) %}
+{%- set ntpByVendor = {
+    'RedHat': [
+        "0.rhel.pool.ntp.org",
+        "1.rhel.pool.ntp.org",
+        "2.rhel.pool.ntp.org",
+    ],
+    'centos': [
+        "0.centos.pool.ntp.org",
+        "1.centos.pool.ntp.org",
+        "2.centos.pool.ntp.org",
+    ],
+} %}
+{%- set defNtpServers = ntpByVendor[salt.grains.get('os')] %}
+{%- set ntpServerList = salt.pillar.get('ash-linux:lookup:ntp-servers', defNtpServers) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
