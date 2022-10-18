@@ -1,14 +1,14 @@
 # Ref Doc:    STIG - RHEL 9 v1r7
-# Finding ID: V-230368
-# Rule ID:    SV-230368r810414_rule
-# STIG ID:    RHEL-08-020221
-# SRG ID:     SRG-OS-000077-GPOS-00045
+# Finding ID: V-230333
+# Rule ID:    SV-230333r743966_rule
+# STIG ID:    RHEL-08-020011
+# SRG ID:     SRG-OS-000021-GPOS-00005
 #
 # Finding Level: medium
 #
 # Rule Summary:
-#       RHEL 8 must be configured in the password-auth file to prohibit
-#       password reuse for a minimum of five generations.
+#       RHEL 8 must automatically lock an account when three unsuccessful
+#       logon attempts occur.
 #
 # References:
 #   CCI:
@@ -24,8 +24,8 @@ diag_out() {
 }
 
 diag_out "--------------------------------------"
-diag_out "STIG Finding ID: V-251717"
-diag_out "     The OS must be configure to"
-diag_out "     prohibit password reuse for a"
-diag_out "     minimum of five generations"
+diag_out "STIG Finding ID: V-230333"
+diag_out "     The OS must automatically lock an"
+diag_out "     account when three unsuccessful"
+diag_out "     logon attempts occur"
 diag_out "--------------------------------------"

@@ -29,5 +29,3 @@ diag_out "     The OS must be configure to"
 diag_out "     prohibit password reuse for a"
 diag_out "     minimum of five generations"
 diag_out "--------------------------------------"
-~
-
