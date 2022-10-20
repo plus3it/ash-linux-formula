@@ -23,7 +23,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/pam.d/password-auth' %}
 {%- if salt.file.is_link(targFile) %}
-  {%- set targFile = targFile + '-ac' %}
+  {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
 {%- endif %}
 {%- set searchRoot = '^password\s+required\s+pam_pwhistory.so\s+' %}
 
