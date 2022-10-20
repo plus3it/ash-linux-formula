@@ -22,6 +22,8 @@
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/security/faillock.conf' %}
+{%- set cfgParm = 'deny' %}
+{%- set cfgVal = '3' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -38,7 +40,7 @@ notify_{{ stig_id }}-skipSet:
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}
-    - pattern: '(^#|^)((|\s*)deny)((|\s*)=)(|\s*)\d'
-    - repl: 'deny\4 3'
+    - pattern: '(^# Deny access.*\n.*\n# The default is.*\n# deny.*$)'
+    - repl: '\1\n{{ cfgParm }} = {{ cfgVal }}'
+    - unless: 'grep -q "^{{ cfgParm }} = {{ cfgVal }}" {{ targFile }}'
 {%- endif %}
-

@@ -22,6 +22,8 @@
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/security/faillock.conf' %}
+{%- set cfgParm = 'fail_interval' %}
+{%- set cfgVal  = '900' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -38,7 +40,8 @@ notify_{{ stig_id }}-skipSet:
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}
-    - pattern: '(^#|^)((|\s*)fail_interval)((|\s*)=)(|\s*)\d'
-    - repl: 'fail_interval = 900'
+    - pattern: '(^# The default is .*\n#\s*fail_interval\s*=\s*\d.*$)'
+    - repl: '\1\n# Set per STIG-ID {{ stig_id }}\n{{ cfgParm }} = {{ cfgVal }}'
+    - unless: 'grep -q "^{{ cfgParm }} = {{ cfgVal }}" {{ targFile }}'
 {%- endif %}
 
