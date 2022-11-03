@@ -65,7 +65,7 @@ user_cfg_content-{{ stig_id }}:
 
 grubuser_superDef-{{ grubUserFile }}:
   file.replace:
-    - name: {{ grubUserFile }}
+    - name: '{{ grubUserFile }}'
     - pattern: 'superusers=".*"'
     - repl: 'superusers="{{ grubUser }}"'
 
