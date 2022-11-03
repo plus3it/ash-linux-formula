@@ -40,7 +40,6 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubPassFile) ) %}
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
     - name: '{{ grubPassFile }}'
@@ -84,13 +83,4 @@ regen_grubCfg:
     - require:
       - file: grubuser_superDef-{{ grubUserFile }}
       - file: grubuser_userSub-{{ grubUserFile }}
-
-  {%- else %}
-
-notify_{{ stig_id }}-noAction:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} skipped due to pre-existence of {{ grubPassFile }}.''\n"'
-    - stateful: True
-    - cwd: /root
-  {%- endif %}
 {%- endif %}
