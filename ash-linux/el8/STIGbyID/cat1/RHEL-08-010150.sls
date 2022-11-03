@@ -55,6 +55,8 @@ user_cfg_selLabels-{{ stig_id }}:
     - cwd: /root
     - require:
       - file: user_cfg_permissions-{{ stig_id }}
+    - unless:
+      - '[[ $( ls -lZ /boot/grub2/user.cfg | awk "{ print $5 }" ) =~ "system_u:object_r:boot_t:"* ]]'
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
