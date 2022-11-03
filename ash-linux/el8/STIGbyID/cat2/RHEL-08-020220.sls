@@ -57,7 +57,7 @@ file_{{ stig_id }}-{{ targFile }}:
   {%- else %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
-    - name: {{ targFile }}
+    - name: '{{ targFile }}'
     - pattern: '^(?P<srctok>^password\s+requisite\s+pam_pwquality.so.*)'
     - repl: '\g<srctok>\npassword required pam_pwhistory.so remember=5'
   {%- endif %}
