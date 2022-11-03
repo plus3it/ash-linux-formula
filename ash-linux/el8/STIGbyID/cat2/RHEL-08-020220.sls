@@ -50,7 +50,7 @@ file_{{ stig_id }}-{{ targFile }}:
   {%- elif salt.file.search(targFile, searchRoot) %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
-    - name: {{ targFile }}
+    - name: '{{ targFile }}'
     - pattern: '^(?P<srctok>{{ searchRoot }}.*$)'
     - repl: '\g<srctok> remember=5'
   # Entry is missing
