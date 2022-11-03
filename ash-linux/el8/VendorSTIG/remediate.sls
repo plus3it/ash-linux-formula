@@ -31,7 +31,7 @@ run_{{ stig_id }}-remediate:
 {%- for sudoer in sudoerFiles %}
 uncomment_{{ stig_id}}-{{ sudoer }}:
   file.replace:
-    - name: {{ sudoer }}
+    - name: '{{ sudoer }}'
     - pattern: '(#[ \t]*)(.* NOPASSWD)'
     - repl: '\2'
     - backup: False
