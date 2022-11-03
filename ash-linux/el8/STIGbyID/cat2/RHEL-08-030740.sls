@@ -49,7 +49,7 @@ notify_{{ stig_id }}-skipSet:
 {%- else %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
-    - name: {{ targFile }}
+    - name: '{{ targFile }}'
     - pattern: '^(?P<srctok>^(|\s*)pool\s* .*$)'
     - repl: '# Set per STIG-ID {{ stig_id }}\n# \g<srctok>\n'
 
