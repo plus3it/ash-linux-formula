@@ -38,3 +38,13 @@ uncomment_{{ stig_id}}-{{ sudoer }}:
     - require:
       - cmd: run_{{ stig_id }}-remediate
 {%- endfor %}
+
+# Ensure root account password is configured to not expire
+root_password_no_expire:
+  user.present:
+    - name: root
+    - createhome: False
+    - mindays: -1
+    - maxdays: -1
+    - require:
+      - cmd: run_{{ stig_id }}-remediate
