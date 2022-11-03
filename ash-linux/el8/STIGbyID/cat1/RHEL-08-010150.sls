@@ -43,7 +43,7 @@ notify_{{ stig_id }}-skipSet:
   {%- if ( not mustSet == '' ) or ( not salt.file.file_exists(grubPassFile) ) %}
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
-    - name: {{ grubPassFile }}
+    - name: '{{ grubPassFile }}'
     - user: 'root'
     - owner: 'root'
     - mode: '000600'
