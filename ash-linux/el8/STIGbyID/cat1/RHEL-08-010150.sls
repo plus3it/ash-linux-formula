@@ -71,7 +71,7 @@ grubuser_superDef-{{ grubUserFile }}:
 
 grubuser_userSub-{{ grubUserFile }}:
   file.replace:
-    - name: {{ grubUserFile }}
+    - name: '{{ grubUserFile }}'
     - pattern: 'password_pbkdf2 .* \\'
     - repl: 'password_pbkdf2 {{ grubUser }} \\'
 
