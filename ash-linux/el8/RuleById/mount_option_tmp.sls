@@ -126,10 +126,6 @@
   'noexec',
   'nodev'
 ] %}
-                  'nosuid',
-                  'noexec',
-                  'nodev'
-                    ]%}
 {%- set targMnt = '/tmp' %}
 
 script_{{ stig_id }}-describe:
