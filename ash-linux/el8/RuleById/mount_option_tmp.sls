@@ -122,6 +122,10 @@
 {%- set helperLoc = 'ash-linux/el8/RuleById/files' %}
 {%- set optionsFile ='/etc/systemd/system/tmp.mount.d/options.conf' %}
 {%- set mntOpt = [
+  'nosuid',
+  'noexec',
+  'nodev'
+] %}
                   'nosuid',
                   'noexec',
                   'nodev'
