@@ -40,7 +40,7 @@ notify_{{ stig_id }}-skipSet:
 {%- else %}
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
-    - name: {{ targFile }}
+    - name: '{{ targFile }}'
     - pattern: '(^.*\s*)(nullok\s*)(.*$)'
     - repl: '# Removed ''nullok'' token per STIG-ID {{ stig_id }}\n\1\3\n'
 {%- endif %}
