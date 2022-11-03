@@ -42,6 +42,8 @@
 {%- set helperLoc = 'ash-linux/el8/RuleById/files' %}
 {%- set optionsFile ='/etc/systemd/system/boot.mount.d/options.conf' %}
 {%- set mntOpt = [
+  'nosuid',
+] %}
                   'nosuid',
                     ]%}
 {%- set targMnt = '/boot' %}
