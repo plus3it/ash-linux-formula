@@ -44,8 +44,6 @@
 {%- set mntOpt = [
   'nosuid',
 ] %}
-                  'nosuid',
-                    ]%}
 {%- set targMnt = '/boot' %}
 
 script_{{ stig_id }}-describe:
