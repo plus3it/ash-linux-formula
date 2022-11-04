@@ -42,6 +42,6 @@ file_{{ stig_id }}-{{ targFile }}:
     - name: {{ targFile }}
     - pattern: '(^# The default is .*\n#\s*fail_interval\s*=\s*\d.*$)'
     - repl: '\1\n# Set per STIG-ID {{ stig_id }}\n{{ cfgParm }} = {{ cfgVal }}'
-    - unless: 'grep -q "^{{ cfgParm }} = {{ cfgVal }}" {{ targFile }}'
+    - unless: 'grep -E "^\s*{{ cfgParm }}(\s*=\s*){{ cfgVal }}" {{ targFile }}'
 {%- endif %}
 
