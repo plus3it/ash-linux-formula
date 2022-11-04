@@ -22,13 +22,13 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nouserFiles = [] %}
 {%- set localFstypes = [
-                         'ext2',
-                         'ext3',
-                         'ext4',
-                         'xfs',
-                         'jfs',
-                         'btrfs'
-                        ] %}
+  'ext2',
+  'ext3',
+  'ext4',
+  'xfs',
+  'jfs',
+  'btrfs',
+] %}
 {%- set mountData = salt.mount.fstab() %}
 {%- set mounts = mountData.keys() %}
 
