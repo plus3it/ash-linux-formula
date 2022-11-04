@@ -34,15 +34,16 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if salt.file.file_exists(targFile) %}
-file_{{ stig_id }}_{{ targFile }}:
+file_{{ stig_id }}_{{ targFile }}_replace:
   file.replace:
     - name: '{{ targFile }}'
     - append_if_not_found: True
     - pattern: '(^(\s*|#*\s*|))AuditBackend\s*=.*$'
     - repl: 'AuditBackend=LinuxAudit'
-  {%- else %}
-file_{{ stig_id }}_{{ targFile }}:
+    - onlyif:
+      - '[[ -e {{ targFile }} ]]'
+
+file_{{ stig_id }}_{{ targFile }}_create:
   file.line:
     - name: '{{ targFile }}'
     - content: |
@@ -53,5 +54,6 @@ file_{{ stig_id }}_{{ targFile }}:
     - location: 'end'
     - mode: 'insert'
     - user: 'root'
-  {%- endif %}
+    - unless:
+      - '[[ -e {{ targFile }} ]]'
 {%- endif %}
