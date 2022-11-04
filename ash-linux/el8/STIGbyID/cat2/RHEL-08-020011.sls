@@ -37,10 +37,21 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-file_{{ stig_id }}-{{ targFile }}:
+# Replace RPM-delivered content
+file_{{ stig_id }}-{{ targFile }}_fromRpm:
   file.replace:
     - name: {{ targFile }}
     - pattern: '(^# Deny access.*\n.*\n# The default is.*\n# deny.*$)'
     - repl: '\1\n{{ cfgParm }} = {{ cfgVal }}'
-    - unless: 'grep -q "^{{ cfgParm }} = {{ cfgVal }}" {{ targFile }}'
+    - unless:
+      - 'rpm -qVf {{ targFile }} | grep -qE "([mM]|\.)5.*{{ targFile }}"'
+
+# Replace non RPM-delivered content
+file_{{ stig_id }}-{{ targFile }}_notRpm:
+  file.replace:
+    - name: {{ targFile }}
+    - pattern: '^(|\s){{ cfgParm }}(\s*=\s*)\d*'
+    - repl: '{{ cfgParm }} = {{ cfgVal }}'
+    - onlyif:
+      - 'rpm -qVf {{ targFile }} | grep -qE "([mM]|\.)5.*{{ targFile }}"'
 {%- endif %}
