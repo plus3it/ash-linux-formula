@@ -34,26 +34,21 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
+file_{{ stig_id }}_{{ targFile }}_managed:
+  file.managed:
+    - name: '{{ targFile }}'
+    - user: 'root'
+    - group: 'root'
+    - mode: '0600'
+    - makedirs: True
+    - dir_mode: '0755'
+
 file_{{ stig_id }}_{{ targFile }}_replace:
   file.replace:
     - name: '{{ targFile }}'
     - append_if_not_found: True
-    - pattern: '(^(\s*|#*\s*|))AuditBackend\s*=.*$'
+    - pattern: '^(#|)\s*AuditBackend(\s*=\s*).*$'
     - repl: 'AuditBackend=LinuxAudit'
-    - onlyif:
-      - '[[ -e {{ targFile }} ]]'
-
-file_{{ stig_id }}_{{ targFile }}_create:
-  file.line:
-    - name: '{{ targFile }}'
-    - content: |
-        AuditBackend=LinuxAudit
-    - create: true
-    - file_mode: 0644
-    - group: 'root'
-    - location: 'end'
-    - mode: 'insert'
-    - user: 'root'
-    - unless:
-      - '[[ -e {{ targFile }} ]]'
+    - require:
+      - file: file_{{ stig_id }}_{{ targFile }}_managed
 {%- endif %}
