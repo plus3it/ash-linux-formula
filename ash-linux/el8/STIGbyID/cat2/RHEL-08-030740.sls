@@ -20,6 +20,7 @@
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/chrony.conf' %}
+{%- set serverFile = '/etc/chrony.d/servers.conf' %}
 {%- set ntpByVendor = {
     'RedHat': [
         "0.rhel.pool.ntp.org",
@@ -47,20 +48,39 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-file_{{ stig_id }}-{{ targFile }}:
+file_{{ stig_id }}-{{ targFile }}_poolDirectives:
   file.replace:
     - name: '{{ targFile }}'
     - pattern: '^(?P<srctok>^(|\s*)pool\s* .*$)'
-    - repl: '# Set per STIG-ID {{ stig_id }}\n# \g<srctok>\n'
+    - repl: '# \g<srctok>\t# ''pool'' directives disabled per STIG\n'
 
-file_{{ stig_id }}-{{ targFile }}-servers:
+file_{{ stig_id }}-{{ targFile }}_serverDirectives:
+  file.replace:
+    - name: '{{ targFile }}'
+    - pattern: '^(?P<srctok>^(|\s*)server\s* .*$)'
+    - repl: '# \g<srctok>\t# ''server'' entries managed in {{ serverFile }}\n'
+
+file_{{ stig_id }}-{{ targFile }}-addInclude:
   file.append:
     - name: {{ targFile }}
     - text: |
 
+        # All server configuration directives managed in this file
+        include {{ serverFile }}
+
+file_{{ stig_id }}-{{ targFile }}-includeFile:
+  file.managed:
+    - name: {{ serverFile }}
+    - contents: |
         # NTP server-list
   {%- for ntpServer in ntpServerList %}
         server {{ ntpServer }} iburst maxpoll 16
   {%- endfor %}
+    - create: True
+    - group: 'root'
+    - makedirs: True
+    - mode: '0600'
+    - replace: True
+    - user: 'root'
 {%- endif %}
 
