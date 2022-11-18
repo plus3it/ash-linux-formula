@@ -27,7 +27,7 @@
         "1.rhel.pool.ntp.org",
         "2.rhel.pool.ntp.org",
     ],
-    'centos': [
+    'CentOS Stream': [
         "0.centos.pool.ntp.org",
         "1.centos.pool.ntp.org",
         "2.centos.pool.ntp.org",
