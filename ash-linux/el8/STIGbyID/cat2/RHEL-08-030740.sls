@@ -22,15 +22,30 @@
 {%- set targFile = '/etc/chrony.conf' %}
 {%- set serverFile = '/etc/chrony.d/servers.conf' %}
 {%- set ntpByVendor = {
-    'RedHat': [
-        "0.rhel.pool.ntp.org",
-        "1.rhel.pool.ntp.org",
-        "2.rhel.pool.ntp.org",
+    'AlmaLinux': [
+        "0.almalinux.pool.ntp.org",
+        "1.almalinux.pool.ntp.org",
+        "2.almalinux.pool.ntp.org",
     ],
     'CentOS Stream': [
         "0.centos.pool.ntp.org",
         "1.centos.pool.ntp.org",
         "2.centos.pool.ntp.org",
+    ],
+    'OEL': [
+        "0.pool.ntp.org",
+        "1.pool.ntp.org",
+        "2.pool.ntp.org",
+    ],
+    'RedHat': [
+        "0.rhel.pool.ntp.org",
+        "1.rhel.pool.ntp.org",
+        "2.rhel.pool.ntp.org",
+    ],
+    'Rocky': [
+        "0.rocky.pool.ntp.org",
+        "1.rocky.pool.ntp.org",
+        "2.rocky.pool.ntp.org",
     ],
 } %}
 {%- set defNtpServers = ntpByVendor[salt.grains.get('os')] %}
