@@ -27,7 +27,7 @@ Of the above findings:
 * <i>Install McAfee Endpoint Security for Linux (ENSL)</i>: It is expected that relevant configuration would come by way of the [mcafee-agent-formula](https://github.com/plus3it/mcafee-agent-formula) or similar activities
 * <i>Set Existing Passwords Maximum Age</i>: All (local) users on test-system have locked passwords (not a relevant finding) _and_ are of a type where it would cause lifecycle/maintenance problems if the accounts were configured to expire
 * <i>Set Existing Passwords Minimum Age</i>: All (local) users on test-system have locked passwords (not a relevant finding)
-* <i>PAM Password Hashing Algorithm</i>:
-* <i>PAM Password Hashing Algorithm (password-auth)</i>:
+* <i>PAM Password Hashing Algorithm</i>: Out-of-date method prescribed/tested for (method is correct for EL6 and earlier but is rendered redundant in EL7 and later by change to `/etc/login.defs` method). The correct method is to specify the `ENCRYPT_METHOD SHA512` in the `/etc/login.defs` file.
+* <i>PAM Password Hashing Algorithm (password-auth)</i>: Out-of-date method prescribed/tested for (method is correct for EL6 and earlier but is rendered redundant in EL7 and later by change to `/etc/login.defs` method). The correct method is to specify the `ENCRYPT_METHOD SHA512` in the `/etc/login.defs` file.
 * <i>Support session locking with tmux</i>: Support for session-locking with `tmux` _is_ enabled, however, the scan-test has insufficient logic to properly identify that the configuration-state is valid.
 * <i>Verify Permissions on SSH Server Private *_key file-permissions</i>:
