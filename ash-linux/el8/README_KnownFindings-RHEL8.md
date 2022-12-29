@@ -1,4 +1,4 @@
-After hardening has been completed, the following findings remain when running an `oscap` report using the `STIG` profile:
+After hardening has been completed against a RHEL8 host, the following findings will typically remain when running a further `oscap` report using the `STIG` profile:
 
 * Add nosuid Option to `/boot`
 * Configure Multiple DNS Servers in `/etc/resolv.conf`
