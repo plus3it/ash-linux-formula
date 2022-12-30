@@ -24,7 +24,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-08-020041' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyId/cat2/files' %}
+{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set profileFile ='/etc/profile.d/tmux.sh' %}
 
 # Log a description of what we're setting
