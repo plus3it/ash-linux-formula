@@ -1,10 +1,11 @@
 #!/bin/sh
+# Ref Doc:    STIG - RHEL 8 v1r7
+# Finding ID: V-230349
+# STIG ID:    RHEL-08-020041
+# Rule ID:    SV-230349r833388_rule
+# SRG ID:     SRG-OS-000028-GPOS-00009
 #
-# Finding ID:
-# Versions:
-#   - mount_option_boot.sls
-# SRG ID:
-# Finding Level:	medium
+# Finding Level: medium
 #
 # Rule Summary:
 #       The tmux terminal multiplexer is used to implement automatic
@@ -17,14 +18,10 @@
 # References:
 #   - CCI-000056
 #   - CCI-000058
-#   - FMT_SMF_EXT.1
-#   - FMT_MOF_EXT.1
-#   - FTA_SSL.1
-#   - SRG-OS-000031-GPOS-00012
-#   - SRG-OS-000028-GPOS-00009
-#   - SRG-OS-000030-GPOS-00011
-#   - RHEL-08-020041
-#   - SV-230349r810020_rule
+#
+# NIST SP 800-53 :: AC-11 b
+# NIST SP 800-53A :: AC-11.1 (iii)
+# NIST SP 800-53 Revision 4 :: AC-11 b
 #
 #################################################################
 # Standard outputter function
