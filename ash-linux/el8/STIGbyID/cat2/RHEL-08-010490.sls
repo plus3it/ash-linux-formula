@@ -1,33 +1,25 @@
-# Versions:
-#   - file_permissions_sshd_private_key
-# SRG ID:
-#   - SRG-OS-000480-GPOS-00227
-# Finding Level:        medium
+# Ref Doc:    STIG - RHEL 8 v1r7
+# Finding ID: V-230287
+# Rule ID:    SV-230287r743951_rule
+# STIG ID:    RHEL-08-010490
+# SRG ID:     SRG-OS-000480-GPOS-00227
+#
+# Finding Level: medium
 #
 # Rule Summary:
-#       All SSH private host-key files must be set to mode '0600'
-#
-# Identifiers:
+#       The SSH private host key files must have mode 0600 or
+#       less permissive
 #
 # References:
-#   - CCI-000366
-#   - CIP-003-8 R5.1.1
-#   - CIP-003-8 R5.3
-#   - CIP-004-6 R2.3
-#   - CIP-007-3 R2.1
-#   - CIP-007-3 R2.2
-#   - CIP-007-3 R2.3
-#   - CIP-007-3 R5.1
-#   - CIP-007-3 R5.1.1
-#   - CIP-007-3 R5.1.2
-#   - AC-17(a)
-#   - CM-6(a)
-#   - AC-6(1)
-#   - SV-248602r779372_rule
+#   CCI:
+#     - CCI-001233
+#   NIST SP 800-53 :: SI-2 (2)
+#   NIST SP 800-53A :: SI-2 (2).1 (ii)
+#   NIST SP 800-53 Revision 4 :: SI-2 (2)
 #
 #################################################################
-{%- set stig_id = 'file_permissions_sshd_private_key' %}
-{%- set helperLoc = 'ash-linux/el8/RuleById/files' %}
+{%- set stig_id = 'RHEL-08-010490' %}
+{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 
 # Log a description of what we're setting
 script_{{ stig_id }}-describe:
