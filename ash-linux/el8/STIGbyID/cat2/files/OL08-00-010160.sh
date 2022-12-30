@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Ref Doc:    STIG - Oracle Linux 8 v1r4
 # Finding ID: V-248544
 # Rule ID:    SV-248544r818611_rule

@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Ref Doc:    STIG - RHEL 8 v1r7
 # Finding ID: V-230327
 # STIG ID:    RHEL-08-010790
