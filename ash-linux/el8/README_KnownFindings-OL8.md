@@ -31,6 +31,6 @@ Of the above findings:
 * <i>Only Authorized Local User Accounts Exist on Operating System</i>: Authorized local users are a site-specific setting - not appropriate for a generalize hardening-tool to set
 * <i>Set Existing Passwords Maximum Age</i>: Bad test - flags accounts with no passwords set
 * <i>Set Existing Passwords Minimum Age</i>: Bad test - flags accounts with no passwords set
-* <i>Set Interval For Counting Failed Password Attempts</i>: Bad test - this value is set/enforced from `<tt>/etc/security/faillock.conf</tt>`
-* <i>Set Lockout Time for Failed Password Attempts</i>: Bad test - this value is set/enforced from `<tt>/etc/security/faillock.conf</tt>`
+* <i>Set Interval For Counting Failed Password Attempts</i>: Bad test - this value is set/enforced from <tt>/etc/security/faillock.conf</tt>
+* <i>Set Lockout Time for Failed Password Attempts</i>: Bad test - this value is set/enforced from <tt>/etc/security/faillock.conf</tt>
 * <i>Support session locking with tmux</i>: Support for session-locking with `tmux` _is_ enabled, however, the scan-test has insufficient logic to properly identify that the configuration-state is valid.
