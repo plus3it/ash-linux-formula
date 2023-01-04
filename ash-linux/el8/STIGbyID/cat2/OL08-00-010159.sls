@@ -43,7 +43,7 @@ file_{{ stig_id }}-{{ targFile }}:
     - pattern: '(^password\s*)(sufficient\s*)(.*)(pam_unix\.so)(.*)'
     - repl: '\1\2\3\4\5 sha512'
     - onlyif:
-      - [[ -n $( grep -q ORACLE_SUPPORT_PRODUCT /etc/os-release ) ]]
+      - grep -q ORACLE_SUPPORT_PRODUCT /etc/os-release
       - grep -vP '^password\s*sufficient\s*.*pam_unix\.so.*sha512.*'
         {{ targFile }} | grep sha512
 {%- endif %}
