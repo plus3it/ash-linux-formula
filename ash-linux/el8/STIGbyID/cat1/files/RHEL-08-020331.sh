@@ -1,4 +1,4 @@
-# Ref Doc:    STIG - RHEL 9 v1r7
+# Ref Doc:    STIG - RHEL 8 v1r7
 # Finding ID: V-244540
 # Rule ID:    SV-244540r743869_rule
 # STIG ID:    RHEL-08-020331

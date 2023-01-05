@@ -1,4 +1,6 @@
-# Ref Doc:    STIG - RHEL 9 v1r7
+#!/bin/bash
+#
+# Ref Doc:    STIG - RHEL 8 v1r7
 # Finding ID: V-230335
 # Rule ID:    SV-230335r743969_rule
 # STIG ID:    RHEL-08-020013

@@ -8,6 +8,8 @@
 {%- set sudoerFiles = salt.file.find('/etc/sudoers.d', maxdepth=1, type='f') %}
 {%- if salt.grains.get('os')|lower == 'redhat' %}
   {%- set dsos = 'rhel' %}
+{%- elif salt.grains.get('os')|lower == 'oel' %}
+  {%- set dsos = 'ol' %}
 {%- else %}
   {%- set dsos = salt.grains.get('os')|lower %}
 {%- endif %}

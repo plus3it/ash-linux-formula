@@ -11,6 +11,8 @@
 ) %}
 {%- if salt.grains.get('os')|lower == 'redhat' %}
   {%- set dsos = 'rhel' %}
+{%- elif salt.grains.get('os')|lower == 'oel' %}
+  {%- set dsos = 'ol' %}
 {%- else %}
   {%- set dsos = salt.grains.get('os')|lower %}
 {%- endif %}
