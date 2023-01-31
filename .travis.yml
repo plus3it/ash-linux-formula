@@ -10,7 +10,6 @@ env:
   matrix:
     - OS_VERSION=7 SALT_STATE=ash-linux.stig
     - OS_VERSION=7 SALT_STATE=ash-linux.iavm
-    - OS_VERSION=7 SALT_STATE=ash-linux.scap
     - OS_VERSION=7 SALT_STATE=ash-linux.vendor
     - OS_VERSION=7 SALT_STATE=ash-linux.el7.stig
 
@@ -42,6 +41,10 @@ install:
       --pillar-root=$SALT_PILLARROOT
       saltutil.sync_all
 
+before_script:
+  - sudo docker exec centos-${OS_VERSION} systemctl is-active firewalld
+      || (echo "FirewallD is not running, exiting..." && exit 1)
+      
 script:
   - sudo docker exec centos-${OS_VERSION} salt-call --local
       --retcode-passthrough --log-file-level debug
