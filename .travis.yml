@@ -10,7 +10,6 @@ env:
   matrix:
     - OS_VERSION=7 SALT_STATE=ash-linux.stig
     - OS_VERSION=7 SALT_STATE=ash-linux.iavm
-    - OS_VERSION=7 SALT_STATE=ash-linux.scap
     - OS_VERSION=7 SALT_STATE=ash-linux.vendor
     - OS_VERSION=7 SALT_STATE=ash-linux.el7.stig
 
