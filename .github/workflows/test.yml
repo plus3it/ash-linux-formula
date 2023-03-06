@@ -1,0 +1,70 @@
+name: test salt formula
+on:
+  # Run on demand
+  workflow_dispatch:
+
+  # Run pull requests against the main branch
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: test-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test-el${{ matrix.os_version }}-${{matrix.salt_state}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os_version:
+          - 7
+          #- 8
+        salt_state:
+          - ash-linux.stig
+          - ash-linux.iavm
+          - ash-linux.vendor
+          - ash-linux.el7.stig
+    env:
+      SALT_PILLARROOT: ${{ github.workspace }}/tests/pillar/test-linux-main
+      SALT_REPO_URL: https://repo.saltproject.io/py3/redhat/7/x86_64/3004.repo
+    steps:
+      - name: Clone this git repository
+        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
+
+      # Build image
+      - run: docker info
+      - run: docker build -t local/centos:${{ matrix.os_version }} "${{ github.workspace }}/tests/docker/centos${{ matrix.os_version }}"
+
+      # Install salt
+      - run: docker run --detach --privileged --cgroupns=host
+          --volume="${{ github.workspace }}:${{ github.workspace }}:ro"
+          --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro
+          --tmpfs /tmp --tmpfs /run
+          --name centos-${{ matrix.os_version }} local/centos:${{ matrix.os_version }} init
+      - run: docker exec centos-${{ matrix.os_version }} touch /etc/fstab
+      - run: docker exec centos-${{ matrix.os_version }} curl -sSL -o /etc/yum.repos.d/salt.repo "$SALT_REPO_URL"
+      - run: docker exec centos-${{ matrix.os_version }} yum -y install
+          $(<${{ github.workspace }}/tests/requirements.txt)
+          $(<${{ github.workspace }}/tests/requirements-el${{ matrix.os_version }}.txt)
+      - run: docker exec centos-${{ matrix.os_version }} salt-call --versions-report
+      - run: docker exec centos-${{ matrix.os_version }} salt-call --local
+          --retcode-passthrough
+          --file-root=${{ github.workspace }}
+          --pillar-root="$SALT_PILLARROOT"
+          saltutil.sync_all
+
+      # Run tests
+      - run: docker exec centos-${{ matrix.os_version }} salt-call --local
+          --retcode-passthrough --log-file-level debug
+          --file-root=${{ github.workspace }}
+          --pillar-root="$SALT_PILLARROOT"
+          state.show_sls
+          ${{ matrix.salt_state }}
+      - run: docker exec centos-${{ matrix.os_version }} salt-call --local
+          --retcode-passthrough --log-file-level debug
+          --file-root=${{ github.workspace }}
+          --pillar-root="$SALT_PILLARROOT"
+          state.sls
+          ${{ matrix.salt_state }}
+          mock=True
