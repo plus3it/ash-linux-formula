@@ -6,23 +6,28 @@ env:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
     - SALT_PILLARROOT=$TRAVIS_BUILD_DIR/tests/pillar/test-linux-main
-    - SALT_REPO_URL=https://repo.saltproject.io/py3/redhat/7/x86_64/3004.repo
+    - SALT_REPO_URL=https://repo.saltproject.io/py3/redhat/OS_REL/x86_64/3004.repo
   matrix:
     - OS_VERSION=7 SALT_STATE=ash-linux.stig
     - OS_VERSION=7 SALT_STATE=ash-linux.iavm
     - OS_VERSION=7 SALT_STATE=ash-linux.vendor
     - OS_VERSION=7 SALT_STATE=ash-linux.el7.stig
+    - OS_VERSION=8 SALT_STATE=ash-linux.el8.Nessus
+    - OS_VERSION=8 SALT_STATE=ash-linux.el8.VendorSTIG
+    - OS_VERSION=8 SALT_STATE=ash-linux.el8.STIGbyID
 
 services:
   - docker
 
 before_install:
   - sudo apt-get update
-  - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' |
+  - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375
+      -H unix:///var/run/docker.sock -s devicemapper"' |
       sudo tee /etc/default/docker > /dev/null
   - sudo service docker restart
   - sleep 5
-  - sudo docker build -t local/centos:${OS_VERSION} tests/docker/centos${OS_VERSION}
+  - sudo docker build -t local/centos:${OS_VERSION}
+      tests/docker/centos${OS_VERSION}
 
 install:
   - sudo docker run --detach --privileged
@@ -30,7 +35,10 @@ install:
       --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro
       --name centos-${OS_VERSION} local/centos:${OS_VERSION} init
   - sudo docker exec centos-${OS_VERSION} touch /etc/fstab
-  - sudo docker exec centos-${OS_VERSION} curl -sSL -o /etc/yum.repos.d/salt.repo ${SALT_REPO_URL}
+  - sudo docker exec centos-${OS_VERSION} curl -sSL
+      -o /etc/yum.repos.d/salt.repo "$(
+        sed 's/OS_REL/'"${OS_VERSION}"'/' <<< ${SALT_REPO_URL}
+      )"
   - sudo docker exec centos-${OS_VERSION} yum -y install
       $(<${TRAVIS_BUILD_DIR}/tests/requirements.txt)
       $(<${TRAVIS_BUILD_DIR}/tests/requirements-el${OS_VERSION}.txt)
