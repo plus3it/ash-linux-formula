@@ -43,7 +43,7 @@ file-add_{{ stig_id }}-{{ targFile }}:
     - pattern: '^(?P<srctok>(|\s*)password\s*sufficient\s*pam_unix.so.*$)'
     - repl: '\g<srctok>\npassword    requisite     pam_pwhistory.so use_authtok remember=5 retry=3'
     - unless:
-      - 'grep -P "^(|\s*)password\s*requisite \s*pam_pwhistory.so.*$" {{ targFile }}'
+      - 'grep -P "^(|\s*)password\s*requisite\s*pam_pwhistory.so.*$" {{ targFile }}'
 file-modify_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}
