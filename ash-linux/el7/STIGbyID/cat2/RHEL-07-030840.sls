@@ -41,14 +41,14 @@ touch_{{ stig_id }}-{{ ruleFile }}:
 file_{{ stig_id }}-{{ ruleFile }}-bin:
   file.replace:
     - name: '{{ ruleFile }}'
-    - pattern: '^-w {{ path2mon }}.*$'
-    - repl: '-w {{ path2mon }} -p x -F auid!=4294967295 -k {{ key2mon }}'
+    - pattern: '^.*((-w\s*|-F\s*path=){1}{{ path2mon }}).*$'
+    - repl: '-a always,exit -F path={{ path2mon }} -F perm=x -F auid>=1000 -F auid!=unset -F key={{ key2mon }}'
     - append_if_not_found: True
 
 file_{{ stig_id }}-{{ ruleFile }}-ubin:
   file.replace:
     - name: '{{ ruleFile }}'
-    - pattern: '^-w {{ path2mon }}.*$'
-    - repl: '-w /usr{{ path2mon }} -p x -F auid!=4294967295 -k {{ key2mon }}'
+    - pattern: '^.*((-w\s*|-F\s*path=){1}/usr{{ path2mon }}).*$'
+    - repl: '-a always,exit -F path=/usr{{ path2mon }} -F perm=x -F auid>=1000 -F auid!=unset -F key={{ key2mon }}'
     - append_if_not_found: True
 {%- endif %}
