@@ -11,3 +11,4 @@ include:
   - ash-linux.el7.STIGbyID.cat3.RHEL-07-040010
   - ash-linux.el7.STIGbyID.cat3.RHEL-07-040300
   - ash-linux.el7.STIGbyID.cat3.RHEL-07-040320
+  - ash-linux.el7.STIGbyID.cat3.RHEL-07-040530
