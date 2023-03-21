@@ -28,7 +28,7 @@
 {%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'Ciphers' %}
-{%- set parmValu = 'aes128-ctr,aes192-ctr,aes256-ctr' %}
+{%- set parmValu = 'aes256-ctr,aes192-ctr,aes128-ctr' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
