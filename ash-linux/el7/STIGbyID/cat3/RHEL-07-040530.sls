@@ -30,7 +30,7 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-file-add{{ stig_id }}-{{ pamFile }}:
+file-add_{{ stig_id }}-{{ pamFile }}:
   file.replace:
     - name: {{ pamFile }}
     - pattern: '^(?P<srctok>(|\s*)session\s*\[default=\d]\s*pam_lastlog.so.*$)'
@@ -47,4 +47,15 @@ file-modify_{{ stig_id }}-{{ pamFile }}:
       - 'grep -P "^(|\s*)session\s*(optional|required)\s*pam_lastlog.so.*(showfailed){1}$" {{ pamFile }}'
     - pattern: '^(|\s*)(session\s*){1}optional(\s*pam_lastlog.so\s*){1}(.*)(\s*showfailed)(\s*.*$)'
     - repl: '\g<1>\g<2>required\g<3>\g<4>\g<5>\g<6>'
+
+file-unsilence_{{ stig_id }}-{{ pamFile }}:
+  file.replace:
+    - name: {{ pamFile }}
+    - onlyif:
+      - 'grep -P "^(|\s*)(session\s*.*){1}(silent)(.*$){1}" /etc/pam.d/postlogin'
+    - pattern: '^(|\s*)(session\s*.*){1}(\s*silent\s*)(.*$){1}'
+    - repl: '\g<1>\g<2>\g<4>'
+    - require:
+      - file: 'file-modify_{{ stig_id }}-{{ pamFile }}'
+      - file: 'file-add_{{ stig_id }}-{{ pamFile }}'
 {%- endif %}
