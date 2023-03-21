@@ -39,7 +39,7 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 # /tmp owned by systemd...
-{%- if salt.service.available('tmp.mount') %}
+{%- if not salt.service.offline() and salt.service.available('tmp.mount') %}
 file_{{ stig_id }}-{{ targMnt }}:
   file.managed:
     - name: '{{ optionsFile }}'
