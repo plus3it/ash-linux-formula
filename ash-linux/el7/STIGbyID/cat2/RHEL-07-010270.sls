@@ -16,11 +16,10 @@
 {%- set stig_id = 'RHEL-07-010270' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set targFile = '/etc/pam.d/system-auth' %}
-{%- if salt.file.is_link(targFile) %}
-  {%- set targFile = targFile + '-ac' %}
-{%- endif %}
-{%- set searchRoot = '^password\s+sufficient\s+pam_unix.so\s+' %}
+{%- set targFileList = [
+    '/etc/pam.d/system-auth',
+    '/etc/pam.d/password-auth',
+] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -34,31 +33,23 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if salt.file.search(targFile, searchRoot + '.*remember=5') %}
-file_{{ stig_id }}-{{ targFile }}:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Found target config in {{ targFile }}.''\n"'
-    - cwd: /root
-    - stateful: True
-  {%- elif salt.file.search(targFile, searchRoot) %}
-file_{{ stig_id }}-{{ targFile }}:
+  {%- for targFile in targFileList %}
+    {%- if salt.file.is_link(targFile) %}
+      {%- set targFile = targFile + '-ac' %}
+    {%- endif %}
+file-add_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}
-    - pattern: '^(?P<srctok>{{ searchRoot }}.*$)'
-    - repl: '\g<srctok> remember=5'
-file_{{ stig_id }}-{{ targFile }}-cleanup:
+    - pattern: '^(?P<srctok>(|\s*)password\s*sufficient\s*pam_unix.so.*$)'
+    - repl: '\g<srctok>\npassword    requisite     pam_pwhistory.so use_authtok remember=5 retry=3'
+    - unless:
+      - 'grep -P "^(|\s*)password\s*requisite\s*pam_pwhistory.so.*$" {{ targFile }}'
+file-modify_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: {{ targFile }}
-    - pattern: '(md5|bigcrypt|sha256|blowfish) '
-    - repl: ''
-    - onchanges:
-      - file: file_{{ stig_id }}-{{ targFile }}
-  {%- else %}
-file_{{ stig_id }}-{{ targFile }}:
-  file.replace:
-    - name: {{ targFile }}
-    - pattern: '^(?P<srctok>^password\s+requisite\s+pam_pwquality.so.*)'
-    - repl: '\g<srctok>\npassword sufficient pam_unix.so remember=5'
-  {%- endif %}
+    - pattern: '^(|\s*)(password\s*sufficient\s*pam_pwhistory.so)(.*)'
+    - repl: 'password    requisite     pam_pwhistory.so use_authtok remember=5 retry=3'
+    - onlyif:
+      - 'grep -P "^(|\s*)password\s*requisite\s*pam_pwhistory.so.*$" {{ targFile }}'
+  {%- endfor %}
 {%- endif %}
-
