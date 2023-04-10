@@ -21,10 +21,10 @@
 {%- set stig_id = 'RHEL-08-020331' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat1/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set targFile = '/etc/pam.d/system-auth' %}
-{%- if salt.file.is_link(targFile) %}
-  {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
-{%- endif %}
+{%- set targFileList = [
+  '/etc/pam.d/system-auth',
+  '/etc/pam.d/password-auth',
+] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -38,9 +38,22 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-file_{{ stig_id }}-{{ targFile }}:
+  {%- for targFile in targFileList %}
+{%- if salt.file.is_link(targFile) %}
+  {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
+{%- endif %}
+file_{{ stig_id }}-{{ targFile }}-noToks:
+  file.replace:
+    - name: '{{ targFile }}'
+    - pattern: '^.*\s*pam_unix.so\s*nullok(\s*|)$'
+    - repl: ''
+
+file_{{ stig_id }}-{{ targFile }}-badToks:
   file.replace:
     - name: '{{ targFile }}'
     - pattern: '(^.*\s*)(nullok\s*)(.*$)'
-    - repl: '# Removed ''nullok'' token per STIG-ID {{ stig_id }}\n\1\3\n'
+    - repl: '\1\3\n'
+    - unless:
+      - 'grep -P "^.*$\s*pam_unix.so\s*nullok(\s*|)$" {{ targFile }}'
+  {%- endfor %}
 {%- endif %}
