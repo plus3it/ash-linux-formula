@@ -21,7 +21,6 @@
 ) %}
 {%- set pillProf = salt.pillar.get('ash-linux:lookup:scap-profile', 'common') %}
 {%- set scapProf = 'xccdf_org.ssgproject.content_profile_' ~ pillProf %}
-{%- set awscli_filetypes = [ 'executable', 'sharedlib' ] %}
 
 run_{{ stig_id }}-remediate:
   cmd.run:
