@@ -1,27 +1,28 @@
 # Ref Doc:    STIG - RHEL 8 v1r7
-# Finding ID: V-244540
-# Rule ID:    SV-244540r743869_rule
-# STIG ID:    RHEL-08-020331
+# Finding ID: V-244541
+# Rule ID:    SV-244541r743872_rule
+# STIG ID:    RHEL-08-020332
 # SRG ID:     SRG-OS-000480-GPOS-00227
 #
 # Finding Level: high
 #
 # Rule Summary:
-#       RHEL 8 must not allow blank or null passwords in the system-auth
+#       RHEL 8 must not allow blank or null passwords in the password-auth
 #       file
 #
 # References:
 #   CCI:
 #     - CCI-000366
-#   NIST SP 800-53 :: CM-6 b
-#   NIST SP 800-53A :: CM-6.1 (iv)
-#   NIST SP 800-53 Revision 4 :: CM-6 b
+#   NIST SP 800-53: CM-6 b
+#   NIST SP 800-53A: CM-6.1 (iv)
+#   NIST SP 800-53 Rev 4: CM-6 b
+#   NIST SP 800-53 Rev 5: CM-6 b
 #
 ###########################################################################
-{%- set stig_id = 'RHEL-08-020331' %}
+{%- set stig_id = 'RHEL-08-020332' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat1/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set targFile = '/etc/pam.d/system-auth' %}
+{%- set targFile = '/etc/pam.d/password-auth' %}
 {%- if salt.file.is_link(targFile) %}
   {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
 {%- endif %}
