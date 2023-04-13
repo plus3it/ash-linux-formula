@@ -57,7 +57,5 @@ service_{{ stig_id }}-{{ cfgFile }}:
     - name: '{{ svcName }}'
     - onchanges:
       - file: 'Ensure {{ parmName }} is set to {{ parmValu }}'
-    - watch:
-      - file: file_{{ stig_id }}-{{ cfgFile }}
 {%- endif %}
 
