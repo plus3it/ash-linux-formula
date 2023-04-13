@@ -24,5 +24,40 @@
 ###########################################################################
 {%- set stig_id = 'RHEL-08-010200' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set svcName = 'sshd' %}
+{%- set cfgFile = '/etc/ssh/sshd_config' %}
+{%- set parmName = 'ClientAliveCountMax' %}
+{%- set parmValu = '1' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+
+script_{{ stig_id }}-describe:
+  cmd.script:
+    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
+    - cwd: /root
+
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+Ensure {{ parmName }} is set to {{ parmValu }}:
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - pattern: '^(|#)(|\s*)(ClientAliveCountMax).*$'
+    - repl: '\3 {{ parmValu }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+        # Inserted per STIG {{ stig_id }}
+        {{ parmName }} {{ parmValu }}
+
+service_{{ stig_id }}-{{ cfgFile }}:
+  service.running:
+    - name: '{{ svcName }}'
+    - onchanges:
+      - file: 'Ensure {{ parmName }} is set to {{ parmValu }}'
+    - watch:
+      - file: file_{{ stig_id }}-{{ cfgFile }}
+{%- endif %}
 
