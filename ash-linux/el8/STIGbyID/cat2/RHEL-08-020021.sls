@@ -40,5 +40,5 @@ file_{{ stig_id }}-{{ targFile }}:
     - name: '{{ targFile }}'
     - append_if_not_found: True
     - pattern: '^(|#)\s*audit.*$'
-    - repl: 'silent'
+    - repl: 'audit'
 {%- endif %}
