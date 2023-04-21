@@ -50,6 +50,6 @@ Fix kernel.yama\.ptrace_scope in {{ sysctlFile }}:
   file.replace:
     - name: '{{ sysctlFile }}'
     - pattern: '^(\s*|#(\s*|))(kernel\.yama\.ptrace_scope)(\s*=\s*).*$'
-    - repl: '\3\4|/bin/false'
+    - repl: '\g<3>\g<4>1'
   {%- endfor %}
 {%- endif %}
