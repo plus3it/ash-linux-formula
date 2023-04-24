@@ -11,12 +11,20 @@ concurrency:
   group: test-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   test:
     runs-on: ubuntu-latest
     name: test-el${{ matrix.os_version }}-${{matrix.salt_state}}
     container:
-      image: centos:centos${{ matrix.os_version }}
+      image: >-
+        ${{ fromJson('{
+          7: "quay.io/centos/centos:centos7",
+          8: "quay.io/centos/centos:stream8"
+        }')[matrix.os_version] }}
       volumes:
         - /sys/fs/cgroup:/sys/fs/cgroup
         - ${{ github.workspace }}:${{ github.workspace }}
@@ -25,12 +33,11 @@ jobs:
       matrix:
         os_version:
           - 7
-          #- 8
+          - 8
         salt_state:
           - ash-linux.stig
           - ash-linux.iavm
           - ash-linux.vendor
-          - ash-linux.el7.stig
     env:
       SALT_PILLARROOT: ${{ github.workspace }}/tests/pillar/test-linux-main
       SALT_REPO_URL: https://repo.saltproject.io/py3/redhat/${{ matrix.os_version }}/x86_64/3004.repo
@@ -42,9 +49,8 @@ jobs:
       - run: touch /etc/fstab
       - run: curl -sSL -o /etc/yum.repos.d/salt.repo ${{ env.SALT_REPO_URL }}
       - run: >-
-          yum install -y 
-          $(<./tests/requirements.txt)
-          $(<./tests/requirements-el${{ matrix.os_version }}.txt)
+          mapfile -t REQUIREMENTS < <(cat ./tests/requirements.txt ./tests/requirements-el${{ matrix.os_version }}.txt) &&
+          yum install -y "${REQUIREMENTS[@]}"
 
       - run: salt-call --versions-report
 
