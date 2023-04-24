@@ -38,8 +38,9 @@ notify_{{ stig_id }}-skipSet:
 file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: '{{ targFile }}'
+    - append_if_not_found: True
     - onlyif:
-      - '[[ rpm -q chrony ]]'
+      - '[[ $( rpm -q --quiet chrony )$? -eq 0 ]]'
       - '[[ -e {{ targFile }} ]]'
     - pattern: '^\s*cmdport\s.*$'
     - repl: 'cmdport 0'
