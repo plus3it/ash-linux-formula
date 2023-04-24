@@ -39,6 +39,10 @@ file_{{ stig_id }}-{{ targFile }}:
   file.replace:
     - name: '{{ targFile }}'
     - append_if_not_found: True
+    - not_found_content: |
+
+        # Insert per {{ stig_id }} - disable network management of the chrony daemon
+        cmdport 0
     - onlyif:
       - '[[ $( rpm -q --quiet chrony )$? -eq 0 ]]'
       - '[[ -e {{ targFile }} ]]'
