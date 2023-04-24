@@ -32,6 +32,7 @@ script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+    - stateful: True
 
 # Ensure profile.d file exists
 file_{{ stig_id }}-{{ profileFile }}:

@@ -31,6 +31,7 @@ script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+    - stateful: True
 
 # /tmp owned by systemd...
 file_{{ stig_id }}-{{ targMnt }}:

@@ -26,6 +26,7 @@ script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+    - stateful: True
 
 # Find and iterated all SSH private host-key files
 {%- for host_ssh_key_files in salt.file.find('/etc/ssh', type='f', name='*_key') %}

@@ -30,4 +30,5 @@ diag_out "STIG Finding ID: file_permissions_sshd_private_key"
 diag_out "   All SSH private host-key files must be set to"
 diag_out "   mode '0600'"
 diag_out "--------------------------------------------------"
-
+diag_out ""
+diag_out "changed=no"

@@ -37,4 +37,5 @@ diag_out "   implement automatic session locking. It"
 diag_out "   should be started for every interactive"
 diag_out "   login-shell."
 diag_out "-------------------------------------------"
-
+diag_out ""
+diag_out "changed=no"
