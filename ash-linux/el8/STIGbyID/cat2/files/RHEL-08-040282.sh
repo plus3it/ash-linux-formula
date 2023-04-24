@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Ref Doc:    STIG - RHEL 8 v1r9
 # Finding ID: V-230546
 # Rule ID:    SV-230546r858824_rule
@@ -7,7 +9,7 @@
 # Finding Level: medium
 #
 # Rule Summary:
-#       RHEL 8 SRG-OS-000480-GPOS-00227
+#       The OS must restrict usage of ptrace to descendant processes.
 #
 # References:
 #   CCI:
@@ -17,39 +19,16 @@
 #   NIST SP 800-53 Revision 4 :: CM-6 b
 #
 ###########################################################################
-{%- set stig_id = 'RHEL-08-040282' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
-{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set searchDirs =[
-  '/etc/sysctl.d/',
-  '/lib/sysctl.d/',
-  '/run/sysctl.d',
-  '/usr/lib/sysctl.d',
-  '/usr/local/lib/sysctl.d',
-] %}
-{%- set sysctlFiles = [ '/etc/sysctl.conf' ] %}
+# Standard outputter function
+diag_out() {
+   echo "${1}"
+}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-    - stateful: True
-
-{%- if stig_id in skipIt %}
-notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - stateful: True
-    - cwd: /root
-{%- else %}
-  {%- for searchDir in searchDirs %}
-    {%- do sysctlFiles.extend(salt.file.find(searchDir, type='f', name='*.conf', grep='kernel\.yama\.ptrace_scope')) %}
-  {%- endfor %}
-  {%- for sysctlFile in sysctlFiles %}
-Fix kernel.yama\.ptrace_scope in {{ sysctlFile }}:
-  file.replace:
-    - name: '{{ sysctlFile }}'
-    - pattern: '^(\s*|#(\s*|))(kernel\.yama\.ptrace_scope)(\s*=\s*).*$'
-    - repl: '\3\4|/bin/false'
-  {%- endfor %}
-{%- endif %}
+diag_out "--------------------------------------"
+diag_out "STIG Finding ID: V-230311"
+diag_out "     The OS must restrict usage of the"
+diag_out "     ptrace utility to descendant"
+diag_out "     processes."
+diag_out "--------------------------------------"
+diag_out ""
+diag_out "changed=no"

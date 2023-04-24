@@ -7,7 +7,7 @@
 # Finding Level: medium
 #
 # Rule Summary:
-#       RHEL 8 SRG-OS-000480-GPOS-00227
+#       The OS must restrict usage of ptrace to descendant processes.
 #
 # References:
 #   CCI:
