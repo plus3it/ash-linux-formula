@@ -42,5 +42,6 @@ Set minimum password lifetime for {{ user }}:
     - mindays: 1
     - onlyif:
       - '[[ -n $( awk -F: ''/{{ user }}:/ && $4 < 1  {print $1 " " $4}'' /etc/shadow ) ]]'
+      - '[[ -z $( awk -F: ''/^{{ user }}:/ && $6 == "/dev/null" { print $1 " " $6 }'' /etc/passwd ) ]]'
   {%- endfor %}
 {%- endif %}
