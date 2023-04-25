@@ -29,8 +29,7 @@ Exempt AWS CLI v2 From fapolicyd ({{ fileType }}):
     - append_if_not_found: True
     - onchanges_in:
       - cmd: 'Reload fapolicyd config'
-    - onlyif:
-      - '[[ -e {{ exemptionFile }} ]]'
+    - ignore_if_missing: True
     - pattern: '^(allow\s*perm=).*(\s*all\s*:\s*dir=\/usr\/local\/aws-cli\/v2\/\s*type=application\/x-{{ fileType }}\s*trust\s*1.*$)'
     - repl: 'allow perm=any all : dir=/usr/local/aws-cli/v2/ type=application/x-{{ fileType }} trust 1'
     - require:
