@@ -43,9 +43,7 @@ file_{{ stig_id }}-{{ targFile }}:
 
         # Insert per {{ stig_id }} - disable network management of the chrony daemon
         port 0
-    - onlyif:
-      - '[[ $( rpm -q --quiet chrony )$? -eq 0 ]]'
-      - '[[ -e {{ targFile }} ]]'
+    - ignore_if_missing: True
     - pattern: '^\s*port\s.*$'
     - repl: 'port 0'
 {%- endif %}
