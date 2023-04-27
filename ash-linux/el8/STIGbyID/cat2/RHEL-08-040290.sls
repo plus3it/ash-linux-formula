@@ -34,34 +34,24 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if 'postfix' in salt.pkg.list_pkgs() %}
 Prevent Unrestricted Mail Relaying:
   module.run:
     - name: postfix.set_main
-    - key: smtpd_client_restrictions
-    - value: permit_mynetworks, reject
     - onlyif:
-      - fun: pkg.info_installed
+      - fun: pkg.version
         args:
           - postfix
+    - key: smtpd_client_restrictions
+    - value: permit_mynetworks, reject
 
 Insert {{ stig_id }} comment:
   file.replace:
     - name: '/etc/postfix/main.cf'
-    - onlyif:
-      - fun: file.file_exists
-        path: /etc/postfix/main.cf
+    - ignore_if_missing: True
     - pattern: '(^\s*smtpd_client_restrictions.*$)'
     - repl: '\n# smtpd_client_restrictions setting required per {{ stig_id }}\n\1'
     - require:
       - module: 'Prevent Unrestricted Mail Relaying'
     - unless:
       - '[[ $( grep -q "^# smtpd_client_restrictions setting required per {{ stig_id }}" /etc/postfix/main.cf )$? -eq 0 ]]'
-  {%- else %}
-Prevent Unrestricted Mail Relaying:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''NOT RELEVANT: the postfix service is not installed.''\n"'
-    - stateful: True
-    - cwd: /root
-  {%- endif %}
 {%- endif %}
