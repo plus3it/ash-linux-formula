@@ -20,9 +20,6 @@
 {%- set stig_id = 'RHEL-08-040290' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- if salt.pkg.version('postfix') %}
-  {%- set clientRestrictStrn = salt.postfix.show_main().get('smtpd_client_restrictions', '') %}
-{%- endif %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
