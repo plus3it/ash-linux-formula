@@ -20,12 +20,8 @@
 {%- set stig_id = 'RHEL-08-040290' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set clientRestrictStrn = '' %}
-{%- if 'postfix' in salt.pkg.list_pkgs() %}
-  {%- set clientRestrictDict = salt.postfix.show_main() %}
-  {%- if 'smtpd_client_restrictions' in clientRestrictDict %}
-    {%- set clientRestrictStrn = salt.postfix.show_main()['smtpd_client_restrictions'] %}
-  {%- endif %}
+{%- if salt.pkg.version('postfix') %}
+  {%- set clientRestrictStrn = salt.postfix.show_main().get('smtpd_client_restrictions', '') %}
 {%- endif %}
 
 script_{{ stig_id }}-describe:
@@ -46,19 +42,21 @@ Check Postfix:
     - name: 'postfix'
     - test: True
 
-  {%- if ( clientRestrictStrn == 'permit_mynetworks,reject' or clientRestrictStrn == 'permit_mynetworks, reject' ) %}
-Mail-Relaying Status:
-  cmd.run:
-    - cwd: /root
-    - name: 'printf "\nchanged=no comment=''Mail-Relaying Already Restricted''\n"'
-    - stateful: True
-  {%- else %}
 Prevent Unrestricted Mail Relaying:
   module.run:
-    - name: 'postfix.set_main'
-    - key: 'smtpd_client_restrictions'
-    - value: 'permit_mynetworks, reject'
+    - name: postfix.set_main
+    - key: smtpd_client_restrictions
+    - value: permit_mynetworks, reject
     - require:
       - pkg: 'Check Postfix'
-  {%- endif %}
+
+Insert {{ stig_id }} comment:
+  file.replace:
+    - name: '/etc/postfix/main.cf'
+    - pattern: '(^\s*smtpd_client_restrictions.*$)'
+    - repl: '\n# smtpd_client_restrictions setting required per {{ stig_id }}\n\1'
+    - require:
+      - module: 'Prevent Unrestricted Mail Relaying'
+    - unless:
+      - '[[ $( grep -q "^# smtpd_client_restrictions setting required per {{ stig_id }}" /etc/postfix/main.cf )$? -eq 0 ]]'
 {%- endif %}
