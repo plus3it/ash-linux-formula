@@ -42,7 +42,8 @@ Prevent Unrestricted Mail Relaying:
     - value: permit_mynetworks, reject
     - onlyif:
       - fun: pkg.info_installed
-        arg: postfix
+        args:
+          - postfix
 
 Insert {{ stig_id }} comment:
   file.replace:
