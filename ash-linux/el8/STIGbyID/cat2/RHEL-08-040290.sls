@@ -39,12 +39,13 @@ Prevent Unrestricted Mail Relaying:
     - name: postfix.set_main
     - key: smtpd_client_restrictions
     - value: permit_mynetworks, reject
-    - require:
-      - pkg: 'Check Postfix'
 
 Insert {{ stig_id }} comment:
   file.replace:
     - name: '/etc/postfix/main.cf'
+    - onlyif:
+      - fun: file.file_exists
+        path: '/etc/postfix/main.cf'
     - pattern: '(^\s*smtpd_client_restrictions.*$)'
     - repl: '\n# smtpd_client_restrictions setting required per {{ stig_id }}\n\1'
     - require:
