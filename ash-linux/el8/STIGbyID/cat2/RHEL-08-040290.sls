@@ -34,11 +34,6 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-Check Postfix:
-  pkg.installed:
-    - name: 'postfix'
-    - test: True
-
 Prevent Unrestricted Mail Relaying:
   module.run:
     - name: postfix.set_main
