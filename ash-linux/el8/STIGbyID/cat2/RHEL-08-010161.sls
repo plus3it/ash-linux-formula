@@ -39,10 +39,8 @@ notify_{{ stig_id }}-skipSet:
 Delete suspect {{ keytab }} file:
   file.absent:
     - name: '{{ keytab }}'
-    - unless:
-      - fun: pkg.version
-        args:
-          - krb5-workstation
-          - krb5-server
+    - onlyif:
+      - '[[ $( rpm --quiet -q krb5-workstation )$? -ne 0 ]]'
+      - '[[ $( rpm --quiet -q krb5-server )$? -ne 0 ]]'
   {%- endfor %}
 {%- endif %}
