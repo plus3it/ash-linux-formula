@@ -24,7 +24,7 @@
 
 run_{{ stig_id }}-remediate:
   cmd.run:
-    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} 2>&1 | tee /var/log/oscap.out'
+    - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} 2>&1 | tee /var/log/oscap.log ; exit $PIPESTATUS[0]'
     - cwd: '/root'
     - success_retcodes:
       - 2
