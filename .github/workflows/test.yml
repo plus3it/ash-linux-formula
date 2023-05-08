@@ -1,73 +1,26 @@
-name: test salt formula
+name: Run salt tests
 on:
-  # Run on demand
-  workflow_dispatch:
-
-  # Run pull requests against the main branch
   pull_request:
-    branches: [master]
 
 concurrency:
   group: test-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
-defaults:
-  run:
-    shell: bash
-
 jobs:
   test:
-    runs-on: ubuntu-latest
-    name: test-el${{ matrix.os_version }}-${{matrix.salt_state}}
-    container:
-      image: >-
-        ${{ fromJson('{
-          7: "quay.io/centos/centos:centos7",
-          8: "quay.io/centos/centos:stream8"
-        }')[matrix.os_version] }}
-      volumes:
-        - /sys/fs/cgroup:/sys/fs/cgroup
-        - ${{ github.workspace }}:${{ github.workspace }}
-      options: --privileged
+    uses: plus3it/actions-workflows/.github/workflows/test-salt-linux.yml@b1b7bdb32125ccb05afa36909954a75b9f2ab431
     strategy:
       matrix:
         os_version:
           - 7
           - 8
         salt_state:
-          - ash-linux.stig
           - ash-linux.iavm
+          - ash-linux.stig
           - ash-linux.vendor
-    env:
-      SALT_PILLARROOT: ${{ github.workspace }}/tests/pillar/test-linux-main
-      SALT_REPO_URL: https://repo.saltproject.io/py3/redhat/${{ matrix.os_version }}/x86_64/3004.repo
-    steps:
-      - name: Clone this git repository
-        uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c
-
-      # Install salt
-      - run: touch /etc/fstab
-      - run: curl -sSL -o /etc/yum.repos.d/salt.repo ${{ env.SALT_REPO_URL }}
-      - run: >-
-          mapfile -t REQUIREMENTS < <(cat ./tests/requirements.txt ./tests/requirements-el${{ matrix.os_version }}.txt) &&
-          yum install -y "${REQUIREMENTS[@]}"
-
-      - run: salt-call --versions-report
-
-      - run: >-
-          salt-call --local --retcode-passthrough
-          --file-root=. --pillar-root=${{ env.SALT_PILLARROOT }}
-          saltutil.sync_all
-
-      # Run tests
-      - run: >-
-          salt-call --local --retcode-passthrough
-          --log-file /var/log/salt/minion --log-file-level debug
-          --file-root=${{ github.workspace }} --pillar-root=${{ env.SALT_PILLARROOT }}
-          state.show_sls ${{ matrix.salt_state }}
-
-      - run: >-
-          salt-call --local --retcode-passthrough
-          --log-file /var/log/salt/minion --log-file-level debug
-          --file-root=${{ github.workspace }} --pillar-root=${{ env.SALT_PILLARROOT }}
-          state.sls ${{ matrix.salt_state }} mock=True
+        salt_pillar_root:
+          - ./tests/pillar/test-linux-main
+    with:
+      salt-os-version: ${{ matrix.os_version }}
+      salt-state: ${{ matrix.salt_state }}
+      salt-pillar-root: ${{ matrix.salt_pillar_root }}
