@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Finding ID:	RHEL-07-040320
-# Version:	RHEL-07-040320_rule
+# Finding ID:	RHEL-07-040600
+# Version:	RHEL-07-040600_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	low
 # 
@@ -21,7 +21,7 @@ diag_out() {
 }
 
 diag_out "----------------------------------------"
-diag_out "STIG Finding ID: RHEL-07-040320"
+diag_out "STIG Finding ID: RHEL-07-040600"
 diag_out "   For systems using DNS resolution, at"
 diag_out "   least two name servers must be"
 diag_out "   configured."
