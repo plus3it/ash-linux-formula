@@ -27,8 +27,8 @@
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
-{%- set cfgItemName = 'ClientAliveInterval'
-{%- set cfgItemValu = '600'
+{%- set cfgItemName = 'ClientAliveInterval' %}
+{%- set cfgItemValu = '600' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
