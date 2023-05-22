@@ -39,7 +39,7 @@ Fixing {{ checkFile }} (per {{ stig_id }}):
     - name: '{{ checkFile }}'
     - append_if_not_found: False
     - backup: False
-    - pattern: '^%([a-z0-9]*)(\s*\s*)([A-Z]*)=([/(][A-Za-z]*[)])\s\s*(?!(TYPE|ROLE)=[a-z_]*)([A-Za-z:]*)$'
+    - pattern: '^%([a-z0-9]*)(\s+)([A-Z]*)=([/(][A-Za-z]*[)])\s+(?!(TYPE|ROLE)=[a-z_]*)\s*([A-Za-z:]*)$'
     - repl: '%\1\2\3=\4 TYPE=sysadm_t ROLE=sysadm_r \6'
   {%- endfor %}
 {%- endif %}
