@@ -26,9 +26,20 @@
   {%- do sudoerFiles.append(moreSudoerFiles) %}
 {%- endfor %}
 
-
-{%- for checkFile in sudoerFiles %}
-Checking {{ checkFile }} (per {{ stig_id }}):
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
   cmd.run:
-    - name: 'grep % {{ checkFile }}'
-{%- endfor %}
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
+  {%- for checkFile in sudoerFiles %}
+Fixing {{ checkFile }} (per {{ stig_id }}):
+  file.replace:
+    - name: '{{ checkFile }}'
+    - append_if_not_found: False
+    - backup: False
+    - pattern: '^%([a-z0-9]*)(\s*\s*)([A-Z]*)=([/(][A-Za-z]*[)])\s\s*(?!(TYPE|ROLE)=[a-z_]*)([A-Za-z:]*)$'
+    - repl: '%\1\2\3=\4 TYPE=sysadm_t ROLE=sysadm_r \6'
+  {%- endfor %}
+{%- endif %}
