@@ -33,7 +33,8 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- for checkFile in sudoerFiles %}
+  {%- if selState.get("enabled") == True %}
+    {%- for checkFile in sudoerFiles %}
 Fixing {{ checkFile }} (per {{ stig_id }}):
   file.replace:
     - name: '{{ checkFile }}'
@@ -41,5 +42,6 @@ Fixing {{ checkFile }} (per {{ stig_id }}):
     - backup: False
     - pattern: '^%([a-z0-9]*)(\s+)([A-Z]*)=([/(][A-Za-z]*[)])\s+(?!(TYPE|ROLE)=[a-z_]*)\s*([A-Za-z:]*)$'
     - repl: '%\1\2\3=\4 TYPE=sysadm_t ROLE=sysadm_r \6'
-  {%- endfor %}
+    {%- endfor %}
+  {%- endif %}
 {%- endif %}
