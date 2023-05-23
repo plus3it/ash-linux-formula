@@ -1,0 +1,26 @@
+name: Run salt tests
+on:
+  pull_request:
+
+concurrency:
+  group: test-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    uses: plus3it/actions-workflows/.github/workflows/test-salt-linux.yml@b1b7bdb32125ccb05afa36909954a75b9f2ab431
+    strategy:
+      matrix:
+        os_version:
+          - 7
+          - 8
+        salt_state:
+          - ash-linux.iavm
+          - ash-linux.stig
+          - ash-linux.vendor
+        salt_pillar_root:
+          - ./tests/pillar/test-linux-main
+    with:
+      salt-os-version: ${{ matrix.os_version }}
+      salt-state: ${{ matrix.salt_state }}
+      salt-pillar-root: ${{ matrix.salt_pillar_root }}
