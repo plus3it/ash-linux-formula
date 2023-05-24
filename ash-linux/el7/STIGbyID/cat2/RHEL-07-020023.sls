@@ -33,15 +33,17 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  {%- if selState.get("enabled") == True %}
     {%- for checkFile in sudoerFiles %}
 Fixing {{ checkFile }} (per {{ stig_id }}):
   file.replace:
     - name: '{{ checkFile }}'
     - append_if_not_found: False
     - backup: False
+    - onlyif:
+      - fun: grains.get
+        args:
+          - selinux:enabled
     - pattern: '^%([a-z0-9]*)(\s+)([A-Z]*)=([/(][A-Za-z]*[)])\s+(?!(TYPE|ROLE)=[a-z_]*)\s*([A-Za-z:]*)$'
     - repl: '%\1\2\3=\4 TYPE=sysadm_t ROLE=sysadm_r \6'
     {%- endfor %}
-  {%- endif %}
 {%- endif %}
