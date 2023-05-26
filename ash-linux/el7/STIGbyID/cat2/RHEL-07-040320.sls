@@ -52,7 +52,7 @@ Fix {{cfgItemName }} in {{ cfgFile }} - {{ stig_id }}:
     - append_if_not_found: True
     - not_found_content: |-
         # Inserted per STIG {{ stig_id }}
-        '{{ cfgItemName }} {{ cfgItemValu }}'
+        {{ cfgItemName }} {{ cfgItemValu }}
     - onchanges_in:
       - service: service_sshd_restart
     - onlyif:
