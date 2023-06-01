@@ -24,7 +24,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-07-040320' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set cfgItemName = 'ClientAliveInterval' %}
