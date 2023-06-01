@@ -1,5 +1,5 @@
-# Finding ID:	RHEL-07-040320
-# Version:	RHEL-07-040320_rule
+# Finding ID:	RHEL-07-040600
+# Version:	SV-204608r603261_rule
 # SRG ID:	SRG-OS-000480-GPOS-00227
 # Finding Level:	low
 #
@@ -12,7 +12,7 @@
 #    NIST SP 800-53 Revision 4 :: CM-6 b
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-040320' %}
+{%- set stig_id = 'RHEL-07-040600' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat3/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nsswitchConf = '/etc/nsswitch.conf' %}
