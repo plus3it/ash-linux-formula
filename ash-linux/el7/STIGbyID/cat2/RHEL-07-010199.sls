@@ -74,8 +74,16 @@ Delete {{ targFile }} authconfig symlink:
 Restore {{ targFile }} from RPM-contents:
   file.copy:
     - name: '{{ targFile }}'
+    - group: 'root'
+    - mode: '0644'
     - onchanges:
       - file: 'Delete {{ targFile }} authconfig symlink'
+    - owner: 'root'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'etc_t'
+        seuser: 'system_u'
     - source: '/tmp/.{{ stig_id }}.d{{ targFile }}'
 
 # If not a symlink to <FILE>-local, move it to <FILE>-local
