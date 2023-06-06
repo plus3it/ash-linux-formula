@@ -41,7 +41,7 @@ notify_{{ stig_id }}-skipSet:
   {%- for mount in mounts %}
     {%- set mountType = mountData[mount]['fstype'] %}
     {%- if mountData[mount]['fstype'] in localFstypes %}
-      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -nouser') %}
+      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -type d -xdev -nouser') %}
       {%- set foundList = foundString.split('\n') %}
       {%- do nouserFiles.extend(foundList) %}
     {%- endif %}
