@@ -45,8 +45,22 @@ notify_{{ stig_id }}-skipSet:
     {%- set mountType = mountData[mount]['fstype'] %}
     {%- if mountData[mount]['fstype'] in localFstypes %}
       {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type f -nouser') %}
-      {%- set foundList = foundString.split('\n') %}
-      {%- do nouserFiles.extend(foundList) %}
+      {%- if foundString %}
+        {%- set foundList = foundString.split('\n') %}
+        {%- do nouserFiles.extend(foundList) %}
+      {%- endif %}
+    {%- endif %}
+  {%- endfor %}
+
+# Find directories with no valid owner..
+  {%- for mount in mounts %}
+    {%- set mountType = mountData[mount]['fstype'] %}
+    {%- if mountData[mount]['fstype'] in localFstypes %}
+      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type d -nouser') %}
+      {%- if foundString %}
+        {%- set foundList = foundString.split('\n') %}
+        {%- do nouserDirs.extend(foundList) %}
+      {%- endif %}
     {%- endif %}
   {%- endfor %}
 
@@ -60,17 +74,13 @@ file_{{ stig_id }}-{{ file }}:
     - user: 'root'
       {%- endif %}
     {%- endfor %}
+  {%- else %}
+file_{{ stig_id }}-noneFound:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Found no files with missing/undefined users.''\n"'
+    - stateful: True
+    - cwd: /root
   {%- endif %}
-
-# Find directories with no valid owner..
-  {%- for mount in mounts %}
-    {%- set mountType = mountData[mount]['fstype'] %}
-    {%- if mountData[mount]['fstype'] in localFstypes %}
-      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type d -nouser') %}
-      {%- set foundList = foundString.split('\n') %}
-      {%- do nouserDirs.extend(foundList) %}
-    {%- endif %}
-  {%- endfor %}
 
 # Take ownership of directories
   {%- if nouserDirs|length %}
@@ -82,5 +92,11 @@ dir_{{ stig_id }}-{{ dir }}:
     - user: 'root'
       {%- endif %}
     {%- endfor %}
+  {%- else %}
+dir_{{ stig_id }}-noneFound:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Found no directories with missing/undefined users.''\n"'
+    - stateful: True
+    - cwd: /root
   {%- endif %}
 {%- endif %}
