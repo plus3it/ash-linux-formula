@@ -56,7 +56,7 @@ Unpack downloaded RPM:
     - name: |
         mkdir /tmp/.{{ stig_id }}.d
         rpm2cpio /var/cache/yum/packages/pam-*.rpm \
-        | ( cd /tmp/.RHEL-07-010199.d/ && cpio -idv ./etc/pam.d/*-auth)
+        | ( cd /tmp/.{{ stig_id }}.d/ && cpio -idv ./etc/pam.d/*-auth)
 
 ##                                          ##
 ##############################################
