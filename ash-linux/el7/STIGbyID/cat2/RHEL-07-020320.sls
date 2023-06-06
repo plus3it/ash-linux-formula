@@ -1,7 +1,9 @@
-# Finding ID:	RHEL-07-020360
-# Version:	RHEL-07-020360_rule
-# SRG ID:	SRG-OS-000480-GPOS-00227
-# Finding Level:	medium
+# Ref Doc:        STIG - RHEL 7 v3r11
+# Finding ID:     V-204463
+# STIG ID:	      RHEL-07-020320
+# Version:        RHEL-07-020320_rule
+# SRG ID:         SRG-OS-000480-GPOS-00227
+# Finding Level:  medium
 #
 # Rule Summary:
 #	All files and directories must have a valid owner.
@@ -10,7 +12,7 @@
 #    NIST SP 800-53 Revision 4 :: AC-3 (4)
 #
 #################################################################
-{%- set stig_id = 'RHEL-07-020360' %}
+{%- set stig_id = 'RHEL-07-020320' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nouserFiles = [] %}
