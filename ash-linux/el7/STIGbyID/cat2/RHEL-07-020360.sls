@@ -14,6 +14,7 @@
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nouserFiles = [] %}
+{%- set nouserDirs = [] %}
 {%- set localFstypes = [
                          'ext2',
                          'ext3',
@@ -41,19 +42,41 @@ notify_{{ stig_id }}-skipSet:
   {%- for mount in mounts %}
     {%- set mountType = mountData[mount]['fstype'] %}
     {%- if mountData[mount]['fstype'] in localFstypes %}
-      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -type d -xdev -nouser') %}
+      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type f -nouser') %}
       {%- set foundList = foundString.split('\n') %}
       {%- do nouserFiles.extend(foundList) %}
     {%- endif %}
   {%- endfor %}
 
 # Take ownership of files
-  {%- if nouserFiles %}
+  {%- if nouserFiles|length %}
     {%- for file in nouserFiles %}
       {%- if file %}
 file_{{ stig_id }}-{{ file }}:
   file.managed:
     - name: '{{ file }}'
+    - user: 'root'
+      {%- endif %}
+    {%- endfor %}
+  {%- endif %}
+
+# Find directories with no valid owner..
+  {%- for mount in mounts %}
+    {%- set mountType = mountData[mount]['fstype'] %}
+    {%- if mountData[mount]['fstype'] in localFstypes %}
+      {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type d -nouser') %}
+      {%- set foundList = foundString.split('\n') %}
+      {%- do nouserDirs.extend(foundList) %}
+    {%- endif %}
+  {%- endfor %}
+
+# Take ownership of directories
+  {%- if nouserDirs|length %}
+    {%- for dir in nouserDirs %}
+      {%- if dir %}
+dir_{{ stig_id }}-{{ dir }}:
+  file.directory:
+    - name: '{{ dir }}'
     - user: 'root'
       {%- endif %}
     {%- endfor %}
