@@ -65,7 +65,7 @@ notify_{{ stig_id }}-skipSet:
   {%- endfor %}
 
 # Take ownership of files
-  {%- if nouserFiles|length %}
+  {%- if nouserFiles %}
     {%- for file in nouserFiles %}
       {%- if file %}
 file_{{ stig_id }}-{{ file }}:
