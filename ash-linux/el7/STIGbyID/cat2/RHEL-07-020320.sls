@@ -26,7 +26,6 @@
                          'btrfs'
                         ] %}
 {%- set mountData = salt.mount.fstab() %}
-{%- set mounts = mountData.keys() %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -41,8 +40,8 @@ notify_{{ stig_id }}-skipSet:
     - cwd: /root
 {%- else %}
 # Find files with no valid owner..
-  {%- for mount in mounts %}
-    {%- if mountData[mount]['fstype'] in localFstypes %}
+  {%- for mount, data in mountData.items() %}
+    {%- if data['fstype'] in localFstypes %}
       {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type f -nouser') %}
       {%- if foundString %}
         {%- set foundList = foundString.split('\n') %}
@@ -52,8 +51,8 @@ notify_{{ stig_id }}-skipSet:
   {%- endfor %}
 
 # Find directories with no valid owner..
-  {%- for mount in mounts %}
-    {%- if mountData[mount]['fstype'] in localFstypes %}
+  {%- for mount, data in mountData.items() %}
+    {%- if data['fstype'] in localFstypes %}
       {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type d -nouser') %}
       {%- if foundString %}
         {%- set foundList = foundString.split('\n') %}
