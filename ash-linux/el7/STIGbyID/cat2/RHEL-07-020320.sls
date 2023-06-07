@@ -64,14 +64,13 @@ notify_{{ stig_id }}-skipSet:
 
 # Take ownership of files
   {%- if nouserFiles %}
-    {%- for file in nouserFiles %}
-      {%- if file %}
-file_{{ stig_id }}-{{ file }}:
+file_{{ stig_id }}:
   file.managed:
-    - name: '{{ file }}'
+    - names:
+      {%- for file in nouserFiles %}
+      - '{{ file }}'
+      {%- endfor %}
     - user: 'root'
-      {%- endif %}
-    {%- endfor %}
   {%- else %}
 file_{{ stig_id }}-noneFound:
   cmd.run:
@@ -82,14 +81,13 @@ file_{{ stig_id }}-noneFound:
 
 # Take ownership of directories
   {%- if nouserDirs %}
-    {%- for dir in nouserDirs %}
-      {%- if dir %}
-dir_{{ stig_id }}-{{ dir }}:
+dir_{{ stig_id }}:
   file.directory:
-    - name: '{{ dir }}'
+    - names:
+      {%- for dir in nouserDirs %}
+      - '{{ dir }}'
+      {%- endfor %}
     - user: 'root'
-      {%- endif %}
-    {%- endfor %}
   {%- else %}
 dir_{{ stig_id }}-noneFound:
   cmd.run:
