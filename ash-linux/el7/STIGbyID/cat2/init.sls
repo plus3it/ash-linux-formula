@@ -15,6 +15,7 @@ include:
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010170
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010180
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010190
+  - ash-linux.el7.STIGbyID.cat2.RHEL-07-010199
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010200
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010210
   - ash-linux.el7.STIGbyID.cat2.RHEL-07-010220
