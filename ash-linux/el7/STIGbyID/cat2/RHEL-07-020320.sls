@@ -64,7 +64,7 @@ notify_{{ stig_id }}-skipSet:
 
 # Take ownership of files
   {%- if nouserFiles %}
-file_{{ stig_id }}:
+file_fix-{{ stig_id }}:
   file.managed:
     - names:
       {%- for file in nouserFiles %}
@@ -72,7 +72,7 @@ file_{{ stig_id }}:
       {%- endfor %}
     - user: 'root'
   {%- else %}
-file_{{ stig_id }}-noneFound:
+file_fix-{{ stig_id }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Found no files with missing/undefined users.''\n"'
     - stateful: True
@@ -81,7 +81,7 @@ file_{{ stig_id }}-noneFound:
 
 # Take ownership of directories
   {%- if nouserDirs %}
-dir_{{ stig_id }}:
+dir_fix-{{ stig_id }}:
   file.directory:
     - names:
       {%- for dir in nouserDirs %}
@@ -89,7 +89,7 @@ dir_{{ stig_id }}:
       {%- endfor %}
     - user: 'root'
   {%- else %}
-dir_{{ stig_id }}-noneFound:
+dir_fix-{{ stig_id }}:
   cmd.run:
     - name: 'printf "\nchanged=no comment=''Found no directories with missing/undefined users.''\n"'
     - stateful: True
