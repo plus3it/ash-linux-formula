@@ -42,7 +42,6 @@ notify_{{ stig_id }}-skipSet:
 {%- else %}
 # Find files with no valid owner..
   {%- for mount in mounts %}
-    {%- set mountType = mountData[mount]['fstype'] %}
     {%- if mountData[mount]['fstype'] in localFstypes %}
       {%- set foundString = salt['cmd.shell']('find ' + mount + ' -xdev -type f -nouser') %}
       {%- if foundString %}
