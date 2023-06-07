@@ -66,10 +66,7 @@ notify_{{ stig_id }}-skipSet:
   {%- if nouserFiles %}
 file_fix-{{ stig_id }}:
   file.managed:
-    - names:
-      {%- for file in nouserFiles %}
-      - '{{ file }}'
-      {%- endfor %}
+    - names: {{ nouserFiles }}
     - user: 'root'
   {%- else %}
 file_fix-{{ stig_id }}:
@@ -83,10 +80,7 @@ file_fix-{{ stig_id }}:
   {%- if nouserDirs %}
 dir_fix-{{ stig_id }}:
   file.directory:
-    - names:
-      {%- for dir in nouserDirs %}
-      - '{{ dir }}'
-      {%- endfor %}
+    - names: {{ nouserDirs }}
     - user: 'root'
   {%- else %}
 dir_fix-{{ stig_id }}:
