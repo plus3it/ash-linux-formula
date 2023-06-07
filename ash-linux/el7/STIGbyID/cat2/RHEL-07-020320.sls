@@ -83,7 +83,7 @@ file_{{ stig_id }}-noneFound:
   {%- endif %}
 
 # Take ownership of directories
-  {%- if nouserDirs|length %}
+  {%- if nouserDirs %}
     {%- for dir in nouserDirs %}
       {%- if dir %}
 dir_{{ stig_id }}-{{ dir }}:
