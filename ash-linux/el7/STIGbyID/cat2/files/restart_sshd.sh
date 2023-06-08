@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Restart sshd service if any of:
 # 
 # Cause changes to the /etc/ssh/sshd_config file
