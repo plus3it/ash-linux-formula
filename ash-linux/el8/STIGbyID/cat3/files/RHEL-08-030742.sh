@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Ref Doc:    STIG - RHEL 8 v1r9
 # Finding ID: V-230486
 # Rule ID:    SV-230486r627750_rule
