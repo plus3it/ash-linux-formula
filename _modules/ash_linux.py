@@ -13,14 +13,14 @@ try:
 except ImportError:
     from salt.utils import fopen
 
-__virtualname__ = 'ash'
+__virtualname__ = "ash"
 
 
 def __virtual__():
-    if __grains__.get('kernel', '') == 'Linux':
+    if __grains__.get("kernel", "") == "Linux":
         return __virtualname__
     else:
-        return False, 'ash_linux module works only on Linux systems'
+        return False, "ash_linux module works only on Linux systems"
 
 
 def _move_boot_kernel(restore_bak):
@@ -40,27 +40,27 @@ def _move_boot_kernel(restore_bak):
 
     old_path = os.path.join("/boot", filename)
     if os.path.exists(old_path):
-        __salt__['file.move'](old_path, new_path)
+        __salt__["file.move"](old_path, new_path)
 
     return old_path
 
 
 def _get_default_kernel():
     """Obtain default kernel from grubby command."""
-    cmd = 'grubby --default-kernel'
-    return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
+    cmd = "grubby --default-kernel"
+    return __salt__["cmd.run"](cmd, python_shell=True, output_loglevel="quiet")
 
 
 def _get_boot_path():
     """Obtain path that kernel is located in."""
     boot_path = _get_default_kernel()
-    return boot_path[:boot_path.rindex('/')] or '/'
+    return boot_path[: boot_path.rindex("/")] or "/"
 
 
 def _get_boot_mount(boot_path):
     """Obtain mount to path that kernel is located in."""
-    cmd = 'findmnt -no source -T ' + boot_path
-    return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
+    cmd = "findmnt -no source -T " + boot_path
+    return __salt__["cmd.run"](cmd, python_shell=True, output_loglevel="quiet")
 
 
 def _modify_grub_file(rmv_fips_arg):
@@ -71,28 +71,27 @@ def _modify_grub_file(rmv_fips_arg):
         rmv_fips_arg:  (`obj`: `bool`)
         True if removing fips argument. False to add it.
     """
-    filepath = '/etc/default/grub'
+    filepath = "/etc/default/grub"
     if rmv_fips_arg:
-        result = __salt__['file.replace'](filepath, 'fips=1[ ]', '')
+        result = __salt__["file.replace"](filepath, "fips=1[ ]", "")
     else:
         grub_marker = 'GRUB_CMDLINE_LINUX="'
         grub_args = []
-        check = __salt__['file.search'](filepath, 'boot=')
+        check = __salt__["file.search"](filepath, "boot=")
         if not check:
             # No boot= in grub, so find mount where kernel is located.
             # Add boot= argument if a boot path exists.
             boot_mount = _get_boot_mount(_get_boot_path())
-            if boot_mount != _get_boot_mount('/'):
-                grub_args.append('boot={0} '.format(boot_mount))
+            if boot_mount != _get_boot_mount("/"):
+                grub_args.append("boot={0} ".format(boot_mount))
 
-        check = __salt__['file.search'](filepath, 'fips=1')
+        check = __salt__["file.search"](filepath, "fips=1")
         if not check:
-            grub_args.append('fips=1 ')
+            grub_args.append("fips=1 ")
 
         if grub_args:
-            result = __salt__['file.replace'](
-                filepath, grub_marker,
-                '{0}{1}'.format(grub_marker, ''.join(grub_args))
+            result = __salt__["file.replace"](
+                filepath, grub_marker, "{0}{1}".format(grub_marker, "".join(grub_args))
             )
         else:
             result = None
@@ -104,9 +103,10 @@ def _is_fips_in_kernel():
     """Checks image file for fips module."""
     filename = "initramfs-" + os.uname()[2] + ".img"
     filepath = os.path.join("/boot", filename)
-    cmd = 'lsinitrd -m {0} | grep fips'.format(filepath)
-    result = __salt__['cmd.run'](
-        cmd, python_shell=True, output_loglevel='quiet') == 'fips'
+    cmd = "lsinitrd -m {0} | grep fips".format(filepath)
+    result = (
+        __salt__["cmd.run"](cmd, python_shell=True, output_loglevel="quiet") == "fips"
+    )
     return result
 
 
@@ -119,14 +119,14 @@ def _get_installed_dracutfips_pkgs():
     update this to use Salt's command.
     """
     cmd = "yum list installed"
-    available_pkgs = __salt__['cmd.run'](cmd, python_shell=False)
-    return re.findall(r'\bdracut-fips[^.]*', available_pkgs)
+    available_pkgs = __salt__["cmd.run"](cmd, python_shell=False)
+    return re.findall(r"\bdracut-fips[^.]*", available_pkgs)
 
 
 def _get_grub_args():
     """Obtain arguments line in grubby command."""
-    cmd = 'grubby --info=' + _get_default_kernel() + ' | grep args='
-    return __salt__['cmd.run'](cmd, python_shell=True, output_loglevel='quiet')
+    cmd = "grubby --info=" + _get_default_kernel() + " | grep args="
+    return __salt__["cmd.run"](cmd, python_shell=True, output_loglevel="quiet")
 
 
 def _rollback_fips_disable(installed_fips_pkgs):
@@ -138,19 +138,16 @@ def _rollback_fips_disable(installed_fips_pkgs):
         List of installed dracut-fips packages that were removed
         during the process of running fips_disable().
     """
-    __salt__['pkg.install'](installed_fips_pkgs)
+    __salt__["pkg.install"](installed_fips_pkgs)
 
     if not _is_fips_in_kernel():
         _move_boot_kernel(True)
 
-    grub_bak = '/etc/default/grub.bak'
+    grub_bak = "/etc/default/grub.bak"
     if os.path.exists(grub_bak):
-        __salt__['file.move'](grub_bak, '/etc/default/grub')
+        __salt__["file.move"](grub_bak, "/etc/default/grub")
 
-    __salt__['cmd.run'](
-        "grubby --update-kernel=ALL --args=fips=1",
-        python_shell=False
-    )
+    __salt__["cmd.run"]("grubby --update-kernel=ALL --args=fips=1", python_shell=False)
 
 
 def fips_disable():
@@ -164,74 +161,73 @@ def fips_disable():
         salt '*' ash.fips_disable
     """
     installed_fips_pkgs = _get_installed_dracutfips_pkgs()
-    ret = { 'result': True }
+    ret = {"result": True}
     old = {}
     new = {}
 
     try:
         # Remove dracut-fips installations.
         installed_fips_pkgs = _get_installed_dracutfips_pkgs()
-        if 'dracut-fips' in installed_fips_pkgs:
-            __salt__['pkg.remove']('dracut-fips')
-            old['Packages'] = installed_fips_pkgs
+        if "dracut-fips" in installed_fips_pkgs:
+            __salt__["pkg.remove"]("dracut-fips")
+            old["Packages"] = installed_fips_pkgs
 
         # If fips is in kernel, create a new boot-kernel.
         if _is_fips_in_kernel():
             _move_boot_kernel(False)
-            __salt__['cmd.run']("dracut -f", python_shell=False)
+            __salt__["cmd.run"]("dracut -f", python_shell=False)
 
         # Update grub.cfg file to remove the fips argument.
         grub_args = _get_grub_args()
-        if 'fips=1' in grub_args:
-            cmd = 'grubby --update-kernel=ALL --remove-args=fips=1'
-            __salt__['cmd.run'](cmd, python_shell=False)
-            new['grubby'] = cmd
+        if "fips=1" in grub_args:
+            cmd = "grubby --update-kernel=ALL --remove-args=fips=1"
+            __salt__["cmd.run"](cmd, python_shell=False)
+            new["grubby"] = cmd
 
         # Update GRUB command line entry to remove fips.
         diff = _modify_grub_file(True)
         if diff:
-            new['/etc/default/grub'] = diff
+            new["/etc/default/grub"] = diff
     except Exception:
         _rollback_fips_disable(installed_fips_pkgs)
-        ret['result'] = False
-        ret['changes'] = {}
-        ret['comment'] = 'Unable to change state of system to FIPS-disabled.'
+        ret["result"] = False
+        ret["changes"] = {}
+        ret["comment"] = "Unable to change state of system to FIPS-disabled."
     else:
         if old:
-            ret['changes'] = {'old': old}
-            ret['comment'] = 'FIPS has been toggled to off.'
+            ret["changes"] = {"old": old}
+            ret["comment"] = "FIPS has been toggled to off."
         if new:
-            if 'changes' in ret:
-                ret['changes'].update({'new': new})
+            if "changes" in ret:
+                ret["changes"].update({"new": new})
             else:
-                ret['changes'] = {'new': new}
-            ret['comment'] = 'FIPS has been toggled to off.'
-        if fips_status() == 'enabled':
-            msg = ' Reboot system to place into FIPS-disabled state.'
-            if 'comment' in ret:
-                ret['comment'] = ret['comment'] + msg
+                ret["changes"] = {"new": new}
+            ret["comment"] = "FIPS has been toggled to off."
+        if fips_status() == "enabled":
+            msg = " Reboot system to place into FIPS-disabled state."
+            if "comment" in ret:
+                ret["comment"] = ret["comment"] + msg
             else:
-                ret['comment'] = msg[1:]
-        if 'changes' not in ret and 'comment' not in ret:
-            ret['comment'] = 'FIPS mode is already disabled. No changes.'
+                ret["comment"] = msg[1:]
+        if "changes" not in ret and "comment" not in ret:
+            ret["comment"] = "FIPS mode is already disabled. No changes."
     finally:
         return ret
 
 
 def _rollback_fips_enable():
     """Rollback the actions of fips_enable() upon a thrown error."""
-    __salt__['pkg.remove']('dracut-fips')
+    __salt__["pkg.remove"]("dracut-fips")
 
     if _is_fips_in_kernel():
         _move_boot_kernel(True)
 
-    grub_bak = '/etc/default/grub.bak'
+    grub_bak = "/etc/default/grub.bak"
     if os.path.exists(grub_bak):
-        __salt__['file.move'](grub_bak, '/etc/default/grub')
+        __salt__["file.move"](grub_bak, "/etc/default/grub")
 
-    __salt__['cmd.run'](
-        "grubby --update-kernel=ALL --remove-args=fips=1",
-        python_shell=False
+    __salt__["cmd.run"](
+        "grubby --update-kernel=ALL --remove-args=fips=1", python_shell=False
     )
 
 
@@ -245,59 +241,59 @@ def fips_enable():
     .. code-block:: bash
         salt '*' ash.fips_enable
     """
-    ret = { 'result': True }
+    ret = {"result": True}
     new = {}
 
     try:
         # Install dracut-fips package.
         installed_fips_pkgs = _get_installed_dracutfips_pkgs()
-        if 'dracut-fips' not in installed_fips_pkgs:
-            __salt__['pkg.install']('dracut-fips')
+        if "dracut-fips" not in installed_fips_pkgs:
+            __salt__["pkg.install"]("dracut-fips")
             installed_fips_pkgs = _get_installed_dracutfips_pkgs()
-            new['Packages'] = installed_fips_pkgs
+            new["Packages"] = installed_fips_pkgs
 
         # If fips is not in kernel, create a new boot-kernel.
         if not _is_fips_in_kernel():
             _move_boot_kernel(False)
-            __salt__['cmd.run']("dracut -f", python_shell=False)
+            __salt__["cmd.run"]("dracut -f", python_shell=False)
 
         # Update grub.cfg file to add the fips and boot agurments.
         grubby_args = []
         grub_args = _get_grub_args()
-        if 'fips=1' not in grub_args:
-            grubby_args.append('fips=1')
-			
+        if "fips=1" not in grub_args:
+            grubby_args.append("fips=1")
+
         # Add boot= argument if a boot path exists.
         boot_mount = _get_boot_mount(_get_boot_path())
-        if 'boot=' not in grub_args and boot_mount != _get_boot_mount('/'):
-            grubby_args.append('boot={0}'.format(boot_mount))
+        if "boot=" not in grub_args and boot_mount != _get_boot_mount("/"):
+            grubby_args.append("boot={0}".format(boot_mount))
         if grubby_args:
             cmd = 'grubby --update-kernel=ALL --args="{0}"'.format(
-                ' '.join(grubby_args)
+                " ".join(grubby_args)
             )
-            __salt__['cmd.run'](cmd, python_shell=False)
-            new['grubby'] = cmd
+            __salt__["cmd.run"](cmd, python_shell=False)
+            new["grubby"] = cmd
 
         # Update GRUB command line entry to add fips.
         diff = _modify_grub_file(False)
         if diff:
-            new['/etc/default/grub'] = diff
+            new["/etc/default/grub"] = diff
     except Exception:
         _rollback_fips_enable()
-        ret['result'] = False
-        ret['comment'] = 'Unable to change state of system to FIPS-enabled.'
+        ret["result"] = False
+        ret["comment"] = "Unable to change state of system to FIPS-enabled."
     else:
         if new:
-            ret['changes'] = {'new': new}
-            ret['comment'] = 'FIPS has been toggled to on.'
-        if fips_status() == 'disabled':
-            msg = ' Reboot system to place into FIPS-enabled state.'
-            if 'comment' in ret:
-                ret['comment'] = ret['comment'] + msg
+            ret["changes"] = {"new": new}
+            ret["comment"] = "FIPS has been toggled to on."
+        if fips_status() == "disabled":
+            msg = " Reboot system to place into FIPS-enabled state."
+            if "comment" in ret:
+                ret["comment"] = ret["comment"] + msg
             else:
-                ret['comment'] = msg[1:]
-        if 'changes' not in ret and 'comment' not in ret:
-            ret['comment'] = 'FIPS mode is already enabled. No changes.'
+                ret["comment"] = msg[1:]
+        if "changes" not in ret and "comment" not in ret:
+            ret["comment"] = "FIPS mode is already enabled. No changes."
     finally:
         return ret
 
@@ -314,10 +310,10 @@ def fips_status():
         salt '*' ash.fips_status
     """
     try:
-        with fopen('/proc/sys/crypto/fips_enabled', 'r') as fle:
-            return 'enabled' if fle.read().strip() == '1' else 'disabled'
+        with fopen("/proc/sys/crypto/fips_enabled", "r") as fle:
+            return "enabled" if fle.read().strip() == "1" else "disabled"
     except (IOError, FileNotFoundError):
-        return 'disabled'
+        return "disabled"
 
 
 def shadow_list_users():
