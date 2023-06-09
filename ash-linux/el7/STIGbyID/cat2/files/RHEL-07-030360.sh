@@ -1,7 +1,7 @@
 #!/bin/sh
 # STIG ID:	RHEL-07-030360
 # Rule ID:	SV-86719r7_rule
-V# uln ID:	V-72095
+# Vuln ID:	V-72095
 # SRG ID:	SRG-OS-000466-GPOS-00210
 # Finding Level:	medium
 # 

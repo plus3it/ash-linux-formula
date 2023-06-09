@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Rule Name:    sshd_set_loglevel_info
 # CIS Rule ID:  1.1.1
 #

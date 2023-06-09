@@ -1,13 +1,13 @@
 #!/bin/bash
 #
-# Finding ID:	RHEL-07-010010
-# Version:	RHEL-07-010010_rule
-# SRG ID:	SRG-OS-000257-GPOS-00098
-# Finding Level:	high
+# Finding ID:   RHEL-07-010010
+# Version:      RHEL-07-010010_rule
+# SRG ID:       SRG-OS-000257-GPOS-00098
+# Finding Level:        high
 #
 # Rule Summary:
-#	The file permissions, ownership, and group membership of
-#	system files and commands must match the vendor values.
+#       The file permissions, ownership, and group membership of
+#       system files and commands must match the vendor values.
 #
 # CCI-001494 CCI-001496
 #    NIST SP 800-53 :: AU-9
@@ -20,31 +20,39 @@
 #################################################################
 RESULT=0
 FOUND=0
+QUERYFLT=(
+  --nodigest
+  --nosignature
+  --nofiledigest
+  --nouser
+  --nogroup
+  --nomtime
+)
 
 # Locate files with questionable modes
 printf "Checking for files with bad permissions... \n"
-QUERYFLT=" --nodigest --nosignature --nofiledigest --nouser --nogroup --nomtime"
-BADPERMS=$(rpm -qVa ${QUERYFLT} | \
-           awk '$1 ~ /.M/ && $2 != "c" {print $2}')
+mapfile -t BADPERMS < <(
+  rpm -qVa "${QUERYFLT[@]}" | \
+  awk '$1 ~ /.M/ && $2 != "c" { print $2 }'
+)
 
 # Correct any questionable file-modes
-if [ "${BADPERMS}" ]
+if [[ "${#BADPERMS}" -gt 0 ]]
 then
-   for CHECK in ${BADPERMS}
+   for CHECK in "${BADPERMS[@]}"
    do
-      if [ -f ${CHECK} ]
+      if [[ -e "${CHECK}" ]]
       then
          FOUND=1
-         RPMOWNS=$(rpm -qf "${CHECK}")
-         printf "Resetting perms on ${CHECK}... "
-         rpm --setperms ${RPMOWNS}
-         if [ $? -eq '0' ]
+         RPMOWNS="$( rpm -qf "${CHECK}" )"
+         printf "Resetting perms on %s... " "${CHECK}"
+         if [[ $( rpm --quiet --setperms "${RPMOWNS}" )$? -eq '0' ]]
          then
             echo "FIXED!"
-            RESULT=$((${RESULT} + 0))
+            RESULT=$(( RESULT + 0 ))
          else
             echo "FAILED!"
-            RESULT=$((${RESULT} + 1))
+            RESULT=$(( RESULT + 1 ))
          fi
       fi
    done
