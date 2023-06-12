@@ -6,7 +6,6 @@ Provide custom modules for ash-linux.
 """
 import os
 import re
-import spwd
 
 try:
     from salt.utils.files import fopen
@@ -314,16 +313,3 @@ def fips_status():
             return "enabled" if fle.read().strip() == "1" else "disabled"
     except (IOError, FileNotFoundError):
         return "disabled"
-
-
-def shadow_list_users():
-    """
-    Return a list of all shadow users.
-
-    Will be superseded by ``shadow.list_users``, in the salt Oxygen release.
-
-    CLI Example:
-    .. code-block:: bash
-        salt '*' ash.shadow_list_users
-    """
-    return sorted([user.sp_nam for user in spwd.getspall()])
