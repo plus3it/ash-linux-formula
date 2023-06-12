@@ -18,8 +18,7 @@ __virtualname__ = "ash"
 def __virtual__():
     if __grains__.get("kernel", "") == "Linux":
         return __virtualname__
-    else:
-        return False, "ash_linux module works only on Linux systems"
+    return False, "ash_linux module works only on Linux systems"
 
 
 def _move_boot_kernel(restore_bak):
