@@ -148,7 +148,7 @@ def _rollback_fips_disable(installed_fips_pkgs):
     __salt__["cmd.run"]("grubby --update-kernel=ALL --args=fips=1", python_shell=False)
 
 
-def fips_disable():
+def fips_disable():  # pylint: disable=too-many-branches
     """
     Disables FIPS on RH/CentOS system. Note that you must reboot the
     system in order for FIPS to be disabled.  This routine prepares
@@ -229,7 +229,7 @@ def _rollback_fips_enable():
     )
 
 
-def fips_enable():
+def fips_enable():  # pylint: disable=too-many-branches
     """
     Enables FIPS on RH/CentOS system.  Note that you must reboot the
     system in order for FIPS to be disabled.  This routine prepares
