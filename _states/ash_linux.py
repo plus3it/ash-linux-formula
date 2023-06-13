@@ -4,7 +4,7 @@ Provide custom state module for ash-linux.
 
 :maintainer: Loren Gordon <loren.gordon@plus3it.com>
 """
-from salt.exceptions import SaltInvocationError
+from salt.exceptions import SaltInvocationError  # pylint: disable=import-error
 
 __virtualname__ = "ash"
 
