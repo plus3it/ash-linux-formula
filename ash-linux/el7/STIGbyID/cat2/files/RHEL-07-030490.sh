@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # STIG ID:	RHEL-07-030490
 # Rule ID:	SV-86745r5_rule
 # Vuln ID:	V-72121

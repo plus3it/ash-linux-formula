@@ -42,6 +42,12 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# =================================
+# Ignore tardigrade-related content
+# =================================
+.tardigrade-ci
+tardigrade-ci/
+
 #===============
 #Personal git ignore settings
 #===============

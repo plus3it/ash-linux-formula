@@ -1,3 +1,5 @@
+#!/bin/bash
+#
 # Finding ID:
 # Version:		sysctl_kernel_randomize_va_space
 # SRG ID:
