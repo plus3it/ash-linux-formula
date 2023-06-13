@@ -186,7 +186,7 @@ def fips_disable():
         diff = _modify_grub_file(True)
         if diff:
             new["/etc/default/grub"] = diff
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         _rollback_fips_disable(installed_fips_pkgs)
         ret["result"] = False
         ret["changes"] = {}
@@ -276,7 +276,7 @@ def fips_enable():
         diff = _modify_grub_file(False)
         if diff:
             new["/etc/default/grub"] = diff
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         _rollback_fips_enable()
         ret["result"] = False
         ret["comment"] = "Unable to change state of system to FIPS-enabled."
