@@ -110,11 +110,12 @@ def _is_fips_in_kernel():
 
 def _get_installed_dracutfips_pkgs():
     """
-    Return list of available dracut-fips pkgs to install. We currently
-    resort to using an actual call to yum as Salt's pkg.list_repo_pkgs()
-    does not look in repos that have been enabled like "enabled = 1"
-    instead of "enabled=1".  Once that has been addressed in Salt, we can
-    update this to use Salt's command.
+    Return list of available dracut-fips pkgs to install.
+
+    We currently resort to using an actual call to yum as Salt's
+    pkg.list_repo_pkgs() does not look in repos that have been enabled
+    like "enabled = 1" instead of "enabled=1".  Once that has been
+    addressed in Salt, we can update this to use Salt's command.
     """
     cmd = "yum list installed"
     available_pkgs = __salt__["cmd.run"](cmd, python_shell=False)
@@ -150,9 +151,10 @@ def _rollback_fips_disable(installed_fips_pkgs):
 
 def fips_disable():  # pylint: disable=too-many-branches
     """
-    Disables FIPS on RH/CentOS system. Note that you must reboot the
-    system in order for FIPS to be disabled.  This routine prepares
-    the system to disable FIPS.
+    Disables FIPS on RH/CentOS system.
+
+    Note: you must reboot the system in order for FIPS to be disabled.
+    This routine prepares the system to disable FIPS.
 
     CLI Example:
     .. code-block:: bash
@@ -231,9 +233,10 @@ def _rollback_fips_enable():
 
 def fips_enable():  # pylint: disable=too-many-branches
     """
-    Enable FIPS on RH/CentOS system.  Note that you must reboot the
-    system in order for FIPS to be disabled.  This routine prepares
-    the system to disable FIPS.
+    Enable FIPS on RH/CentOS system.
+
+    Note: You must reboot the system in order for FIPS to be disabled.
+    This routine prepares the system to disable FIPS.
 
     CLI Example:
     .. code-block:: bash
