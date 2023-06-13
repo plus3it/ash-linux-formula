@@ -209,7 +209,7 @@ def fips_disable():  # pylint: disable=too-many-branches
                 ret["comment"] = msg[1:]
         if "changes" not in ret and "comment" not in ret:
             ret["comment"] = "FIPS mode is already disabled. No changes."
-    finally:
+    finally:  # pylint: disable=lost-exception
         return ret
 
 
@@ -292,7 +292,7 @@ def fips_enable():  # pylint: disable=too-many-branches
                 ret["comment"] = msg[1:]
         if "changes" not in ret and "comment" not in ret:
             ret["comment"] = "FIPS mode is already enabled. No changes."
-    finally:
+    finally:  # pylint: disable=lost-exception
         return ret
 
 
