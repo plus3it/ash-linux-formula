@@ -98,7 +98,7 @@ def _modify_grub_file(rmv_fips_arg):
 
 
 def _is_fips_in_kernel():
-    """Checks image file for fips module."""
+    """Check image file for fips module."""
     filename = "initramfs-" + os.uname()[2] + ".img"
     filepath = os.path.join("/boot", filename)
     cmd = "lsinitrd -m {0} | grep fips".format(filepath)
@@ -110,7 +110,7 @@ def _is_fips_in_kernel():
 
 def _get_installed_dracutfips_pkgs():
     """
-    Returns list of available dracut-fips pkgs to install. We currently
+    Return list of available dracut-fips pkgs to install. We currently
     resort to using an actual call to yum as Salt's pkg.list_repo_pkgs()
     does not look in repos that have been enabled like "enabled = 1"
     instead of "enabled=1".  Once that has been addressed in Salt, we can
@@ -231,7 +231,7 @@ def _rollback_fips_enable():
 
 def fips_enable():  # pylint: disable=too-many-branches
     """
-    Enables FIPS on RH/CentOS system.  Note that you must reboot the
+    Enable FIPS on RH/CentOS system.  Note that you must reboot the
     system in order for FIPS to be disabled.  This routine prepares
     the system to disable FIPS.
 
@@ -298,7 +298,7 @@ def fips_enable():  # pylint: disable=too-many-branches
 
 def fips_status():
     """
-    Returns the status of fips on the currently running system.
+    Return the status of fips on the currently running system.
 
     Returns a `str` of "enabled" if FIPS is enabled. Otherwise,
     returns a `str` of "disabled".
