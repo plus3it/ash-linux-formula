@@ -24,5 +24,6 @@ include:
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-020231
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-030740
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040123
+  - ash-linux.el8.STIGbyID.cat2.RHEL-08-040180
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040282
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040290
