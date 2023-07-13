@@ -55,7 +55,7 @@ Ensure auth pam_faillock.so preauth before pam_faillock.so authfail ({{ stig_id 
     - require:
       - file: 'Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }})'
     - unless:
-      - '[[ $( grep -Pq "^auth\s*required\s*pam_faillock.so\s*preauth" {{ targFile }} )$? -eq 0 ]]'
+      - grep -Pq "^auth\s*required\s*pam_faillock.so\s*preauth" {{ targFile }}
 
 Ensure accunt pam_faillock.so before pam_unix.so ({{ stig_id }}):
   file.replace:
