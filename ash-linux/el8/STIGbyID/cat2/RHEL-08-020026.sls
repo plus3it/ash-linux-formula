@@ -63,5 +63,5 @@ Ensure accunt pam_faillock.so before pam_unix.so ({{ stig_id }}):
     - pattern: '(^account\s*required\s*pam_unix.so.*)'
     - repl: 'account     required                                     pam_faillock.so\n\1'
     - unless:
-      - '[[ $( grep -Pq "^account\s*required\s*pam_faillock.so" {{ targFile }} )$? -eq 0 ]]'
+      - grep -Pq "^account\s*required\s*pam_faillock.so" {{ targFile }}
 {%- endif %}
