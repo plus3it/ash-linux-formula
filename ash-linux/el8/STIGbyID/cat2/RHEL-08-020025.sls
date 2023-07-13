@@ -39,7 +39,7 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-Ensure auth pam_faillock.so authfail before pam_unix.so:
+Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }}):
   file.replace:
     - name: '{{ targFile }}'
     - pattern: '(^auth\s*(sufficient|\[.*])\s*pam_unix.so.*)'
@@ -47,17 +47,17 @@ Ensure auth pam_faillock.so authfail before pam_unix.so:
     - unless:
       - grep -Pq "^auth\s*required\s*pam_faillock.so\s*authfail" {{ targFile }}
 
-Ensure auth pam_faillock.so preauth before pam_faillock.so authfail:
+Ensure auth pam_faillock.so preauth before pam_faillock.so authfail ({{ stig_id }}):
   file.replace:
     - name: '{{ targFile }}'
     - pattern: '(^auth\s*required\s*pam_faillock.so authfail)'
     - repl: 'auth        required                                     pam_faillock.so preauth\n\1'
     - require:
-      - file: 'Ensure auth pam_faillock.so authfail before pam_unix.so'
+      - file: 'Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }})'
     - unless:
       - grep -Pq "^auth\s*required\s*pam_faillock.so\s*preauth" {{ targFile }}
 
-Ensure accunt pam_faillock.so before pam_unix.so:
+Ensure accunt pam_faillock.so before pam_unix.so ({{ stig_id }}):
   file.replace:
     - name: '{{ targFile }}'
     - pattern: '(^account\s*required\s*pam_unix.so.*)'
