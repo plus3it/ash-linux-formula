@@ -26,7 +26,6 @@
 {%- if salt.file.is_link(targFile) %}
   {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
 {%- endif %}
-{%- set searchRoot = '^password\s+required\s+pam_pwhistory.so\s+' %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
