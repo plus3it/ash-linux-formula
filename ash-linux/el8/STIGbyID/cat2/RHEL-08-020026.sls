@@ -50,7 +50,7 @@ Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }}):
 Ensure auth pam_faillock.so preauth before pam_faillock.so authfail ({{ stig_id }}):
   file.replace:
     - name: '{{ targFile }}'
-    - pattern: '(^auth\s*required\s*pam_faillock.so authfail)'
+    - pattern: '(^auth\s*required\s*pam_faillock.so\s*authfail)'
     - repl: 'auth        required                                     pam_faillock.so preauth\n\1'
     - require:
       - file: 'Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }})'
