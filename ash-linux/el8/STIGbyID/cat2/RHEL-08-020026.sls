@@ -1,7 +1,7 @@
 # Ref Doc:    STIG - RHEL 8 v1r10
-# Finding ID: V-244533
-# Rule ID:    SV-244533r743848_rule
-# STIG ID:    RHEL-08-020025
+# Finding ID: V-244534
+# Rule ID:    SV-244534r743851_rule
+# STIG ID:    RHEL-08-020026
 # SRG ID:     SRG-OS-000021-GPOS-00005
 #             SRG-OS-000329-GPOS-00128
 #
@@ -9,7 +9,7 @@
 #
 # Rule Summary:
 #       The OS must configure the use of the pam_faillock.so module in the
-#       /etc/pam.d/system-auth file.
+#       /etc/pam.d/password-auth file.
 #
 # References:
 #   CCI:
@@ -19,10 +19,10 @@
 #       - NIST SP 800-53 Revision 4 :: AC-7 a
 #
 ###########################################################################
-{%- set stig_id = 'RHEL-08-020025' %}
+{%- set stig_id = 'RHEL-08-020026' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set targFile = '/etc/pam.d/system-auth' %}
+{%- set targFile = '/etc/pam.d/password-auth' %}
 {%- if salt.file.is_link(targFile) %}
   {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
 {%- endif %}
@@ -50,7 +50,7 @@ Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }}):
 Ensure auth pam_faillock.so preauth before pam_faillock.so authfail ({{ stig_id }}):
   file.replace:
     - name: '{{ targFile }}'
-    - pattern: '(^auth\s*required\s*pam_faillock.so authfail)'
+    - pattern: '(^auth\s*required\s*pam_faillock.so\s*authfail)'
     - repl: 'auth        required                                     pam_faillock.so preauth\n\1'
     - require:
       - file: 'Ensure auth pam_faillock.so authfail before pam_unix.so ({{ stig_id }})'
@@ -65,4 +65,3 @@ Ensure accunt pam_faillock.so before pam_unix.so ({{ stig_id }}):
     - unless:
       - grep -Pq "^account\s*required\s*pam_faillock.so" {{ targFile }}
 {%- endif %}
-
