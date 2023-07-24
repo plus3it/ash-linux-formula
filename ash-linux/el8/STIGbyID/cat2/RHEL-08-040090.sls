@@ -60,7 +60,7 @@ Set Default firewalld zone - config-running:
 Set Minimum Ports:
   firewalld.present:
     - name: '{{ firewalldValu }}'
-    - requires:
+    - require:
       - module: 'Set Default firewalld zone - config-running'
     - ports: {{ firewalldSafePorts }}
     - prune_ports: False
