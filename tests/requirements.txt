@@ -2,3 +2,4 @@ audit
 openssh-server
 rsyslog
 salt-minion
+firewalld
