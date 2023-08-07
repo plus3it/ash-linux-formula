@@ -43,12 +43,19 @@ Update PAM and AuthSelect:
       - pam
       - authselect
 
+Ensure Valid Starting Config:
+  cmd.run:
+    - name: 'authselect check'
+    - cwd: /root
+    - require:
+      - pkg: 'Update PAM and AuthSelect'
+
 Enable pam_pwhistory module in PAM:
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root
     - require:
-      - pkg: 'Update PAM and AuthSelect'
+      - cmd: 'Ensure Valid Starting Config'
 
 Set pam_pwhistory memory to {{ pwhistory_remember }}:
   file.replace:
