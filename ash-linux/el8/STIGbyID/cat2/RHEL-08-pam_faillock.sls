@@ -127,4 +127,18 @@ Set pam_faillock unlock_time to {{ faillock_unlock_time }}:
     - repl: '\g<2>\g<3>{{ faillock_unlock_time }}'
     - require:
       - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+
+# STIG ID RHEL-08-020019
+Set pam_faillock unlock_time to {{ faillock_unlock_time }}:
+  file.replace:
+    - name: '{{ faillock_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG ID RHEL-08-020019
+        silent
+    - pattern: '^(#|)\s*(silent).*'
+    - repl: '\g<2>'
+    - require:
+      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
 {%- endif %}
