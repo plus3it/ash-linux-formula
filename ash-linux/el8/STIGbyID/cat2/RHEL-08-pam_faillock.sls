@@ -172,8 +172,25 @@ Set pam_faillock enable even_deny_root:
     - require:
       - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
 
+# STIG ID RHEL-08-020027
+Ensure {{ faillock_logging_dir }} exists:
+  file.directory:
+    - name: {{ faillock_logging_dir }}
+    - group: root
+    - makedirs: True
+    - mode: '0700'
+    - require:
+      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'faillog_t'
+        seuser: 'unconfined_u'
+    - user: root
+
 # STIG ID RHEL-08-030590
-# Set pam_faillock logging dir to {{
+Set pam_faillock logging dir to {{ faillock_logging_dir }}:
+  file.replace:
     - name: '{{ faillock_cfg_file }}'
     - append_if_not_found: True
     - not_found_content: |-
