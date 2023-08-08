@@ -83,4 +83,17 @@ Enable pam_faillock module in PAM ({{ stig_id }}):
     - cwd: /root
     - require:
       - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+
+Set pam_faillock deny-count to {{ faillock_deny_count }}:
+  file.replace:
+    - name: '{{ faillock_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG ID RHEL-08-020011
+        deny = {{ faillock_deny_count }}
+    - pattern: '^(#|)\s*(deny)(\s*=\s*).*'
+    - repl: '\g<2>\g<3>{{ faillock_deny_count }}'
+    - require:
+      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
 {%- endif %}
