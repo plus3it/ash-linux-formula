@@ -156,4 +156,18 @@ Set pam_faillock enable audit:
     - repl: '\g<2>'
     - require:
       - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+
+# STIG ID RHEL-08-020023
+Set pam_faillock enable even_deny_root:
+  file.replace:
+    - name: '{{ faillock_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG ID RHEL-08-020023
+        even_deny_root
+    - pattern: '^(#|)\s*(even_deny_root).*'
+    - repl: '\g<2>'
+    - require:
+      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
 {%- endif %}
