@@ -79,6 +79,7 @@ Ensure Valid Starting Config ({{ stig_id }}):
     - require:
       - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
 
+# STIG IDs RHEL-08-020025 and RHEL-08-020026
 Enable pam_faillock module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature with-faillock
