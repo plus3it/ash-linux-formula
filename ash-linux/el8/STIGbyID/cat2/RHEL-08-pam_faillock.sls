@@ -29,8 +29,9 @@
 # Finding Level: medium
 #
 # Rule Summary:
-#       The OS must prevent files with the setuid and setgid bit set from
-#       being executed on the /boot directory
+#       The OS must lock out user accounts after a three failures within a
+#       fifteen minute interval. The account should stay locked until an
+#       administrator manually unlocks the account.
 #
 # References:
 #   CCI:
@@ -51,4 +52,25 @@ script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
+
+
+Update PAM and AuthSelect ({{ stig_id }}):
+  pkg.latest:
+    - pkgs:
+      - pam
+      - authselect
+
+Ensure Valid Starting Config ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect check'
+    - cwd: /root
+    - require:
+      - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
+
+Enable pam_faillock module in PAM ({{ stig_id }}):
+  cmd.run:
+    - name: authselect enable-feature with-faillock
+    - cwd: /root
+    - require:
+      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
 
