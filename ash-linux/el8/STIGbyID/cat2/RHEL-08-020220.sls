@@ -21,11 +21,9 @@
 {%- set stig_id = 'RHEL-08-020220' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set targFile = '/etc/pam.d/password-auth' %}
-{%- if salt.file.is_link(targFile) %}
-  {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
-{%- endif %}
-{%- set searchRoot = '^password\s+required\s+pam_pwhistory.so\s+' %}
+{%- set pwhistory_cfg_file = '/etc/security/pwhistory.conf' %}
+{%- set pwhistory_remember = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_remember', 5) %}
+{%- set pwhistory_retry = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_retry', 3) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -39,27 +37,50 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-  # Entry exists and is correct
-  {%- if salt.file.search(targFile, searchRoot + '.*remember=5') %}
-file_{{ stig_id }}-{{ targFile }}:
+Update PAM and AuthSelect:
+  pkg.latest:
+    - pkgs:
+      - pam
+      - authselect
+
+Ensure Valid Starting Config:
   cmd.run:
-    - name: 'printf "\nchanged=no comment=''Found target config in {{ targFile }}.''\n"'
+    - name: 'authselect check'
     - cwd: /root
-    - stateful: True
-  # Entry exists and is incorrect
-  {%- elif salt.file.search(targFile, searchRoot) %}
-file_{{ stig_id }}-{{ targFile }}:
+    - require:
+      - pkg: 'Update PAM and AuthSelect'
+
+Enable pam_pwhistory module in PAM:
+  cmd.run:
+    - name: authselect enable-feature with-pwhistory
+    - cwd: /root
+    - require:
+      - cmd: 'Ensure Valid Starting Config'
+
+Set pam_pwhistory memory to {{ pwhistory_remember }}:
   file.replace:
-    - name: '{{ targFile }}'
-    - pattern: '^(?P<srctok>{{ searchRoot }}.*$)'
-    - repl: '\g<srctok> remember=5'
-  # Entry is missing
-  {%- else %}
-file_{{ stig_id }}-{{ targFile }}:
+    - name: '{{ pwhistory_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG IDs RHEL-08-020220 and RHEL-08-020221
+        remember = {{ pwhistory_remember }}
+    - pattern: '^(#|)\s*(remember)(\s*=\s*).*'
+    - repl: '\g<2>\g<3>{{ pwhistory_remember }}'
+    - require:
+      - cmd: 'Enable pam_pwhistory module in PAM'
+
+Set pam_pwhistory retry to {{ pwhistory_retry }}:
   file.replace:
-    - name: '{{ targFile }}'
-    - pattern: '^(?P<srctok>^password\s+requisite\s+pam_pwquality.so.*)'
-    - repl: '\g<srctok>\npassword required pam_pwhistory.so remember=5'
-  {%- endif %}
+    - name: '{{ pwhistory_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG IDs RHEL-08-020220 and RHEL-08-020221
+        remember = {{ pwhistory_retry }}
+    - pattern: '^(#|)\s*(retry)(\s*=\s*).*'
+    - repl: '\g<2>\g<3>{{ pwhistory_retry }}'
+    - require:
+      - cmd: 'Enable pam_pwhistory module in PAM'
 {%- endif %}
 
