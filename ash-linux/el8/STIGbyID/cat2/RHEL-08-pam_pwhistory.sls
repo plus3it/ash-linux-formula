@@ -18,7 +18,7 @@
 #   NIST SP 800-53 Revision 4 :: IA-5 (1) (e)
 #
 ###########################################################################
-{%- set stig_id = 'RHEL-08-020220' %}
+{%- set stig_id = 'RHEL-08-pam_pwhistory' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set pwhistory_cfg_file = '/etc/security/pwhistory.conf' %}
@@ -37,20 +37,20 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-Update PAM and AuthSelect:
+Update PAM and AuthSelect ({{ stig_id }}):
   pkg.latest:
     - pkgs:
       - pam
       - authselect
 
-Ensure Valid Starting Config:
+Ensure Valid Starting Config ({{ stig_id }}):
   cmd.run:
     - name: 'authselect check'
     - cwd: /root
     - require:
       - pkg: 'Update PAM and AuthSelect'
 
-Enable pam_pwhistory module in PAM:
+Enable pam_pwhistory module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root

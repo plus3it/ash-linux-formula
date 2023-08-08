@@ -20,7 +20,7 @@ include:
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-020041
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-020090
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-020180
-  - ash-linux.el8.STIGbyID.cat2.RHEL-08-020220
+  - ash-linux.el8.STIGbyID.cat2.RHEL-08-pam_pwhistory
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-020231
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-030740
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040090
