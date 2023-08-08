@@ -50,6 +50,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set faillock_cfg_file = '/etc/security/faillock.conf' %}
 {%- set faillock_deny_count = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_deny_count', 3) %}
+{%- set faillock_fail_interval = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_fail_interval', 900) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -84,6 +85,7 @@ Enable pam_faillock module in PAM ({{ stig_id }}):
     - require:
       - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
 
+# STIG ID RHEL-08-020011
 Set pam_faillock deny-count to {{ faillock_deny_count }}:
   file.replace:
     - name: '{{ faillock_cfg_file }}'
@@ -94,6 +96,20 @@ Set pam_faillock deny-count to {{ faillock_deny_count }}:
         deny = {{ faillock_deny_count }}
     - pattern: '^(#|)\s*(deny)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ faillock_deny_count }}'
+    - require:
+      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+
+# STIG ID RHEL-08-020013
+Set pam_faillock fail_interval to {{ faillock_fail_interval }}:
+  file.replace:
+    - name: '{{ faillock_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG ID RHEL-08-020013
+        fail_interval = {{ faillock_fail_interval }}
+    - pattern: '^(#|)\s*(deny)(\s*=\s*).*'
+    - repl: '\g<2>\g<3>{{ faillock_fail_interval }}'
     - require:
       - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
 {%- endif %}
