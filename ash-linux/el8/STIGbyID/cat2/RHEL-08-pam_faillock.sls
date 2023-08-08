@@ -52,6 +52,7 @@
 {%- set faillock_deny_count = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_deny_count', 3) %}
 {%- set faillock_fail_interval = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_fail_interval', 900) %}
 {%- set faillock_unlock_time = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_unlock_time', 0) %}
+{%- set faillock_logging_dir = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_logging_dir', '/var/log/faillock') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -168,6 +169,19 @@ Set pam_faillock enable even_deny_root:
         even_deny_root
     - pattern: '^(#|)\s*(even_deny_root).*'
     - repl: '\g<2>'
+    - require:
+      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+
+# STIG ID RHEL-08-030590
+# Set pam_faillock logging dir to {{
+    - name: '{{ faillock_cfg_file }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+
+        # Inserted per STIG ID RHEL-08-030590
+        dir={{ faillock_logging_dir }}
+    - pattern: '^(#\s*|.*)(dir)(\s*=\s*).*$'
+    - repl: '\g<2>\g<3>{{ faillock_logging_dir }}'
     - require:
       - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
 {%- endif %}
