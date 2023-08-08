@@ -47,6 +47,9 @@
 ###########################################################################
 {%- set stig_id = 'RHEL-08-pam_faillock' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set faillock_cfg_file = '/etc/security/faillock.conf' %}
+{%- set faillock_deny_count = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_deny_count', 3) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -54,6 +57,13 @@ script_{{ stig_id }}-describe:
     - cwd: /root
 
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  cmd.run:
+    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
+    - stateful: True
+    - cwd: /root
+{%- else %}
 Update PAM and AuthSelect ({{ stig_id }}):
   pkg.latest:
     - pkgs:
@@ -73,4 +83,4 @@ Enable pam_faillock module in PAM ({{ stig_id }}):
     - cwd: /root
     - require:
       - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
-
+{%- endif %}
