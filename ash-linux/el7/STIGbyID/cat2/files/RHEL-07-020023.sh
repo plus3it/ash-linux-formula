@@ -1,3 +1,4 @@
+#!/bin/sh
 # Ref Doc:    STIG - RHEL 7 v3r11
 # Finding ID: V-250314
 # Rule ID:    SV-250314r877392_rule
