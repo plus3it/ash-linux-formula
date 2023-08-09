@@ -48,14 +48,14 @@ Ensure Valid Starting Config ({{ stig_id }}):
     - name: 'authselect check'
     - cwd: /root
     - require:
-      - pkg: 'Update PAM and AuthSelect'
+      - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
 
 Enable pam_pwhistory module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root
     - require:
-      - cmd: 'Ensure Valid Starting Config'
+      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
 
 Set pam_pwhistory memory to {{ pwhistory_remember }}:
   file.replace:
@@ -68,7 +68,7 @@ Set pam_pwhistory memory to {{ pwhistory_remember }}:
     - pattern: '^(#|)\s*(remember)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ pwhistory_remember }}'
     - require:
-      - cmd: 'Enable pam_pwhistory module in PAM'
+      - cmd: 'Enable pam_pwhistory module in PAM ({{ stig_id }})'
 
 Set pam_pwhistory retry to {{ pwhistory_retry }}:
   file.replace:
@@ -81,6 +81,6 @@ Set pam_pwhistory retry to {{ pwhistory_retry }}:
     - pattern: '^(#|)\s*(retry)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ pwhistory_retry }}'
     - require:
-      - cmd: 'Enable pam_pwhistory module in PAM'
+      - cmd: 'Enable pam_pwhistory module in PAM ({{ stig_id }})'
 {%- endif %}
 
