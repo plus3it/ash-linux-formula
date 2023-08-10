@@ -21,6 +21,7 @@
 {%- set stig_id = 'RHEL-08-pam_pwhistory' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set authselect_profile = salt.pillar.get('ash-linux:lookup:pam_stuff:profile_name', 'sssd-hardened') %}
 {%- set pwhistory_cfg_file = '/etc/security/pwhistory.conf' %}
 {%- set pwhistory_remember = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_remember', 5) %}
 {%- set pwhistory_retry = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_retry', 3) %}
@@ -50,12 +51,32 @@ Ensure Valid Starting Config ({{ stig_id }}):
     - require:
       - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
 
+Create custom authselect profile ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect create-profile {{ authselect_profile }} -b sssd'
+    - cwd: /root
+    - require:
+      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - unless:
+      - 'authselect list | grep -q "{{ authselect_profile }}"'
+
+Select custom authselect profile ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect select custom/{{ authselect_profile }}'
+    - cwd: /root
+    - require:
+      - cmd: 'Create custom authselect profile ({{ stig_id }})'
+    - unless:
+      - 'authselect current | grep -q "{{ authselect_profile }}"'
+
 Enable pam_pwhistory module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root
     - require:
       - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - unless:
+      - 'authselect current | grep -q "with-pwhistory"'
 
 Set pam_pwhistory memory to {{ pwhistory_remember }}:
   file.replace:

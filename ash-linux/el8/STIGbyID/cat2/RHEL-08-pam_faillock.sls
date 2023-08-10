@@ -51,6 +51,7 @@
 {%- set stig_id = 'RHEL-08-pam_faillock' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set authselect_profile = salt.pillar.get('ash-linux:lookup:pam_stuff:profile_name', 'sssd-hardened') %}
 {%- set faillock_cfg_file = '/etc/security/faillock.conf' %}
 {%- set faillock_deny_count = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_deny_count', 3) %}
 {%- set faillock_fail_interval = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_fail_interval', 900) %}
@@ -83,6 +84,24 @@ Ensure Valid Starting Config ({{ stig_id }}):
     - require:
       - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
 
+Create custom authselect profile ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect create-profile {{ authselect_profile }} -b sssd'
+    - cwd: /root
+    - require:
+      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - unless:
+      - 'authselect list | grep -q "{{ authselect_profile }}"'
+
+Select custom authselect profile ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect select custom/{{ authselect_profile }}'
+    - cwd: /root
+    - require:
+      - cmd: 'Create custom authselect profile ({{ stig_id }})'
+    - unless:
+      - 'authselect current | grep -q "{{ authselect_profile }}"'
+
 # STIG IDs RHEL-08-020025 and RHEL-08-020026
 Enable pam_faillock module in PAM ({{ stig_id }}):
   cmd.run:
@@ -90,6 +109,8 @@ Enable pam_faillock module in PAM ({{ stig_id }}):
     - cwd: /root
     - require:
       - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - unless:
+      - 'authselect current | grep -q "with-faillock"'
 
 # STIG ID RHEL-08-020011
 Set pam_faillock deny-count to {{ faillock_deny_count }}:

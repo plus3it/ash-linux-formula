@@ -24,6 +24,7 @@
 {%- set stig_id = 'RHEL-08-no_pam_nullok' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat1/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set authselect_profile = salt.pillar.get('ash-linux:lookup:pam_stuff:profile_name', 'sssd-hardened') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -50,11 +51,32 @@ Ensure Valid Starting Config ({{ stig_id }}):
     - require:
       - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
 
+Create custom authselect profile ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect create-profile {{ authselect_profile }} -b sssd'
+    - cwd: /root
+    - require:
+      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - unless:
+      - 'authselect list | grep -q "{{ authselect_profile }}"'
+
+Select custom authselect profile ({{ stig_id }}):
+  cmd.run:
+    - name: 'authselect select custom/{{ authselect_profile }}'
+    - cwd: /root
+    - require:
+      - cmd: 'Create custom authselect profile ({{ stig_id }})'
+    - unless:
+      - 'authselect current | grep -q "{{ authselect_profile }}"'
+
 Disable nullok module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature without-nullok
     - cwd: /root
     - require:
       - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - unless:
+      - 'authselect current | grep -q "without-nullok"'
+
 {%- endif %}
 
