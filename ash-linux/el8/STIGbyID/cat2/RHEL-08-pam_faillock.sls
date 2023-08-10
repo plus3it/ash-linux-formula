@@ -84,24 +84,6 @@ Ensure Valid Starting Config ({{ stig_id }}):
     - require:
       - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
 
-Create custom authselect profile ({{ stig_id }}):
-  cmd.run:
-    - name: 'authselect create-profile {{ authselect_profile }} -b sssd'
-    - cwd: /root
-    - require:
-      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
-    - unless:
-      - 'authselect list | grep -q "{{ authselect_profile }}"'
-
-Select custom authselect profile ({{ stig_id }}):
-  cmd.run:
-    - name: 'authselect select custom/{{ authselect_profile }}'
-    - cwd: /root
-    - require:
-      - cmd: 'Create custom authselect profile ({{ stig_id }})'
-    - unless:
-      - 'authselect current | grep -q "{{ authselect_profile }}"'
-
 # STIG IDs RHEL-08-020025 and RHEL-08-020026
 Enable pam_faillock module in PAM ({{ stig_id }}):
   cmd.run:
