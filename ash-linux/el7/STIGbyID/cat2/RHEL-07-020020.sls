@@ -21,10 +21,10 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set stig_role = 'user_u' %}
 {%- set regUserGid = 1000 %}
-{%- set admUsers = [] %}
-{%- set stfUsers = [] %}
-{%- set uncUsers = [] %}
-{%- set nulUsers = [] %}
+{%- set admUsers = salt.pillar.get('ash-linux:lookup:sel_confine:adm-users', []) %}
+{%- set stfUsers = salt.pillar.get('ash-linux:lookup:sel_confine:staff-users', []) %}
+{%- set uncUsers = salt.pillar.get('ash-linux:lookup:sel_confine:unconfined-users', []) %}
+{%- set nulUsers = salt.pillar.get('ash-linux:lookup:sel_confine:null-users', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
