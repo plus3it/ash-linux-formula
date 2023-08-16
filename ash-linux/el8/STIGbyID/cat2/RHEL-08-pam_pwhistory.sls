@@ -44,19 +44,12 @@ Update PAM and AuthSelect ({{ stig_id }}):
       - pam
       - authselect
 
-Ensure Valid Starting Config ({{ stig_id }}):
-  cmd.run:
-    - name: 'authselect check'
-    - cwd: /root
-    - require:
-      - pkg: 'Update PAM and AuthSelect ({{ stig_id }})'
-
 Enable pam_pwhistory module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root
-    - require:
-      - cmd: 'Ensure Valid Starting Config ({{ stig_id }})'
+    - onlyif:
+      - 'authselect check'
     - unless:
       - 'authselect current | grep -q "with-pwhistory"'
 
