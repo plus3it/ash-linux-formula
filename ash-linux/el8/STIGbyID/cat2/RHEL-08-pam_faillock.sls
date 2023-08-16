@@ -51,7 +51,6 @@
 {%- set stig_id = 'RHEL-08-pam_faillock' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set authselect_profile = salt.pillar.get('ash-linux:lookup:pam_stuff:profile_name', 'sssd-hardened') %}
 {%- set faillock_cfg_file = '/etc/security/faillock.conf' %}
 {%- set faillock_deny_count = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_deny_count', 3) %}
 {%- set faillock_fail_interval = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_fail_interval', 900) %}
@@ -195,7 +194,7 @@ Set pam_faillock logging dir to {{ faillock_logging_dir }}:
     - not_found_content: |-
 
         # Inserted per STIG ID RHEL-08-030590
-        dir={{ faillock_logging_dir }}
+        dir = {{ faillock_logging_dir }}
     - pattern: '^(#\s*|.*)(dir)(\s*=\s*).*$'
     - repl: '\g<2>\g<3>{{ faillock_logging_dir }}'
     - require:

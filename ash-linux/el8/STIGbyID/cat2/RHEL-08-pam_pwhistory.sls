@@ -21,7 +21,6 @@
 {%- set stig_id = 'RHEL-08-pam_pwhistory' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set authselect_profile = salt.pillar.get('ash-linux:lookup:pam_stuff:profile_name', 'sssd-hardened') %}
 {%- set pwhistory_cfg_file = '/etc/security/pwhistory.conf' %}
 {%- set pwhistory_remember = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_remember', 5) %}
 {%- set pwhistory_retry = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_retry', 3) %}

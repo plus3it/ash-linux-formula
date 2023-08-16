@@ -24,7 +24,6 @@
 {%- set stig_id = 'RHEL-08-no_pam_nullok' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat1/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set authselect_profile = salt.pillar.get('ash-linux:lookup:pam_stuff:profile_name', 'sssd-hardened') %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
