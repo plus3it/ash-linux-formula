@@ -21,10 +21,10 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set stig_role = 'user_u' %}
 {%- set regUserGid = 1000 %}
-{%- set admUsers = salt.pillar.get('ash-linux:lookup:sel_confine:adm-users', []) %}
-{%- set stfUsers = salt.pillar.get('ash-linux:lookup:sel_confine:staff-users', []) %}
-{%- set uncUsers = salt.pillar.get('ash-linux:lookup:sel_confine:unconfined-users', []) %}
-{%- set nulUsers = salt.pillar.get('ash-linux:lookup:sel_confine:null-users', []) %}
+{%- set staffUsers      = salt.pillar.get('ash-linux:lookup:sel_confine:staff_u', []) %}
+{%- set sysadmUsers     = salt.pillar.get('ash-linux:lookup:sel_confine:sysadm_u', []) %}
+{%- set unconfinedUsers = salt.pillar.get('ash-linux:lookup:sel_confine:unconfined_u', []) %}
+{%- set nulUsers = [] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -39,36 +39,27 @@ notify_{{ stig_id }}-skipSet:
     - cwd: /root
 {%- else %}
   {%- for userName in salt.user.list_users() %}
-  {%- set userInfo = salt.user.info(userName) %}
+    {%- set userInfo = salt.user.info(userName) %}
     {%- if userInfo.gid >= regUserGid %}
-      {%- set seUmap =  salt['cmd.shell']('semanage login -ln | awk \'/' + userName + '/{print $2}\'') %}
-      {%- if seUmap == "unconfined_u" %}
-        {%- do uncUsers.append(userName) %}
-      {%- elif seUmap == "staff_u" %}
-        {%- do stfUsers.append(userName) %}
-      {%- elif seUmap == "sysadm_u" %}
-        {%- do admUsers.append(userName) %}
-      {%- elif seUmap == "" %}
-        {%- do nulUsers.append(userName) %}
+
+      {%- if userName in staffUsers %}
+Map {{ userName }} to staff_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s staff_u'
       {%- endif %}
+
+      {%- if userName in sysadmUsers %}
+Map {{ userName }} to sysadm_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s sysadm_u'
+      {%- endif %}
+
+      {%- if userName in unconfinedUsers %}
+Map {{ userName }} to unconfined_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s unconfined_u'
+      {%- endif %}
+
     {%- endif %}
   {%- endfor %}
-
-  {%- if nulUsers %}
-    {%- for nullUser in nulUsers %}
-set_{{ stig_id }}-SELuserRole-{{ nullUser }}:
-  cmd.run:
-    - name: 'semanage login {{ nullUser }} -a -s {{ stig_role }} && echo "Set {{ nullUser }}''s role to {{ stig_role }}"'
-    - cwd: /root
-
-    {%- endfor %}
-  {%- endif %}
-
-  {%- if not salt['cmd.shell']('semanage login -l | awk \'/^__defaul/{ print $2}\'') == stig_role %}
-notify_{{ stig_id }}-baDefault:
-  cmd.run:
-    - name: 'printf "[WARNING] Default SEL login user role-mapping is not\n\t\"{{ stig_role }}\": users created after this state runs will\n\tneed to be explicitly set to STIG-compatible roles."'
-    - cwd: /root
-
-  {%- endif %}
 {%- endif %}
