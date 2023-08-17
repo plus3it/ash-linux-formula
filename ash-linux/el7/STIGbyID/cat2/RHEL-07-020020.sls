@@ -79,4 +79,21 @@ Map {{ userName }} to user_u:
       - 'semanage login -ln | grep "{{ userName }} "'
     {%- endif %}
   {%- endfor %}
+
+Set "__default__" SELinux user-mapping to "user_u":
+  test.show_notification:
+    - text: |
+        This state is currently a NOOP.
+
+        Per {{ stig_id }}, the `__default__` user-mapping *should* be set to
+        `user_u`. However, doing this would cause users that authenticate to the
+        host via many third-party authentication-services to not be able to
+        execute the `sudo` command.  Because the many of the users of this
+        formula are using third-party authentication-services, this handler will
+        not implement the STIG recommended setting.
+
+        For users lgging in via third-party authentication-service, it will be
+        necessary for those users to specify the `-r unconfined_r` and
+        `-t unconfined_t` when invoking `sudo`.
+
 {%- endif %}
