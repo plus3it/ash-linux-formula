@@ -18,13 +18,13 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020020' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set mapped_users = salt.cmd.shell('semanage login -ln').split('\n') %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set stig_role = 'user_u' %}
 {%- set regUserGid = 1000 %}
 {%- set staffUsers      = salt.pillar.get('ash-linux:lookup:sel_confine:staff_u', []) %}
 {%- set sysadmUsers     = salt.pillar.get('ash-linux:lookup:sel_confine:sysadm_u', []) %}
 {%- set unconfinedUsers = salt.pillar.get('ash-linux:lookup:sel_confine:unconfined_u', []) %}
-{%- set nulUsers = [] %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -42,24 +42,41 @@ notify_{{ stig_id }}-skipSet:
     {%- set userInfo = salt.user.info(userName) %}
     {%- if userInfo.gid >= regUserGid %}
 
+# Assign Pillar-specified users to 'staff_u' SEL-role
       {%- if userName in staffUsers %}
 Map {{ userName }} to staff_u:
   cmd.run:
     - name: 'semanage login {{ userName }} -a -s staff_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
       {%- endif %}
 
+# Assign Pillar-specified users to 'sysadm_u' SEL-role
       {%- if userName in sysadmUsers %}
 Map {{ userName }} to sysadm_u:
   cmd.run:
     - name: 'semanage login {{ userName }} -a -s sysadm_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
       {%- endif %}
 
+# Assign Pillar-specified users to 'unconfined_u' SEL-role
       {%- if userName in unconfinedUsers %}
 Map {{ userName }} to unconfined_u:
   cmd.run:
     - name: 'semanage login {{ userName }} -a -s unconfined_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
       {%- endif %}
 
+# Assign remaining, non-system users to '{{ stig_role }}' SEL-role
+      {%- if userName + ' ' not in mapped_users %}
+Map {{ userName }} to user_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s {{ stig_role }} && echo "Set {{ userName }}''s role to {{ stig_role }}"'
+      {%- endif %}
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
     {%- endif %}
   {%- endfor %}
 {%- endif %}
