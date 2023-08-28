@@ -22,6 +22,9 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set stig_role = 'user_u' %}
 {%- set regUserGid = 1000 %}
+{%- set guestUsers = salt.pillar.get('ash-linux:lookup:sel_confine:guest_u', []) %}
+{%- set nullUsers = salt.pillar.get('ash-linux:lookup:sel_confine:null_u', []) %}
+{%- set rootUsers = salt.pillar.get('ash-linux:lookup:sel_confine:root_u', []) %}
 {%- set staffUsers      = salt.pillar.get('ash-linux:lookup:sel_confine:staff_u', []) %}
 {%- set sysadmUsers     = salt.pillar.get('ash-linux:lookup:sel_confine:sysadm_u', []) %}
 {%- set unconfinedUsers = salt.pillar.get('ash-linux:lookup:sel_confine:unconfined_u', []) %}
@@ -41,6 +44,33 @@ notify_{{ stig_id }}-skipSet:
   {%- for userName in salt.user.list_users() %}
     {%- set userInfo = salt.user.info(userName) %}
     {%- if userInfo.gid >= regUserGid %}
+
+# Assign Pillar-specified users to 'guest_u' SEL-role
+      {%- if userName in guestUsers %}
+Map {{ userName }} to guest_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s guest_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign Pillar-specified users to 'null_u' SEL-role
+      {%- if userName in nullUsers %}
+Map {{ userName }} to null_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s null_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign Pillar-specified users to 'root_u' SEL-role
+      {%- if userName in rootUsers %}
+Map {{ userName }} to root_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s root_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
 
 # Assign Pillar-specified users to 'staff_u' SEL-role
       {%- if userName in staffUsers %}
