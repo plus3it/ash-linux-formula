@@ -52,13 +52,13 @@
 
        # Users that should get specific confinements other that 'user_u'
 ##     sel_confine:
-##       guest-users:      # Users that should be mapped to the 'guest_u' confinement
-##       root-users:       # Users that should be mapped to the 'root' confinement
-##       staff-users:      # Users that should be mapped to the 'staff_u' confinement
-##       adm-users:        # Users that should be mapped to the 'sysadm_u' confinement
-##       system-users:     # Users that should be mapped to the 'system_u' confinement
-##       unconfined-users: # Users that should be mapped to the 'unconfined_u' confinement
-##       null-users:       # Users that should be not be mapped to a confinement
+##       guest_u:      # Users that should be mapped to the 'guest_u' confinement
+##       root_u:       # Users that should be mapped to the 'root' confinement
+##       staff_u:      # Users that should be mapped to the 'staff_u' confinement
+##       sysadm_u:     # Users that should be mapped to the 'sysadm_u' confinement
+##       system_u:     # Users that should be mapped to the 'system_u' confinement
+##       unconfined_u: # Users that should be mapped to the 'unconfined_u' confinement
+##       null_u:       # Users that should be not be mapped to a confinement
 
 
        # List of accounts that should be banned from deployed systems
