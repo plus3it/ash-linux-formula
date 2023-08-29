@@ -18,13 +18,16 @@
 #################################################################
 {%- set stig_id = 'RHEL-07-020020' %}
 {%- set helperLoc = 'ash-linux/el7/STIGbyID/cat2/files' %}
+{%- set mapped_users = salt.cmd.shell('semanage login -ln').split('\n') %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set stig_role = 'user_u' %}
 {%- set regUserGid = 1000 %}
-{%- set admUsers = [] %}
-{%- set stfUsers = [] %}
-{%- set uncUsers = [] %}
-{%- set nulUsers = [] %}
+{%- set guestUsers = salt.pillar.get('ash-linux:lookup:sel_confine:guest_u', []) %}
+{%- set nullUsers = salt.pillar.get('ash-linux:lookup:sel_confine:null_u', []) %}
+{%- set rootUsers = salt.pillar.get('ash-linux:lookup:sel_confine:root_u', []) %}
+{%- set staffUsers      = salt.pillar.get('ash-linux:lookup:sel_confine:staff_u', []) %}
+{%- set sysadmUsers     = salt.pillar.get('ash-linux:lookup:sel_confine:sysadm_u', []) %}
+{%- set unconfinedUsers = salt.pillar.get('ash-linux:lookup:sel_confine:unconfined_u', []) %}
 
 script_{{ stig_id }}-describe:
   cmd.script:
@@ -39,36 +42,88 @@ notify_{{ stig_id }}-skipSet:
     - cwd: /root
 {%- else %}
   {%- for userName in salt.user.list_users() %}
-  {%- set userInfo = salt.user.info(userName) %}
+    {%- set userInfo = salt.user.info(userName) %}
     {%- if userInfo.gid >= regUserGid %}
-      {%- set seUmap =  salt['cmd.shell']('semanage login -ln | awk \'/' + userName + '/{print $2}\'') %}
-      {%- if seUmap == "unconfined_u" %}
-        {%- do uncUsers.append(userName) %}
-      {%- elif seUmap == "staff_u" %}
-        {%- do stfUsers.append(userName) %}
-      {%- elif seUmap == "sysadm_u" %}
-        {%- do admUsers.append(userName) %}
-      {%- elif seUmap == "" %}
-        {%- do nulUsers.append(userName) %}
+
+# Assign Pillar-specified users to 'guest_u' SEL-role
+      {%- if userName in guestUsers %}
+Map {{ userName }} to guest_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s guest_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
       {%- endif %}
+
+# Assign Pillar-specified users to 'null_u' SEL-role
+      {%- if userName in nullUsers %}
+Map {{ userName }} to null_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s null_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign Pillar-specified users to 'root_u' SEL-role
+      {%- if userName in rootUsers %}
+Map {{ userName }} to root_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s root_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign Pillar-specified users to 'staff_u' SEL-role
+      {%- if userName in staffUsers %}
+Map {{ userName }} to staff_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s staff_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign Pillar-specified users to 'sysadm_u' SEL-role
+      {%- if userName in sysadmUsers %}
+Map {{ userName }} to sysadm_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s sysadm_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign Pillar-specified users to 'unconfined_u' SEL-role
+      {%- if userName in unconfinedUsers %}
+Map {{ userName }} to unconfined_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s unconfined_u'
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
+      {%- endif %}
+
+# Assign remaining, non-system users to '{{ stig_role }}' SEL-role
+      {%- if userName + ' ' not in mapped_users %}
+Map {{ userName }} to user_u:
+  cmd.run:
+    - name: 'semanage login {{ userName }} -a -s {{ stig_role }} && echo "Set {{ userName }}''s role to {{ stig_role }}"'
+      {%- endif %}
+    - unless:
+      - 'semanage login -ln | grep "{{ userName }} "'
     {%- endif %}
   {%- endfor %}
 
-  {%- if nulUsers %}
-    {%- for nullUser in nulUsers %}
-set_{{ stig_id }}-SELuserRole-{{ nullUser }}:
-  cmd.run:
-    - name: 'semanage login {{ nullUser }} -a -s {{ stig_role }} && echo "Set {{ nullUser }}''s role to {{ stig_role }}"'
-    - cwd: /root
+Set "__default__" SELinux user-mapping to "user_u":
+  test.show_notification:
+    - text: |
+        This state is currently a NOOP.
 
-    {%- endfor %}
-  {%- endif %}
+        Per {{ stig_id }}, the `__default__` user-mapping *should* be set to
+        `user_u`. However, doing this would cause users that authenticate to the
+        host via many third-party authentication-services to not be able to
+        execute the `sudo` command.  Because the many of the users of this
+        formula are using third-party authentication-services, this handler will
+        not implement the STIG recommended setting.
 
-  {%- if not salt['cmd.shell']('semanage login -l | awk \'/^__defaul/{ print $2}\'') == stig_role %}
-notify_{{ stig_id }}-baDefault:
-  cmd.run:
-    - name: 'printf "[WARNING] Default SEL login user role-mapping is not\n\t\"{{ stig_role }}\": users created after this state runs will\n\tneed to be explicitly set to STIG-compatible roles."'
-    - cwd: /root
+        For users lgging in via third-party authentication-service, it will be
+        necessary for those users to specify the `-r unconfined_r` and
+        `-t unconfined_t` when invoking `sudo`.
 
-  {%- endif %}
 {%- endif %}

@@ -48,6 +48,18 @@
        # Action to take if audispd is unable to send logs to a
        # remote collector-host
 ##     audisp-net-fail: <syslog|single|halt>
+#
+
+       # Users that should get specific confinements other that 'user_u'
+##     sel_confine:
+##       guest_u:      # Users that should be mapped to the 'guest_u' confinement
+##       root_u:       # Users that should be mapped to the 'root' confinement
+##       staff_u:      # Users that should be mapped to the 'staff_u' confinement
+##       sysadm_u:     # Users that should be mapped to the 'sysadm_u' confinement
+##       system_u:     # Users that should be mapped to the 'system_u' confinement
+##       unconfined_u: # Users that should be mapped to the 'unconfined_u' confinement
+##       null_u:       # Users that should be not be mapped to a confinement
+
 
        # List of accounts that should be banned from deployed systems
 ##     banned-accts
