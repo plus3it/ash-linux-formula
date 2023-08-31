@@ -18,7 +18,7 @@
 #   NIST SP 800-53 Revision 4 :: IA-5 (1) (e)
 #
 ###########################################################################
-{%- set stig_id = 'RHEL-08-020220' %}
+{%- set stig_id = 'RHEL-08-pam_pwhistory' %}
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set pwhistory_cfg_file = '/etc/security/pwhistory.conf' %}
@@ -37,25 +37,20 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-Update PAM and AuthSelect:
+Update PAM and AuthSelect ({{ stig_id }}):
   pkg.latest:
     - pkgs:
       - pam
       - authselect
 
-Ensure Valid Starting Config:
-  cmd.run:
-    - name: 'authselect check'
-    - cwd: /root
-    - require:
-      - pkg: 'Update PAM and AuthSelect'
-
-Enable pam_pwhistory module in PAM:
+Enable pam_pwhistory module in PAM ({{ stig_id }}):
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root
-    - require:
-      - cmd: 'Ensure Valid Starting Config'
+    - onlyif:
+      - 'authselect check'
+    - unless:
+      - 'authselect current | grep -q "with-pwhistory"'
 
 Set pam_pwhistory memory to {{ pwhistory_remember }}:
   file.replace:
@@ -68,7 +63,7 @@ Set pam_pwhistory memory to {{ pwhistory_remember }}:
     - pattern: '^(#|)\s*(remember)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ pwhistory_remember }}'
     - require:
-      - cmd: 'Enable pam_pwhistory module in PAM'
+      - cmd: 'Enable pam_pwhistory module in PAM ({{ stig_id }})'
 
 Set pam_pwhistory retry to {{ pwhistory_retry }}:
   file.replace:
@@ -81,6 +76,6 @@ Set pam_pwhistory retry to {{ pwhistory_retry }}:
     - pattern: '^(#|)\s*(retry)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ pwhistory_retry }}'
     - require:
-      - cmd: 'Enable pam_pwhistory module in PAM'
+      - cmd: 'Enable pam_pwhistory module in PAM ({{ stig_id }})'
 {%- endif %}
 

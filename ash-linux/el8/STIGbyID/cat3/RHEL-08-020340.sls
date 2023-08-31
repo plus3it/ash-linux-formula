@@ -22,6 +22,9 @@
 {%- set helperLoc = 'ash-linux/el8/STIGbyID/cat3/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/pam.d/postlogin' %}
+{%- if salt.file.is_link(targFile) %}
+  {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
+{%- endif %}
 
 script_{{ stig_id }}-describe:
   cmd.script:

@@ -98,6 +98,14 @@
     ## scap-xccdf:   # Path to scap xccdf.xml file
     ## scap-output:  # Path to directory where scap results will be saved
 
+##     pam_stuff:
+##       faillock_deny_count:    # pam_faillock's "deny" value
+##       faillock_fail_interval: # pam_faillock's "fail_interval" value
+##       faillock_unlock_time:   # pam_faillock's "unlock_time" value
+##       faillock_logging_dir:   # pam_faillock's "dir" value
+##       pwhistory_remember:     # pam_pwhistory's "remember" value
+##       pwhistory_retry:        # pam_pwhistory's "retry" value
+
 
 ##     banner-plain: |
 ##     login-banners:
