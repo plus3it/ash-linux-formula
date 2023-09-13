@@ -43,7 +43,7 @@ Update PAM and AuthSelect ({{ stig_id }}):
       - pam
       - authselect
 
-Enable pam_pwhistory module in PAM ({{ stig_id }}):
+Enable pam_pwhistory module in PAM:
   cmd.run:
     - name: authselect enable-feature with-pwhistory
     - cwd: /root
@@ -63,7 +63,7 @@ Set pam_pwhistory memory to {{ pwhistory_remember }}:
     - pattern: '^(#|)\s*(remember)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ pwhistory_remember }}'
     - require:
-      - cmd: 'Enable pam_pwhistory module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_pwhistory module in PAM'
 
 Set pam_pwhistory retry to {{ pwhistory_retry }}:
   file.replace:
@@ -76,6 +76,6 @@ Set pam_pwhistory retry to {{ pwhistory_retry }}:
     - pattern: '^(#|)\s*(retry)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ pwhistory_retry }}'
     - require:
-      - cmd: 'Enable pam_pwhistory module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_pwhistory module in PAM'
 {%- endif %}
 
