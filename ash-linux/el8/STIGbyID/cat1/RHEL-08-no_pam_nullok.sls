@@ -43,7 +43,7 @@ Update PAM and AuthSelect ({{ stig_id }}):
       - pam
       - authselect
 
-Disable nullok module in PAM ({{ stig_id }}):
+Disable nullok module in PAM:
   cmd.run:
     - name: authselect enable-feature without-nullok
     - cwd: /root

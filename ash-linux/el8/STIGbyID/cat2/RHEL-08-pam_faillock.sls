@@ -77,7 +77,7 @@ Update PAM and AuthSelect ({{ stig_id }}):
       - authselect
 
 # STIG IDs RHEL-08-020025 and RHEL-08-020026
-Enable pam_faillock module in PAM ({{ stig_id }}):
+Enable pam_faillock module in PAM:
   cmd.run:
     - name: authselect enable-feature with-faillock
     - cwd: /root
@@ -98,7 +98,7 @@ Set pam_faillock deny-count to {{ faillock_deny_count }}:
     - pattern: '^(#|)\s*(deny)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ faillock_deny_count }}'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 
 # STIG ID RHEL-08-020013
 Set pam_faillock fail_interval to {{ faillock_fail_interval }}:
@@ -112,7 +112,7 @@ Set pam_faillock fail_interval to {{ faillock_fail_interval }}:
     - pattern: '^(#|)\s*(fail_interval)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ faillock_fail_interval }}'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 
 # STIG ID RHEL-08-020015
 Set pam_faillock unlock_time to {{ faillock_unlock_time }}:
@@ -126,7 +126,7 @@ Set pam_faillock unlock_time to {{ faillock_unlock_time }}:
     - pattern: '^(#|)\s*(unlock_time)(\s*=\s*).*'
     - repl: '\g<2>\g<3>{{ faillock_unlock_time }}'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 
 # STIG ID RHEL-08-020019
 Set pam_faillock enable silent:
@@ -140,7 +140,7 @@ Set pam_faillock enable silent:
     - pattern: '^(#|)\s*(silent).*'
     - repl: '\g<2>'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 
 # STIG ID RHEL-08-020021
 Set pam_faillock enable audit:
@@ -154,7 +154,7 @@ Set pam_faillock enable audit:
     - pattern: '^(#|)\s*(audit).*'
     - repl: '\g<2>'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 
 # STIG ID RHEL-08-020023
 Set pam_faillock enable even_deny_root:
@@ -168,7 +168,7 @@ Set pam_faillock enable even_deny_root:
     - pattern: '^(#|)\s*(even_deny_root).*'
     - repl: '\g<2>'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 
 # STIG ID RHEL-08-020027
 Ensure {{ faillock_logging_dir }} exists:
@@ -178,7 +178,7 @@ Ensure {{ faillock_logging_dir }} exists:
     - makedirs: True
     - mode: '0700'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
     - selinux:
         serange: 's0'
         serole: 'object_r'
@@ -198,5 +198,5 @@ Set pam_faillock logging dir to {{ faillock_logging_dir }}:
     - pattern: '^(#\s*|.*)(dir)(\s*=\s*).*$'
     - repl: '\g<2>\g<3>{{ faillock_logging_dir }}'
     - require:
-      - cmd: 'Enable pam_faillock module in PAM ({{ stig_id }})'
+      - cmd: 'Enable pam_faillock module in PAM'
 {%- endif %}
