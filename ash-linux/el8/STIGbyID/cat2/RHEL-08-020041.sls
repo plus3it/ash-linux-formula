@@ -1,4 +1,4 @@
-# Ref Doc:    STIG - RHEL 8 v1r7
+# Ref Doc:    STIG - RHEL 8 v1r9
 # Finding ID: V-230349
 # STIG ID:    RHEL-08-020041
 # Rule ID:    SV-230349r833388_rule
@@ -43,16 +43,15 @@ file_{{ stig_id }}-{{ profileFile }}:
     - makedirs: True
     - dir_mode: '0755'
     - contents: |-
-        # Check if shell is interactive
-        if [[ $- == *i* ]] && [[ $( rpm --quiet -q tmux )$? -eq 0 ]]
+        # Check if tmux is available
+        if [[ $( rpm -q tmux --quiet )$? -ne 0 ]] || [[ ! -x /usr/bin/tmux ]]
         then
-           parent=$( ps -o ppid= -p $$ )
-           name=$( ps -o comm= -p $parent )
+           return
+        fi
 
-           # Check if controlling-process is target-value
-           case "$name" in
-              sshd|login)
-                 exec tmux
-                 ;;
-           esac
+        # Check if shell is interactive
+        if [ "$PS1" ]; then
+          parent=$(ps -o ppid= -p $$)
+          name=$(ps -o comm= -p $parent)
+          case "$name" in (sshd|login) tmux ;; esac
         fi
