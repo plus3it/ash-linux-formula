@@ -46,7 +46,7 @@ file_{{ stig_id }}-{{ profileFile }}:
         # Check if tmux is available
         if [[ $( rpm -q tmux --quiet )$? -ne 0 ]] || [[ ! -x /usr/bin/tmux ]]
         then
-           exit
+           return
         fi
 
         # Check if shell is interactive
