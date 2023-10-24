@@ -27,6 +27,6 @@ diag_out() {
 
 diag_out "--------------------------------------"
 diag_out "STIG Finding ID: V-230252"
-diag_out "     The OS must allow only DoD-
+diag_out "     The OS must allow only DoD-"
 diag_out "     approved SSH encryption-ciphers"
 diag_out "--------------------------------------"
