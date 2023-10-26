@@ -3,6 +3,7 @@ include:
   - ash-linux.el8.STIGbyID.cat2.OL08-00-010160
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-010161
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-010200
+  - ash-linux.el8.STIGbyID.cat2.RHEL-08-010201
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-010291
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-010490
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-010571
