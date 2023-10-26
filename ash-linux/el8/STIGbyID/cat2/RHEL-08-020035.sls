@@ -51,6 +51,7 @@ Set logind idle-session termination timeout:
 service_{{ stig_id }}-{{ cfgFile }}:
   service.running:
     - name: '{{ svcName }}'
-    - onchanges:
+    - enable: True
+    - watch:
       - file: 'Set logind idle-session termination timeout'
 {%- endif %}
