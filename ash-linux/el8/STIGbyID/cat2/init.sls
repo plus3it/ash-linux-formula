@@ -23,5 +23,6 @@ include:
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040180
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040282
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-040290
+  - ash-linux.el8.STIGbyID.cat2.RHEL-08-040342
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-pam_faillock
   - ash-linux.el8.STIGbyID.cat2.RHEL-08-pam_pwhistory
