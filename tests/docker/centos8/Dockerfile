@@ -1,4 +1,4 @@
-FROM quay.io/centos/centos:stream8@sha256:56526f21cd244b2324e19559d732413b3c481d9c8d4e5bf86eb42583132aea55
+FROM quay.io/centos/centos:stream8@sha256:5917fa6bdbced823c488264ba03f1cfab852c15b5e47714fc8c9a074adc7cfdd
 
 
 CMD ["/bin/bash"]
