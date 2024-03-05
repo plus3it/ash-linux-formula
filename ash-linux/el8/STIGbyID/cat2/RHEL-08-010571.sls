@@ -43,4 +43,5 @@ file_{{ stig_id }}-{{ targMnt }}:
     - dir_mode: '0755'
     - contents: |-
         [Mount]
-        Options=mode=1777,strictatime,{{ mntOpt|join(",") }}
+        Options=strictatime,{{ mntOpt|join(",") }}
+        DirectoryMode=0700
