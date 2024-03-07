@@ -18,7 +18,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-040090' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set firewalldConf = '/etc/firewalld/firewalld.conf' %}
 {%- set firewalldParm = 'DefaultZone' %}

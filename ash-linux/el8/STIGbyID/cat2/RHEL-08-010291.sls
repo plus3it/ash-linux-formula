@@ -19,7 +19,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-010291' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/crypto-policies/back-ends/opensshserver.config' %}
 {%- set fixOpts = [

@@ -18,7 +18,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-08-040123' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set optionsFile ='/etc/systemd/system/tmp.mount.d/options.conf' %}
 {%- set mntOpt = [
   'nosuid',

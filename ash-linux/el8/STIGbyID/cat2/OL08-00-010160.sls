@@ -20,7 +20,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'OL08-00-010160' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/pam.d/password-auth' %}
 
