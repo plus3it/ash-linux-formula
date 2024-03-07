@@ -4,7 +4,7 @@
 #
 #################################################################
 {%- set stig_id = 'VendorSTIG-top' %}
-{%- set helperLoc = 'ash-linux-formula/ash-linux/el8/VendorSTIG/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set sudoerFiles = salt.file.find('/etc/sudoers.d', maxdepth=1, type='f') %}
 {%- if salt.grains.get('os')|lower == 'redhat' %}
   {%- set dsos = 'rhel' %}
