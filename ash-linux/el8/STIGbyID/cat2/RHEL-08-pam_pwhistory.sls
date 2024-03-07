@@ -19,7 +19,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-pam_pwhistory' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set pwhistory_cfg_file = '/etc/security/pwhistory.conf' %}
 {%- set pwhistory_remember = salt.pillar.get('ash-linux:lookup:pam_stuff:pwhistory_remember', 5) %}

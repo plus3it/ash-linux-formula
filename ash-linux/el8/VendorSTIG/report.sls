@@ -4,7 +4,7 @@
 #
 #################################################################
 {%- set stig_id = 'VendorSTIG-top' %}
-{%- set helperLoc = 'ash-linux-formula/ash-linux/el8/VendorSTIG/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set repDir = salt.pillar.get('ash-linux:lookup:scap-output') | default(
     '/var/tmp',
     true

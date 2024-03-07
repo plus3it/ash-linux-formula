@@ -49,7 +49,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-pam_faillock' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set faillock_cfg_file = '/etc/security/faillock.conf' %}
 {%- set faillock_deny_count = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_deny_count', 3) %}

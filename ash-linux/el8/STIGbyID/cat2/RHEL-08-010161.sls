@@ -19,7 +19,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-010161' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set keytabList = salt.file.find('/etc', maxdepth=1, type='f', name='*.keytab') %}
 

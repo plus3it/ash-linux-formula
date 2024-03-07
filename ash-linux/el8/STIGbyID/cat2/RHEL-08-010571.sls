@@ -20,7 +20,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-010571' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set optionsFile ='/etc/systemd/system/boot.mount.d/options.conf' %}
 {%- set mntOpt = [
   'nosuid',

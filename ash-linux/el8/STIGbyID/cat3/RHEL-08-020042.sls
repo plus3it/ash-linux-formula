@@ -19,7 +19,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-020042' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat3/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/shells' %}
 

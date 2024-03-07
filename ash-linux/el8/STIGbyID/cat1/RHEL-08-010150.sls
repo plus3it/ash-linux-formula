@@ -19,7 +19,7 @@
 #
 #################################################################
 {%- set stig_id = 'RHEL-08-010150' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat1/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
 {%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}

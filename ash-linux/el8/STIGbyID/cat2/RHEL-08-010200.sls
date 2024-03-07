@@ -23,7 +23,7 @@
 #
 ###########################################################################
 {%- set stig_id = 'RHEL-08-010200' %}
-{%- set helperLoc = 'ash-linux/el8/STIGbyID/cat2/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 {%- set svcName = 'sshd' %}
 {%- set cfgFile = '/etc/ssh/sshd_config' %}
 {%- set parmName = 'ClientAliveCountMax' %}

@@ -4,7 +4,7 @@
 #
 #################################################################
 {%- set stig_id = 'VendorSTIG-top' %}
-{%- set helperLoc = 'ash-linux-formula/ash-linux/el8/VendorSTIG/files' %}
+{%- set helperLoc = tpldir ~ '/files' %}
 
 packages_{{ stig_id }}-installed:
   pkg.installed:
