@@ -22,10 +22,26 @@
 {%- set pillProf = salt.pillar.get('ash-linux:lookup:scap-profile', 'common') %}
 {%- set scapProf = 'xccdf_org.ssgproject.content_profile_' ~ pillProf %}
 
+
+install fapolicyd:
+  pkg.installed:
+    - pkgs:
+      - fapolicyd
+
+script_fapolicyd_rule-files:
+  cmd.script:
+    - cwd: /root
+    - require:
+      - pkg: 'install fapolicyd'
+    - source: 'salt://{{ helperLoc }}/fapolicyd_rules-helper.sh'
+    - stateful: True
+
 run_{{ stig_id }}-remediate:
   cmd.run:
     - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} > >(tee /var/log/oscap.log) 2>&1'
     - cwd: '/root'
+    - require:
+      - cmd: 'script_fapolicyd_rule-files'
     - shell: '/bin/bash'
     - success_retcodes:
       - 2
