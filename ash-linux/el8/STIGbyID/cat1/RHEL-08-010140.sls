@@ -51,8 +51,7 @@ user_cfg_exists-{{ stig_id }}:
     - makedirs: True
     - onlyif:
       - [[ -d /sys/firmware/efi/ ]]
-    - unless:
-      - [[ -e {{ grubPassFile }} ]]
+      - [[ ! -e {{ grubPassFile }} ]]
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
