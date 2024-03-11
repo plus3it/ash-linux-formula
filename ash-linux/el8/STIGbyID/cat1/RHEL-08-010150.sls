@@ -66,19 +66,19 @@ user_cfg_content-{{ stig_id }}:
     - require:
       - file: user_cfg_permissions-{{ stig_id }}
 
-grubuser_superDef-{{ grubUserFile }}:
+grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
     - name: '{{ grubUserFile }}'
     - pattern: 'superusers=".*"'
     - repl: 'superusers="{{ grubUser }}"'
 
-grubuser_userSub-{{ grubUserFile }}:
+grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
     - name: '{{ grubUserFile }}'
     - pattern: 'password_pbkdf2 .* \\'
     - repl: 'password_pbkdf2 {{ grubUser }} \\'
 
-regen_grubCfg:
+regen_grubCfg-{{ stig_id }}:
   cmd.run:
     - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg '
     - cwd: /root
