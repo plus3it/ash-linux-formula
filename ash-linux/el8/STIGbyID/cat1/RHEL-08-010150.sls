@@ -46,6 +46,8 @@ user_cfg_permissions-{{ stig_id }}:
     - user: 'root'
     - owner: 'root'
     - mode: '000600'
+    - onlyif:
+      - [[ ! -d /sys/firmware/efi/ ]]
     - replace: false
 
 user_cfg_selLabels-{{ stig_id }}:
