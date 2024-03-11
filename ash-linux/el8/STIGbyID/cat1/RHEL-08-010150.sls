@@ -83,6 +83,6 @@ regen_grubCfg-{{ stig_id }}:
     - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg '
     - cwd: /root
     - require:
-      - file: grubuser_superDef-{{ grubUserFile }}
-      - file: grubuser_userSub-{{ grubUserFile }}
+      - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
+      - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
 {%- endif %}
