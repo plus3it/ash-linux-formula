@@ -43,9 +43,11 @@ notify_{{ stig_id }}-skipSet:
 user_cfg_permissions-{{ stig_id }}:
   file.managed:
     - name: '{{ grubPassFile }}'
+    - makedirs: True
+    - dir_mode: '0700'
+    - create: True
     - user: 'root'
     - owner: 'root'
-    - mode: '000600'
     - onlyif:
       - [[ -d /sys/firmware/efi/ ]]
     - replace: false
@@ -83,6 +85,6 @@ regen_grubCfg-{{ stig_id }}:
     - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg '
     - cwd: /root
     - require:
-      - file: grubuser_superDef-{{ grubUserFile }}
-      - file: grubuser_userSub-{{ grubUserFile }}
+      - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
+      - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
 {%- endif %}
