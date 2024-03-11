@@ -25,7 +25,12 @@
 {%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
 {%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
 {%- set grubUserFile = '/etc/grub.d/01_users' %}
-{%- set grubPassFile = '/boot/efi/EFI/redhat/user.cfg' %}
+{%- if salt.grains.get('os')|lower != 'centos stream' %}
+  {%- set grubPassFile = '/boot/efi/EFI/centos/user.cfg' %}
+{%- else %}
+  {%- set grubPassFile = '/boot/efi/EFI/redhat/user.cfg' %}
+{%- endif %}
+
 {%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
 
 script_{{ stig_id }}-describe:
