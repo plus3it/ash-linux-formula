@@ -49,15 +49,6 @@ user_cfg_exists-{{ stig_id }}:
     - unless:
       - [[ -e {{ grubPassFile }} ]]
 
-user_cfg_selLabels-{{ stig_id }}:
-  cmd.run:
-    - name: 'chcon -u system_u -r object_r -t boot_t {{ grubPassFile }}'
-    - cwd: /root
-    - require:
-      - file: user_cfg_exists-{{ stig_id }}
-    - unless:
-      - '[[ $( ls -lZ /boot/grub2/user.cfg | awk "{ print $5 }" ) =~ "system_u:object_r:boot_t:"* ]]'
-
 user_cfg_content-{{ stig_id }}:
   cmd.run:
     - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubPassFile }}'
