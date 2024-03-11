@@ -40,24 +40,21 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-user_cfg_permissions-{{ stig_id }}:
-  file.managed:
+user_cfg_exists-{{ stig_id }}:
+  file.touch:
     - name: '{{ grubPassFile }}'
     - makedirs: True
-    - dir_mode: '0700'
-    - create: True
-    - user: 'root'
-    - owner: 'root'
     - onlyif:
       - [[ -d /sys/firmware/efi/ ]]
-    - replace: false
+    - unless:
+      - [[ -e {{ grubPassFile }} ]]
 
 user_cfg_selLabels-{{ stig_id }}:
   cmd.run:
     - name: 'chcon -u system_u -r object_r -t boot_t {{ grubPassFile }}'
     - cwd: /root
     - require:
-      - file: user_cfg_permissions-{{ stig_id }}
+      - file: user_cfg_exists-{{ stig_id }}
     - unless:
       - '[[ $( ls -lZ /boot/grub2/user.cfg | awk "{ print $5 }" ) =~ "system_u:object_r:boot_t:"* ]]'
 
@@ -66,7 +63,7 @@ user_cfg_content-{{ stig_id }}:
     - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubPassFile }}'
     - cwd: /root
     - require:
-      - file: user_cfg_permissions-{{ stig_id }}
+      - file: user_cfg_exists-{{ stig_id }}
 
 grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
