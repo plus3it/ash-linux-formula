@@ -6,7 +6,7 @@
 # Finding Level:        high
 #
 # Rule Summary:
-#       RHEL 8 operating systems booted with a BIOS must
+#       RHEL 8 operating systems booted with EFI must
 #       require authentication upon booting into
 #       single-user and maintenance modes
 #
