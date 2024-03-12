@@ -74,7 +74,7 @@ grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}:
 
 regen_grubCfg-{{ stig_id }}:
   cmd.run:
-    - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg '
+    - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg'
     - cwd: /root
     - require:
       - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
