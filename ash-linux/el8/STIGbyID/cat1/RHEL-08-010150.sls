@@ -41,30 +41,24 @@ notify_{{ stig_id }}-skipSet:
     - stateful: True
     - cwd: /root
 {%- else %}
-user_cfg_permissions-{{ stig_id }}:
+user_cfg_content-{{ stig_id }}:
   file.managed:
     - name: '{{ grubPassFile }}'
-    - user: 'root'
-    - owner: 'root'
+    - contents: |-
+        GRUB2_PASSWORD={{ grubEncryptedPass }}
     - mode: '000600'
+    - onchanges_in:
+      - cmd: regen_grubCfg-{{ stig_id }}
     - onlyif:
       - [[ ! -d /sys/firmware/efi/ ]]
+    - owner: 'root'
     - replace: false
     - selinux:
         serange: 's0'
         serole: 'object_r'
         setype: 'boot_t'
         seuser: 'unconfined_u'
-
-user_cfg_content-{{ stig_id }}:
-  file.managed:
-    - name: '{{ grubPassFile }}'
-    - contents: |-
-        GRUB2_PASSWORD={{ grubEncryptedPass }}
-    - onchanges_in:
-      - cmd: regen_grubCfg-{{ stig_id }}
-    - onchanges:
-      - file: user_cfg_permissions-{{ stig_id }}
+    - user: 'root'
 
 grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
