@@ -31,3 +31,5 @@ diag_out "     RHEL 8 must require authenticated"
 diag_out "     user in order to access single-"
 diag_out "     user and maintenance modes"
 diag_out "--------------------------------------"
+
+printf "\nchanged=no comment=''Informational Only''\n"'
