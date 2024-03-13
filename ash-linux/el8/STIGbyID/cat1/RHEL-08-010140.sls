@@ -82,4 +82,19 @@ regen_grubCfg-{{ stig_id }}:
     - onchanges:
        - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
        - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
+    - onchanges_in:
+      - file: fix_perms_grubCfg-{{ stig_id }}
+
+fix_perms_grubCfg-{{ stig_id }}:
+  file.managed:
+    - name: '/boot/grub2/grub.cfg'
+    - mode: '0600'
+    - owner: 'root'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'boot_t'
+        seuser: 'system_u'
+    - user: 'root'
+
 {%- endif %}

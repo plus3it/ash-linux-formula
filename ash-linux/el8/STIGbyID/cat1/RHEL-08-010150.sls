@@ -62,7 +62,7 @@ user_cfg_content-{{ stig_id }}:
     - contents: |-
         GRUB2_PASSWORD={{ grubEncryptedPass }}
     - onchanges_in:
-      - regen_grubCfg-{{ stig_id }}
+      - cmd: regen_grubCfg-{{ stig_id }}
     - onchanges:
       - file: user_cfg_permissions-{{ stig_id }}
 
@@ -85,4 +85,18 @@ regen_grubCfg-{{ stig_id }}:
     - onchanges:
       - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
       - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
+    - onchanges_in:
+      - file: fix_perms_grubCfg-{{ stig_id }}
+
+fix_perms_grubCfg-{{ stig_id }}:
+  file.managed:
+    - name: '/boot/grub2/grub.cfg'
+    - mode: '0600'
+    - owner: 'root'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'boot_t'
+        seuser: 'system_u'
+    - user: 'root'
 {%- endif %}
