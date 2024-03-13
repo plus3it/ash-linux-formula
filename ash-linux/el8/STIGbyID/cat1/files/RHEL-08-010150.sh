@@ -32,4 +32,4 @@ diag_out "     user in order to access single-"
 diag_out "     user and maintenance modes"
 diag_out "--------------------------------------"
 
-printf "\nchanged=no comment=''Informational Only''\n"'
+printf "\nchanged=no comment='Informational Only'\n"
