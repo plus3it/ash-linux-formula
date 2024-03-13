@@ -20,7 +20,8 @@
 #################################################################
 {%- set stig_id = 'RHEL-08-010140' %}
 {%- set helperLoc = tpldir ~ '/files' %}
-{%- from tpldir ~ '/map.jinja' import grub2stuff with context %}
+{%- from tpldir ~ '/grub2_info.jinja' import grubEncryptedPass with context %}
+{%- from tpldir ~ '/grub2_info.jinja' import grubUser with context %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
 {%- set grubUserFile = '/etc/grub.d/01_users' %}
@@ -54,7 +55,7 @@ user_cfg_exists-{{ stig_id }}:
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
-    - name: 'printf "GRUB2_PASSWORD=grub2stuff.grubEncryptedPass }}" > {{ grubPassFile }}'
+    - name: 'printf "GRUB2_PASSWORD={{ grubEncryptedPass }}" > {{ grubPassFile }}'
     - cwd: /root
     - require:
       - file: user_cfg_exists-{{ stig_id }}
@@ -63,13 +64,13 @@ grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
     - name: '{{ grubUserFile }}'
     - pattern: 'superusers=".*"'
-    - repl: 'superusers="{{ grub2stuff.grubUser }}"'
+    - repl: 'superusers="{{ grubUser }}"'
 
 grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
     - name: '{{ grubUserFile }}'
     - pattern: 'password_pbkdf2 .* \\'
-    - repl: 'password_pbkdf2 {{ grub2stuff.grubUser }} \\'
+    - repl: 'password_pbkdf2 {{ grubUser }} \\'
 
 regen_grubCfg-{{ stig_id }}:
   cmd.run:

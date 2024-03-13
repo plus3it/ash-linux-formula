@@ -1,8 +1,3 @@
-{#- Initialize a map of default values #}
-{%- load_yaml as defaults %}
-
-{%- endload %}
-
 {%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
 {%- set grubClearPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
 
