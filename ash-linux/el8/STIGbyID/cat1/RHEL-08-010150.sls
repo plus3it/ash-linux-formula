@@ -62,7 +62,7 @@ user_cfg_content-{{ stig_id }}:
     - cwd: /root
     - onchanges_in:
       - regen_grubCfg-{{ stig_id }}
-    - require:
+    - onchanges:
       - file: user_cfg_permissions-{{ stig_id }}
 
 grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
