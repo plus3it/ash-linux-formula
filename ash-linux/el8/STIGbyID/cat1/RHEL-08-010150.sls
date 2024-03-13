@@ -54,7 +54,7 @@ user_cfg_permissions-{{ stig_id }}:
         serange: 's0'
         serole: 'object_r'
         setype: 'boot_t'
-        seuser: 'system_u'
+        seuser: 'unconfined_u'
 
 user_cfg_content-{{ stig_id }}:
   file.managed:
@@ -97,6 +97,6 @@ fix_perms_grubCfg-{{ stig_id }}:
         serange: 's0'
         serole: 'object_r'
         setype: 'boot_t'
-        seuser: 'system_u'
+        seuser: 'unconfined_u'
     - user: 'root'
 {%- endif %}

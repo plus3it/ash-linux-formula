@@ -94,7 +94,7 @@ fix_perms_grubCfg-{{ stig_id }}:
         serange: 's0'
         serole: 'object_r'
         setype: 'boot_t'
-        seuser: 'system_u'
+        seuser: 'unconfined_u'
     - user: 'root'
 
 {%- endif %}
