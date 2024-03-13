@@ -20,10 +20,9 @@
 #################################################################
 {%- set stig_id = 'RHEL-08-010140' %}
 {%- set helperLoc = tpldir ~ '/files' %}
+{%- from tpldir ~ '/map.jinja' import grub2stuff with context %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
-{%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
-{%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
 {%- set grubUserFile = '/etc/grub.d/01_users' %}
 {%- if salt.grains.get('os')|lower == 'centos stream' %}
   {%- set grubPassFile = '/boot/efi/EFI/centos/user.cfg' %}
@@ -55,7 +54,7 @@ user_cfg_exists-{{ stig_id }}:
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
-    - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubPassFile }}'
+    - name: 'printf "GRUB2_PASSWORD=grub2stuff.grubEncryptedPass }}" > {{ grubPassFile }}'
     - cwd: /root
     - require:
       - file: user_cfg_exists-{{ stig_id }}
@@ -64,13 +63,13 @@ grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
     - name: '{{ grubUserFile }}'
     - pattern: 'superusers=".*"'
-    - repl: 'superusers="{{ grubUser }}"'
+    - repl: 'superusers="{{ grub2stuff.grubUser }}"'
 
 grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
     - name: '{{ grubUserFile }}'
     - pattern: 'password_pbkdf2 .* \\'
-    - repl: 'password_pbkdf2 {{ grubUser }} \\'
+    - repl: 'password_pbkdf2 {{ grub2stuff.grubUser }} \\'
 
 regen_grubCfg-{{ stig_id }}:
   cmd.run:
