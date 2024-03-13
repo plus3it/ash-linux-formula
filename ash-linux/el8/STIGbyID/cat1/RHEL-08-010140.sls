@@ -37,7 +37,7 @@ script_{{ stig_id }}-describe:
   cmd.script:
     - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
     - cwd: /root
-    - statueful: True
+    - stateful: True
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
