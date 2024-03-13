@@ -31,7 +31,6 @@
   {%- set grubPassFile = '/boot/efi/EFI/redhat/user.cfg' %}
 {%- endif %}
 
-{%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
 
 {{ stig_id }}-description:
   test.show_notification:
