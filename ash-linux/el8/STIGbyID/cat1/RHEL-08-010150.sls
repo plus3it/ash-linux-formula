@@ -29,11 +29,15 @@
 {%- set grubPassFile = '/boot/grub2/user.cfg' %}
 {%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-    - stateful: True
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230235
+             RHEL 8 must require authenticated
+             user in order to access single-
+             user and maintenance modes
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
