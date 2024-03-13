@@ -20,9 +20,10 @@
 #################################################################
 {%- set stig_id = 'RHEL-08-010150' %}
 {%- set helperLoc = tpldir ~ '/files' %}
+{%- from tpldir ~ '/grub2_info.jinja' import grubEncryptedPass with context %}
+{%- from tpldir ~ '/grub2_info.jinja' import grubUser with context %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
-{%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
 {%- set grubPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
 {%- set grubUserFile = '/etc/grub.d/01_users' %}
 {%- set grubPassFile = '/boot/grub2/user.cfg' %}
@@ -61,8 +62,10 @@ user_cfg_selLabels-{{ stig_id }}:
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
-    - name: 'printf "GRUB2_PASSWORD=%s\n" "$( printf "{{ grubPass }}\n{{ grubPass }}\n" | {{ grubUtil }} | awk ''/grub.pbkdf/{print $NF}'' )" > {{ grubPassFile }}'
+    - name: 'printf "GRUB2_PASSWORD={{ grubEncryptedPass }})" > {{ grubPassFile }}'
     - cwd: /root
+    - onchanges_in:
+      - regen_grubCfg-{{ stig_id }}
     - require:
       - file: user_cfg_permissions-{{ stig_id }}
 
@@ -82,7 +85,7 @@ regen_grubCfg-{{ stig_id }}:
   cmd.run:
     - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg '
     - cwd: /root
-    - require:
+    - onchanges:
       - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
       - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
 {%- endif %}
