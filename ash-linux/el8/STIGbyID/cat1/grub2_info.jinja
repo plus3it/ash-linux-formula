@@ -1,0 +1,12 @@
+{%- set grubUser = salt.pillar.get('ash-linux:lookup:grub-user', 'grubuser') %}
+{%- set grubClearPass = salt.pillar.get('ash-linux:lookup:grub-passwd', 'AR34llyB4dP4ssw*rd') %}
+
+{%-
+    set grubEncryptedPass = salt.cmd.shell(
+        'printf "%s\n%s\n" "' + grubClearPass + '" "' + grubClearPass + '" |
+        /bin/grub2-mkpasswd-pbkdf2 |
+        grep "hash of" |
+        sed "s/^.* is //"',
+        ignore_retcode=True
+    )
+%}
