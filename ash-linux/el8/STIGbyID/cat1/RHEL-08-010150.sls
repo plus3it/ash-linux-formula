@@ -57,9 +57,10 @@ user_cfg_permissions-{{ stig_id }}:
         seuser: 'system_u'
 
 user_cfg_content-{{ stig_id }}:
-  cmd.run:
-    - name: 'printf "GRUB2_PASSWORD={{ grubEncryptedPass }})" > {{ grubPassFile }}'
-    - cwd: /root
+  file.managed:
+    - name: '{{ grubPassFile }}'
+    - contents: |-
+        GRUB2_PASSWORD={{ grubEncryptedPass }}
     - onchanges_in:
       - regen_grubCfg-{{ stig_id }}
     - onchanges:

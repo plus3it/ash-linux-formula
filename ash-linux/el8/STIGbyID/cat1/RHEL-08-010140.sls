@@ -54,9 +54,10 @@ user_cfg_exists-{{ stig_id }}:
     - unless: {{ grubPassFile }}
 
 user_cfg_content-{{ stig_id }}:
-  cmd.run:
-    - name: 'printf "GRUB2_PASSWORD={{ grubEncryptedPass }}" > {{ grubPassFile }}'
-    - cwd: /root
+  file.managed:
+    - name: '{{ grubPassFile }}'
+    - contents: |-
+        GRUB2_PASSWORD={{ grubEncryptedPass }}
     - onchanges:
       - file: user_cfg_exists-{{ stig_id }}
     - onchanges_in:
