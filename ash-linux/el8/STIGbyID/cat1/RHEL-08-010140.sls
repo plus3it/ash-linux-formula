@@ -50,15 +50,17 @@ user_cfg_exists-{{ stig_id }}:
     - name: '{{ grubPassFile }}'
     - makedirs: True
     - onlyif:
-      - [[ -d /sys/firmware/efi/ ]]
-      - [[ ! -e {{ grubPassFile }} ]]
+      - test -d /sys/firmware/efi/
+    - unless: {{ grubPassFile }}
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
     - name: 'printf "GRUB2_PASSWORD={{ grubEncryptedPass }}" > {{ grubPassFile }}'
     - cwd: /root
-    - require:
+    - onchanges:
       - file: user_cfg_exists-{{ stig_id }}
+    - onchanges_in:
+      - regen_grubCfg-{{ stig_id }}
 
 grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}:
   file.replace:
@@ -76,7 +78,7 @@ regen_grubCfg-{{ stig_id }}:
   cmd.run:
     - name: '/sbin/grub2-mkconfig -o /boot/grub2/grub.cfg'
     - cwd: /root
-    - require:
-      - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
-      - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
+    - onchanges:
+       - file: grubuser_superDef-{{ grubUserFile }}-{{ stig_id }}
+       - file: grubuser_userSub-{{ grubUserFile }}-{{ stig_id }}
 {%- endif %}
