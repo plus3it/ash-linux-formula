@@ -51,10 +51,10 @@ user_cfg_permissions-{{ stig_id }}:
       - [[ ! -d /sys/firmware/efi/ ]]
     - replace: false
     - selinux:
-      - serange: 's0'
-      - seuser: 'system_u'
-      - serole: 'object_r'
-      - setype: 'boot_t'
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'boot_t'
+        seuser: 'system_u'
 
 user_cfg_content-{{ stig_id }}:
   cmd.run:
