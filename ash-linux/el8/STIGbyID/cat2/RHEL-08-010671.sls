@@ -29,10 +29,14 @@
 ] %}
 {%- set sysctlFiles = [ '/etc/sysctl.conf' ] %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230311
+             The OS must disable the
+             kernel.core_pattern setting
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:

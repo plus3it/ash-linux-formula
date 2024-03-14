@@ -28,10 +28,15 @@
 {%- set cfgParm = 'ClientAliveInterval' %}
 {%- set cfgValue = '600' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-244525
+             The OS must terminate all SSH
+             sessions ater 10 minutes of
+             becoming unresponsive
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:

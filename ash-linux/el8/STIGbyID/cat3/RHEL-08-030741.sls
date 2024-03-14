@@ -22,11 +22,14 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/chrony.conf' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-    - stateful: True
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230485
+            The OS must disable the chrony
+            daemon from acting as a server
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:

@@ -23,10 +23,15 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set keytabList = salt.file.find('/etc', maxdepth=1, type='f', name='*.keytab') %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-248543
+             The OS system must prevent system
+             daemons from using Kerberos for
+             authentication
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:

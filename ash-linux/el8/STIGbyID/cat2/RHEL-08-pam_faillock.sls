@@ -57,11 +57,14 @@
 {%- set faillock_unlock_time = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_unlock_time', 0) %}
 {%- set faillock_logging_dir = salt.pillar.get('ash-linux:lookup:pam_stuff:faillock_logging_dir', '/var/log/faillock') %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
-
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: (Multiple)
+             OS must lock user accounts after
+             three failures in fifteen minutes
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:

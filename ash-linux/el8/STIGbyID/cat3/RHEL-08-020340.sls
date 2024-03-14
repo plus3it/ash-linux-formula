@@ -26,10 +26,15 @@
   {%- set targFile = salt.cmd.run('readlink -f ' + targFile) %}
 {%- endif %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230350
+            The OS must display the date and
+            time of the last successful
+            account logon upon logon
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:

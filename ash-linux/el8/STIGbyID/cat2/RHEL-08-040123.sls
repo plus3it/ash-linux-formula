@@ -27,10 +27,14 @@
 ] %}
 {%- set targMnt = '/tmp' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: mount_options_tmp
+           Set nodev, noexec and nosuid mount-
+           options on /tmp to prevent abuses.
+        --------------------------------------
 
 # /tmp owned by systemd...
 file_{{ stig_id }}-{{ targMnt }}:

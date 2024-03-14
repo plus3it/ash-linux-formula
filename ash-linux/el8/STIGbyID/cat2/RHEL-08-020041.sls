@@ -27,11 +27,16 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set profileFile ='/etc/profile.d/tmux.sh' %}
 
-# Log a description of what we're setting
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        -------------------------------------------
+        STIG Finding ID: configure_bashrc_exec_tmux
+           The tmux terminal multiplexer is used to
+           implement automatic session locking. It
+           should be started for every interactive
+           login-shell.
+        -------------------------------------------
 
 # Ensure profile.d file exists
 file_{{ stig_id }}-{{ profileFile }}:

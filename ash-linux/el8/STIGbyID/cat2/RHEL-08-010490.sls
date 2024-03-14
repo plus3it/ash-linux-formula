@@ -21,11 +21,15 @@
 {%- set stig_id = 'RHEL-08-010490' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 
-# Log a description of what we're setting
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------------------
+        STIG Finding ID: file_permissions_sshd_private_key
+           All SSH private host-key files must be set to
+           mode '0600'
+        --------------------------------------------------
+
 
 # Find and iterated all SSH private host-key files
 {%- for host_ssh_key_files in salt.file.find('/etc/ssh', type='f', name='*_key') %}

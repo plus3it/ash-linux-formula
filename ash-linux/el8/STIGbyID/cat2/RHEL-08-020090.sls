@@ -21,3 +21,13 @@
 {%- set stig_id = 'RHEL-08-020090' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230355
+             The OS must map PKI entity to
+             the POSIX user or group account
+             (currently a NO-OP state)
+        --------------------------------------

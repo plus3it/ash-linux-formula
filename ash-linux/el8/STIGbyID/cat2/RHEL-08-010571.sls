@@ -27,10 +27,14 @@
 ] %}
 {%- set targMnt = '/boot' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230300
+             The setuid attribute must be set
+             on the /boot mount-point
+        --------------------------------------
 
 # /boot owned by systemd...
 file_{{ stig_id }}-{{ targMnt }}:

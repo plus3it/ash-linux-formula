@@ -26,10 +26,15 @@
 {%- set firewalldSafePorts = salt.pillar.get('ash-linux:lookup:def_firewall_ports', [] ) %}
 {%- set firewalldSafeSvcs = salt.pillar.get('ash-linux:lookup:def_firewall_services', [ 'ssh', ] ) %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230238
+             The OS activate a host-based
+             firewall service with a default
+             'deny-all' posture
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
