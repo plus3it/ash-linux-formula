@@ -41,10 +41,9 @@
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - stateful: True
-    - cwd: /root
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
   {%- for searchDir in searchDirs %}
     {%- do sysctlFiles.extend(salt.file.find(searchDir, type='f', name='*.conf', grep='kernel\.yama\.ptrace_scope')) %}
