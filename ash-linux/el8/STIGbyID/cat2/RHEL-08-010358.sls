@@ -23,17 +23,20 @@
   'mailx',
 ] %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-256974
+             OS must have mailer software
+             available for notifiers to use
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - stateful: True
-    - cwd: /root
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
 # Ensure necessary mail-related RPMs are installed
 package_{{ stig_id }}-MailRPMs:

@@ -51,17 +51,20 @@
 {%- set defNtpServers = ntpByVendor[salt.grains.get('os')] %}
 {%- set ntpServerList = salt.pillar.get('ash-linux:lookup:ntp-servers', defNtpServers) %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-230484
+             Use server directives when using
+             chronyd for time-synchronization
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - stateful: True
-    - cwd: /root
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
 file_{{ stig_id }}-{{ targFile }}_poolDirectives:
   file.replace:

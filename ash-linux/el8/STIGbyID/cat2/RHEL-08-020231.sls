@@ -23,18 +23,20 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set targFile = '/etc/login.defs' %}
 
-script_{{ stig_id }}-describe:
-  cmd.script:
-    - source: salt://{{ helperLoc }}/{{ stig_id }}.sh
-    - stateful: True
-    - cwd: /root
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |
+        --------------------------------------
+        STIG Finding ID: V-245540
+             Passwords for new users must have
+             a minimum of 15 characters
+        --------------------------------------
 
 {%- if stig_id in skipIt %}
 notify_{{ stig_id }}-skipSet:
-  cmd.run:
-    - name: 'printf "\nchanged=no comment=''Handler for {{ stig_id }} has been selected for skip.''\n"'
-    - stateful: True
-    - cwd: /root
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
 file_{{ stig_id }}-{{ targFile }}_poolDirectives:
   file.replace:
