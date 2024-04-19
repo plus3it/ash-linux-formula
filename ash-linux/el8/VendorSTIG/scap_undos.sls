@@ -7,6 +7,8 @@
 # Undo SCAP's appending of a `*.* @@logcollector` config-token in the
 # rsyslog.conf file
 undo logcollector in /etc/rsyslog.conf:
-  file.comment:
+  file.replace:
     - name: '/etc/rsyslog.conf'
-    - regex: '^(\s*|)\*\.\*\s*@@logcollector'
+    - not_found_content: ''
+    - pattern: '^(\s*|#*\s*|)\*\.\*\s*@*logcollector$'
+    - repl: '# *.* @logcollector'
