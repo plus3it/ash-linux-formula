@@ -11,4 +11,4 @@ undo logcollector in /etc/rsyslog.conf:
     - name: '/etc/rsyslog.conf'
     - not_found_content: ''
     - pattern: '^(\s*|#*\s*|)\*\.\*\s*@*logcollector$'
-    - repl: '# *.* @logcollector'
+    - repl: ''
