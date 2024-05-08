@@ -21,7 +21,7 @@
 {%- set stig_id = 'RHEL-09-255065' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set cfgFile = '/etc/crypto-policies/back-ends/opensshserver.config' %}
+{%- set cfgFile = '/etc/crypto-policies/back-ends/openssh.config' %}
 {%- set fixOpts = [
         'aes256-gcm@openssh.com',
         'chacha20-poly1305@openssh.com',
