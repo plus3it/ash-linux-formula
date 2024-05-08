@@ -1,9 +1,14 @@
-# Due to continued lapses in the release of an official STIG from
-# DISA, # this code-branch will use to run the vendor-provided
-# STIG profiles by way of the `oscap` suite of tests and
-# remediations.
+# Due to hardening "misses" in the releases of official STIGs from
+# DISA, this code-branch will use to run content released through the
+# OSCAP project. Because the OSCAP project's content _can_ "over
+# harden" systems, this code-branch will also run content to undo
+# any such hardening that is proven to be consistently-problematic.
 #
-#################################################################
+# Further, some supplemental hardening-content - to address gaps that
+# do not yet (or will never) have suitable DISA- or OSCAP-provied
+# content - will be located in this code-branch
+#
+######################################################################
 
 include:
   - ash-linux.el8.VendorSTIG.packages
