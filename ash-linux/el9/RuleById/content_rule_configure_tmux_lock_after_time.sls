@@ -22,10 +22,9 @@
 #     - SRG-OS-000031-GPOS-00012
 #
 #################################################################
-{%- set stig_id = 'configure_bashrc_exec_tmux' %}
+{%- set stig_id = 'configure_tmux_lock_after_time' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set profileFile ='/etc/profile.d/tmux.sh' %}
 {%- set lockAfterSec = '900' %}
 {%- set targFile = '/etc/tmux.conf' %}
 
@@ -56,7 +55,7 @@ notify_{{ stig_id }}-skipSet:
         seuser: 'system_u'
     - user: 'root'
 
-{{ targFile }} sets lock-command:
+{{ targFile }} sets lock-after-time:
   file.replace:
     - name: '{{ targFile }}'
     - append_if_not_found: True
