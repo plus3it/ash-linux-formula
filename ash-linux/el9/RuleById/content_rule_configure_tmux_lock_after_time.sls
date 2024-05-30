@@ -62,5 +62,5 @@ notify_{{ stig_id }}-skipSet:
     - pattern: '^(|#)\s*set\s*.*\slock-after-time\s*.*'
     - repl: 'set -g lock-after-time {{ lockAfterSec }}'
     - require:
-      - file: '{{ targFile }} Exists'
+      - file: '{{ targFile }} Exists ({{ stig_id }})'
 {%- endif %}

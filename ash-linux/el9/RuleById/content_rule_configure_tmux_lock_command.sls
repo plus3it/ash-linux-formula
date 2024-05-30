@@ -66,5 +66,5 @@ notify_{{ stig_id }}-skipSet:
     - pattern: '^(|#)\s*set\s*.*\slock-command\s*.*'
     - repl: 'set -g lock-command vlock'
     - require:
-      - file: '{{ targFile }} Exists'
+      - file: '{{ targFile }} Exists ({{ stig_id }})'
 {%- endif %}
