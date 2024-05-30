@@ -72,6 +72,8 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set biosVendor = salt.grains.get('biosvendor', []) %}
+{%- set sudoerFiles = [ '/etc/sudoers' ] %}
+{%- set sudoerFiles = sudoerFiles + salt.file.find('/etc/sudoers.d', maxdepth=1, type='f') %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -98,4 +100,16 @@ Why Skip ({{ stig_id }}) - is {{ biosVendor }}:
         function as designed
         --------------------------------------------------
 {%- else %}
+  {%- for sudoer in sudoerFiles %}
+    {%- if salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
+notify_{{ stig_id}}-{{ sudoer }}:
+  test.show_notification:
+    - text: |
+        --------------------------------------------------
+        WARNING: The {{ sudoer }} file contains an active
+        'NOPASSWD' entry. Sites not using only password-
+        based logins should ignore this warning.
+        --------------------------------------------------
+    {%- endif %}
+  {%- endfor %}
 {%- endif %}
