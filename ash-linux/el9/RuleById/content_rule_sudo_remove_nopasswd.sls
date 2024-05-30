@@ -92,7 +92,7 @@ notify_{{ stig_id }}-skipSet:
 {%- else %}
   {%- for sudoer in sudoerFiles %}
     {%- if sudoer != "/etc/sudoers.d/90-cloud-init-users" and salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
-Nuke NOPASSWD from sudoers ({{ stig_id }}):
+Nuke NOPASSWD from sudoers ({{ stig_id }}) - {{ sudoer }}:
   file.replace:
     - name: '{{ sudoer }}'
     - pattern: '^([a-zA-Z0-9_-][a-zA-Z0-9._-]*)(\s\s*.*)(NOPASSWD:[A-Za-z/_-]*)'
