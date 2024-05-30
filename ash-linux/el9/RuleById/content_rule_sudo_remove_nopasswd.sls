@@ -89,19 +89,9 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
-{%- elif biosVendor == "Amazon EC2" %}
-Why Skip ({{ stig_id }}) - is {{ biosVendor }}:
-  test.show_notification:
-    - text: |
-        --------------------------------------------------
-        SKIPPING: Enabling this control on Amazon EC2s
-        would break the ability of the provisioning-user
-        and/or SSM-user accounts from being able to
-        function as designed
-        --------------------------------------------------
 {%- else %}
   {%- for sudoer in sudoerFiles %}
-    {%- if salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
+    {%- if sudoer != "/etc/sudoers.d/90-cloud-init-users" and salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
 notify_{{ stig_id}}-{{ sudoer }}:
   test.show_notification:
     - text: |
@@ -109,6 +99,16 @@ notify_{{ stig_id}}-{{ sudoer }}:
         WARNING: The {{ sudoer }} file contains an active
         'NOPASSWD' entry. Sites not using only password-
         based logins should ignore this warning.
+        --------------------------------------------------
+    {%- elif sudoer == "/etc/sudoers.d/90-cloud-init-users" and salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
+Why Skip ({{ stig_id }}) - is {{ biosVendor }}:
+  test.show_notification:
+    - text: |
+        --------------------------------------------------
+        SKIPPING: Enabling this control on {{ biosVendor }}
+        could break the ability of the provisioning-user
+        and/or "special" accounts (e.g., the "SSM-user"
+        account) from being able to function as designed
         --------------------------------------------------
     {%- endif %}
   {%- endfor %}
