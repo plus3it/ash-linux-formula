@@ -60,7 +60,7 @@ file_{{ stig_id }}-{{ profileFile }}:
     - group: 'root'
     - makedirs: True
     - mode: '0644'
-      - selinux:
+    - selinux:
         serange: 's0'
         serole: 'object_r'
         setype: 'bin_t'
