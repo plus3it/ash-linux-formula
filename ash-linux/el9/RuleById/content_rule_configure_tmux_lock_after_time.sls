@@ -43,7 +43,7 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-{{ targFile }} Exists:
+{{ targFile }} Exists ({{ stig_id }}):
   file.managed:
     - group: 'root'
     - mode: '0644'
