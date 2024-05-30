@@ -92,14 +92,11 @@ notify_{{ stig_id }}-skipSet:
 {%- else %}
   {%- for sudoer in sudoerFiles %}
     {%- if sudoer != "/etc/sudoers.d/90-cloud-init-users" and salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
-notify_{{ stig_id}}-{{ sudoer }}:
-  test.show_notification:
-    - text: |
-        --------------------------------------------------
-        WARNING: The {{ sudoer }} file contains an active
-        'NOPASSWD' entry. Sites not using only password-
-        based logins should ignore this warning.
-        --------------------------------------------------
+Nuke NOPASSWD from sudoers ({{ stig_id }}):
+  file.replace:
+    - name: '{{ sudoer }}'
+    - pattern: '^([a-zA-Z0-9_-][a-zA-Z0-9._-]*)(\s\s*.*)(NOPASSWD:[A-Za-z/_-]*)'
+    - repl: '# Set per STIG-ID {{ stig_id }}\n\1\2'
     {%- elif sudoer == "/etc/sudoers.d/90-cloud-init-users" and salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
 Why Skip ({{ stig_id }}) - is {{ biosVendor }}:
   test.show_notification:
