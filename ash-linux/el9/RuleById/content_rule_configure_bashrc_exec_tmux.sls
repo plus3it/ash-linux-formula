@@ -43,11 +43,6 @@
 file_{{ stig_id }}-{{ profileFile }}:
   file.managed:
     - name: '{{ profileFile }}'
-    - user: 'root'
-    - group: 'root'
-    - mode: '0644'
-    - makedirs: True
-    - dir_mode: '0755'
     - contents: |-
         # Check if tmux is available
         if [[ $( rpm -q tmux --quiet )$? -ne 0 ]] || [[ ! -x /usr/bin/tmux ]]
@@ -61,3 +56,13 @@ file_{{ stig_id }}-{{ profileFile }}:
           name=$(ps -o comm= -p $parent)
           case "$name" in (sshd|login) tmux ;; esac
         fi
+    - dir_mode: '0755'
+    - group: 'root'
+    - makedirs: True
+    - mode: '0644'
+      - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'bin_t'
+        seuser: 'system_u'
+    - user: 'root'
