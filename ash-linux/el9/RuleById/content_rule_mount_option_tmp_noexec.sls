@@ -181,16 +181,15 @@ Add first mount-option {{ mntOpt }} ({{ stig_id }}):
     - repl: '\1{{ mntOpt }}'
     - require:
       - file: Create Dummy {{ optionsFile }} ({{ stig_id }})
-    - unless:
-      - 'grep -q ^Options=.*noexec {{ optionsFile }}'
 
 Add extra mount-option {{ mntOpt }} ({{ stig_id }}):
   file.replace:
     - name: '{{ optionsFile }}'
-    - pattern: '^(Options=.*)'
+    - pattern: '^(Options=..*)'
     - repl: '\1,{{ mntOpt }}'
     - require:
       - file: Create Dummy {{ optionsFile }} ({{ stig_id }})
     - unless:
-      - 'grep -q ^Options=.*noexec {{ optionsFile }}'
+      - 'grep -q ^Options=.*{{ mntOpt }} {{ optionsFile }}'
+      - file: Add first mount-option {{ mntOpt }} ({{ stig_id }})
 {%- endfor %}
