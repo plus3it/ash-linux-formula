@@ -66,7 +66,7 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
-{%- elif useNtp == 'True' %}
+{%- elif useNtp == True %}
 # Get rid of `pool` directives
 file_{{ stig_id }}-{{ targFile }}_poolDirectives:
   file.replace:
