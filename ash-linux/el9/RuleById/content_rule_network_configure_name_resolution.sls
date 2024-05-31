@@ -52,6 +52,12 @@
              servers configured.
         --------------------------------------
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
+{%- else %}
 # Scanner-notes include the warning:
 #   "This rule doesn't come with a remediation, the IP addresses of local
 #    authoritative name servers need to be added by the administrator."
@@ -63,5 +69,5 @@ Why Skip ({{ stig_id }}):
         there's no good way to determine if
         the client DNS-configuration is
         resiliently-configured or not.
-        --------------------------------------
 
+{%- endif %}

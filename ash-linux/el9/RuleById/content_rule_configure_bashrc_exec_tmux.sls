@@ -39,6 +39,12 @@
            login-shell.
         -------------------------------------------
 
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
+{%- else %}
 # Ensure profile.d file exists
 file_{{ stig_id }}-{{ profileFile }}:
   file.managed:
@@ -66,3 +72,4 @@ file_{{ stig_id }}-{{ profileFile }}:
         setype: 'bin_t'
         seuser: 'system_u'
     - user: 'root'
+{%- endif %}

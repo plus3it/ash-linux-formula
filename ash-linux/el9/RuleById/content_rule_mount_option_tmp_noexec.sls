@@ -139,7 +139,12 @@
            prevent abuses.
         --------------------------------------
 
-
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
+{%- else %}
 # Ensure mount-options directory exists
 Create {{ optionsDir }} ({{ stig_id }}):
   file.directory:
@@ -173,7 +178,7 @@ Create Dummy {{ optionsFile }} ({{ stig_id }}):
     - user: 'root'
 
 # Ensure specified mount-option(s) present
-{%- for mntOpt in mountOptsDefault + mountOptsStig %}
+  {%- for mntOpt in mountOptsDefault + mountOptsStig %}
 Add first mount-option {{ mntOpt }} ({{ stig_id }}):
   file.replace:
     - name: '{{ optionsFile }}'
@@ -192,4 +197,5 @@ Add extra mount-option {{ mntOpt }} ({{ stig_id }}):
     - unless:
       - 'grep -q ^Options=.*{{ mntOpt }} {{ optionsFile }}'
       - file: Add first mount-option {{ mntOpt }} ({{ stig_id }})
-{%- endfor %}
+  {%- endfor %}
+{%- endif %}
