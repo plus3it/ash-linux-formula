@@ -6,7 +6,7 @@
 #       forwarded to a monitored email address.
 #
 # Identifiers:
-#   - CONTENT_RULE_POSTFIX_CLIENT_CONFIGURE_MAIL_ALIAS
+#   - content_rule_postfix_client_configure_mail_alias
 #
 # References:
 #   - ANSSI
