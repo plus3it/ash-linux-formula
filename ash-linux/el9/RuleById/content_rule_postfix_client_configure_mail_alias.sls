@@ -22,7 +22,7 @@
 {%- set stig_id = 'postfix_client_configure_mail_alias' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set rootMailDest = salt.pillar.get('ash-linux:lookup:root-mail-dest', []) %}
+{%- set rootMailDest = salt.pillar.get('ash-linux:lookup:root-mail-dest', '') %}
 {%- set profileFile ='/etc/profile.d/tmux.sh' %}
 {%- set mailAliasFiles = [
   '/etc/aliases',
@@ -42,15 +42,20 @@
 notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
+        -----------------------------------------------------
         Handler for {{ stig_id }} has been selected for skip.
+        -----------------------------------------------------
 {%- else %}
   {%- if rootMailDest %}
     {%- for mailAliasFile in mailAliasFiles %}
-Set root-mail Destination:
+Set root-mail Destination ({{ mailAliasFile }}):
   file.replace:
       - name: '{{ mailAliasFile }}'
-      - pattern: '^([rR][oO][oO][tT]|\"[rR][oO][oO][tT]\")\s*:\s*(.+)$'
+      - append_if_not_found: True
+      - pattern: '^([rR][oO][oO][tT]|\"[rR][oO][oO][tT]\")(\s*:\s*)(.+)$'
       - repl: '\1\2{{ rootMailDest }}'
+      - onlyif:
+        - '[[ -e {{ mailAliasFile }} ]]'
     {%- endfor %}
   {%- else %}
 Why Skip ({{ stig_id }}) - No Declared root-mail Destination:
