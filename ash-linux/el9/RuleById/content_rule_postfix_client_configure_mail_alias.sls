@@ -52,10 +52,14 @@ Set root-mail Destination ({{ mailAliasFile }}):
   file.replace:
       - name: '{{ mailAliasFile }}'
       - append_if_not_found: True
-      - pattern: '^([rR][oO][oO][tT]|\"[rR][oO][oO][tT]\")(\s*:\s*)(.+)$'
-      - repl: '\1\2{{ rootMailDest }}'
+      - not_found_content: |-
+
+        # Inserted per {{ stig_id }}
+        root: {{ rootMailDest }}
       - onlyif:
         - '[[ -e {{ mailAliasFile }} ]]'
+      - pattern: '^([rR][oO][oO][tT]|\"[rR][oO][oO][tT]\")(\s*:\s*)(.+)$'
+      - repl: '\1\2{{ rootMailDest }}'
     {%- endfor %}
   {%- else %}
 Why Skip ({{ stig_id }}) - No Declared root-mail Destination:
