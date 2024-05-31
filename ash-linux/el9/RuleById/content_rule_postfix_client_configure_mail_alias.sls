@@ -53,7 +53,7 @@ Set root-mail Destination:
       - repl: '\1\2{{ rootMailDest }}'
     {%- endfor %}
   {%- else %}
-No Declared root-mail Destination:
+Why Skip ({{ stig_id }}) - No Declared root-mail Destination:
   test.show_notification:
       - text: |
               -------------------------------------------
