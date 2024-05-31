@@ -69,5 +69,5 @@ Why Skip ({{ stig_id }}):
         there's no good way to determine if
         the client DNS-configuration is
         resiliently-configured or not.
-
+        --------------------------------------
 {%- endif %}
