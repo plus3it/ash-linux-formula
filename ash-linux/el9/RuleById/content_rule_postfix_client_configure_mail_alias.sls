@@ -54,8 +54,8 @@ Set root-mail Destination ({{ mailAliasFile }}):
       - append_if_not_found: True
       - not_found_content: |-
 
-        # Inserted per {{ stig_id }}
-        root: {{ rootMailDest }}
+          # Inserted per {{ stig_id }}
+          root\: {{ rootMailDest }}
       - onlyif:
         - '[[ -e {{ mailAliasFile }} ]]'
       - pattern: '^([rR][oO][oO][tT]|\"[rR][oO][oO][tT]\")(\s*:\s*)(.+)$'
