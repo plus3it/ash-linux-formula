@@ -19,7 +19,7 @@
 {%- set stig_id = 'chronyd_server_directive' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set usePublicNtp = salt.pillar.get('ash-linux:lookup:use-public-ntp', 'False') %}
+{%- set useNtp = salt.pillar.get('ash-linux:lookup:use-ntp', 'False') %}
 {%- set targFile = '/etc/chrony.conf' %}
 {%- set serverFile = '/etc/chrony.d/servers.conf' %}
 {%- set ntpByVendor = {
@@ -66,7 +66,7 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
-{%- elif usePublicNtp == 'True' %}
+{%- elif useNtp == 'True' %}
 # Get rid of `pool` directives
 file_{{ stig_id }}-{{ targFile }}_poolDirectives:
   file.replace:
