@@ -117,7 +117,14 @@
 {%- set stig_id = 'mount_option_tmp_noexec' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set mntOpts = [
+{%- set OptsDefaultFile = '/usr/lib/systemd/system/tmp.mount' %}
+{%- set mountOptsDefault = salt.cmd.shell(
+    'grep -h ^Options= ' +
+    OptsDefaultFile +
+    ' | sed "s/Options=//"'
+  ).split(',')
+%}
+{%- set mountOptsStig = [
   'noexec',
 ] %}
 {%- set optionsDir = '/etc/systemd/system/tmp.mount.d' %}
@@ -166,7 +173,7 @@ Create Dummy {{ optionsFile }} ({{ stig_id }}):
     - user: 'root'
 
 # Ensure specified mount-option(s) present
-{%- for mntOpt in mntOpts %}
+{%- for mntOpt in mountOptsDefault + mountOptsStig %}
 Add first mount-option {{ mntOpt }} ({{ stig_id }}):
   file.replace:
     - name: '{{ optionsFile }}'
