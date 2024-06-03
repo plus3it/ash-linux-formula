@@ -28,6 +28,7 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set nicList =  salt.network.interfaces() %}
+{%- set allZones = salt.firewalld.get_zones() %}
 {%- set targZone = salt.pillar.get('ash-linux:lookup:stig-interface-zone', 'drop') %}
 
 {{ stig_id }}-description:
@@ -45,7 +46,24 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-Enable SSHD for all zones:
+  {%- for zone in allZones %}
+Enable SSHD for {{ zone }} zone:
+  module.run:
+    - name: firewalld.add_service
+    - onlyif:
+      - fun: pkg.version
+        args:
+          - firewalld
+    - permanent: True
+    - require_in:
+      - module: Enable SSHD globally
+    - service: ssh
+    - unless:
+      - '[[ $( firewall-cmd --list-services --zone {{ zone }} ) == *"ssh"* ]]'
+    - zone: {{ zone }}
+  {%- endfor %}
+
+Enable SSHD globally:
   module.run:
     - name: firewalld.add_service
     - onlyif:
@@ -57,13 +75,14 @@ Enable SSHD for all zones:
     - unless:
       - '[[ $( firewall-cmd --list-services ) == *"ssh"* ]]'
   {%- for nic in nicList %}
+
     {%- if not nic == 'lo' %}
 Set Zone for {{ nic }}:
   module.run:
     - name: firewalld.add_interface
     - interface: {{ nic }}
     - onlyif:
-      module: Enable SSHD for all zones
+      - module: Enable SSHD globally
     - permanent: True
     - unless:
       - '[[ $( firewall-cmd --get-zone-of-interface {{ nic }} ) == "{{ targZone }}" ]]'
