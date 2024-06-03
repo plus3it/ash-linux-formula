@@ -59,17 +59,13 @@ Enable SSHD for {{ zone }} zone:
       - module: Enable SSHD globally
     - service: ssh
     - unless:
-      - '[[ $( firewall-cmd --list-services --zone {{ zone }} ) == *"ssh"* ]]'
+      - '[[ $( firewall-cmd --list-services --zone {{ zone }} --permanent ) == *"ssh"* ]]'
     - zone: {{ zone }}
   {%- endfor %}
 
 Enable SSHD globally:
   module.run:
     - name: firewalld.add_service
-    - onlyif:
-      - fun: pkg.version
-        args:
-          - firewalld
     - permanent: True
     - service: ssh
     - unless:
