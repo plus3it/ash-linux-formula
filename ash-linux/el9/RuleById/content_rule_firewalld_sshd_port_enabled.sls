@@ -30,6 +30,12 @@
 {%- set nicList =  salt.network.interfaces() %}
 {%- set allZones = salt.firewalld.get_zones() %}
 {%- set targZone = salt.pillar.get('ash-linux:lookup:stig-interface-zone', 'drop') %}
+{%- set nmcliFiles = [
+    '/run/NetworkManager',
+    '/etc/NetworkManager',
+    '/usr/lib/NetworkManager'
+  ]
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -73,6 +79,11 @@ Enable SSHD globally:
 
   {%- for nic in nicList %}
     {%- if not nic == 'lo' %}
+Convert to keyfile format for {{ nic }}:
+  cmd.run:
+    - name: 'nmcli connection migrate'
+    - unless:
+      - grep -q {{ nic }}$ {{ nmcliFiles | join('/system-connections/* ')}}
 Set Zone for {{ nic }}:
   module.run:
     - name: firewalld.add_interface
