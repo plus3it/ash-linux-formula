@@ -70,14 +70,14 @@ Enable SSHD globally:
     - service: ssh
     - unless:
       - '[[ $( firewall-cmd --list-services ) == *"ssh"* ]]'
-  {%- for nic in nicList %}
 
+  {%- for nic in nicList %}
     {%- if not nic == 'lo' %}
 Set Zone for {{ nic }}:
   module.run:
     - name: firewalld.add_interface
     - interface: {{ nic }}
-    - onlyif:
+    - require:
       - module: Enable SSHD globally
     - permanent: True
     - unless:
