@@ -45,17 +45,26 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Enable SSHD for all zones:
+  module.run:
+    - name: firewalld.add_service
+    - onlyif:
+      - fun: pkg.version
+        args:
+          - firewalld
+    - permanent: True
+    - service: ssh
+    - unless:
+      - '[[ $( firewall-cmd --list-services ) == *"ssh"* ]]'
   {%- for nic in nicList %}
     {%- if not nic == 'lo' %}
 Set Zone for {{ nic }}:
   module.run:
     - name: firewalld.add_interface
     - interface: {{ nic }}
-    - permanent: True
     - onlyif:
-      - fun: pkg.version
-        args:
-          - firewalld
+      module: Enable SSHD for all zones
+    - permanent: True
     - unless:
       - '[[ $( firewall-cmd --get-zone-of-interface {{ nic }} ) == "{{ targZone }}" ]]'
     - zone: {{ targZone }}
