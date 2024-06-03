@@ -52,6 +52,33 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+
+#########################
+# NIC-configuration tasks
+#########################
+  {%- for nic in nicList %}
+    {%- if not nic == 'lo' %}
+Convert to keyfile format for {{ nic }}:
+  cmd.run:
+    - name: 'nmcli connection migrate'
+    - unless:
+      - grep -q {{ nic }}$ {{ nmcliFiles | join('/system-connections/* ')}}
+Set Zone for {{ nic }}:
+  module.run:
+    - name: firewalld.add_interface
+    - interface: {{ nic }}
+    - require:
+      - module: Enable SSHD globally
+    - permanent: True
+    - unless:
+      - '[[ $( firewall-cmd --get-zone-of-interface {{ nic }} ) == "{{ targZone }}" ]]'
+    - zone: {{ targZone }}
+    {%- endif %}
+  {%- endfor %}
+
+##########################
+# Zone-configuration tasks
+##########################
   {%- for zone in allZones %}
 Enable SSHD for {{ zone }} zone:
   module.run:
@@ -76,24 +103,4 @@ Enable SSHD globally:
     - service: ssh
     - unless:
       - '[[ $( firewall-cmd --list-services ) == *"ssh"* ]]'
-
-  {%- for nic in nicList %}
-    {%- if not nic == 'lo' %}
-Convert to keyfile format for {{ nic }}:
-  cmd.run:
-    - name: 'nmcli connection migrate'
-    - unless:
-      - grep -q {{ nic }}$ {{ nmcliFiles | join('/system-connections/* ')}}
-Set Zone for {{ nic }}:
-  module.run:
-    - name: firewalld.add_interface
-    - interface: {{ nic }}
-    - require:
-      - module: Enable SSHD globally
-    - permanent: True
-    - unless:
-      - '[[ $( firewall-cmd --get-zone-of-interface {{ nic }} ) == "{{ targZone }}" ]]'
-    - zone: {{ targZone }}
-    {%- endif %}
-  {%- endfor %}
 {%- endif %}
