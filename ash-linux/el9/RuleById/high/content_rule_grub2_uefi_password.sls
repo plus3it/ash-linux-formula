@@ -6,7 +6,7 @@
 #       protection enabled to protect boot-time settings.
 #
 # Identifiers:
-#   - CONTENT_RULE_GRUB2_UEFI_PASSWORD
+#   - content_rule_grub2_uefi_password
 #
 # References:
 #   - ANSSI
