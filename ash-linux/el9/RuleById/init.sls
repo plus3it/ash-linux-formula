@@ -7,6 +7,7 @@ include:
   - ash-linux.el9.RuleById.content_rule_grub2_uefi_password
   - ash-linux.el9.RuleById.content_rule_mount_option_tmp_noexec
   - ash-linux.el9.RuleById.content_rule_network_configure_name_resolution
+  - ash-linux.el9.RuleById.content_rule_no_tmux_in_shells
   - ash-linux.el9.RuleById.content_rule_postfix_client_configure_mail_alias
   - ash-linux.el9.RuleById.content_rule_rsyslog_remote_loghost
   - ash-linux.el9.RuleById.content_rule_sudo_remove_nopasswd
