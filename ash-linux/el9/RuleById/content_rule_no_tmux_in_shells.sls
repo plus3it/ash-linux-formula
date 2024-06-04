@@ -45,8 +45,8 @@ notify_{{ stig_id }}-skipSet:
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
 Ensure tmux not in {{ cfgFile }}:
-  file.line:
+  file.replace:
     - name: '{{ cfgFile }}'
-    - match 'tmux'
-    - mode: delete
+    - pattern: '^.*/tmux\n'
+    - repl: ''
 {%- endif %}
