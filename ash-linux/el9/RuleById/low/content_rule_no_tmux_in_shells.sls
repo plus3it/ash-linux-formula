@@ -1,5 +1,5 @@
 # Rule ID:              content_rule_no_tmux_in_shells
-# Finding Level:        high
+# Finding Level:        low
 #
 # Rule Summary:
 #       The tmux terminal multiplexer is used to implement automatic session
