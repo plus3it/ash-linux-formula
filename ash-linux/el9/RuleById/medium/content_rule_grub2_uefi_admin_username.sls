@@ -141,7 +141,7 @@ notify_{{ stig_id }}-skipSet:
 Set GRUB2 super-user to {{ grubUser }} in {{ grubUserFile }}:
   file.replace:
     - name: '{{ grubUserFile }}'
-    - pattern: '^(|\s*)(set superusers=)\".*\"'
+    - pattern: '^(|\s*)(set superusers)=".*"'
     - repl: '\1\2="{{ grubUser }}"'
 
 Update {{ grubCfg }} as needed:
