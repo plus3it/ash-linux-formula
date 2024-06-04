@@ -118,6 +118,7 @@
 {%- from tplroot ~ '/el9/RuleById/common/grub2_info.jinja' import grubUser with context %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
+{%- set grubCfg = '/boot/grub2/grub.cfg' %}
 {%- set grubUserFile = '/etc/grub.d/01_users' %}
 {%- set grubPassFile = '/boot/grub2/user.cfg' %}
 {%- set grubUtil = '/bin/grub2-mkpasswd-pbkdf2' %}
@@ -143,9 +144,9 @@ Set GRUB2 super-user to {{ grubUser }} in {{ grubUserFile }}:
     - pattern: '^(|\s*)(set superusers=)\".*\"'
     - repl: '\1\2="{{ grubUser }}"'
 
-Update grub.cfg as needed:
+Update {{ grubCfg }} as needed:
   cmd.run:
-    - name: '/sbin/grubby --update-kernel=ALL'
+    - name: '/usr/sbin/grub2-mkconfig -o {{ grubCfg }}'
     - onchanges:
       - file: Set GRUB2 super-user to {{ grubUser }} in {{ grubUserFile }}
 {%- else %}
