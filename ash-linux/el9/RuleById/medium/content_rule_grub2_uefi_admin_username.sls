@@ -112,8 +112,10 @@
 ################################################################################
 {%- set stig_id = 'grub2_uefi_admin_username' %}
 {%- set helperLoc = tpldir ~ '/files' %}
-{%- from tpldir ~ '/grub2_info.jinja' import grubEncryptedPass with context %}
-{%- from tpldir ~ '/grub2_info.jinja' import grubUser with context %}
+{#- Get the `tplroot` from `tpldir` #}
+{%- set tplroot = tpldir.split('/')[0] %}
+{%- from tplroot ~ '/el9/RuleById/common/grub2_info.jinja' import grubEncryptedPass with context %}
+{%- from tplroot ~ '/el9/RuleById/common/grub2_info.jinja' import grubUser with context %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set mustSet = salt.pillar.get('ash-linux:lookup:grub-passwd', '') %}
 {%- set grubUserFile = '/etc/grub.d/01_users' %}
