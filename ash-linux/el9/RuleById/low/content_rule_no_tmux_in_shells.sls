@@ -24,7 +24,7 @@
 #     - SRG-OS-000030-GPOS-00011
 #
 #################################################################
-{%- set stig_id = 'content_rule_no_tmux_in_shells' %}
+{%- set stig_id = 'no_tmux_in_shells' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/shells' %}
