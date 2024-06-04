@@ -151,7 +151,7 @@ user_cfg_content-{{ stig_id }}-present:
     - name: '{{ grubPassFile }}'
     - append_if_not_found: True
     - not_found_content: |-
-        'GRUB2_PASSWORD={{ grubEncryptedPass }}'
+        GRUB2_PASSWORD={{ grubEncryptedPass }}
     - pattern: '^(\s*GRUB2_PASSWORD=).*$'
     - repl: 'GRUB2_PASSWORD={{ grubEncryptedPass }}'
     - require:
