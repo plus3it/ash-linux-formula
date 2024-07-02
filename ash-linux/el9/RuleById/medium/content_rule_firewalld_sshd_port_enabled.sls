@@ -69,8 +69,6 @@ Set Zone for {{ nic }}:
     - interface: {{ nic }}
     - require:
       - module: Enable SSHD globally
-    - require_in:
-      - test: Brake
     - permanent: True
     - unless:
       - '[[ $( firewall-cmd --get-zone-of-interface {{ nic }} ) == "{{ targZone }}" ]]'
@@ -81,10 +79,6 @@ Set Zone for {{ nic }}:
 ##########################
 # Zone-configuration tasks
 ##########################
-Brake:
-  test.show_notification:
-    - text: NO-OP
-
   {%- for zone in allZones %}
 Enable SSHD for {{ zone }} zone:
   module.run:
@@ -96,7 +90,6 @@ Enable SSHD for {{ zone }} zone:
     - permanent: True
     - require_in:
       - module: Enable SSHD globally
-      - test: Brake
     - service: ssh
     - unless:
       - '[[ $( firewall-cmd --list-services --zone {{ zone }} --permanent ) == *"ssh"* ]]'
