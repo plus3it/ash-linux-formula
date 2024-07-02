@@ -91,11 +91,15 @@ notify_{{ stig_id }}-skipSet:
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
   {%- for sudoer in sudoerFiles %}
-    {%- if sudoer != "/etc/sudoers.d/90-cloud-init-users" and
-           sudoer != "/etc/sudoers.d/ssm-agent-users" %}
+    {%- if (
+             sudoer != "/etc/sudoers.d/90-cloud-init-users" and
+             sudoer != "/etc/sudoers.d/ssm-agent-users"
+           ) and
+           salt.file.search(sudoer, '^[a-zA-Z%@].*NOPASSWD') %}
 Nuke NOPASSWD from sudoers ({{ stig_id }}) - {{ sudoer }}:
   file.replace:
     - name: '{{ sudoer }}'
+    - backup: False
     - pattern: '^([a-zA-Z0-9_-][a-zA-Z0-9._-]*)(\s\s*.*)(NOPASSWD:[A-Za-z/_-]*)'
     - repl: '# Set per STIG-ID {{ stig_id }}\n\1\2'
     {%- elif (
