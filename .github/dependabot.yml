@@ -1,14 +1,13 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: docker
-    directory: "/tests/docker/centos7"
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: daily
-    open-pull-requests-limit: 10
+      interval: weekly
+  # Maintain dependencies for root dockerfile
   - package-ecosystem: docker
-    directory: "/tests/docker/centos8"
+    directory: /
     schedule:
-      interval: daily
-    open-pull-requests-limit: 10
+      interval: weekly
 ...
