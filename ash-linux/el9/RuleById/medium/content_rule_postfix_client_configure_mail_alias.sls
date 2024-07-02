@@ -58,7 +58,7 @@ Set root-mail Destination ({{ mailAliasFile }}):
           root\: {{ rootMailDest }}
       - onlyif:
         - '[[ -e {{ mailAliasFile }} ]]'
-      - pattern: '^([rR][oO][oO][tT]|\"[rR][oO][oO][tT]\")(\s*:\s*)(.+)$'
+      - pattern: '^(?i)(\"?root\"?)(\s*:\s*)(.+)$'
       - repl: '\1\2{{ rootMailDest }}'
     {%- endfor %}
   {%- else %}
