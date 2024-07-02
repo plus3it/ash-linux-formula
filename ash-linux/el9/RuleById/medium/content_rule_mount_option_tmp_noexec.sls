@@ -156,8 +156,6 @@ Create {{ optionsDir }} ({{ stig_id }}):
         serole: 'object_r'
         setype: 'systemd_unit_file_t'
         seuser: 'system_u'
-    - unless:
-      - [[ -d {{ optionsDir }} ]]
     - user: 'root'
 
 # Ensure (dummy) mount-options file exists
