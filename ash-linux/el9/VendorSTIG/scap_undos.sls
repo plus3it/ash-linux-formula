@@ -3,6 +3,9 @@
 # generic OSCAP content
 #
 #################################################################
+{%- set sudoerFiles = [ '/etc/sudoers' ] %}
+{%- set sudoerFiles = sudoerFiles + salt.file.find('/etc/sudoers.d', maxdepth=1, type='f') %}
+
 
 # Undo SCAP's appending of a `*.* @@logcollector` config-token in the
 # rsyslog.conf file
