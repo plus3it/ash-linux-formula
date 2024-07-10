@@ -13,13 +13,15 @@
   {%- set dsos = 'rhel' %}
 {%- elif salt.grains.get('os')|lower == 'oel' %}
   {%- set dsos = 'ol' %}
+{%- elif salt.grains.get('os')|lower == 'centos stream' %}
+  {%- set dsos = 'cs' %}
 {%- else %}
   {%- set dsos = salt.grains.get('os')|lower %}
 {%- endif %}
 {%- set osrel = salt.grains.get('osmajorrelease') %}
 {%- set contentDir = '/usr/share/xml/scap/ssg/content' %}
 {%- set cpeXml = salt.pillar.get('ash-linux:lookup:scap-cpe') | default(
-    contentDir ~ '/ssg-rhel8-cpe-dictionary.xml',
+    contentDir ~ '/ssg-rhel9-cpe-dictionary.xml',
     true
 ) %}
 {%- set xccdfXml = salt.pillar.get('ash-linux:lookup:scap-xccdf') | default(

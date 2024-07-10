@@ -10,6 +10,8 @@
   {%- set dsos = 'rhel' %}
 {%- elif salt.grains.get('os')|lower == 'oel' %}
   {%- set dsos = 'ol' %}
+{%- elif salt.grains.get('os')|lower == 'centos stream' %}
+  {%- set dsos = 'cs' %}
 {%- else %}
   {%- set dsos = salt.grains.get('os')|lower %}
 {%- endif %}
