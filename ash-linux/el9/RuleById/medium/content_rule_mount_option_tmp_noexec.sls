@@ -145,12 +145,16 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-# Ensure mount-options directory exists
-Create {{ optionsDir }} ({{ stig_id }}):
-  file.directory:
-    - name: '{{ optionsDir }}'
+Manage {{ optionsFile }} ({{ stig_id }}):
+  file.managed:
+    - name: '{{ optionsFile }}'
+    - contents: |
+        [Mount]
+        Options={{ mountOptsDefault + mountOptsStig | unique | join(',') }}
+    - dir_mode: '0755'
     - group: 'root'
-    - mode: '0700'
+    - makedirs: True
+    - mode: '0644'
     - selinux:
         serange: 's0'
         serole: 'object_r'
@@ -158,42 +162,4 @@ Create {{ optionsDir }} ({{ stig_id }}):
         seuser: 'system_u'
     - user: 'root'
 
-# Ensure (dummy) mount-options file exists
-Create Dummy {{ optionsFile }} ({{ stig_id }}):
-  file.managed:
-    - name: '{{ optionsFile }}'
-    - contents: |-
-        [Mount]
-        Options=
-    - dir_mode: '0755'
-    - group: 'root'
-    - makedirs: True
-    - mode: '0644'
-    - requires:
-      - file: Create {{ optionsDir }} ({{ stig_id }})
-    - unless:
-      - '[[ -f {{ optionsFile }} ]]'
-    - user: 'root'
-
-# Ensure specified mount-option(s) present
-  {%- for mntOpt in mountOptsDefault + mountOptsStig %}
-Add first mount-option {{ mntOpt }} ({{ stig_id }}):
-  file.replace:
-    - name: '{{ optionsFile }}'
-    - pattern: '^(Options=$)'
-    - repl: '\1{{ mntOpt }}'
-    - require:
-      - file: Create Dummy {{ optionsFile }} ({{ stig_id }})
-
-Add extra mount-option {{ mntOpt }} ({{ stig_id }}):
-  file.replace:
-    - name: '{{ optionsFile }}'
-    - pattern: '^(Options=..*)'
-    - repl: '\1,{{ mntOpt }}'
-    - require:
-      - file: Create Dummy {{ optionsFile }} ({{ stig_id }})
-    - unless:
-      - 'grep -q ^Options=.*{{ mntOpt }} {{ optionsFile }}'
-      - file: Add first mount-option {{ mntOpt }} ({{ stig_id }})
-  {%- endfor %}
 {%- endif %}
