@@ -1,5 +1,5 @@
 # This Salt state downloads the tools necessary to scan,
-# remediate and report on the compliance-state of an EL8-based
+# remediate and report on the compliance-state of an EL9-based
 # instance.
 #
 #################################################################
