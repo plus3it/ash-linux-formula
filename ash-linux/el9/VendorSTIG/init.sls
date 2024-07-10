@@ -11,7 +11,7 @@
 ######################################################################
 
 include:
-  - ash-linux.el8.VendorSTIG.packages
-  - ash-linux.el8.VendorSTIG.remediate
-  - ash-linux.el8.VendorSTIG.scap_undos
-  - ash-linux.el8.VendorSTIG.aws_cli_v2
+  - ash-linux.el9.VendorSTIG.packages
+  - ash-linux.el9.VendorSTIG.remediate
+  - ash-linux.el9.VendorSTIG.scap_undos
+  - ash-linux.el9.VendorSTIG.aws_cli_v2
