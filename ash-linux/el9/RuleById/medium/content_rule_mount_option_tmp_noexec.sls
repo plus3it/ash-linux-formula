@@ -129,6 +129,7 @@
 ] %}
 {%- set optionsDir = '/etc/systemd/system/tmp.mount.d' %}
 {%- set optionsFile = optionsDir + '/options.conf' %}
+{%- set combinedOpts = mountOptsDefault + mountOptsStig %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -150,7 +151,7 @@ Manage {{ optionsFile }} ({{ stig_id }}):
     - name: '{{ optionsFile }}'
     - contents: |
         [Mount]
-        Options={{ mountOptsDefault + mountOptsStig | unique | join(',') }}
+        Options={{ combinedOpts | unique | join(',') }}
     - dir_mode: '0755'
     - group: 'root'
     - makedirs: True
