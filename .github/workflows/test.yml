@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         os_version:
-          - 7
           - 8
+          - 9
         salt_state:
           - ash-linux.iavm
           - ash-linux.stig
