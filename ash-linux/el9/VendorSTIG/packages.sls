@@ -1,4 +1,4 @@
-# This Salt state downloads the tools necessary to scan, 
+# This Salt state downloads the tools necessary to scan,
 # remediate and report on the compliance-state of an EL8-based
 # instance.
 #
@@ -11,7 +11,4 @@ packages_{{ stig_id }}-installed:
     - pkgs:
       - openscap
       - openscap-scanner
-{%- if salt.grains.get('os') == 'CentOS' %}
-      - openscap-engine-sce
-{%- endif %}
       - scap-security-guide
