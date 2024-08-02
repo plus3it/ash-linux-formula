@@ -25,7 +25,7 @@
 {%- set stig_id = 'configure_tmux_lock_after_time' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set lockAfterSec = '900' %}
+{%- set lockAfterSec = salt.pillar.get('ash-linux:lookup:tmux-lock-after-time', '900') %}
 {%- set targFile = '/etc/tmux.conf' %}
 
 {{ stig_id }}-description:
