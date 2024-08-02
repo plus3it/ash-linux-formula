@@ -8,7 +8,7 @@
 #
 # Rule Summary:
 #       RHEL 9 must implement DOD-approved encryption ciphers to protect the
-#       confidentiality of SSH client connections.
+#       confidentiality of SSH server connections.
 #
 # References:
 # CCI:
