@@ -149,7 +149,7 @@ def _rollback_fips_disable(installed_fips_pkgs):
     __salt__["cmd.run"]("grubby --update-kernel=ALL --args=fips=1", python_shell=False)
 
 
-def fips_disable():  # pylint: disable=too-many-branches
+def fips_disable():  # pylint: disable=too-many-branches,inconsistent-return-statements
     """
     Disables FIPS on RH/CentOS system.
 
@@ -212,7 +212,7 @@ def fips_disable():  # pylint: disable=too-many-branches
         if "changes" not in ret and "comment" not in ret:
             ret["comment"] = "FIPS mode is already disabled. No changes."
     finally:
-        return ret  # pylint: disable=lost-exception
+        return ret  # pylint: disable=lost-exception,return-in-finally
 
 
 def _rollback_fips_enable():
@@ -231,7 +231,7 @@ def _rollback_fips_enable():
     )
 
 
-def fips_enable():  # pylint: disable=too-many-branches
+def fips_enable():  # pylint: disable=too-many-branches,inconsistent-return-statements
     """
     Enable FIPS on RH/CentOS system.
 
@@ -296,7 +296,7 @@ def fips_enable():  # pylint: disable=too-many-branches
         if "changes" not in ret and "comment" not in ret:
             ret["comment"] = "FIPS mode is already enabled. No changes."
     finally:
-        return ret  # pylint: disable=lost-exception
+        return ret  # pylint: disable=lost-exception,return-in-finally
 
 
 def fips_status():
