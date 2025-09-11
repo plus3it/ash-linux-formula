@@ -115,9 +115,9 @@ Chrony Service ({{ stig_id }}):
   service.running:
     - name: 'chronyd'
     - enable: true
-    - reload: True
+    - reload: false
     - watch:
-        - file: {{ serverFile }}
+      - file: file_{{ stig_id }}-{{ targFile }}-includeFile
 {%- else %}
 Why Skip ({{ stig_id }}) - NTP Servers:
   test.show_notification:
