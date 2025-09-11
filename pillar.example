@@ -6,6 +6,7 @@
 ## ash-linux:
 ##   lookup:
 
+
        # Settings used for configuring syslog service
 ##     rsyslog:
 ##       destination: localhost
@@ -121,6 +122,27 @@
 ##           * The only current recommendation is to limit content to standad ASCII character-set. Alternate character-sets (i.e., UTF8/UNICODE) have not been tested.
 ##
 ##           Beyond that, "go nuts".
-##    
+##
 ##       gconf:  This banner-content overrides the standard, STIG-specified, DoD warning banner content that is bundled with the ASH-linux formula. Note that GDM's `gconf` utility wants banner text specified as a single line of text with any required linefeeds injected as '\n' literals. Beyond that, this override content is not constrained.\n\nBasically, "go nuts".
-##       
+
+##     NTP-related settings
+##     use-ntp: True                       # boolean data-type
+##     ntp-servers:                        # list data-type
+##       - 0.pool.ntp.org                  #   If `use-ntp` is set to `true`, an
+##       - 1.pool.ntp.org                  #   Undeclared or emtpy-list results
+##       - 2.pool.ntp.org                  #   in distribution's default servers
+##       - ...
+##       - 169.254.169.123                 #   AWS NTP service-endpoint IP/recommended value
+##       - time.windows.com                #   Azure Marketplace images' default-value
+##       - metadata.google                 #   Google CLoud Platform recommended value
+##       - metadata.google.internal        #   Google CLoud Platform recommended value
+
+##     SSH configuration-options
+##     ssh:
+##       daemon:                           # Daemon-related settings
+##         allowed_ciphers:                # Ciphers to support: list data-type
+##           - aes256-gcm@openssh.com      #   Listed values are those allowed
+##           - aes256-ctr                  #   in the CY25Q3 STIG-release
+##           - aes128-gcm@openssh.com      #
+##           - aes128-ctr                  #
+##       client:                           # Client-related settings
