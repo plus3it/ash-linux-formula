@@ -51,4 +51,12 @@ Set SSHD Ciphers:
     - name:  '{{ cfgFile }}'
     - pattern: '(^Ciphers\s\s*)(.*$)'
     - repl: '\g<1>{{ fixOpts|join(',') }}'
+
+SSHD Service ({{ stig_id }}):
+  service.running:
+    - name: 'sshd'
+    - enable: true
+    - reload: false
+    - watch:
+        - file: "Set SSHD Ciphers"
 {%- endif %}
