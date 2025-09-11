@@ -110,6 +110,14 @@ file_{{ stig_id }}-{{ targFile }}-includeFile:
         setype: 'etc_t'
         seuser: 'system_u'
     - user: 'root'
+
+Chrony Service ({{ stig_id }}):
+  service.running:
+    - name: 'chronyd'
+    - enable: true
+    - reload: false
+    - watch:
+      - file: file_{{ stig_id }}-{{ targFile }}-includeFile
 {%- else %}
 Why Skip ({{ stig_id }}) - NTP Servers:
   test.show_notification:
