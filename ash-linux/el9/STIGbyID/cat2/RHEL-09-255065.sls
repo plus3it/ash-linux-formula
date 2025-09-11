@@ -22,13 +22,14 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/crypto-policies/back-ends/openssh.config' %}
-{%- set fixOpts = [
+{%- set fixOpts = salt.pillar.get('ash-linux:lookup:ssh:daemon:allowed_ciphers',
+    [
         'aes256-gcm@openssh.com',
-        'chacha20-poly1305@openssh.com',
         'aes256-ctr',
         'aes128-gcm@openssh.com',
         'aes128-ctr'
-] %}
+    ])
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
