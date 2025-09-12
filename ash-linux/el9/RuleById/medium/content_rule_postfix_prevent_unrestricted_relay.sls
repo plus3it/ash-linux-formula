@@ -38,9 +38,9 @@ Set Postfix Allowed Relay Sources:
   file.replace:
     - name:  '{{ cfgFile }}'
     - pattern: '(^smtpd_client_restrictions\s\s*)(.*$)'
-    - repl: '\g<1>= localhost,{{ extraOpts|join(',') }},reject'
+    - repl: '\g<1>= localhost,{{ extraOpts|join(',') }}{%- if extraOpts %},{%- endif %}reject'
 
-SSHD Service ({{ stig_id }}):
+Postfix Service ({{ stig_id }}):
   service.running:
     - name: 'postfix'
     - enable: true
