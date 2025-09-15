@@ -44,8 +44,10 @@ notify_{{ stig_id }}-skipSet:
 Set Postfix Allowed Relay Sources:
   file.replace:
     - name:  '{{ cfgFile }}'
+    - append_if_not_found: true
+    - not_found_content: 'smtpd_client_restrictions = {{ optString }}'
     - pattern: '(^smtpd_client_restrictions\s\s*)(.*$)'
-    - repl: '\g<1>={{ optString }}'
+    - repl: '\g<1>= {{ optString }}'
 
 Postfix Service ({{ stig_id }}):
   service.running:
