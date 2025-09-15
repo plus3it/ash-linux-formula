@@ -147,6 +147,15 @@
 ##           - aes128-ctr                  #
 ##       client:                           # Client-related settings
 
+##     SMTP email alias configuration
+##     mail_aliases:
+##       root: <OFFHOST_EMAIL_ADDRESS>     # This must be defined to a valid
+##                                         # site-address to meet hardening
+##                                         # requirements
+##       user1: <DESTINATION_1>            # Extra aliases that site wants
+##       .....: ........                   # standardized onto...
+##       userN: <DESTINATION_N>            # ...
+
 ##     Postfix configuration-options
 ##     postfix:
 ##       main_cf:                          # Config-changed made to /etc/postfix/main.cf file

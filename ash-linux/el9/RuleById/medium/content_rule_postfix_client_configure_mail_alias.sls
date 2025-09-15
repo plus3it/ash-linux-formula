@@ -22,8 +22,7 @@
 {%- set stig_id = 'postfix_client_configure_mail_alias' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set rootMailDest = salt.pillar.get('ash-linux:lookup:root-mail-dest', '') %}
-{%- set profileFile ='/etc/profile.d/tmux.sh' %}
+{%- set emailUserMap = salt.pillar.get('ash-linux:lookup:mail_aliases', {}) %}
 {%- set mailAliasFiles = [
   '/etc/aliases',
   '/etc/mail/aliases',
@@ -36,6 +35,7 @@
         -------------------------------------------
         Make sure that mails delivered to root user
         are forwarded to a monitored email address.
+        (per: {{ stig_id }})
         -------------------------------------------
 
 {%- if stig_id in skipIt %}
@@ -46,23 +46,32 @@ notify_{{ stig_id }}-skipSet:
         Handler for {{ stig_id }} has been selected for skip.
         -----------------------------------------------------
 {%- else %}
-  {%- if rootMailDest %}
-    {%- for mailAliasFile in mailAliasFiles %}
-Set root-mail Destination ({{ mailAliasFile }}):
-  file.replace:
-      - name: '{{ mailAliasFile }}'
-      - append_if_not_found: True
-      - not_found_content: |-
+  {%- if emailUserMap %}
+    {%- for key,value in emailUserMap.items() %}
+Action Description ({{ key }}):
+  test.show_notification:
+    - text: |
+        -------------------------------------------
+        Forward emails delivered to {{ key }} user
+        to {{ value }}
+        -------------------------------------------
 
-          # Inserted per {{ stig_id }}
-          root\: {{ rootMailDest }}
-      - onlyif:
-        - '[[ -e {{ mailAliasFile }} ]]'
-      - pattern: '^(?i)(\"?root\"?)(\s*:\s*)(.+)$'
-      - repl: '\1\2{{ rootMailDest }}'
+      {%- for mailAliasFile in mailAliasFiles %}
+Set email destinations ({{ key }} in {{ mailAliasFile }}):
+  file.replace:
+    - name: {{ mailAliasFile }}
+    - append_if_not_found: true
+    - not_found_content: |-
+        # Inserted by watchmaker
+        {{ key }}: {{ value }}
+    - onlyif:
+      - '[[ -e {{ mailAliasFile }} ]]'
+    - pattern: '^(|#|#\s*|\s*)({{ key }})(\s*:\s*).*$'
+    - repl: '\2: {{ value }}'
+      {%- endfor %}
     {%- endfor %}
   {%- else %}
-Why Skip ({{ stig_id }}) - No Declared root-mail Destination:
+Why Skip ({{ stig_id }}) - No Declared email Destinations:
   test.show_notification:
       - text: |
               -------------------------------------------
