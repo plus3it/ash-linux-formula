@@ -18,12 +18,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/etc/postfix/main.cf' %}
 {%- set extraOpts = salt.pillar.get('ash-linux:lookup:postfix:main_cf:smtpd_client_restrictions', []) %}
-{%- set optString = 'permit_mynetworks,' + extraOpts|join(',') %}
-{%- if extraOpts %}
-  {% set optString = optString ~ ',' ~ 'reject' %}
-{%- else %}
-  {% set optString = optString ~ 'reject' %}
-{%- endif %}
+{%- set cfgOptList = ['permit_mynetworks'] + extraOpts + ['reject'] %}
 
 
 {{ stig_id }}-description:
@@ -45,9 +40,9 @@ Set Postfix Allowed Relay Sources:
   file.replace:
     - name:  '{{ cfgFile }}'
     - append_if_not_found: true
-    - not_found_content: 'smtpd_client_restrictions = {{ optString }}'
+    - not_found_content: 'smtpd_client_restrictions = {{ cfgOptList|join(',') }}'
     - pattern: '(^smtpd_client_restrictions\s\s*)(.*$)'
-    - repl: '\g<1>= {{ optString }}'
+    - repl: '\g<1>= {{ cfgOptList|join(',') }}'
 
 Postfix Service ({{ stig_id }}):
   service.running:
