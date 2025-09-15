@@ -155,3 +155,13 @@
 ##       user1: <DESTINATION_1>            # Extra aliases that site wants
 ##       .....: ........                   # standardized onto...
 ##       userN: <DESTINATION_N>            # ...
+
+##     Postfix configuration-options
+##     postfix:
+##       main_cf:                          # Config-changed made to /etc/postfix/main.cf file
+##         smtpd_client_restrictions:      # Postfix parameter-name: a list data-type
+##           - ...                         # Any values defined here will be inserted into
+##           - ...                         # the parameter's option-list, between `localhost`
+##           - ...                         # and `reject`
+##           - permit_mynetworks
+##           - check_client_access cidr:/etc/postfix/access
