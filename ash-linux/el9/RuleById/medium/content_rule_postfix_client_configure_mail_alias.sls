@@ -35,6 +35,7 @@
         -------------------------------------------
         Make sure that mails delivered to root user
         are forwarded to a monitored email address.
+        (per: {{ stig_id }})
         -------------------------------------------
 
 {%- if stig_id in skipIt %}
@@ -46,8 +47,16 @@ notify_{{ stig_id }}-skipSet:
         -----------------------------------------------------
 {%- else %}
   {%- if emailUserMap %}
-    {%- for mailAliasFile in mailAliasFiles %}
-      {%- for key,value in emailUserMap.items() %}
+    {%- for key,value in emailUserMap.items() %}
+Action Description ({{ key }}):
+  test.show_notification:
+    - text: |
+        -------------------------------------------
+        Forward emails delivered to {{ key }} user
+        to {{ value }}
+        -------------------------------------------
+
+      {%- for mailAliasFile in mailAliasFiles %}
 Set email destinations ({{ key }} in {{ mailAliasFile }}):
   file.replace:
     - name: {{ mailAliasFile }}
