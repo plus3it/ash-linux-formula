@@ -19,7 +19,10 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile = '/usr/lib/systemd/system/rescue.service' %}
-{%- set fixString = '/bin/sh -c "/sbin/sulogin ; /usr/bin/systemctl --fail --no-block default"' %}
+{%- set fixString = salt.pillar.get('ash-linux:lookup:rescue_shell_protection',
+          '/usr/lib/systemd/systemd-sulogin-shell rescue'
+        )
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
