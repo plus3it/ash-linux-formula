@@ -41,4 +41,19 @@ Require Authentication for Single User Mode:
     - name:  '{{ cfgFile }}'
     - pattern: '(^ExecStart=)(.*$)'
     - repl: '\g<1>-{{ fixString }}'
+
+Reload systemctl daemon ({{ stig_id }}):
+  module.run:
+    - name: service.systemctl_reload
+    - watch:
+      - file: 'Require Authentication for Single User Mode'
+
+Restart Rescue Service ({{ stig_id }}):
+  service.running:
+    - name: 'rescue'
+    - enable: true
+    - reload: false
+    - watch:
+      - module: 'Reload systemctl daemon ({{ stig_id }})'
+
 {%- endif %}
