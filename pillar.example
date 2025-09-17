@@ -165,3 +165,12 @@
 ##           - ...                         # and `reject`
 ##           - permit_mynetworks
 ##           - check_client_access cidr:/etc/postfix/access
+
+##     Systemd rescue-shell password-protection method: the v2r4 STIGs specify
+##       the first value while the Compliance As Code remediation-content for
+##       Ansible specify the latter method. Absent Pillar content, the state
+##       will set the former. In either case, some scanners may erroneously
+##       identify neither as valid
+##     
+##     rescue_shell_protection: '/usr/lib/systemd/systemd-sulogin-shell rescue'
+##     rescue_shell_protection: '/bin/sh -c "/sbin/sulogin ; /usr/bin/systemctl --fail --no-block default"'
