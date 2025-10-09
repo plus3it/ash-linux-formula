@@ -50,7 +50,7 @@ notify_{{ stig_id }}-skipSet:
     {%- do sysctlFiles.extend(salt.file.find(searchDir, type='f', name='*.conf', grep='user\.max_user_namespaces')) %}
   {%- endfor %}
   {% if sysctlFiles|length == 0 %}
-Ensure fapolicyd exception-file exists:
+Ensure syctemctl settings-file exists:
   file.managed:
     - name: '{{ newSysctlFile }}'
     - create: True
