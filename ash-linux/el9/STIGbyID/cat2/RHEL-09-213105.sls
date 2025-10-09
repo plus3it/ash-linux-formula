@@ -29,7 +29,7 @@
   '/usr/local/lib/sysctl.d',
 ] %}
 {%- set newSysctlFile = '/etc/sysctl.d/99-max-user-namespace.conf' %}
-{%- set sysctlFiles = [ '/etc/sysctl.conf' ] %}
+{%- set sysctlFiles = [] %}
 
 {{ stig_id }}-description:
   test.show_notification:
