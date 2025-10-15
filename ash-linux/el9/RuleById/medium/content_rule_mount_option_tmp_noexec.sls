@@ -127,7 +127,7 @@
 {%- set mountOptsStig = [
   'noexec',
 ] %}
-{%- set optionsDir = '/etc/systemd/system/tmp.mount.d' %}
+{%- set optionsDir = '/usr/lib/systemd/system/tmp.mount.d' %}
 {%- set optionsFile = optionsDir + '/options.conf' %}
 {%- set combinedOpts = mountOptsDefault + mountOptsStig %}
 
