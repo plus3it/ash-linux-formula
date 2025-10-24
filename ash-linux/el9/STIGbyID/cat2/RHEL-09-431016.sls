@@ -20,6 +20,7 @@
 {%- set stig_id = 'RHEL-09-431016' %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set biosVendor = salt.grains.get('biosvendor', []) %}
 {%- set sudoerFiles = [ '/etc/sudoers' ] %}
 {%- set sudoerFiles = sudoerFiles + salt.file.find('/etc/sudoers.d', maxdepth=1, type='f') %}
 
@@ -44,15 +45,15 @@ notify_{{ stig_id }}-skipSet:
              sudoerFile != "/etc/sudoers.d/90-cloud-init-users" and
              sudoerFile != "/etc/sudoers.d/ssm-agent-users"
            )  %}
-Ensure users and groups have SEL ROLE and TYPE transition-mappings ({{ stig_id }}) - {{ sudoer }}:
+Ensure users and groups have SEL ROLE and TYPE transition-mappings ({{ stig_id }}) - {{ sudoerFile }}:
   file.replace:
     - name: '{{ sudoerFile }}'
     - append_if_not_found: False
     - backup: False
     - pattern: '^(|%)([a-z0-9_^-]*\s\s*)([A-Z]*=\([A-Za-z]*\)\s\s*)(?!(TYPE|ROLE)=[a-z_]*)([A-Za-z:]*)$'
-    - repl: '%\1\2\3 TYPE=sysadm_t ROLE=sysadm_r \4'
+    - repl: '\1\2\3 TYPE=sysadm_t ROLE=sysadm_r \5'
 
-Ensure users and groups have consistent SEL ROLE and TYPE transition-mappings ({{ stig_id }}) - {{ sudoer }}:
+Ensure users and groups have consistent SEL ROLE and TYPE transition-mappings ({{ stig_id }}) - {{ sudoerFile }}:
   file.replace:
     - name: '{{ sudoerFile }}'
     - append_if_not_found: False
