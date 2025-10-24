@@ -22,6 +22,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set biosVendor = salt.grains.get('biosvendor', []) %}
 {%- set sudoerFiles = [ '/etc/sudoers' ] %}
+{%- set protectedSudoerFiles = salt.pillar.get('ash-linux:lookup:protected-sudoer-files', []) %}
 {%- set sudoerFiles = sudoerFiles + salt.file.find('/etc/sudoers.d', maxdepth=1, type='f') %}
 
 {{ stig_id }}-description:
@@ -43,7 +44,8 @@ notify_{{ stig_id }}-skipSet:
   {%- for sudoerFile in sudoerFiles %}
     {%- if (
              sudoerFile != "/etc/sudoers.d/90-cloud-init-users" and
-             sudoerFile != "/etc/sudoers.d/ssm-agent-users"
+             sudoerFile != "/etc/sudoers.d/ssm-agent-users" and
+             sudoerFile not in protectedSudoerFiles
            )  %}
 Ensure users and groups have SEL ROLE and TYPE transition-mappings ({{ stig_id }}) - {{ sudoerFile }}:
   file.replace:
@@ -63,7 +65,8 @@ Ensure users and groups have consistent SEL ROLE and TYPE transition-mappings ({
 
     {%- elif (
                sudoerFile == "/etc/sudoers.d/90-cloud-init-users" or
-               sudoerFile == "/etc/sudoers.d/ssm-agent-users"
+               sudoerFile == "/etc/sudoers.d/ssm-agent-users" or
+	       sudoerFile in protectedSudoerFiles
              ) %}
 Why Skip ({{ stig_id }}) - {{ sudoerFile }}:
   test.show_notification:
