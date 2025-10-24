@@ -59,7 +59,7 @@ Ensure users and groups have consistent SEL ROLE and TYPE transition-mappings ({
     - append_if_not_found: False
     - backup: False
     - pattern: '^(|%)([a-z0-9_^-]*\s\s*)([A-Z]*=\([a-zA-Z]*\)\s\s*)(TYPE=[a-z]*_t\s\s*)(ROLE=[a-z]*_r\s\s*)([A-Z]*$)'
-    - repl: '\1\2\3\tTYPE=sysadm_t\tROLE=sysadm_r\t\6'
+    - repl: '\1\2\3TYPE=sysadm_t\tROLE=sysadm_r\t\6'
 
     {%- elif (
                sudoerFile == "/etc/sudoers.d/90-cloud-init-users" or
