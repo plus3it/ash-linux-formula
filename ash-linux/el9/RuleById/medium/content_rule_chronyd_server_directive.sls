@@ -117,6 +117,9 @@ Chrony Service ({{ stig_id }}):
     - enable: true
     - reload: false
     - watch:
+      - file: file_{{ stig_id }}-{{ targFile }}_poolDirectives
+      - file: file_{{ stig_id }}-{{ targFile }}_serverDirectives
+      - file: file_{{ stig_id }}-{{ targFile }}-addInclude
       - file: file_{{ stig_id }}-{{ targFile }}-includeFile
 {%- else %}
 Why Skip ({{ stig_id }}) - NTP Servers:
