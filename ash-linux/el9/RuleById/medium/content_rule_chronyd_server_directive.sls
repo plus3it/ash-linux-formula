@@ -82,7 +82,7 @@ file_{{ stig_id }}-{{ targFile }}_serverDirectives:
     - repl: '# \g<srctok>\t# ''server'' entries managed in {{ serverFile }}\n'
 
 # Set `server` references to an included file
-file_{{ stig_id }}-{{ targFile }}-addInclude:
+file_{{ stig_id }}-{{ targFile }}_addInclude:
   file.append:
     - name: {{ targFile }}
     - text: |
@@ -91,7 +91,7 @@ file_{{ stig_id }}-{{ targFile }}-addInclude:
         include {{ serverFile }}
 
 # Populate included-file
-file_{{ stig_id }}-{{ targFile }}-includeFile:
+file_{{ stig_id }}-{{ targFile }}_includeFile:
   file.managed:
     - name: {{ serverFile }}
     - contents: |
@@ -117,7 +117,10 @@ Chrony Service ({{ stig_id }}):
     - enable: true
     - reload: false
     - watch:
-      - file: file_{{ stig_id }}-{{ targFile }}-includeFile
+      - file: file_{{ stig_id }}-{{ targFile }}_poolDirectives
+      - file: file_{{ stig_id }}-{{ targFile }}_serverDirectives
+      - file: file_{{ stig_id }}-{{ targFile }}_addInclude
+      - file: file_{{ stig_id }}-{{ targFile }}_includeFile
 {%- else %}
 Why Skip ({{ stig_id }}) - NTP Servers:
   test.show_notification:
