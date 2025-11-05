@@ -52,7 +52,7 @@ Ensure users and groups have SEL ROLE and TYPE transition-mappings ({{ stig_id }
     - name: '{{ sudoerFile }}'
     - append_if_not_found: False
     - backup: False
-    - pattern: '^(|%)([a-z0-9_^-]*\s\s*)([A-Z]*=\([A-Za-z]*\)\s\s*)(?!(TYPE|ROLE)=[a-z_]*)([A-Za-z]*(|:[A-Za-z]*)$'
+    - pattern: '^(|%)([a-z0-9_^-]*\s\s*)([A-Z]*=\([A-Za-z]*\)\s\s*)(?!(TYPE|ROLE)=[a-z_]*)([A-Za-z]*(|:[A-Za-z]*))$'
     - repl: '\1\2\3 TYPE=sysadm_t ROLE=sysadm_r \5'
 
 Ensure users and groups have consistent SEL ROLE and TYPE transition-mappings ({{ stig_id }}) - {{ sudoerFile }}:
