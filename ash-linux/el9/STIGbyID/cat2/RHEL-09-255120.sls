@@ -54,7 +54,7 @@
 SSHD hostkey-permission - {{ filename }} ({{ stig_id }}):
   file.managed:
     - group: root
-    - mode: '0640'
+    - mode: '0600'
     - name: '{{ host_ssh_key_files }}'
     - selinux:
         serange: 's0'
