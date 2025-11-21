@@ -43,7 +43,7 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set searchDir = '/etc/modprobe.d/' %}
 {%- set modprobeFiles = [] %}
-{%- if salt.file.directory_exists('/etc/modprobe.conf') %}
+{%- if salt.file.file_exists('/etc/modprobe.conf') %}
   {%- do modprobeFiles.extends('/etc/modprobe.conf') %}
 {%- endif %}
 {%- set modprobeFiles = modprobeFiles + salt.file.find(
