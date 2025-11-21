@@ -74,18 +74,28 @@ notify_{{ stig_id }}-skipSet:
   {%- if modprobeFiles %}
     {%- for modprobeFile in modprobeFiles %}
 Disable TIPC kernel module - install as false ({{ modprobeFile }}):
-  file.append:
+  file.replace:
     - name: '{{ modprobeFile }}'
-    - text: 'install tipc /bin/false'
-    - unless:
-      - 'grep -qP "(^|\s\s*)install\s\s*tipc\s\s*/bin/false" {{ modprobeFile }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+      # Set per rule '{{ stig_id }}
+      install tipc /bin/false'
+    - onchanges_in:
+      - service: 'Re-read kernel module-config files (TIPC)'
+    - pattern: '(^(|\s\s*))install\s\s*tipc\s\s*.*'
+    - repl: 'install tipc /bin/false'
 
 Disable TIPC kernel module - blacklist ({{ modprobeFile }}):
-  file.append:
+  file.replace:
     - name: '{{ modprobeFile }}'
-    - text: 'blacklist tipc'
-    - unless:
-      - 'grep -qP "(^|\s\s*)blacklist\s\s*tipc" {{ modprobeFile }}'
+    - append_if_not_found: True
+    - not_found_content: |-
+      # Set per rule '{{ stig_id }}
+      blacklist tipc
+    - onchanges_in:
+      - service: 'Re-read kernel module-config files (TIPC)'
+    - pattern: '(^|\s\s*)blacklist\s\s*tipc'
+    - repl: 'blacklist tipc'
     {%- endfor %}
   {%- else %}
 Disable TIPC kernel module - create-file ({{ tipcFile }}):
@@ -96,6 +106,8 @@ Disable TIPC kernel module - create-file ({{ tipcFile }}):
         blacklist tipc
     - group: 'root'
     - mode: '0600'
+    - onchanges_in:
+      - service: 'Re-read kernel module-config files (TIPC)'
     - selinux:
         serange: 's0'
         serole: 'object_r'
@@ -104,3 +116,9 @@ Disable TIPC kernel module - create-file ({{ tipcFile }}):
     - user: 'root'
   {%- endif %}
 {%- endif %}
+
+Re-read kernel module-config files (TIPC):
+  service.running:
+    - name: systemd-modules-load
+    - enable: true
+    - reload: true
