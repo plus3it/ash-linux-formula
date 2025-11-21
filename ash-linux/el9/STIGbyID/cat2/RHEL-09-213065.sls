@@ -41,22 +41,19 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set modprobeFiles = [
-    '/etc/modprobe.conf'
-  ]
-%}
-{%- if salt.file.directory_exists("/etc/systemd/system/rescue.service.d") %}
-  {%- do modprobeFiles.extend(
-      salt.file.find(
-        searchDir,
-	type='f',
-	name='*.conf',
-	grep='tipc'
-      )
-    )
-  %}
+{%- set searchDir = '/etc/modprobe.d/' %}
+{%- set modprobeFiles = [] %}
+{%- if salt.file.directory_exists('/etc/modprobe.conf') %}
+  {%- do modprobeFiles.extends('/etc/modprobe.conf') %}
 {%- endif %}
-
+{%- set modprobeFiles = modprobeFiles + salt.file.find(
+    searchDir,
+    type='f',
+    name='*.conf',
+    grep='tipc'
+  )
+%}
+{% set tipcFile = '/etc/modprobe.d/tipc.conf'%}
 
 
 {{ stig_id }}-description:
@@ -74,4 +71,36 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+  {%- if modprobeFiles %}
+    {%- for modprobeFile in modprobeFiles %}
+Disable TIPC kernel module - install as false ({{ modprobeFile }}):
+  file.append:
+    - name: '{{ modprobeFile }}'
+    - text: 'install tipc /bin/false'
+    - unless:
+      - 'grep -qP "(^|\s\s*)install\s\s*tipc\s\s*/bin/false" {{ modprobeFile }}'
+
+Disable TIPC kernel module - blacklist ({{ modprobeFile }}):
+  file.append:
+    - name: '{{ modprobeFile }}'
+    - text: 'blacklist tipc'
+    - unless:
+      - 'grep -qP "(^|\s\s*)blacklist\s\s*tipc" {{ modprobeFile }}'
+    {%- endfor %}
+  {%- else %}
+Disable TIPC kernel module - create-file ({{ tipcFile }}):
+  file.managed:
+    - name: '{{ tipcFile }}'
+    - contents: |-
+        install tipc /bin/false
+        blacklist tipc
+    - group: 'root'
+    - mode: '0600'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'modules_conf_t'
+        seuser: 'system_u'
+    - user: 'root'
+  {%- endif %}
 {%- endif %}
