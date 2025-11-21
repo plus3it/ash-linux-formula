@@ -77,7 +77,7 @@ Disable TIPC kernel module - install as false ({{ modprobeFile }}):
   file.replace:
     - name: '{{ modprobeFile }}'
     - append_if_not_found: True
-    - not_found_content: |-
+    - not_found_content: |
         # Set per rule {{ stig_id }}
         install tipc /bin/false
     - onchanges_in:
@@ -89,19 +89,19 @@ Disable TIPC kernel module - blacklist ({{ modprobeFile }}):
   file.replace:
     - name: '{{ modprobeFile }}'
     - append_if_not_found: True
-    - not_found_content: |-
+    - not_found_content: |
         # Set per rule {{ stig_id }}
         blacklist tipc
     - onchanges_in:
       - service: 'Re-read kernel module-config files (TIPC)'
-    - pattern: '(^|\s\s*)blacklist\s\s*tipc'
+    - pattern: '(^(|\s\s*))blacklist\s\s*tipc'
     - repl: 'blacklist tipc'
     {%- endfor %}
   {%- else %}
 Disable TIPC kernel module - create-file ({{ tipcFile }}):
   file.managed:
     - name: '{{ tipcFile }}'
-    - contents: |-
+    - contents: |
         install tipc /bin/false
         blacklist tipc
     - group: 'root'
