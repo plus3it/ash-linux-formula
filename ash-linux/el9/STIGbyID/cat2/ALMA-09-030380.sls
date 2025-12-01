@@ -59,8 +59,7 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- elif osName == 'AlmaLinux' %}
-  {%- if modprobeFiles %}
-    {%- for modprobeFile in modprobeFiles %}
+  {%- for modprobeFile in modprobeFiles if modprobeFiles %}
 Disable UDF Filesystem Support - install as false ({{ modprobeFile }}):
   file.replace:
     - name: '{{ modprobeFile }}'
@@ -84,7 +83,6 @@ Disable UDF Filesystem Support - blacklist ({{ modprobeFile }}):
       - service: 'Re-read kernel module-config files (UDF)'
     - pattern: '(^(|\s\s*))blacklist\s\s*udf'
     - repl: 'blacklist udf'
-    {%- endfor %}
   {%- else %}
 Disable UDF Filesystem Support - create-file ({{ udfFile }}):
   file.managed:
@@ -103,7 +101,7 @@ Disable UDF Filesystem Support - create-file ({{ udfFile }}):
         setype: 'modules_conf_t'
         seuser: 'system_u'
     - user: 'root'
-  {%- endif %}
+  {%- endfor %}
 {%- else %}
 Skip Reason ({{ stig_id }}):
   test.show_notification:
