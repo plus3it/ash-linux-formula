@@ -71,7 +71,7 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-  {%- for modprobeFile in modprobeFiles if modprobeFiles %}
+  {%- for modprobeFile in modprobeFiles %}
 Disable TIPC kernel module - install as false ({{ modprobeFile }}):
   file.replace:
     - name: '{{ modprobeFile }}'
