@@ -59,7 +59,7 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- elif osName == 'AlmaLinux' %}
-  {%- for modprobeFile in modprobeFiles if modprobeFiles %}
+  {%- for modprobeFile in modprobeFiles %}
 Disable UDF Filesystem Support - install as false ({{ modprobeFile }}):
   file.replace:
     - name: '{{ modprobeFile }}'
