@@ -71,8 +71,7 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-  {%- if modprobeFiles %}
-    {%- for modprobeFile in modprobeFiles %}
+  {%- for modprobeFile in modprobeFiles if modprobeFiles %}
 Disable TIPC kernel module - install as false ({{ modprobeFile }}):
   file.replace:
     - name: '{{ modprobeFile }}'
@@ -96,7 +95,6 @@ Disable TIPC kernel module - blacklist ({{ modprobeFile }}):
       - service: 'Re-read kernel module-config files (TIPC)'
     - pattern: '(^(|\s\s*))blacklist\s\s*tipc'
     - repl: 'blacklist tipc'
-    {%- endfor %}
   {%- else %}
 Disable TIPC kernel module - create-file ({{ tipcFile }}):
   file.managed:
@@ -114,7 +112,7 @@ Disable TIPC kernel module - create-file ({{ tipcFile }}):
         setype: 'modules_conf_t'
         seuser: 'system_u'
     - user: 'root'
-  {%- endif %}
+  {%- endfor %}
 {%- endif %}
 
 Re-read kernel module-config files (TIPC):
