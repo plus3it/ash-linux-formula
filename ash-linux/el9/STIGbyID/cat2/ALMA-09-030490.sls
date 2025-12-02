@@ -42,7 +42,7 @@
     searchDir,
     type='f',
     name='*.conf',
-    grep='udf'
+    grep='uvcvideo'
   )
 %}
 {% set uvcvideoFile = '/etc/modprobe.d/uvcvideo.conf' %}
