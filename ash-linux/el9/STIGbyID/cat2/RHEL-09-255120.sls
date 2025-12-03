@@ -56,6 +56,7 @@ SSHD hostkey-permission - {{ filename }} ({{ stig_id }}):
     - group: root
     - mode: '0600'
     - name: '{{ host_ssh_key_files }}'
+    - replace: False
     - selinux:
         serange: 's0'
         serole: 'object_r'
