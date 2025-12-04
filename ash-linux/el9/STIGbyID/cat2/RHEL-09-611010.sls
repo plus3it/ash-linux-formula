@@ -41,6 +41,7 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set retryTimes = salt.pillar.get('ash-linux:lookup:pwquality:retries', '3') %}
 {%- set pwqualityCfgFiles = [] %}
 {%- set pwqualityDefCfgFile = '/etc/security/pwquality.conf' %}
 {%- set searchDir = '/etc/security/pwquality.conf.d' %}
@@ -71,11 +72,10 @@ notify_{{ stig_id }}-skipSet:
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
   {%- for pwqualityCfgFile in pwqualityCfgFiles %}
-Notify {{ pwqualityCfgFile }}:
-  test.show_notification:
-    - text: |-
-        --------------------
-        Found the 'retry' attribute in {{ pwqualityCfgFile }}
-        --------------------
+Modify {{ pwqualityCfgFile }}:
+  file.replace:
+    - name: '{{ pwqualityCfgFile }}'
+    - pattern: '(^(|#)(|\s\s*)retry)((|\s\s*)=(|\s\s*))\d'
+    - repl: 'retry = {{ retryTimes }}'
   {%- endfor %}
 {%- endif %}
