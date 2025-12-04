@@ -41,10 +41,11 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set pwqualityDefCfgFile = '/etc/security/pwquality.conf' %}
 {%- set pwqualityCfgFiles = [] %}
+{%- set pwqualityDefCfgFile = '/etc/security/pwquality.conf' %}
+{%- set searchDir = '/etc/security/pwquality.conf.d' %}
 {%- if salt.file.file_exists(pwqualityDefCfgFile) %}
-  {%- do pwqualityCfgFiles.extends(pwqualityCfgFiles) %}
+  {%- do pwqualityCfgFiles.append(pwqualityDefCfgFile) %}
 {%- endif %}
 {%- set pwqualityCfgFiles = pwqualityCfgFiles + salt.file.find(
     searchDir,
@@ -53,7 +54,6 @@
     grep='retry\s*='
   )
 %}
-/etc/security/pwquality.conf /etc/security/pwquality.conf.d/*.conf
 
 {{ stig_id }}-description:
   test.show_notification:
