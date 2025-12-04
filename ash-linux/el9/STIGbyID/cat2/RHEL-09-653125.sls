@@ -43,11 +43,7 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set emailUserMap = salt.pillar.get('ash-linux:lookup:mail_aliases', {}) %}
-{%- set mailAliasFiles = [
-  '/etc/aliases',
-  '/etc/mail/aliases',
-  ]
-%}
+{%- set mailAliasFile = '/etc/aliases' %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -73,26 +69,33 @@ Action Description ({{ key }}):
         Forward emails delivered to {{ key }} user
         to {{ value }}
         -------------------------------------------
-    {%- for mailAliasFile in mailAliasFiles %}
 Set email destinations ({{ key }} in {{ mailAliasFile }}):
-  file.replace:
-    - name: {{ mailAliasFile }}
-    - append_if_not_found: true
-    - not_found_content: |-
-        # Inserted by watchmaker
-        {{ key }}: {{ value }}
-    - onlyif:
-      - '[[ -e {{ mailAliasFile }} ]]'
-    - pattern: '^(|#|#\s*|\s*)({{ key }})(\s*:\s*).*$'
-    - repl: '\2: {{ value }}'
-    {%- endfor %}
+  alias.present:
+    - name: '{{ key }}'
+    - target: '{{ value }}'
+    - onchanges_in:
+      - cmd: 'Regenerate postfix aliases DB file ({{ mailAliasFile }})'
   {%- else %}
 Why Skip ({{ stig_id }}) - No Declared email Destinations:
   test.show_notification:
-      - text: |
-              -------------------------------------------
-              CANNOT SET: No `root-mail-dest` value found
-                in the ash-linux Pillar-data.
-              -------------------------------------------
+    - text: |
+        -------------------------------------------
+        CANNOT SET: No `root-mail-dest` value found
+        in the ash-linux Pillar-data.
+        -------------------------------------------
   {%- endfor %}
+{%- endif %}
+
+{% if salt.pkg.version('postfix') %}
+Regenerate postfix aliases DB file ({{ mailAliasFile }}):
+  cmd.run:
+    - name: '/sbin/postalias {{ mailAliasFile }}'
+    - cwd: '/root'
+{%- else %}
+Regenerate postfix aliases DB file:
+  test.show_notification:
+    - text: |
+        -------------------------------------------
+        Postfix is NOT installed
+        -------------------------------------------
 {%- endif %}
