@@ -86,16 +86,9 @@ Why Skip ({{ stig_id }}) - No Declared email Destinations:
   {%- endfor %}
 {%- endif %}
 
-{% if salt.pkg.version('postfix') %}
 Regenerate postfix aliases DB file ({{ mailAliasFile }}):
   cmd.run:
     - name: '/sbin/postalias {{ mailAliasFile }}'
     - cwd: '/root'
-{%- else %}
-Regenerate postfix aliases DB file:
-  test.show_notification:
-    - text: |
-        -------------------------------------------
-        Postfix is NOT installed
-        -------------------------------------------
-{%- endif %}
+    - onlyif:
+      - 'rpm -q postfix --quiet'
