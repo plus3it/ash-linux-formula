@@ -75,19 +75,16 @@ notify_{{ stig_id }}-skipSet:
 Modify {{ pwqualityCfgFile }}:
   file.replace:
     - name: '{{ pwqualityCfgFile }}'
-    - pattern: '(^(|#)(|\s\s*)retry)((|\s\s*)=(|\s\s*))\d'
+    - append_if_not_found: True
+    - not_found_content: |
+
+        # Set per rule {{ stig_id }}
+        # Prompt user at most '{{ retryTimes }}' times before returning with error
+        retry = {{ retryTimes }}
+    - onlyif:
+      - 'grep -qP "retry(|\s\s*)=" {{ pwqualityCfgFile }}'
+    - pattern: '(^(|\s\s*)retry)((|\s\s*)=(|\s\s*))\d'
     - repl: |-
         retry = {{ retryTimes }}
-
-Attribution-note {{ pwqualityCfgFile }}:
-  file.line:
-    - name: '{{ pwqualityCfgFile }}'
-    - before: ^retry = {{ retryTimes }}
-    - content: |-
-
-        # Set per {{ stig_id }}
-    - mode: insert
-    - onchanges:
-      - file: 'Modify {{ pwqualityCfgFile }}'
   {%- endfor %}
 {%- endif %}
