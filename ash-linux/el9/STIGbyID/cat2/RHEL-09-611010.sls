@@ -76,6 +76,18 @@ Modify {{ pwqualityCfgFile }}:
   file.replace:
     - name: '{{ pwqualityCfgFile }}'
     - pattern: '(^(|#)(|\s\s*)retry)((|\s\s*)=(|\s\s*))\d'
-    - repl: 'retry = {{ retryTimes }}'
+    - repl: |-
+        retry = {{ retryTimes }}
+
+Attribution-note {{ pwqualityCfgFile }}:
+  file.line:
+    - name: '{{ pwqualityCfgFile }}'
+    - before: ^retry = {{ retryTimes }}
+    - content: |-
+
+        # Set per {{ stig_id }}
+    - mode: insert
+    - onchanges:
+      - file: 'Modify {{ pwqualityCfgFile }}'
   {%- endfor %}
 {%- endif %}
