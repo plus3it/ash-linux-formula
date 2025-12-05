@@ -40,6 +40,22 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set digestFunction = salt.pillar.get('ash-linux:lookup:sssd:special:certificate_verification:ocsp_dgst', 'sha512') %}
+{%- set sssdCfgFiles = [] %}
+{%- set sssdDefCfgFile = '/etc/sssd/sssd.conf' %}
+{%- set searchDir = '/etc/sssd/conf.d' %}
+{%- set stdVerifyCfg = searchDir + '/certificate_verification.conf' %}
+{%- if salt.file.file_exists(sssdDefCfgFile) %}
+  {%- do sssdCfgFiles.append(sssdDefCfgFile) %}
+{%- endif %}
+{%- set sssdCfgFiles = sssdCfgFiles + salt.file.find(
+    searchDir,
+    type='f',
+    name='*.conf',
+    grep='certificate_verification\s*='
+  )
+%}
+
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -57,4 +73,39 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+  {%- for sssdCfgFile in sssdCfgFiles %}
+Ensure 'certificate_verification' options are correct for {{ sssdCfgFile }}:
+  file.replace:
+    - name: '{{ sssdCfgFile }}'
+    - pattern: '^((|\s\s*)certificate_verification(\s*=\s*)).*'
+    - repl: \1ocsp_dgst={{ digestFunction }}
+    - onchanges_in:
+      - service: 'Re-read SSSD configuration-options'
+  {%- else %}
+Create {{ stdVerifyCfg }}:
+  file.managed:
+    - name: '{{ stdVerifyCfg }}'
+    - contents: |
+        # Installed per STIG-ID '{{ stig_id }}'
+        certificate_verification = ocsp_dgst={{ digestFunction }}
+    - group: 'root'
+    - mode: '0600'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'sssd_conf_t'
+        seuser: 'system_u'
+    - user: 'root'
+    - watch_in:
+      - service: 'Re-read SSSD configuration-options'
+
+  {%- endfor %}
 {%- endif %}
+
+Re-read SSSD configuration-options:
+  service.running:
+    - name: sssd
+    - enable: true
+    - reload: false
+    - onlyif:
+      - 'test -e "{{ sssdDefCfgFile }}"'
