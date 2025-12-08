@@ -70,11 +70,16 @@ notify_{{ stig_id }}-skipSet:
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
   {%- for sudoersFile in sudoersFiles %}
-Nuke ending-token NOPASSWD from {{ sudoersFile }}:
+    {%- if (
+             sudoersFile != "/etc/sudoers.d/90-cloud-init-users" and
+             sudoersFile != "/etc/sudoers.d/ssm-agent-users"
+           )  %}
+Nuke NOPASSWD Tag_Spec from all "ALL" declarations in {{ sudoersFile }}:
   file.replace:
     - name: '{{ sudoersFile }}'
     - backup: False
     - pattern: '^((%|\w)\w*)(\s\s*)(.*)(NOPASSWD(|\s*):)(|\s*)ALL$'
-    - repl: '\1\3\4'
+    - repl: '\1\3\4ALL'
+    {%- endif %}
   {%- endfor %}
 {%- endif %}
