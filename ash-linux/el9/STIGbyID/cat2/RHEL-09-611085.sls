@@ -69,4 +69,12 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+  {%- for sudoersFile in sudoersFiles %}
+Nuke ending-token NOPASSWD from {{ sudoersFile }}:
+  file.replace:
+    - name: '{{ sudoersFile }}'
+    - backup: False
+    - pattern: '^((%|\w)\w*)(\s\s*)(.*)(NOPASSWD(|\s*):)(|\s*)ALL$'
+    - repl: '\1\3\4'
+  {%- endfor %}
 {%- endif %}
