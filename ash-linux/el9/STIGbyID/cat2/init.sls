@@ -8,6 +8,7 @@ include:
   - ash-linux.el9.STIGbyID.cat2.RHEL-09-291010
   - ash-linux.el9.STIGbyID.cat2.RHEL-09-431016
   - ash-linux.el9.STIGbyID.cat2.RHEL-09-611010
+  - ash-linux.el9.STIGbyID.cat2.RHEL-09-611085
   - ash-linux.el9.STIGbyID.cat2.RHEL-09-611200
   - ash-linux.el9.STIGbyID.cat2.RHEL-09-611170
   - ash-linux.el9.STIGbyID.cat2.RHEL-09-653125
