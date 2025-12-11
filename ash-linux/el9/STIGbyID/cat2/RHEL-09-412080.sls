@@ -19,7 +19,7 @@
 # Finding Level: medium
 #
 # Rule Summary:
-#       The OS must ...
+#       The OS must terminate idle user sessions
 #
 # References:
 #   CCI:
@@ -51,7 +51,7 @@
     - text: |-
         ----------------------------------------
         STIG Finding ID: {{ stig_id }}
-             The OS must ...
+             The OS must terminate idle user sessions
         ----------------------------------------
 
 {%- if stig_id in skipIt %}
