@@ -1,16 +1,20 @@
 # Ref Doc:
 #   - STIG - RHEL 9 v2r6      (01 Oct 2025)
 #   - STIG - AlmaLinux 9 v1r4 (01 Oct 2025)
+#   - STIG - AL2023 v1r1      (14 Jul 2025)
 # Finding ID:
-#   - RHEL: V-258077
-#   - Alma: V-269421
+#   - RHEL:   V-258077
+#   - Alma:   V-269421
+#   - AL2023: V-274166
 # Rule ID:
-#   - RHEL: SV-258077r1014874_rule
-#   - Alma: SV-269421r1050304_rule
+#   - RHEL:   SV-258077r1014874_rule
+#   - Alma:   SV-269421r1050304_rule
+#   - AL2023: SV-274166r1120486_rule
 # STIG ID:
 #   - RHEL-09-412080
 #   - ALMA-09-040500
-# SRG ID:     SRG-OS-NNNNNN-GPOS-NNNNN
+#   - AZLX-23-002510
+# SRG ID:     SRG-OS-000163-GPOS-00072
 #
 # Finding Level: medium
 #
@@ -19,17 +23,18 @@
 #
 # References:
 #   CCI:
-#     - CCI-000213
+#     - CCI-001133
 #   NIST:
-#     - SP 800-53 ::
-#     - SP 800-53A ::
-#     - SP 800-53 Revision 4 ::
+#     - SP 800-53 :: SC-10
+#     - SP 800-53A :: SC-10.1 (ii)
+#     - SP 800-53 Revision 4 :: SC-10
 #
 ###########################################################################
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set stigIdByVendor = {
     'AlmaLinux': 'ALMA-09-040500',
+    'Amazon': 'AZLX-23-002510',
     'CentOS Stream': 'RHEL-09-412080',
     'OEL': 'OL09-00-UNDEF',
     'RedHat': 'RHEL-09-412080',
