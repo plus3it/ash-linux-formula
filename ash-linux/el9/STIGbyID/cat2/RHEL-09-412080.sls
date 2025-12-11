@@ -69,7 +69,7 @@ Set {{ chkParm }} to {{ parmVal }}:
         {{ chkParm }}={{ parmVal }}
     - watch_in:
       - service: 'Re-read {{ chkFile }}'
-    - pattern: '^(|\s\s*)StopIdleSessionSec=\d\d*'
+    - pattern: '^(|\s\s*){{ chkParm }}=\d\d*'
     - repl: '{{ chkParm }}={{ parmVal }}'
 {%- else %}
 Skip Reason ({{ stig_id }}):
