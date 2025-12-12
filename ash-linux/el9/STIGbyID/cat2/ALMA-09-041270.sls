@@ -37,6 +37,12 @@
 {%- set osName = salt.grains.get('os') %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set trustOutRaw = salt.cmd.shell(
+    'trust list --filter=ca-anchors 2> /dev/null | ' +
+    'grep -E "^(pkcs11:)"'
+  )
+%}
+{%- set trustOutList = trustOutRaw.split('\n') %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -59,11 +65,14 @@ notify_{{ stig_id }}-skipSet:
     osName == "OEL"
   )
 %}
-Notify logic-prototyping:
+  {%- for line in trustOutList %}
+Notify logic-prototyping {{ line }}:
   test.show_notification:
     - text: |
         ----------------------------------------
         Need logic to implement CA-blacklisting
+        {{ line }}
         ----------------------------------------
+  {%- endfor %}
 {%- else %}
 {%- endif %}
