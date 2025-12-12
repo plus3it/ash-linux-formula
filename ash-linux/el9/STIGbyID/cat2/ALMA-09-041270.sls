@@ -39,7 +39,8 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set trustOutRaw = salt.cmd.shell(
     'trust list --filter=ca-anchors 2> /dev/null | ' +
-    'grep -E "^(pkcs11:)"'
+    'grep -E "^(pkcs11:|\s\s*label)" |' +
+    'sed -e "N ; s/cert\\n\s\s*label:\s*/cert|/"'
   )
 %}
 {%- set trustOutList = trustOutRaw.split('\n') %}
