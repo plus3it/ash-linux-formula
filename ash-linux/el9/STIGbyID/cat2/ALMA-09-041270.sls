@@ -53,11 +53,15 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
-{%- elif osName == 'AlmaLinux' OR
-         osName == 'OEL'
+{%- elif
+  (
+    osName == "AlmaLinux" or
+    osName == "OEL"
+  )
 %}
-Notify logic-prototyping::
-    - text: |-
+Notify logic-prototyping:
+  test.show_notification:
+    - text: |
         ----------------------------------------
         Need logic to implement CA-blacklisting
         ----------------------------------------
