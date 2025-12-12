@@ -1,0 +1,65 @@
+# Ref Doc:
+#   - STIG - OEL 9 v1r3       (01 Oct 2025)
+#   - STIG - AlmaLinux 9 v1r4 (01 Oct 2025)
+# Finding ID:
+#   - OEL:  V-271901
+#   - Alma: V-269427
+# Rule ID:
+#   - OEL:  SV-271901r1092415_rule
+#   - Alma: SV-269427r1050310_rule
+# STIG ID:
+#   - OL09-00-900140
+#   - ALMA-09-041270
+# SRG ID:     SRG-OS-000403-GPOS-00182
+#
+# Finding Level: medium
+#
+# Rule Summary:
+#       The OS must only allow the use of DOD PKI-established certificate
+#       authorities for authentication in the establishment of protected
+#       sessions to the operating system
+#
+# References:
+#   CCI:
+#     - CCI-002470
+#   NIST:
+#     - SP 800-53 Revision 4 :: SC-23 (5)
+#
+###########################################################################
+{%- set stigIdByVendor = {
+    'AlmaLinux': 'ALMA-09-041270',
+    'CentOS Stream': 'ALMA-09-041270',
+    'OEL': 'OL09-00-900140',
+    'RedHat': 'ALMA-09-041270',
+    'Rocky': 'ALMA-09-041270',
+} %}
+{%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
+{%- set osName = salt.grains.get('os') %}
+{%- set helperLoc = tpldir ~ '/files' %}
+{%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+
+{{ stig_id }}-description:
+  test.show_notification:
+    - text: |-
+        ----------------------------------------
+        STIG Finding ID: {{ stig_id }}
+            The OS must blacklist non-DoD
+            certificate authorities from system-
+            wide trust-list
+        ----------------------------------------
+
+{%- if stig_id in skipIt %}
+notify_{{ stig_id }}-skipSet:
+  test.show_notification:
+    - text: |
+        Handler for {{ stig_id }} has been selected for skip.
+{%- elif osName == 'AlmaLinux' OR
+         osName == 'OEL'
+%}
+Notify logic-prototyping::
+    - text: |-
+        ----------------------------------------
+        Need logic to implement CA-blacklisting
+        ----------------------------------------
+{%- else %}
+{%- endif %}
