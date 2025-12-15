@@ -41,6 +41,7 @@
 {%- set customCaCerts = salt.pillar.get('ash-linux:lookup:custom_ca_trust', []) %}
 {%- set trustedCaCerts = trustedDodCerts + trustedCspCerts + customCaCerts %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set caBlockDir = '/etc/pki/ca-trust/source/blocklist' %}
 {%- set trustOutRaw = salt.cmd.shell(
     'trust list --filter=ca-anchors 2> /dev/null | ' +
     'grep -E "^(pkcs11:|\s\s*label)" |' +
@@ -74,9 +75,9 @@ notify_{{ stig_id }}-skipSet:
     {%- set certID = line.split('|')[0] %}
     {%- set certNameUTF = line.split('|')[1].replace("/", "_") %}
     {%- if line.split('|')[1] not in trustedCaCerts %}
-Write blacklist-file for {{ certNameUTF }} file:
+Write blocklist-file for {{ certNameUTF }} file:
   file.managed:
-    - name: '/etc/pki/ca-trust/source/blocklist/{{ certNameUTF }}'
+    - name: '{{ caBlockDir }}/{{ certNameUTF }}'
     - contents:
         # Installed per STIG-ID '{{ stig_id }}'
     - group: 'root'
@@ -86,11 +87,11 @@ Write blacklist-file for {{ certNameUTF }} file:
       - cmd: 'Process blacklisted root CAs'
     - user: 'root'
 
-Add content to blacklist-file for {{ certNameUTF }}:
+Add content to blocklist-file for {{ certNameUTF }}:
   cmd.run:
-    - name: 'trust dump --filter "{{ certID }}" > "/etc/pki/ca-trust/source/blocklist/{{ certNameUTF }}" 2> /dev/null'
+    - name: 'trust dump --filter "{{ certID }}" > "{{ caBlockDir }}/{{ certNameUTF }}.pem" 2> /dev/null'
     - onchanges:
-      - file: 'Write blacklist-file for {{ certNameUTF }} file'
+      - file: 'Write blocklist-file for {{ certNameUTF }} file'
     {%- endif %}
   {%- endfor %}
 Process blacklisted root CAs:
