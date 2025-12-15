@@ -36,6 +36,7 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set osName = salt.grains.get('os') %}
 {%- set helperLoc = tpldir ~ '/files' %}
+{%- from helperLoc ~ '/DoD-Certs.jinja' import trustedDodCerts with context %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set trustOutRaw = salt.cmd.shell(
     'trust list --filter=ca-anchors 2> /dev/null | ' +
@@ -69,6 +70,7 @@ notify_{{ stig_id }}-skipSet:
   {%- for line in trustOutList %}
     {%- set certID = line.split('|')[0] %}
     {%- set certNameUTF = line.split('|')[1].replace("/", "_") %}
+    {%- if line.split('|')[1] not in trustedDodCerts %}
 Write blacklist-file for {{ certNameUTF }} file:
   file.managed:
     - name: '/etc/pki/ca-trust/source/blocklist/{{ certNameUTF }}'
@@ -86,6 +88,7 @@ Add content to blacklist-file for {{ certNameUTF }}:
     - name: 'trust dump --filter "{{ certID }}" > "/etc/pki/ca-trust/source/blocklist/{{ certNameUTF }}" 2> /dev/null'
     - onchanges:
       - file: 'Write blacklist-file for {{ certNameUTF }} file'
+    {%- endif %}
   {%- endfor %}
 Process blacklisted root CAs:
   cmd.run:
