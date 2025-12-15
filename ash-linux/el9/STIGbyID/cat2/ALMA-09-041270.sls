@@ -67,13 +67,22 @@ notify_{{ stig_id }}-skipSet:
   )
 %}
   {%- for line in trustOutList %}
-Notify logic-prototyping {{ line }}:
-  test.show_notification:
-    - text: |
-        ----------------------------------------
-        Need logic to implement CA-blacklisting
-        {{ line }}
-        ----------------------------------------
+    {%- set certID = line.split('|')[0] %}
+    {%- set certName = line.split('|')[1].replace(" ", "_") %}
+Write blacklist-file for {{ certName }} file:
+  file.managed:
+    - name: '/etc/pki/ca-trust/source/blocklist/{{ certName }}'
+    - contents:
+        # Installed per STIG-ID '{{ stig_id }}'
+    - group: 'root'
+    - mode: '0600'
+    - replace: False
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'cert_t'
+        seuser: 'system_u'
+    - user: 'root'
   {%- endfor %}
 {%- else %}
 {%- endif %}
