@@ -37,6 +37,8 @@
 {%- set osName = salt.grains.get('os') %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- from helperLoc ~ '/DoD-Certs.jinja' import trustedDodCerts with context %}
+{%- from helperLoc ~ '/AWS-Certs.jinja' import trustedAwsCerts with context %}
+{%- set trustedCaCerts = trustedDodCerts + trustedAwsCerts %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set trustOutRaw = salt.cmd.shell(
     'trust list --filter=ca-anchors 2> /dev/null | ' +
@@ -70,7 +72,7 @@ notify_{{ stig_id }}-skipSet:
   {%- for line in trustOutList %}
     {%- set certID = line.split('|')[0] %}
     {%- set certNameUTF = line.split('|')[1].replace("/", "_") %}
-    {%- if line.split('|')[1] not in trustedDodCerts %}
+    {%- if line.split('|')[1] not in trustedCaCerts %}
 Write blacklist-file for {{ certNameUTF }} file:
   file.managed:
     - name: '/etc/pki/ca-trust/source/blocklist/{{ certNameUTF }}'
