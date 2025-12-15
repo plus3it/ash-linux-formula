@@ -38,7 +38,8 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- from helperLoc ~ '/DoD-Certs.jinja' import trustedDodCerts with context %}
 {%- from helperLoc ~ '/AWS-Certs.jinja' import trustedAwsCerts with context %}
-{%- set trustedCaCerts = trustedDodCerts + trustedAwsCerts %}
+{%- set customCaCerts = salt.pillar.get('ash-linux:lookup:custom_ca_trust', []) %}
+{%- set trustedCaCerts = trustedDodCerts + trustedAwsCerts + customCaCerts %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set trustOutRaw = salt.cmd.shell(
     'trust list --filter=ca-anchors 2> /dev/null | ' +
