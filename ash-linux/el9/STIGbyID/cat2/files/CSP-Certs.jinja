@@ -1,0 +1,24 @@
+{#-
+# (
+#   echo '{%- set trustedCspCerts = [' ; \
+#   trust list 2> /dev/null | \
+#   grep -wEi '(amazon|aws)' | \
+#   sort -u | \
+#   sed -e '/label:/s/^\s\s*label:\s*//' \
+#       -e "s/^.*$/'&',/" \
+#       -e 's/^/    /'\
+#       -e '$s/,$//' ; \
+#   printf '  ]\n%%}\n'
+# )
+#}
+{%- if salt.grains.get('biosvendor') == 'Amazon EC2' %}
+  {%- set trustedCspCerts = [
+      'Amazon Root CA 1',
+      'Amazon Root CA 2',
+      'Amazon Root CA 3',
+      'Amazon Root CA 4'
+    ]
+  %}
+{%- else %}
+  {%- set trustedCspCerts = [] %}
+{%- endif %}
