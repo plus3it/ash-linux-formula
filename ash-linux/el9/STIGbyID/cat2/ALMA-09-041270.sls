@@ -77,7 +77,18 @@ Write blacklist-file for {{ certNameUTF }} file:
     - group: 'root'
     - mode: '0600'
     - replace: False
+    - onchanges_in:
+      - cmd: 'Process blacklisted root CAs'
     - user: 'root'
+
+Add content to blacklist-file for {{ certNameUTF }}:
+  cmd.run:
+    - name: 'trust dump --filter "{{ certID }}" > "/etc/pki/ca-trust/source/blocklist/{{ certNameUTF }}" 2> /dev/null'
+    - onchanges:
+      - file: 'Write blacklist-file for {{ certNameUTF }} file'
   {%- endfor %}
+Process blacklisted root CAs:
+  cmd.run:
+    - name: 'update-ca-trust'
 {%- else %}
 {%- endif %}
