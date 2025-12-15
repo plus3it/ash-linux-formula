@@ -19,6 +19,24 @@
       'Amazon Root CA 4'
     ]
   %}
+{%- elif
+  (
+    salt.grains.get('manufacturer') == 'manufacturer' and
+    salt.grains.get('productname') == 'productname' and
+    salt.grains.get('virtual') == 'virtual'
+  )
+%}
+  {%- set trustedCspCerts = [
+      'Microsoft ECC Product Root Certificate Authority 2018',
+      'Microsoft ECC Root Certificate Authority 2017',
+      'Microsoft ECC TS Root Certificate Authority 2018',
+      'Microsoft Identity Verification Root Certificate Authority 2020',
+      'Microsoft RSA Root Certificate Authority 2017',
+      'Microsoft Root Certificate Authority',
+      'Microsoft Root Certificate Authority 2010',
+      'Microsoft Root Certificate Authority 2011'
+    ]
+  %}
 {%- else %}
   {%- set trustedCspCerts = [] %}
 {%- endif %}
