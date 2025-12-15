@@ -96,5 +96,4 @@ Add content to blacklist-file for {{ certNameUTF }}:
 Process blacklisted root CAs:
   cmd.run:
     - name: 'update-ca-trust'
-{%- else %}
 {%- endif %}
