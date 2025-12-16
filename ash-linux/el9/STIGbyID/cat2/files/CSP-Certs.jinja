@@ -1,0 +1,42 @@
+{#-
+# (
+#   echo '{%- set trustedCspCerts = [' ; \
+#   trust list 2> /dev/null | \
+#   grep -wEi '(amazon|aws)' | \
+#   sort -u | \
+#   sed -e '/label:/s/^\s\s*label:\s*//' \
+#       -e "s/^.*$/'&',/" \
+#       -e 's/^/    /'\
+#       -e '$s/,$//' ; \
+#   printf '  ]\n%%}\n'
+# )
+#}
+{%- if salt.grains.get('biosvendor') == 'Amazon EC2' %}
+  {%- set trustedCspCerts = [
+      'Amazon Root CA 1',
+      'Amazon Root CA 2',
+      'Amazon Root CA 3',
+      'Amazon Root CA 4'
+    ]
+  %}
+{%- elif
+  (
+    salt.grains.get('manufacturer') == 'manufacturer' and
+    salt.grains.get('productname') == 'productname' and
+    salt.grains.get('virtual') == 'virtual'
+  )
+%}
+  {%- set trustedCspCerts = [
+      'Microsoft ECC Product Root Certificate Authority 2018',
+      'Microsoft ECC Root Certificate Authority 2017',
+      'Microsoft ECC TS Root Certificate Authority 2018',
+      'Microsoft Identity Verification Root Certificate Authority 2020',
+      'Microsoft RSA Root Certificate Authority 2017',
+      'Microsoft Root Certificate Authority',
+      'Microsoft Root Certificate Authority 2010',
+      'Microsoft Root Certificate Authority 2011'
+    ]
+  %}
+{%- else %}
+  {%- set trustedCspCerts = [] %}
+{%- endif %}

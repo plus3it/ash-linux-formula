@@ -1,0 +1,68 @@
+{#-
+# This file's contents were generated using:
+#
+# (
+#   echo '{%- set trustedDodCerts = [' ; \
+#   trust list | \
+#   grep -wi DoD | \
+#   sort -u | \
+#   sed -e '/label:/s/^\s\s*label:\s*//' \
+#       -e "s/^.*$/'&',/" \
+#       -e 's/^/    /'\
+#       -e '$s/,$//' ; \
+#   printf '  ]\n%%}\n'
+# )
+#
+#
+###########################################################################
+#}
+{%- set trustedDodCerts = [
+    'DOD DERILITY CA-1',
+    'DOD DERILITY CA-3',
+    'DOD DERILITY CA-4',
+    'DOD EMAIL CA-59',
+    'DOD EMAIL CA-62',
+    'DOD EMAIL CA-63',
+    'DOD EMAIL CA-64',
+    'DOD EMAIL CA-65',
+    'DOD EMAIL CA-70',
+    'DOD EMAIL CA-71',
+    'DOD EMAIL CA-72',
+    'DOD EMAIL CA-73',
+    'DOD ID CA-59',
+    'DOD ID CA-62',
+    'DOD ID CA-63',
+    'DOD ID CA-64',
+    'DOD ID CA-65',
+    'DOD ID CA-70',
+    'DOD ID CA-71',
+    'DOD ID CA-72',
+    'DOD ID CA-73',
+    'DOD SW CA-60',
+    'DOD SW CA-61',
+    'DOD SW CA-66',
+    'DOD SW CA-67',
+    'DOD SW CA-68',
+    'DOD SW CA-69',
+    'DOD SW CA-74',
+    'DOD SW CA-75',
+    'DOD SW CA-76',
+    'DOD SW CA-77',
+    'DoD Root CA 3',
+    'DoD Root CA 4',
+    'DoD Root CA 5',
+    'DoD Root CA 6',
+    'DoD WCF Intermediate CA 1',
+    'DoD WCF Root CA 1',
+    'DoD WCF Signing CA 1',
+    'DoD WCF Signing CA 10',
+    'DoD WCF Signing CA 2',
+    'DoD WCF Signing CA 3',
+    'DoD WCF Signing CA 4',
+    'DoD WCF Signing CA 5',
+    'DoD WCF Signing CA 6',
+    'DoD WCF Signing CA 7',
+    'DoD WCF Signing CA 8',
+    'DoD WCF Signing CA 9',
+  ]
+%}
