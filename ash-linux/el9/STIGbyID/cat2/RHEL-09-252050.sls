@@ -40,6 +40,9 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/postfix/main.cf' %}
+{%- set extraOpts = salt.pillar.get('ash-linux:lookup:postfix:main_cf:smtpd_client_restrictions', []) %}
+{%- set cfgOptList = ['permit_mynetworks'] + extraOpts + ['reject'] %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -55,5 +58,25 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
+{%- elif salt.pkg.version('postfix') %}
+Set Postfix Allowed Relay Sources:
+  file.replace:
+    - name:  '{{ cfgFile }}'
+    - append_if_not_found: true
+    - not_found_content: 'smtpd_client_restrictions = {{ cfgOptList|join(',') }}'
+    - pattern: '(^smtpd_client_restrictions\s\s*)(.*$)'
+    - repl: '\g<1>= {{ cfgOptList|join(',') }}'
+
+Postfix Service ({{ stig_id }}):
+  service.running:
+    - name: 'postfix'
+    - enable: true
+    - reload: false
+    - watch:
+        - file: "Set Postfix Allowed Relay Sources"
 {%- else %}
+Finding Not Valid for {{ stig_id }}:
+  test.show_notification:
+    - text: |
+        Per the STIG's Check Text, "If postfix is not installed, this is Not Applicable"
 {%- endif %}
