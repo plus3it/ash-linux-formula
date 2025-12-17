@@ -1,41 +1,41 @@
 # Ref Doc:
-#   - STIG - RHEL 9 vXrY      (DD MMM YYYY)
-#   - STIG - OEL 9 vXrY       (DD MMM YYYY)
-#   - STIG - AlmaLinux 9 vXrY (DD MMM YYYY)
+#   - STIG - RHEL 9 v2r6      (01 Oct 2025)
+#   - STIG - OEL 9 v1r3       (01 Oct 2025)
+#   - STIG - AlmaLinux 9 v1r4 (01 Oct 2025)
 # Finding ID:
-#   - RHEL: V-NNNNNN
-#   - OEL:  V-NNNNNN
-#   - Alma: V-NNNNNN
+#   - RHEL: V-257951
+#   - OEL:  V-271763
+#   - Alma: V-269252
 # Rule ID:
-#   - RHEL: SV-NNNNNNrNNNNNNN_rule
-#   - OEL:  SV-NNNNNNrNNNNNNN_rule
-#   - Alma: SV-NNNNNNrNNNNNNN_rule
+#   - RHEL: SV-257951r1014843_rule
+#   - OEL:  SV-271763r1092001_rule
+#   - Alma: SV-269252r1050134_rule
 # STIG ID:
-#   - RHEL-09-NNNNNN
-#   - OL09-00-NNNNNN
-#   - ALMA-09-NNNNNN
-# SRG ID:     SRG-OS-NNNNNN-GPOS-NNNNN
+#   - RHEL-09-252050
+#   - OL09-00-002425
+#   - ALMA-09-019490
+# SRG ID:     SRG-OS-000480-GPOS-00227
 #
 # Finding Level: medium
 #
 # Rule Summary:
-#       The OS must ...
+#       The OS must be configured to prevent unrestricted mail relaying
 #
 # References:
 #   CCI:
-#     - CCI-000213
+#     - CCI-000366
 #   NIST:
-#     - SP 800-53 ::
-#     - SP 800-53A ::
-#     - SP 800-53 Revision 4 ::
+#     - SP 800-53 :: CM-6 b
+#     - SP 800-53A :: CM-6.1 (iv)
+#     - SP 800-53 Revision 4 :: CM-6 b
 #
 ###########################################################################
 {%- set stigIdByVendor = {
-    'AlmaLinux': 'ALMA-09-NNNNNN',
-    'CentOS Stream': 'RHEL-09-NNNNNN',
-    'OEL': 'OL09-00-NNNNNN',
-    'RedHat': 'RHEL-09-NNNNNN',
-    'Rocky': 'RHEL-09-NNNNNN',
+    'AlmaLinux': 'ALMA-09-019490',
+    'CentOS Stream': 'RHEL-09-252050',
+    'OEL': 'OL09-00-002425',
+    'RedHat': 'RHEL-09-252050',
+    'Rocky': 'RHEL-09-252050',
 } %}
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
@@ -46,7 +46,8 @@
     - text: |-
         ----------------------------------------
         STIG Finding ID: {{ stig_id }}
-             The OS must ...
+            The OS must be configured to prevent
+            unrestricted mail relaying
         ----------------------------------------
 
 {%- if stig_id in skipIt %}
