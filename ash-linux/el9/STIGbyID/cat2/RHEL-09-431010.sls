@@ -50,6 +50,9 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/selinux/config' %}
+{%- set selMode = salt.pillar.get('ash-linux:lookup:selinux:mode', 'enforcing') %}
+{%- set selType = salt.pillar.get('ash-linux:lookup:selinux:type', 'targeted') %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -67,4 +70,23 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Set SELinux enforcement mode ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        SELINUX={{ selMode }}
+    - pattern: '^(|\s\s*)(SELINUX=).*'
+    - repl: '\1{{ selMode }}'
+
+Set SELinux enforcement type ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        SELINUXTYPE={{ selType }}
+    - pattern: '^(|\s\s*)(SELINUXTYPE=).*'
+    - repl: '\1{{ selType }}'
 {%- endif %}
