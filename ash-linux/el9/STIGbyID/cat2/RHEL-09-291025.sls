@@ -43,6 +43,7 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile ='/etc/usbguard/usbguard-daemon.conf' %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -59,4 +60,5 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+
 {%- endif %}
