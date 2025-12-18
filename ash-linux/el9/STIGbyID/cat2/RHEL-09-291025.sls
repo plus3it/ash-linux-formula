@@ -44,6 +44,8 @@
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set cfgFile ='/etc/usbguard/usbguard-daemon.conf' %}
+{%- set cfgParm = 'AuditBackend' %}
+{%- set cfgValu =  salt.pillar.get('ash-linux:lookup:usb_guard:audit_backend', 'LinuxAudit') %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -60,5 +62,13 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-
+Enable USBguard audit-logging ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        {{ cfgParm }}={{ cfgValu }}
+    - pattern: '(^(|\s\s*)){{ cfgParm }}.*$'
+    - repl: '{{ cfgParm }}={{ cfgValu }}'
 {%- endif %}
