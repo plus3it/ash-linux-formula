@@ -62,6 +62,25 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Create USBguard config-file ({{ stig_id }}):
+  file.touch:
+    - name: '{{ cfgFile }}'
+    - makedirs: True
+
+Set permission-bits on {{ cfgFile }} ({{ stig_id }}):
+  file.managed:
+    - name: '{{ cfgFile }}'
+    - group: 'root'
+    - mode: '0600'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'etc_t'
+        seuser: 'system_u'
+    - user: 'root'
+    - onlyif:
+      - file: 'Create USBguard config-file ({{ stig_id }})'
+
 Enable USBguard audit-logging ({{ stig_id }}):
   file.replace:
     - name: '{{ cfgFile }}'
@@ -69,6 +88,8 @@ Enable USBguard audit-logging ({{ stig_id }}):
     - not_found_content: |
         # Set per rule {{ stig_id }}
         {{ cfgParm }}={{ cfgValu }}
+    - onlyif:
+      - file: 'Set permission-bits on {{ cfgFile }} ({{ stig_id }})'
     - pattern: '(^(|\s\s*)){{ cfgParm }}.*$'
     - repl: '{{ cfgParm }}={{ cfgValu }}'
 {%- endif %}
