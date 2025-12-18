@@ -78,7 +78,7 @@ Set SELinux enforcement mode ({{ stig_id }}):
         # Set per rule {{ stig_id }}
         SELINUX={{ selMode }}
     - pattern: '^(|\s\s*)(SELINUX=).*'
-    - repl: '\1{{ selMode }}'
+    - repl: '\2{{ selMode }}'
 
 Set SELinux enforcement type ({{ stig_id }}):
   file.replace:
@@ -88,5 +88,5 @@ Set SELinux enforcement type ({{ stig_id }}):
         # Set per rule {{ stig_id }}
         SELINUXTYPE={{ selType }}
     - pattern: '^(|\s\s*)(SELINUXTYPE=).*'
-    - repl: '\1{{ selType }}'
+    - repl: '\2{{ selType }}'
 {%- endif %}
