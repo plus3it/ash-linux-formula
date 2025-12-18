@@ -48,4 +48,9 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Suppress boot messages ({{ stig_id }}):
+  cmd.run:
+    - name: 'grubby --update-kernel=ALL --args=quiet'
+    - unless:
+      - 'grubby --info=ALL | grep --quiet quiet'
 {%- endif %}
