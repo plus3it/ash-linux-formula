@@ -66,20 +66,23 @@ Create USBguard config-file ({{ stig_id }}):
   file.touch:
     - name: '{{ cfgFile }}'
     - makedirs: True
+    - unless:
+      - 'stat {{ cfgFile }}'
 
 Set permission-bits on {{ cfgFile }} ({{ stig_id }}):
   file.managed:
     - name: '{{ cfgFile }}'
     - group: 'root'
     - mode: '0600'
+    - replace: False
     - selinux:
         serange: 's0'
         serole: 'object_r'
         setype: 'etc_t'
         seuser: 'system_u'
     - user: 'root'
-    - onlyif:
-      - file: 'Create USBguard config-file ({{ stig_id }})'
+    - watch:
+       - file: 'Create USBguard config-file ({{ stig_id }})'
 
 Enable USBguard audit-logging ({{ stig_id }}):
   file.replace:
@@ -88,8 +91,8 @@ Enable USBguard audit-logging ({{ stig_id }}):
     - not_found_content: |
         # Set per rule {{ stig_id }}
         {{ cfgParm }}={{ cfgValu }}
-    - onlyif:
-      - file: 'Set permission-bits on {{ cfgFile }} ({{ stig_id }})'
     - pattern: '(^(|\s\s*)){{ cfgParm }}.*$'
     - repl: '{{ cfgParm }}={{ cfgValu }}'
+    - watch:
+       - file: 'Set permission-bits on {{ cfgFile }} ({{ stig_id }})'
 {%- endif %}
