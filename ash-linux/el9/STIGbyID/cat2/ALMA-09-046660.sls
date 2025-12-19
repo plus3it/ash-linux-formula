@@ -34,6 +34,7 @@
     'Amazon': 'ALMA-09-046660'
 } %}
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
+{%- set osName = salt.grains.get('os') %
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
@@ -52,5 +53,13 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
+{%- elif osName == 'AlmaLinux' %}
 {%- else %}
+Skip Reason ({{ stig_id }}):
+  test.show_notification:
+    - text: |-
+        ----------------------------------------
+        STIG Finding ID: {{ stig_id }}
+             Not valid for distro '{{ osName }}'
+        ----------------------------------------
 {%- endif %}
