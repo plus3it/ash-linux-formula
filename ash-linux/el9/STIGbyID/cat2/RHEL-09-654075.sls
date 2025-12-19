@@ -114,4 +114,11 @@ Regenerate rules ({{ stig_id }}):
   cmd.run:
     - name: 'augenrules --load'
 {%- else %}
+Skip Reason ({{ stig_id }}):
+  test.show_notification:
+    - text: |-
+        ----------------------------------------
+        STIG Finding ID: {{ stig_id }}
+             Not valid for distro '{{ osName }}'
+        ----------------------------------------
 {%- endif %}
