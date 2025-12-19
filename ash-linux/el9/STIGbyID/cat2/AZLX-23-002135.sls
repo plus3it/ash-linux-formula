@@ -1,41 +1,44 @@
 # Ref Doc:
-#   - STIG - RHEL 9 vXrY      (DD MMM YYYY)
-#   - STIG - OEL 9 vXrY       (DD MMM YYYY)
-#   - STIG - AlmaLinux 9 vXrY (DD MMM YYYY)
+#   - STIG - AL2023 v1r1      (14 Jul 2025)
 # Finding ID:
-#   - RHEL: V-NNNNNN
-#   - OEL:  V-NNNNNN
-#   - Alma: V-NNNNNN
+#   - AL2023: V-274091
 # Rule ID:
-#   - RHEL: SV-NNNNNNrNNNNNNN_rule
-#   - OEL:  SV-NNNNNNrNNNNNNN_rule
-#   - Alma: SV-NNNNNNrNNNNNNN_rule
+#   - AL2023: SV-274091r1120261_rule
 # STIG ID:
-#   - RHEL-09-NNNNNN
-#   - OL09-00-NNNNNN
-#   - ALMA-09-NNNNNN
-# SRG ID:     SRG-OS-NNNNNN-GPOS-NNNNN
+#   - AL2023: AZLX-23-002135
+# SRG ID:     SRG-OS-000037-GPOS-00015
+#   - SRG-OS-000037-GPOS-00015
+#   - SRG-OS-000042-GPOS-00020
+#   - SRG-OS-000062-GPOS-00031
+#   - SRG-OS-000392-GPOS-00172
+#   - SRG-OS-000462-GPOS-00206
+#   - SRG-OS-000471-GPOS-00215
+#   - SRG-OS-000064-GPOS-00033
+#   - SRG-OS-000466-GPOS-00210
+#   - SRG-OS-000458-GPOS-00203
 #
 # Finding Level: medium
 #
 # Rule Summary:
-#       The OS must ...
+#       The OS must audit all uses of the init_module and finit_module
+#       system calls
 #
 # References:
 #   CCI:
-#     - CCI-000213
+#     - CCI-000130
 #   NIST:
-#     - SP 800-53 ::
-#     - SP 800-53A ::
-#     - SP 800-53 Revision 4 ::
+#     - SP 800-53 :: AU-3
+#     - SP 800-53A :: AU-3.1
+#     - SP 800-53 Revision 4 :: AU-3
 #
 ###########################################################################
 {%- set stigIdByVendor = {
-    'AlmaLinux': 'ALMA-09-NNNNNN',
-    'CentOS Stream': 'RHEL-09-NNNNNN',
-    'OEL': 'OL09-00-NNNNNN',
-    'RedHat': 'RHEL-09-NNNNNN',
-    'Rocky': 'RHEL-09-NNNNNN',
+    'AlmaLinux': 'AZLX-23-002135',
+    'Amazon': 'AZLX-23-002135'
+    'CentOS Stream': 'AZLX-23-002135',
+    'OEL': 'AZLX-23-002135',
+    'RedHat': 'AZLX-23-002135',
+    'Rocky': 'AZLX-23-002135',
 } %}
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
@@ -46,7 +49,9 @@
     - text: |-
         ----------------------------------------
         STIG Finding ID: {{ stig_id }}
-             The OS must ...
+            The OS must audit all uses of the
+            init_module and finit_module system
+            calls
         ----------------------------------------
 
 {%- if stig_id in skipIt %}
@@ -55,4 +60,11 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Skip Reason ({{ stig_id }}):
+  test.show_notification:
+    - text: |-
+        ----------------------------------------
+        STIG Finding ID: {{ stig_id }}
+             Not valid for distro '{{ osName }}'
+        ----------------------------------------
 {%- endif %}
