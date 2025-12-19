@@ -34,9 +34,22 @@
     'Amazon': 'ALMA-09-046660'
 } %}
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
-{%- set osName = salt.grains.get('os') %
+{%- set osName = salt.grains.get('os') %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set auditKey = 'module_chng' %}
+{%- set auditArchs = [
+    'b32',
+    'b64'
+  ]
+%}
+{%- set actsToMonitor = [
+    'delete_module',
+    'finit_module',
+    'init_module'
+  ]
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -54,6 +67,16 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- elif osName == 'AlmaLinux' %}
+  {%- for actToMonitor in actsToMonitor %}
+    {%- for auditArch in auditArchs %}
+Audit event {{ actToMonitor }} for {{ auditArch }} architecture ({{ stig_id }}):
+  test.show_notification:
+    - text: |-
+        --------------------------------------------------------------------------------
+        -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}
+        --------------------------------------------------------------------------------
+    {%- endfor %}
+  {%- endfor %}
 {%- else %}
 Skip Reason ({{ stig_id }}):
   test.show_notification:
