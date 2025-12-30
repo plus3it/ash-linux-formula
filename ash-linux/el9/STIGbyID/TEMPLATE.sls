@@ -37,7 +37,8 @@
     'RedHat': 'RHEL-09-NNNNNN',
     'Rocky': 'RHEL-09-NNNNNN',
 } %}
-{%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
+{%- set osName = salt.grains.get('os') %}
+{%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
