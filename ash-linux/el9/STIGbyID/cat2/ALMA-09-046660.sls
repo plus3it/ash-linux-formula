@@ -76,8 +76,6 @@ Audit event "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id 
     - not_found_content: |
         # Set per rule {{ stig_id }}
         -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}
-    - onchanges_in:
-      - cmd: 'Regenerate rules ({{ stig_id }})'
     - pattern: '^(|\s\s*)(-a\s\s*always,exit\s\s*-F\s\s*arch=){{ auditArch }}(\s\s*-S\s\s*){{ actToMonitor }}(\s\s*-F auid>=1000\s\s*-F\s\s*auid!=unset\s\s*-k\s\s*)(module_chng)'
     - repl: '-a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}'
 
