@@ -34,13 +34,14 @@
 ###########################################################################
 {%- set stigIdByVendor = {
     'AlmaLinux': 'AZLX-23-002135',
-    'Amazon': 'AZLX-23-002135'
+    'Amazon': 'AZLX-23-002135',
     'CentOS Stream': 'AZLX-23-002135',
     'OEL': 'AZLX-23-002135',
     'RedHat': 'AZLX-23-002135',
     'Rocky': 'AZLX-23-002135',
 } %}
-{%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
+{%- set osName = salt.grains.get('os') %}
+{%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 
