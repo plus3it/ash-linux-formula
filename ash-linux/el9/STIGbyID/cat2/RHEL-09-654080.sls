@@ -80,6 +80,41 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
+{%- elif osName != 'AlmaLinux' %}
+Ensure {{ cfgFile }} file exists ({{ stig_id }}):
+  file.managed:
+    - name: '{{ cfgFile }}'
+    - create: True
+    - group: 'root'
+    - mode: '0600'
+    - replace: False
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'auditd_etc_t'
+        seuser: 'system_u'
+    - user: 'root'
+  {%- for actToMonitor in actsToMonitor %}
+    {%- for auditArch in auditArchs %}
+Audit event "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}
+    - pattern: '^(|\s\s*)(-a\s\s*always,exit\s\s*-F\s\s*arch=){{ auditArch }}(\s\s*-S\s\s*){{ actToMonitor }}(\s\s*-F auid>=1000\s\s*-F\s\s*auid!=unset\s\s*-k\s\s*)(module_chng)'
+    - repl: '-a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}'
+    - watch:
+      - 'Ensure {{ cfgFile }} file exists ({{ stig_id }})'
+
+Live-update "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id }}):
+  cmd.run:
+    - name: 'auditctl -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F "auid>=1000" -F "auid!=unset" -k {{ auditKey }}'
+    - onchanges:
+      - 'Audit event "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id }})'
+    {%- endfor %}
+  {%- endfor %}
 {%- else %}
 Skip Reason ({{ stig_id }}):
   test.show_notification:
