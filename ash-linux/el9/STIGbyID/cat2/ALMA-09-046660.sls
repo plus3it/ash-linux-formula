@@ -80,11 +80,16 @@ Audit event "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id 
       - cmd: 'Regenerate rules ({{ stig_id }})'
     - pattern: '^(|\s\s*)(-a\s\s*always,exit\s\s*-F\s\s*arch=){{ auditArch }}(\s\s*-S\s\s*){{ actToMonitor }}(\s\s*-F auid>=1000\s\s*-F\s\s*auid!=unset\s\s*-k\s\s*)(module_chng)'
     - repl: '-a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}'
+
+Live-update "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id }}):
+  cmd.run:
+    - name: 'auditctl -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F "auid>=1000" -F "auid!=unset" -k {{ auditKey }}'
+    - onchanges:
+      - 'Audit event "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id }})'
+    - unless:
+      - '[[ $( auditctl -s | awk ''/^enabled /{ print $2 }'' ) == 2 ]]'
     {%- endfor %}
   {%- endfor %}
-Regenerate rules ({{ stig_id }}):
-  cmd.run:
-    - name: 'augenrules --load'
 {%- else %}
 Skip Reason ({{ stig_id }}):
   test.show_notification:
