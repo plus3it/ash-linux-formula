@@ -1,10 +1,18 @@
 # Ref Doc:
+#   - STIG - RHEL 9 v2r6      (01 Oct 2025)
+#   - STIG - OEL 9 v1r3       (01 Oct 2025)
 #   - STIG - AL2023 v1r1      (14 Jul 2025)
 # Finding ID:
+#   - RHEL:   V-258190
+#   - OEL:    V-271565
 #   - AL2023: V-274091
 # Rule ID:
+#   - RHEL:   SV-258190r1106379_rule
+#   - OEL:    SV-271565r1092550_rule
 #   - AL2023: SV-274091r1120261_rule
 # STIG ID:
+#   - RHEL:   RHEL-09-654080
+#   - OEL:    OL09-00-000690
 #   - AL2023: AZLX-23-002135
 # SRG ID:     SRG-OS-000037-GPOS-00015
 #   - SRG-OS-000037-GPOS-00015
@@ -33,17 +41,29 @@
 #
 ###########################################################################
 {%- set stigIdByVendor = {
-    'AlmaLinux': 'AZLX-23-002135',
+    'AlmaLinux': 'RHEL-09-654080',
     'Amazon': 'AZLX-23-002135',
-    'CentOS Stream': 'AZLX-23-002135',
-    'OEL': 'AZLX-23-002135',
-    'RedHat': 'AZLX-23-002135',
-    'Rocky': 'AZLX-23-002135',
+    'CentOS Stream': 'RHEL-09-654080',
+    'OEL': 'OL09-00-000690',
+    'RedHat': 'RHEL-09-654080',
+    'Rocky': 'RHEL-09-654080',
 } %}
 {%- set osName = salt.grains.get('os') %}
 {%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set auditKey = 'module_chng' %}
+{%- set auditArchs = [
+    'b32',
+    'b64'
+  ]
+%}
+{%- set actsToMonitor = [
+    'finit_module',
+    'init_module'
+  ]
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
