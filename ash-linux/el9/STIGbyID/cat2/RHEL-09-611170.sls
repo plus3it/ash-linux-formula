@@ -73,6 +73,9 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Ensure SSSD config-checker is available:
+  pkg.installed:
+    - name: sssd-tools
   {%- for sssdCfgFile in sssdCfgFiles %}
 Ensure 'certificate_verification' options are correct for {{ sssdCfgFile }}:
   file.replace:
@@ -81,6 +84,7 @@ Ensure 'certificate_verification' options are correct for {{ sssdCfgFile }}:
     - repl: \1ocsp_dgst={{ digestFunction }}
     - onchanges_in:
       - service: 'Re-read SSSD configuration-options'
+      - service: 'Disable SSSD configuration if not valid'
   {%- else %}
 Create {{ stdVerifyCfg }}:
   file.managed:
@@ -98,7 +102,7 @@ Create {{ stdVerifyCfg }}:
     - user: 'root'
     - watch_in:
       - service: 'Re-read SSSD configuration-options'
-
+      - service: 'Disable SSSD configuration if not valid'
   {%- endfor %}
 {%- endif %}
 
@@ -109,3 +113,10 @@ Re-read SSSD configuration-options:
     - reload: false
     - onlyif:
       - 'test -e "{{ sssdDefCfgFile }}"'
+      - 'sssctl config-check > /dev/null'
+
+Disable SSSD configuration if not valid:
+  service.disabled:
+    - name: sssd
+    - unless:
+      - 'sssctl config-check > /dev/null'
