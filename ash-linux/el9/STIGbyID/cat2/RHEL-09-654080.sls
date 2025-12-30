@@ -113,6 +113,8 @@ Live-update "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id 
     - name: 'auditctl -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F "auid>=1000" -F "auid!=unset" -k {{ auditKey }}'
     - onchanges:
       - 'Audit event "{{ actToMonitor }}" for "{{ auditArch }}" architecture ({{ stig_id }})'
+    - unless:
+      - '[[ $( auditctl -s | awk ''/^enabled /{ print $2 }'' ) == 2 ]]'
     {%- endfor %}
   {%- endfor %}
 {%- else %}
