@@ -79,6 +79,21 @@
 {%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set auditArchs = [
+    'b32',
+    'b64'
+  ]
+%}
+{%- set actsToMonitor = [
+    'fremovexattr',
+    'fsetxattr',
+    'lremovexattr',
+    'lsetxattr',
+    'removexattr',
+    'setxattr',
+  ]
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -97,4 +112,22 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+
+Ensure {{ cfgFile }} file exists ({{ stig_id }}):
+  file.managed:
+    - name: '{{ cfgFile }}'
+    - create: True
+    - group: 'root'
+    - mode: '0600'
+    - replace: False
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'auditd_etc_t'
+        seuser: 'system_u'
+    - user: 'root'
+  {%- for actToMonitor in actsToMonitor %}
+    {%- for auditArch in auditArchs %}
+    {%- endfor %}
+  {%- endfor %}
 {%- endif %}
