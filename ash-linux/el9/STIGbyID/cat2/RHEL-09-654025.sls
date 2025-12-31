@@ -85,6 +85,7 @@
     'b64'
   ]
 %}
+{%- set auditKey = 'perm_mod' %}
 {%- set actsToMonitor = [
     'fremovexattr',
     'fsetxattr',
@@ -112,7 +113,6 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-
 Ensure {{ cfgFile }} file exists ({{ stig_id }}):
   file.managed:
     - name: '{{ cfgFile }}'
@@ -128,6 +128,17 @@ Ensure {{ cfgFile }} file exists ({{ stig_id }}):
     - user: 'root'
   {%- for actToMonitor in actsToMonitor %}
     {%- for auditArch in auditArchs %}
+Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        -a always,exit -S {{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}
+    - pattern: '(^(|\s\s*))(-a\s\s*always,exit\s\s*)(-F\s\s*arch=b(32|64)\s\s*)(-S\s\s*.*xattr\s\s*)(-F\s\s*auid=0\s\s*)(.*$)'
+    - repl: -a always,exit -S {{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}
+    - watch:
+      - file: 'Ensure {{ cfgFile }} file exists ({{ stig_id }})'
     {%- endfor %}
   {%- endfor %}
 {%- endif %}
