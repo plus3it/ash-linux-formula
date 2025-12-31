@@ -64,6 +64,17 @@
 {%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/audit/rules.d/audit.rules' %}
+{%- set auditArchs = [
+    'b32',
+    'b64'
+  ]
+%}
+{%- set auditEvent = 'execve' %}
+{%- set auditFilePath = '/usr/bin/ssh-keysign' %}
+{%- set auditKey = 'privileged-ssh' %}
+{%- set auditPerm = 'x' %}
+
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -80,4 +91,37 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Ensure {{ cfgFile }} file exists ({{ stig_id }}):
+  file.managed:
+    - name: '{{ cfgFile }}'
+    - create: True
+    - group: 'root'
+    - mode: '0600'
+    - replace: False
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'auditd_etc_t'
+        seuser: 'system_u'
+    - user: 'root'
+
+  {%- for auditArch in auditArchs %}
+Persistent auditing-setup for all uses of ssh-keysign ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        -a always,exit -F arch={{ auditArch }} -F path={{ auditFilePath }} -F perm={{ auditPerm }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}
+    - pattern: '^(|\s\s*)(-a\s\s*always,exit\s\s*)(-F\s\s*arch=b(32|64)\s\s*)-S\s\s*execve\s\s*-F\s\s*path=/usr/bin/ssh-keysign\s\s*.*\s\s*(key=(.*|privileged-ssh)(\s\s*|$))'
+    - repl: '-a always,exit -F arch={{ auditArch }} -F path={{ auditFilePath }} -F perm={{ auditPerm }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}'
+
+Run-time auditing-setup for all uses of ssh-keysign ({{ stig_id }}):
+  cmd.run:
+    - name: 'auditctl -a always,exit -F arch={{ auditArch }} -F path={{ auditFilePath }} -F perm={{ auditPerm }} -F "auid>=1000" -F "auid!=unset" -k {{ auditKey }}'
+    - onchanges:
+      - 'Persistent auditing-setup for all uses of ssh-keysign ({{ stig_id }})'
+    - unless:
+      - '[[ $( auditctl -s | awk ''/^enabled /{ print $2 }'' ) == 2 ]]'
+  {%- endfor %}
 {%- endif %}
