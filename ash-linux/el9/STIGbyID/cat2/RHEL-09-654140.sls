@@ -106,7 +106,7 @@ Ensure {{ cfgFile }} file exists ({{ stig_id }}):
     - user: 'root'
 
   {%- for auditArch in auditArchs %}
-Persistent auditing-setup for all uses of ssh-keysign ({{ stig_id }}):
+Persistent auditing-setup for all uses of ssh-keysign on {{ auditArch }} systems ({{ stig_id }}):
   file.replace:
     - name: '{{ cfgFile }}'
     - append_if_not_found: True
@@ -116,11 +116,11 @@ Persistent auditing-setup for all uses of ssh-keysign ({{ stig_id }}):
     - pattern: '^(|\s\s*)(-a\s\s*always,exit\s\s*)(-F\s\s*arch=b(32|64)\s\s*)-S\s\s*execve\s\s*-F\s\s*path=/usr/bin/ssh-keysign\s\s*.*\s\s*(key=(.*|privileged-ssh)(\s\s*|$))'
     - repl: '-a always,exit -F arch={{ auditArch }} -F path={{ auditFilePath }} -F perm={{ auditPerm }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}'
 
-Run-time auditing-setup for all uses of ssh-keysign ({{ stig_id }}):
+Run-time auditing-setup for all uses of ssh-keysign on {{ auditArch }} systems ({{ stig_id }}):
   cmd.run:
     - name: 'auditctl -a always,exit -F arch={{ auditArch }} -F path={{ auditFilePath }} -F perm={{ auditPerm }} -F "auid>=1000" -F "auid!=unset" -k {{ auditKey }}'
     - onchanges:
-      - 'Persistent auditing-setup for all uses of ssh-keysign ({{ stig_id }})'
+      - 'Persistent auditing-setup for all uses of ssh-keysign on {{ auditArch }} systems ({{ stig_id }})'
     - unless:
       - '[[ $( auditctl -s | awk ''/^enabled /{ print $2 }'' ) == 2 ]]'
   {%- endfor %}
