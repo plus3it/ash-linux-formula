@@ -134,11 +134,19 @@ Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on 
     - append_if_not_found: True
     - not_found_content: |
         # Set per rule {{ stig_id }}
-        -a always,exit -S {{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}
-    - pattern: '(^(|\s\s*))(-a\s\s*always,exit\s\s*)(-F\s\s*arch=b(32|64)\s\s*)(-S\s\s*.*xattr\s\s*)(-F\s\s*auid=0\s\s*)(.*$)'
-    - repl: -a always,exit -S {{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}
+        -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}
+    - pattern: '(^(|\s\s*))(-a\s\s*always,exit\s\s*)(-F\s\s*arch={{ auditArch }}\s\s*)(-S\s\s*(.*,[a-z]*attr|setxattr)\s\s*)(-F\s\s*auid=0\s\s*)(.*$)'
+    - repl: '-a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}'
     - watch:
       - file: 'Ensure {{ cfgFile }} file exists ({{ stig_id }})'
+
+Live auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }}):
+  cmd.run:
+    - name: 'auditctl -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid=0 -F key={{ auditKey }}'
+    - onchanges:
+      - file: 'Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }})'
+    - unless:
+      - '[[ $( auditctl -s | awk ''/^enabled /{ print $2 }'' ) == 2 ]]'
     {%- endfor %}
   {%- endfor %}
 {%- endif %}
