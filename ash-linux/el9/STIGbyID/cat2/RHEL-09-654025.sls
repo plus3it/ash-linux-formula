@@ -128,15 +128,41 @@ Ensure {{ cfgFile }} file exists ({{ stig_id }}):
     - user: 'root'
   {%- for actToMonitor in actsToMonitor %}
     {%- for auditArch in auditArchs %}
+      {%- set uid0Rule =
+          '-a always,exit -F arch=' +
+          auditArch +
+          ' -S ' +
+          actToMonitor +
+          ' -F auid=0 -k ' +
+          auditKey
+      %}
+      {%-
+        set unprivRule =
+          '-a always,exit -F arch=' +
+          auditArch +
+          ' -S ' +
+          actToMonitor +
+          ' -F auid>=1000 -F auid!=unset -k ' +
+          auditKey
+      %}
+      {%-
+        set unprivRuleQuoted =
+          '-a always,exit -F arch=' +
+          auditArch +
+          ' -S ' +
+          actToMonitor +
+          ' -F "auid>=1000" -F "auid!=unset" -k ' +
+          auditKey
+      %}
 Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }}):
   file.replace:
     - name: '{{ cfgFile }}'
     - append_if_not_found: True
     - not_found_content: |
-        # Set per rule {{ stig_id }}
-        -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid=0 -k {{ auditKey }}
+        # Set {{ actToMonitor }} sys-call tracking for arch={{ auditArch }} per rule {{ stig_id }}
+        {{ uid0Rule }}
     - pattern: '(^(|))(-a always,exit -F arch={{ auditArch }}\s\s*)(-S(\s\s*(([a-z,]*[a-z]*(|,){{ actToMonitor }}.*xattr|{{ actToMonitor }})\s\s*)))(.*-F\s\s*auid=0\s\s*.*$)'
-    - repl: '-a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid=0 -k {{ auditKey }}'
+    - repl: '{{ uid0Rule }}'
     - watch:
       - file: 'Ensure {{ cfgFile }} file exists ({{ stig_id }})'
 
@@ -145,16 +171,16 @@ Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by other tha
     - name: '{{ cfgFile }}'
     - append_if_not_found: True
     - not_found_content: |
-        # Set per rule {{ stig_id }}
-        -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}
+        # Set {{ actToMonitor }} sys-call tracking for arch={{ auditArch }} per rule {{ stig_id }}
+        {{ unprivRule }}
     - pattern: '(^(|))(-a always,exit -F arch={{ auditArch }}\s\s*)(-S(\s\s*(([a-z,]*[a-z]*(|,){{ actToMonitor }}.*xattr|{{ actToMonitor }})\s\s*)))(.*-F\s\s*auid(!|>)=\d*\s\s*.*$)'
-    - repl: '-a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid>=1000 -F auid!=unset -k {{ auditKey }}'
+    - repl: '{{ unprivRule }}'
     - watch:
       - file: 'Ensure {{ cfgFile }} file exists ({{ stig_id }})'
 
 Live auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }}):
   cmd.run:
-    - name: 'auditctl -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F auid=0 -k {{ auditKey }}'
+    - name: 'auditctl {{ uid0Rule }}'
     - onchanges:
       - file: 'Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }})'
     - unless:
@@ -162,7 +188,7 @@ Live auditing-setup for tracking {{ actToMonitor }} sys-calls by uid 0 on {{ aud
 
 Live auditing-setup for tracking {{ actToMonitor }} sys-calls by other than uid 0 on {{ auditArch }} systems ({{ stig_id }}):
   cmd.run:
-    - name: 'auditctl -a always,exit -F arch={{ auditArch }} -S {{ actToMonitor }} -F "auid>=1000" -F "auid!=unset" -k {{ auditKey }}'
+    - name: 'auditctl {{ unprivRuleQuoted }}'
     - onchanges:
       - file: 'Persistent auditing-setup for tracking {{ actToMonitor }} sys-calls by other than uid 0 on {{ auditArch }} systems ({{ stig_id }})'
     {%- endfor %}
