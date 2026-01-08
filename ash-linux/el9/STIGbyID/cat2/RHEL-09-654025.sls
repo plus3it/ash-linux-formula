@@ -167,11 +167,13 @@ Ensure {{ auditFile }} file exists ({{ stig_id }}):
       %}
 Persistent auditing-setup in {{ auditFile }} for tracking xattr sys-calls by uid 0 on {{ auditArch }} systems ({{ stig_id }}):
   file.replace:
-    - name: '{{ auditFile}}'
+    - name: '{{ auditFile }}'
     - append_if_not_found: True
     - not_found_content: |
         # Set xattr sys-call tracking for arch={{ auditArch }} per rule {{ stig_id }}
         {{ uid0Rule }}
+    - onlyif:
+      - '[[ $( find {{ searchDir }} -name "*.rules" | xargs grep -El "xattr.*auid=0" | grep -v "{{ auditFile }}" | wc -l ) == "0" ]]'
     - pattern: '(^(|))(-a always,exit -F arch={{ auditArch }}\s\s*)(-S(\s\s*(([a-z,]*[a-z]*(|,).*xattr)\s\s*)))(.*-F\s\s*auid=0\s\s*.*$)'
     - repl: '{{ uid0Rule }}'
     - watch:
@@ -184,6 +186,8 @@ Persistent auditing-setup in {{ auditFile }} for tracking xattr sys-calls by oth
     - not_found_content: |
         # Set xattr sys-call tracking for arch={{ auditArch }} per rule {{ stig_id }}
         {{ unprivRule }}
+    - onlyif:
+      - '[[ $( find {{ searchDir }} -name "*.rules" | xargs grep -Pl "xattr.*auid(|!|>)=1000" | grep -v "{{ auditFile }}" | wc -l ) == "0" ]]'
     - pattern: '(^(|))(-a always,exit -F arch={{ auditArch }}\s\s*)(-S(\s\s*(([a-z,]*[a-z]*(|,).*xattr)\s\s*)))(.*-F\s\s*auid(!|>)=\d*\s\s*.*$)'
     - repl: '{{ unprivRule }}'
     - watch:
