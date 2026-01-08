@@ -129,6 +129,7 @@ notify_{{ stig_id }}-skipSet:
 Ensure {{ auditFile }} file exists ({{ stig_id }}):
   file.managed:
     - name: '{{ auditFile }}'
+    - backup: False
     - create: True
     - group: 'root'
     - mode: '0600'
@@ -169,6 +170,7 @@ Persistent auditing-setup in {{ auditFile }} for tracking xattr sys-calls by uid
   file.replace:
     - name: '{{ auditFile }}'
     - append_if_not_found: True
+    - backup: False
     - not_found_content: |
         # Set xattr sys-call tracking for arch={{ auditArch }} per rule {{ stig_id }}
         {{ uid0Rule }}
@@ -183,6 +185,7 @@ Persistent auditing-setup in {{ auditFile }} for tracking xattr sys-calls by oth
   file.replace:
     - name: '{{ auditFile }}'
     - append_if_not_found: True
+    - backup: False
     - not_found_content: |
         # Set xattr sys-call tracking for arch={{ auditArch }} per rule {{ stig_id }}
         {{ unprivRule }}
