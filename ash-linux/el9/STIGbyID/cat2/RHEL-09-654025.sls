@@ -124,7 +124,7 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
-{%- elif auditFiles %}
+{%- else %}
   {%- for auditFile in auditFiles %}
 Ensure {{ auditFile }} file exists ({{ stig_id }}):
   file.managed:
@@ -213,5 +213,4 @@ Live auditing-setup in {{ auditFile }} for tracking xattr sys-calls by other tha
       - '[[ $( auditctl -s | awk ''/^enabled /{ print $2 }'' ) == 2 ]]'
     {%- endfor %}
   {%- endfor %}
-{%- else %}
 {%- endif %}
