@@ -60,11 +60,11 @@ notify_{{ stig_id }}-skipSet:
     osName == "OEL"
   )
 %}
-Ensure the audispd plugins are installed:
+Ensure the audispd plugins are installed ({{ stig_id }}):
   pkg.installed:
     - name: audispd-plugins
 
-Ensure the plugin-file is installed with proper permissions:
+Ensure the plugin-file is installed with proper permissions ({{ stig_id }}):
   file.managed:
     - name: '{{ cfgFile }}'
     - create: True
@@ -80,9 +80,9 @@ Ensure the plugin-file is installed with proper permissions:
       - 'test -e {{ cfgFile }}'
     - user: 'root'
     - watch:
-      - pkg: 'Ensure the audispd plugins are installed'
+      - pkg: 'Ensure the audispd plugins are installed ({{ stig_id }})'
 
-Ensure STIG-setting is present:
+Ensure STIG-setting is present ({{ stig_id }}):
   file.replace:
     - name: '{{ cfgFile }}'
     - append_if_not_found: True
@@ -92,7 +92,7 @@ Ensure STIG-setting is present:
     - pattern: '^(|\s\s*)(active\s*=)(\s*).*$'
     - repl: '\1\2\3yes'
     - watch:
-      - file: 'Ensure the plugin-file is installed with proper permissions'
+      - file: 'Ensure the plugin-file is installed with proper permissions ({{ stig_id }})'
 {%- else %}
 Skip Reason ({{ stig_id }}):
   test.show_notification:
