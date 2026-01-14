@@ -73,7 +73,7 @@ Fix $ActionSendStreamDriverAuthMode setting in {{ rsyslogCfgFile }} ({{ stig_id 
     - name: '{{ rsyslogCfgFile }}'
     - backup: False
     - watch_in:
-      - service: 'Re-read rsyslog configuration-options'
+      - service: 'Re-read rsyslog configuration-options ({{ stig_id }})'
     - pattern: '^(\s*)(\$ActionSendStreamDriverAuthMode\s*).*'
     - repl: '\1\2x509/name'
   {%- else %}
@@ -86,13 +86,13 @@ Fix $ActionSendStreamDriverAuthMode setting in {{ rsyslogDefCfgfile }} ({{ stig_
         # Set per rule {{ stig_id }}
         $ActionSendStreamDriverAuthMode x509/name
     - watch_in:
-      - service: 'Re-read rsyslog configuration-options'
+      - service: 'Re-read rsyslog configuration-options ({{ stig_id }})'
     - pattern: '^(\s*)(\$ActionSendStreamDriverAuthMode\s*).*'
     - repl: '\1\2x509/name'
   {%- endfor %}
 {%- endif %}
 
-Re-read rsyslog configuration-options:
+Re-read rsyslog configuration-options ({{ stig_id }}):
   service.running:
     - name: 'rsyslog.service'
     - enable: true
