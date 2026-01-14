@@ -14,7 +14,9 @@
 #   - RHEL-09-652040
 #   - OL09-00-005015
 #   - ALMA-09-052600
-# SRG ID:     SRG-OS-NNNNNN-GPOS-NNNNN
+# SRG ID:
+#   - SRG-OS-000342-GPOS-00133
+#   - SRG-OS-000479-GPOS-00224
 #
 # Finding Level: medium
 #
