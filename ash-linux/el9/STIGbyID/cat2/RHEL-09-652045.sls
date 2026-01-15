@@ -84,7 +84,7 @@ Fix $ActionSendStreamDriverMode setting in {{ rsyslogCfgFile }} ({{ stig_id }}):
     - watch_in:
       - service: 'Re-read rsyslog configuration-options ({{ stig_id }})'
     - pattern: '^(\s*)(\$ActionSendStreamDriverMode\s*).*'
-    - repl: '\1\21'
+    - repl: '\g<1>\g<2>1'
   {%- else %}
 Fix $ActionSendStreamDriverMode setting in {{ rsyslogDefCfgfile }} ({{ stig_id }}):
   file.replace:
@@ -97,7 +97,7 @@ Fix $ActionSendStreamDriverMode setting in {{ rsyslogDefCfgfile }} ({{ stig_id }
     - watch_in:
       - service: 'Re-read rsyslog configuration-options ({{ stig_id }})'
     - pattern: '^(\s*)(\$ActionSendStreamDriverMode\s*).*'
-    - repl: '\1\21'
+    - repl: '\g<1>\g<2>1'
   {%- endfor %}
 {%- endif %}
 
