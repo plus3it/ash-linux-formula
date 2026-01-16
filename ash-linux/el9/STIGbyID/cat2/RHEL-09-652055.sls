@@ -82,6 +82,8 @@ Set log-destination in {{ rsyslogCfgFile }} to {{ log_collector }} via TCP ({{ s
         *.* @@{{ log_collector }}
     - pattern: '(^\*\.\*\s*)(:omrelp:|@*)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[a-z]*\.[a-z.]*)(:\d*|)'
     - repl: '\g<1>@@{{ log_collector }}'
+    - watch_in:
+      - service: 'Re-read rsyslog configuration-options ({{ stig_id }})'
   {%- else %}
 Set log-destination in {{ rsyslogDefCfgfile }} to {{ log_collector }} via TCP ({{ stig_id }}):
   file.replace:
@@ -93,6 +95,8 @@ Set log-destination in {{ rsyslogDefCfgfile }} to {{ log_collector }} via TCP ({
         *.* @@{{ log_collector }}
     - pattern: '(^\*\.\*\s*)(:omrelp:|@*)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[a-z]*\.[a-z.]*)(:\d*|)'
     - repl: '\g<1>@@{{ log_collector }}'
+    - watch_in:
+      - service: 'Re-read rsyslog configuration-options ({{ stig_id }})'
   {%- endfor %}
 {%- else %}
 No Collector Specified ({{ stig_id }}):
@@ -100,3 +104,12 @@ No Collector Specified ({{ stig_id }}):
     - text: |
         No syslog collector hostname/IP found in Pillar-data
 {%- endif %}
+
+
+Re-read rsyslog configuration-options ({{ stig_id }}):
+  service.running:
+    - name: 'rsyslog.service'
+    - enable: true
+    - reload: false
+    - onlyif:
+      - '[[ $( systemctl is-active rsyslog.service ) == "active" ]]'
