@@ -174,3 +174,9 @@
 ##     
 ##     rescue_shell_protection: '/usr/lib/systemd/systemd-sulogin-shell rescue'
 ##     rescue_shell_protection: '/bin/sh -c "/sbin/sulogin ; /usr/bin/systemctl --fail --no-block default"'
+
+##     Rsyslog configuration-options
+##     rsyslog:collector_host
+##       collector_host:                   # FQDN or IP address of remote syslog collector
+##                                         # service. May include a ':<PORT_NUMBER>' substring
+##                                         # as needed
