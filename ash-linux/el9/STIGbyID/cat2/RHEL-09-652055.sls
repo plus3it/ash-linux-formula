@@ -44,13 +44,13 @@
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
 {%- set log_collector = salt.pillar.get('ash-linux:lookup:rsyslog:collector_host', []) %}
 {%- set rsyslogDefCfgfile = '/etc/rsyslog.conf' %}
-{%- set rsyslogCfgFiles = [ rsyslogDefCfgfile ] %}
+{%- set rsyslogCfgFiles = [] %}
 {%- set searchDir = '/etc/rsyslog.d' %}
 {%- set rsyslogCfgFiles = rsyslogCfgFiles + salt.file.find(
     searchDir,
     type='f',
     name='*.conf',
-    grep='@@'
+    grep='\*\.\*'
   )
 %}
 
@@ -75,6 +75,17 @@ notify_{{ stig_id }}-skipSet:
 Set log-destination in {{ rsyslogCfgFile }} to {{ log_collector }} via TCP ({{ stig_id }}):
   file.replace:
     - name: '{{ rsyslogCfgFile }}'
+    - append_if_not_found: True
+    - backup: False
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        *.* @@{{ log_collector }}
+    - pattern: '(^\*\.\*\s*)(:omrelp:|@*)(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|[a-z]*\.[a-z.]*)(:\d*|)'
+    - repl: '\g<1>@@{{ log_collector }}'
+  {%- else %}
+Set log-destination in {{ rsyslogDefCfgfile }} to {{ log_collector }} via TCP ({{ stig_id }}):
+  file.replace:
+    - name: '{{ rsyslogDefCfgfile }}'
     - append_if_not_found: True
     - backup: False
     - not_found_content: |
