@@ -86,6 +86,7 @@
 } %}
 {%- set defNtpServers = ntpByVendor[salt.grains.get('os')] %}
 {%- set ntpServerList = salt.pillar.get('ash-linux:lookup:ntp-servers', defNtpServers) %}
+{%- set maxpollPower = salt.pillar.get('ash-linux:lookup:chrony:maxpoll', '16') %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -103,4 +104,11 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+  {%- for ntpServer in ntpServerList %}
+Ensure {{ ntpServer }} in {{ targFile }} ({{ stig_id }}):
+  file.replace:
+    - name: '{{ targFile }}'
+    - pattern: '^(\s\s*|)server.*{{ ntpServer }}.*'
+    - repl: 'server {{ ntpServer }} iburst maxpoll {{ maxpollPower }}'
+  {%- endfor %}
 {%- endif %}
