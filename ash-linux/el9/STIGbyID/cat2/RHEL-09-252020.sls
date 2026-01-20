@@ -108,6 +108,11 @@ notify_{{ stig_id }}-skipSet:
 Ensure {{ ntpServer }} in {{ targFile }} ({{ stig_id }}):
   file.replace:
     - name: '{{ targFile }}'
+    - append_if_not_found: True
+    - backup: False
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        server {{ ntpServer }} iburst maxpoll {{ maxpollPower }}
     - pattern: '^(\s\s*|)server.*{{ ntpServer }}.*'
     - repl: 'server {{ ntpServer }} iburst maxpoll {{ maxpollPower }}'
   {%- endfor %}
