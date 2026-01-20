@@ -63,7 +63,7 @@ Make full use of the audit storage space ({{ stig_id }}):
     - not_found_content: |
         # Set per rule {{ stig_id }}
         {{ cfgParm }} = {{ cfgValue }}
-    - pattern: '((\s\s*|)max_log_file(\s\s*|)=(\s\s*|))'
+    - pattern: '^((\s\s*|)max_log_file(\s\s*|)=(\s\s*|))\d*'
     - repl: '\g<1>{{ cfgValue }}'
 {%- else %}
 Skip Reason ({{ stig_id }}):
