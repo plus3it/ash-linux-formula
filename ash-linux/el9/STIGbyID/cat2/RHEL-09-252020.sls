@@ -115,5 +115,15 @@ Ensure {{ ntpServer }} in {{ targFile }} ({{ stig_id }}):
         server {{ ntpServer }} iburst maxpoll {{ maxpollPower }}
     - pattern: '^(\s\s*|)server.*{{ ntpServer }}.*'
     - repl: 'server {{ ntpServer }} iburst maxpoll {{ maxpollPower }}'
+    - watch_in:
+      - service: 'Re-read chronyd configuration-options ({{ stig_id }})'
   {%- endfor %}
 {%- endif %}
+
+Re-read chronyd configuration-options ({{ stig_id }}):
+  service.running:
+    - name: 'chronyd.service'
+    - enable: true
+    - reload: false
+    - onlyif:
+      - '[[ $( systemctl is-active chronyd.service ) == "active" ]]'
