@@ -33,6 +33,13 @@
 {%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set cfgFile = '/etc/audit/auditd.conf' %}
+{%- set cfgParm = 'max_log_file' %}
+{%- set cfgValue = salt.pillar.get(
+    'ash-linux:lookup:auditd_config:max_log_file',
+    '8'
+  )
+%}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -48,5 +55,22 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
+{%- elif osName == 'AlmaLinux' %}
+Make full use of the audit storage space ({{ stig_id }}):
+  file.replace:
+    - name: '{{ cfgFile }}'
+    - append_if_not_found: True
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        {{ cfgParm }} = {{ cfgValue }}
+    - pattern: '((\s\s*|)max_log_file(\s\s*|)=(\s\s*|))'
+    - repl: '\g<1>{{ cfgValue }}'
 {%- else %}
+Skip Reason ({{ stig_id }}):
+  test.show_notification:
+    - text: |-
+        ----------------------------------------
+        STIG Finding ID: {{ stig_id }}
+             Not valid for distro '{{ osName }}'
+        ----------------------------------------
 {%- endif %}
