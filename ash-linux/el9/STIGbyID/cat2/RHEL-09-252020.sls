@@ -63,6 +63,9 @@
         "1.almalinux.pool.ntp.org",
         "2.almalinux.pool.ntp.org",
     ],
+    'Amazon': [
+        "169.254.169.123",
+    ],
     'CentOS Stream': [
         "0.centos.pool.ntp.org",
         "1.centos.pool.ntp.org",
