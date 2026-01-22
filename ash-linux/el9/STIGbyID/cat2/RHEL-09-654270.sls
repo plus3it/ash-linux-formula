@@ -65,6 +65,18 @@
 {%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set searchDir = '/etc/audit/rules.d' %}
+{%- set auditFileDflt = '/etc/audit/rules.d/audit.rules' %}
+{%- set auditFiles = [] + salt.file.find(
+      searchDir,
+      type='f',
+      name='*.rules',
+      grep='--loginuid-immutable'
+    )
+%}
+{%- if auditFiles|length == 0 %}
+  {%- set auditFiles = [ auditFileDflt ] %}
+{%- endif %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -82,4 +94,32 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Ensure {{ auditFileDflt }} file exists ({{ stig_id }}):
+  file.managed:
+    - name: '{{ auditFileDflt }}'
+    - backup: False
+    - create: True
+    - group: 'root'
+    - mode: '0600'
+    - replace: False
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'auditd_etc_t'
+        seuser: 'system_u'
+    - user: 'root'
+  {%- for auditFile in auditFiles %}
+Protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }}):
+  file.replace:
+    - name: '{{ auditFile }}'
+    - append_if_not_found: True
+    - backup: False
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        --loginuid-immutable
+    - pattern: '(^(\s\s*|))--loginuid-immutable.*'
+    - repl: '--loginuid-immutable'
+    - watch:
+      - file: 'Ensure {{ auditFileDflt }} file exists ({{ stig_id }})'
+  {%- endfor %}
 {%- endif %}
