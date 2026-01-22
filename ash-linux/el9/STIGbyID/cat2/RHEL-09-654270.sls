@@ -109,7 +109,7 @@ Ensure {{ auditFileDflt }} file exists ({{ stig_id }}):
         seuser: 'system_u'
     - user: 'root'
   {%- for auditFile in auditFiles %}
-Protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }}):
+Persistently protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }}):
   file.replace:
     - name: '{{ auditFile }}'
     - append_if_not_found: True
@@ -121,5 +121,13 @@ Protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }}):
     - repl: '--loginuid-immutable'
     - watch:
       - file: 'Ensure {{ auditFileDflt }} file exists ({{ stig_id }})'
+
+Live-update audit-config to protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }}):
+  cmd.run:
+    - name: 'auditctl --loginuid-immutable'
+    - onchanges:
+      - file: 'Persistently protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }})'
+    - unless:
+      - 'auditctl -s | grep -qP"loginuid_immutable\s\s*1\s\s*locked"'
   {%- endfor %}
 {%- endif %}
