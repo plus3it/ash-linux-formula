@@ -125,9 +125,9 @@ Persistently protect logon UIDs from unauthorized change via {{ auditFile }} ({{
 Live-update audit-config to protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }}):
   cmd.run:
     - name: 'auditctl --loginuid-immutable'
-    - onchanges:
+    - watch:
       - file: 'Persistently protect logon UIDs from unauthorized change via {{ auditFile }} ({{ stig_id }})'
     - unless:
-      - 'auditctl -s | grep -qP"loginuid_immutable\s\s*1\s\s*locked"'
+      - 'auditctl -s | grep -qP "loginuid_immutable\s\s*1\s\s*locked"'
   {%- endfor %}
 {%- endif %}
