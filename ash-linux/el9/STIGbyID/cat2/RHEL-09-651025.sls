@@ -79,6 +79,12 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Ensure AIDE software is present ({{ stig_id }}):
+  pkg.installed:
+    - pkgs:
+      - aide
+      - audit
+
 Ensure {{ aideCfg }} exists ({{ stig_id }}):
   file.managed:
     - name: '{{ aideCfg }}'
@@ -89,9 +95,11 @@ Ensure {{ aideCfg }} exists ({{ stig_id }}):
     - selinux:
         serange: 's0'
         serole: 'object_r'
-        setype: 'auditd_etc_t'
+        setype: 'etc_t'
         seuser: 'system_u'
     - user: 'root'
+    - watch:
+      - pkg: 'Ensure AIDE software is present ({{ stig_id }})'
   {%- for fileToMonitor in filesToMonitor %}
 Ensure monitoring of {{ fileToMonitor }} in {{ aideCfg }} ({{ stig_id }}):
   file.replace:
@@ -104,7 +112,7 @@ Ensure monitoring of {{ fileToMonitor }} in {{ aideCfg }} ({{ stig_id }}):
     - pattern: '^(\s\s*){{ fileToMonitor }}\s\s*p\+i\+n\+u\+g\+s\+b\+acl\+.*'
     - repl: '{{ fileToMonitor }} {{ monitorSetting }}'
     - unless:
-      - 'grep -P "^(\s\s*|)/usr/sbin/auditctl\s\s*p\+i\+n\+u\+g\+s\+b\+acl\+.*" {{ aideCfg }}'
+      - 'grep -qP "^(\s\s*|){{ fileToMonitor }}\s\s*p\+i\+n\+u\+g\+s\+b\+acl\+(.*)sha512$" {{ aideCfg }}'
     - watch:
       - file: 'Ensure {{ aideCfg }} exists ({{ stig_id }})'
   {%- endfor %}
