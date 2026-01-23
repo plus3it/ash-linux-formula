@@ -51,6 +51,17 @@
 {%- set stig_id = stigIdByVendor[osName] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
+{%- set aideCfg = '/etc/aide.conf' %}
+{%- set filesToMonitor = [
+        "/usr/sbin/auditctl",
+        "/usr/sbin/auditd",
+        "/usr/sbin/augenrules",
+        "/usr/sbin/aureport",
+        "/usr/sbin/ausearch",
+        "/usr/sbin/autrace",
+    ]
+%}
+{%- set monitorSetting = 'p+i+n+u+g+s+b+acl+xattrs+sha512' %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -68,4 +79,33 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
+Ensure {{ aideCfg }} exists ({{ stig_id }}):
+  file.managed:
+    - name: '{{ aideCfg }}'
+    - create: True
+    - group: 'root'
+    - mode: '0600'
+    - replace: False
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'auditd_etc_t'
+        seuser: 'system_u'
+    - user: 'root'
+  {%- for fileToMonitor in filesToMonitor %}
+Ensure monitoring of {{ fileToMonitor }} in {{ aideCfg }} ({{ stig_id }}):
+  file.replace:
+    - name: '{{ aideCfg }}'
+    - append_if_not_found: True
+    - backup: False
+    - not_found_content: |
+        # Set per rule {{ stig_id }}
+        {{ fileToMonitor }} {{ monitorSetting }}
+    - pattern: '^(\s\s*){{ fileToMonitor }}\s\s*p\+i\+n\+u\+g\+s\+b\+acl\+.*'
+    - repl: '{{ fileToMonitor }} {{ monitorSetting }}'
+    - unless:
+      - 'grep -P "^(\s\s*|)/usr/sbin/auditctl\s\s*p\+i\+n\+u\+g\+s\+b\+acl\+.*" {{ aideCfg }}'
+    - watch:
+      - file: 'Ensure {{ aideCfg }} exists ({{ stig_id }})'
+  {%- endfor %}
 {%- endif %}
