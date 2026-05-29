@@ -1,0 +1,8 @@
+{#-
+Overrides `osmajorrelease` grain to map AL2023 to EL9 baseline
+-#}
+
+{%- set ver = salt.grains.filter_by({
+    2023: 9,
+    'default': grains['osmajorrelease'],
+}, grain='osmajorrelease' ) %}
