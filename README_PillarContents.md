@@ -91,15 +91,7 @@ Explanatory-contents to be added upon request. Currently, only the Enterprise Li
 
 Explanatory-contents to be added upon request.
 
-## `scap-cpe`
-
-Explanatory-contents to be added upon request.
-
 ## `scap-ds`
-
-Explanatory-contents to be added upon request.
-
-## `scap-xccdf`
 
 Explanatory-contents to be added upon request.
 

@@ -94,9 +94,7 @@
     ## scap-profile: 'C2S'
     ## scap-profile: 'common'
 
-    ## scap-cpe:     # Path to scap cpe-dictionary.xml file
     ## scap-ds:      # Path to scap ds.xml file
-    ## scap-xccdf:   # Path to scap xccdf.xml file
     ## scap-output:  # Path to directory where scap results will be saved
 
 ##     pam_stuff:
