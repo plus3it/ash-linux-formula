@@ -32,6 +32,7 @@
 ###########################################################################
 {%- set stigIdByVendor = {
     'AlmaLinux': 'ALMA-09-NNNNNN',
+    'Amazon': 'AZLX-23-NNNNNN',
     'CentOS Stream': 'RHEL-09-NNNNNN',
     'OEL': 'OL09-00-NNNNNN',
     'RedHat': 'RHEL-09-NNNNNN',
