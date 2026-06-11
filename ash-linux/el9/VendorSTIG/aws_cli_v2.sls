@@ -59,6 +59,13 @@ Aggregate And Specify AWS Rules:
     - name: '{{ target_file }}'
     - user: root
 
+Ensure Fapolicyd Service Operational:
+  service.running:
+    - name: fapolicyd
+    - reload: False
+    - watch:
+        - cmd: 'Reload Fapolicyd Policy'
+
 {%- for old_file in sorted_match_files %}
 Purge Obsoleted Rule File - {{ old_file }}:
   file.absent:
