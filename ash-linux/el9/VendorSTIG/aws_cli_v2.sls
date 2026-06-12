@@ -1,43 +1,88 @@
-# This Salt state creats an exception in fapolicyd for the AWS
-# CLI v2 if fapolicyd and the AWS CLI v2 are both installed.
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
 #
-#################################################################
-{%- set awscli_filetypes = [ 'executable', 'sharedlib' ] %}
-{%- set exemptionFile = '/etc/fapolicyd/rules.d/30-aws.rules' %}
+# This Salt state creates a tier-80 exception in fapolicyd for the AWS CLI v2.
 
-# Add fapolicyd exceptions for AWS CLI
-Ensure fapolicyd exception-file exists:
+{%- set rules_dir = '/etc/fapolicyd/rules.d' %}
+{%- set target_file = rules_dir ~ '/80-aws.rules' %}
+{%- set search_pattern = '/usr/local/aws-cli/v2' %}
+{%- set match_files = [] %}
+{%- set baseline_rules = [
+      'allow perm=any all : path=/usr/local/bin/aws',
+      'allow perm=any all : dir=/usr/local/aws-cli/v2/',
+      'allow perm=any comm=aws : dir=/var/tmp/'
+    ]
+%}
+
+{%- set aggregated_rules = [] %}
+{%- for baseline_rule in baseline_rules %}
+  {%- do aggregated_rules.append(baseline_rule) %}
+{%- endfor %}
+
+{%- if salt['file.directory_exists'](rules_dir) %}
+  {%- set found_files = salt['file.find'](
+        rules_dir,
+        grep=search_pattern,
+        type='f'
+      )
+  %}
+  {%- for file_path in found_files %}
+    {%- if file_path != target_file %}
+      {%- if salt['file.file_exists'](file_path) %}
+        {%- do match_files.append(file_path) %}
+        {%- set file_content = salt['file.read'](file_path) %}
+        {%- if file_content %}
+          {%- for line in file_content.splitlines() %}
+            {%- set cleaned_rule = line.strip() %}
+            {%- if (
+                cleaned_rule
+                and cleaned_rule not in aggregated_rules
+            ) %}
+              {%- do aggregated_rules.append(cleaned_rule) %}
+            {%- endif %}
+          {%- endfor %}
+        {%- endif %}
+      {%- endif %}
+    {%- endif %}
+  {%- endfor %}
+{%- endif %}
+{%- set sorted_match_files = match_files | sort %}
+
+Aggregate And Specify AWS Rules:
   file.managed:
-    - name: '{{ exemptionFile }}'
-    - create: True
-    - group: 'fapolicyd'
+    - contents: |
+        {%- for rule_entry in aggregated_rules %}
+        {{ rule_entry }}
+        {%- endfor %}
+    - group: fapolicyd
     - mode: '0644'
-    - onlyif:
-      - 'rpm -q fapolicyd --quiet'
-      - '[[ -e /usr/local/bin/aws ]]'
+    - name: '{{ target_file }}'
     - selinux:
         serange: 's0'
         serole: 'object_r'
         setype: 'fapolicyd_config_t'
         seuser: 'system_u'
-    - user: 'root'
+    - user: root
 
-{%- for fileType in awscli_filetypes %}
-Exempt AWS CLI v2 From fapolicyd ({{ fileType }}):
-  file.replace:
-    - name: '{{ exemptionFile }}'
-    - append_if_not_found: True
-    - onchanges_in:
-      - cmd: 'Reload fapolicyd config'
-    - ignore_if_missing: True
-    - pattern: '^(allow\s*perm=).*(\s*all\s*:\s*dir=\/usr\/local\/aws-cli\/v2\/\s*type=application\/x-{{ fileType }}\s*trust\s*1.*$)'
-    - repl: 'allow perm=any all : dir=/usr/local/aws-cli/v2/ type=application/x-{{ fileType }} trust 1'
+Ensure Fapolicyd Service Operational:
+  service.running:
+    - name: fapolicyd
+    - reload: False
+    - watch:
+        - cmd: 'Reload Fapolicyd Policy'
+
+{%- for old_file in sorted_match_files %}
+Purge Obsoleted Rule File - {{ old_file }}:
+  file.absent:
+    - name: '{{ old_file }}'
     - require:
-      - file: 'Ensure fapolicyd exception-file exists'
+        - file: 'Aggregate And Specify AWS Rules'
+    - require_in:
+        - cmd: 'Reload Fapolicyd Policy"
 {%- endfor %}
 
-Reload fapolicyd config:
+Reload Fapolicyd Policy:
   cmd.run:
-    - name: '/usr/sbin/fapolicyd-cli -u'
-    - cwd: '/root'
-    - stateful: False
+    - name: fagenrules --load
+    - onchanges:
+        - file: 'Aggregate And Specify AWS Rules'
