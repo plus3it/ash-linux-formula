@@ -57,6 +57,11 @@ Aggregate And Specify AWS Rules:
     - group: fapolicyd
     - mode: '0644'
     - name: '{{ target_file }}'
+    - selinux:
+        serange: 's0'
+        serole: 'object_r'
+        setype: 'fapolicyd_config_t'
+        seuser: 'system_u'
     - user: root
 
 Ensure Fapolicyd Service Operational:
