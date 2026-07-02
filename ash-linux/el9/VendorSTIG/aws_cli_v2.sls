@@ -78,7 +78,7 @@ Purge Obsoleted Rule File - {{ old_file }}:
     - require:
         - file: 'Aggregate And Specify AWS Rules'
     - require_in:
-        - cmd: 'Reload Fapolicyd Policy"
+        - cmd: 'Reload Fapolicyd Policy'
 {%- endfor %}
 
 Reload Fapolicyd Policy:
