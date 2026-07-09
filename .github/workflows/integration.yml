@@ -53,8 +53,8 @@ jobs:
       TF_VAR_aws_region: us-east-1
       TF_VAR_codebuild_id: ${{ needs.trigger.outputs.run-id }}
       TF_VAR_common_args: "-n -e dev"
-      TF_VAR_lx_args: >-
-        --user-formulas={\"${{ github.event.repository.name }}\":\"${{ github.event.inputs.formula-archive-url || format('https://github.com/{0}/archive/refs/heads/{1}.zip', github.event.pull_request.head.repo.full_name || github.repository, github.event.pull_request.head.ref || github.ref_name) }}\"}
+      TF_VAR_user_formulas: >-
+        {"${{ github.event.repository.name }}":"${{ github.event.inputs.formula-archive-url || format('https://github.com/{0}/archive/refs/heads/{1}.zip', github.event.pull_request.head.repo.full_name || github.repository, github.event.pull_request.head.ref || github.ref_name) }}"}
       TF_VAR_git_ref: ${{ github.event.inputs.watchmaker-git-ref || 'main' }}
       TF_VAR_git_repo: ${{ github.event.inputs.watchmaker-git-repo || 'https://github.com/plus3it/watchmaker.git' }}
       TF_VAR_source_builds: '["${{ matrix.source-build }}"]'
@@ -66,3 +66,6 @@ jobs:
         uses: plus3it/terrafirm/.github/actions/test@1091935a976104e701d20905ab63da4a8e6d5b8f
         with:
           destroy-after-test: true
+          # Used to test against alternative terrafirm repositories and branches
+          terrafirm-repository: plus3it/terrafirm
+          terrafirm-ref: master
