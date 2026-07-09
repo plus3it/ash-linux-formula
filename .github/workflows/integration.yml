@@ -54,7 +54,7 @@ jobs:
       TF_VAR_codebuild_id: ${{ needs.trigger.outputs.run-id }}
       TF_VAR_common_args: "-n -e dev"
       TF_VAR_lx_args: >-
-        --user-formulas={\"ash-linux-formula\":\"${{ github.event.inputs.formula-archive-url || format('https://github.com/{0}/archive/refs/heads/{1}.zip', github.event.pull_request.head.repo.full_name || 'plus3it/ash-linux-formula', github.event.pull_request.head.ref || 'main') }}\"}
+        --user-formulas={\"${{ github.event.repository.name }}\":\"${{ github.event.inputs.formula-archive-url || format('https://github.com/{0}/archive/refs/heads/{1}.zip', github.event.pull_request.head.repo.full_name || github.repository, github.event.pull_request.head.ref || github.ref_name) }}\"}
       TF_VAR_git_ref: ${{ github.event.inputs.watchmaker-git-ref || 'main' }}
       TF_VAR_git_repo: ${{ github.event.inputs.watchmaker-git-repo || 'https://github.com/plus3it/watchmaker.git' }}
       TF_VAR_source_builds: '["${{ matrix.source-build }}"]'
