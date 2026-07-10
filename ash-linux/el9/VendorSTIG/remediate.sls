@@ -25,6 +25,7 @@
 {%- set scapProf = 'xccdf_org.ssgproject.content_profile_' ~ pillProf %}
 
 
+{%- if salt.grains.get('os') != 'Amazon' and salt.grains.get('osmajorrelease') != 2023 %}
 install fapolicyd:
   pkg.installed:
     - pkgs:
@@ -35,15 +36,16 @@ script_fapolicyd_rule-files:
     - cwd: /root
     - require:
       - pkg: 'install fapolicyd'
+    - require_in:
+      - cmd: 'run_{{ stig_id }}-remediate'
     - source: 'salt://{{ helperLoc }}/fapolicyd_rules-helper.sh'
     - stateful: True
+{%- endif %}
 
 run_{{ stig_id }}-remediate:
   cmd.run:
     - name: 'oscap xccdf eval --remediate --profile {{ scapProf }} {{ dsfile }} > >(tee /var/log/oscap.log) 2>&1'
     - cwd: '/root'
-    - require:
-      - cmd: 'script_fapolicyd_rule-files'
     - shell: '/bin/bash'
     - success_retcodes:
       - 2

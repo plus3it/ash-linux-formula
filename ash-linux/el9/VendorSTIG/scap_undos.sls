@@ -11,6 +11,8 @@
 # rsyslog.conf file
 undo logcollector in /etc/rsyslog.conf:
   file.replace:
+    {#- if file does not exist, report no changes rather than error #}
+    - ignore_if_missing: True
     - name: '/etc/rsyslog.conf'
     - not_found_content: ''
     - pattern: '^(\s*|#*\s*|)\*\.\*\s*@*logcollector$'

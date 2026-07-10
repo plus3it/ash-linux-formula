@@ -83,7 +83,10 @@ Fix $ActionSendStreamDriverAuthMode setting in {{ rsyslogCfgFile }} ({{ stig_id 
 Fix $ActionSendStreamDriverAuthMode setting in {{ rsyslogDefCfgfile }} ({{ stig_id }}):
   file.replace:
     - name: '{{ rsyslogDefCfgfile }}'
+    {#- if file exists, but pattern not found, append it #}
     - append_if_not_found: True
+    {#- if file does not exist, report no changes rather than error #}
+    - ignore_if_missing: True
     - backup: False
     - not_found_content: |
         # Set per rule {{ stig_id }}
