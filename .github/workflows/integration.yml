@@ -47,7 +47,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        source-build: [centos9stream, rhel8, rhel9, ol9]
+        source-build:
+          - al2023
+          - centos9stream
+          - rhel8
+          - rhel9
+          - ol9
     env:
       AWS_DEFAULT_REGION: us-east-1
       TF_VAR_aws_region: us-east-1
