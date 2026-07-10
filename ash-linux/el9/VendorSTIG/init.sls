@@ -14,4 +14,6 @@ include:
   - ash-linux.el9.VendorSTIG.packages
   - ash-linux.el9.VendorSTIG.remediate
   - ash-linux.el9.VendorSTIG.scap_undos
+  {%- if salt.grains.get('os') != 'Amazon' and salt.grains.get('osmajorrelease') != 2023 %}
   - ash-linux.el9.VendorSTIG.aws_cli_v2
+  {%- endif %}
