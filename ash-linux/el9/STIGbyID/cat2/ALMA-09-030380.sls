@@ -59,7 +59,15 @@ notify_{{ stig_id }}-skipSet:
   test.show_notification:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
-{%- elif osName == 'AlmaLinux' %}
+{%- elif osName != 'AlmaLinux' %}
+Skip Reason ({{ stig_id }}):
+  test.show_notification:
+    - text: |-
+        ----------------------------------------
+        STIG Finding ID: {{ stig_id }}
+             Not valid for distro '{{ osName }}'
+        ----------------------------------------
+{%- else %}
   {%- for modprobeFile in modprobeFiles %}
 Disable UDF Filesystem Support - install as false ({{ modprobeFile }}):
   file.replace:
@@ -103,20 +111,9 @@ Disable UDF Filesystem Support - create-file ({{ udfFile }}):
         seuser: 'system_u'
     - user: 'root'
   {%- endfor %}
-{%- else %}
-Skip Reason ({{ stig_id }}):
-  test.show_notification:
-    - text: |-
-        ----------------------------------------
-        STIG Finding ID: {{ stig_id }}
-             Not valid for distro '{{ osName }}'
-        ----------------------------------------
-    - watch_in:
-      - service: 'Re-read kernel module-config files (UDF)'
-{%- endif %}
-
 Re-read kernel module-config files (UDF):
   service.running:
     - name: systemd-modules-load
     - enable: true
     - reload: false
+{%- endif %}
