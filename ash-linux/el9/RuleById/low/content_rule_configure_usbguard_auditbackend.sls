@@ -53,11 +53,18 @@ notify_{{ stig_id }}-skipSet:
     - mode: '0600'
     - user: 'root'
     - group: 'root'
-    - selinux:
-        serange: 's0'
-        serole: 'object_r'
-        setype: 'usbguard_conf_t'
-        seuser: 'system_u'
+
+# Label comes from the loaded policy; forcing a type with `selinux:` makes
+# Salt add a per-file fcontext via `semanage`, which fails on some platforms
+Restore SELinux context on {{ cfgFile }}:
+  cmd.run:
+    - name: 'restorecon -F {{ cfgFile }}'
+    - onlyif:
+      - 'selinuxenabled'
+    - unless:
+      - 'test -z "$(restorecon -nvF {{ cfgFile }})"'
+    - require:
+      - file: {{ cfgFile }} - Exists
 
 # Make config-change
 {{ cfgFile }} - Update content:
@@ -71,6 +78,7 @@ notify_{{ stig_id }}-skipSet:
     - repl: '# Set per rule "{{ stig_id }}"\n\2=LinuxAudit'
     - require:
       - file: {{ cfgFile }} - Exists
+      - cmd: Restore SELinux context on {{ cfgFile }}
     - unless:
       - '[[ $( grep AuditBackend=LinuxAudit {{ cfgFile }} ) ]]'
 
