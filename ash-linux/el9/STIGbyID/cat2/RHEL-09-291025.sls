@@ -81,12 +81,8 @@ Set permission-bits on {{ cfgFile }} ({{ stig_id }}):
        - file: 'Create USBguard config-file ({{ stig_id }})'
 
 Restore SELinux context on {{ cfgFile }} ({{ stig_id }}):
-  cmd.run:
-    - name: 'restorecon -F {{ cfgFile }}'
-    - onlyif:
-      - 'selinuxenabled'
-    - unless:
-      - 'test -z "$(restorecon -nvF {{ cfgFile }})"'
+  selinux.fcontext_policy_applied:
+    - name: '{{ cfgFile }}'
     - require:
       - file: 'Set permission-bits on {{ cfgFile }} ({{ stig_id }})'
 
@@ -100,7 +96,7 @@ Enable USBguard audit-logging ({{ stig_id }}):
     - pattern: '(^(|\s\s*)){{ cfgParm }}.*$'
     - repl: '{{ cfgParm }}={{ cfgValu }}'
     - require:
-      - cmd: 'Restore SELinux context on {{ cfgFile }} ({{ stig_id }})'
+      - selinux: 'Restore SELinux context on {{ cfgFile }} ({{ stig_id }})'
     - watch:
        - file: 'Set permission-bits on {{ cfgFile }} ({{ stig_id }})'
 {%- endif %}

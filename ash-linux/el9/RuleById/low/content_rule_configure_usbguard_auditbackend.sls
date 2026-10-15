@@ -57,12 +57,8 @@ notify_{{ stig_id }}-skipSet:
 # Label comes from the loaded policy; forcing a type with `selinux:` makes
 # Salt add a per-file fcontext via `semanage`, which fails on some platforms
 Restore SELinux context on {{ cfgFile }}:
-  cmd.run:
-    - name: 'restorecon -F {{ cfgFile }}'
-    - onlyif:
-      - 'selinuxenabled'
-    - unless:
-      - 'test -z "$(restorecon -nvF {{ cfgFile }})"'
+  selinux.fcontext_policy_applied:
+    - name: '{{ cfgFile }}'
     - require:
       - file: {{ cfgFile }} - Exists
 
@@ -78,7 +74,7 @@ Restore SELinux context on {{ cfgFile }}:
     - repl: '# Set per rule "{{ stig_id }}"\n\2=LinuxAudit'
     - require:
       - file: {{ cfgFile }} - Exists
-      - cmd: Restore SELinux context on {{ cfgFile }}
+      - selinux: Restore SELinux context on {{ cfgFile }}
     - unless:
       - '[[ $( grep AuditBackend=LinuxAudit {{ cfgFile }} ) ]]'
 
