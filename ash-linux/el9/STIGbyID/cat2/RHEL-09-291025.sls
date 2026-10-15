@@ -1,11 +1,11 @@
 # Ref Doc:
 #   - STIG - RHEL 9 v2r6      (01 Oct 2025)
 #   - STIG - OEL 9 vXrY       (01 Oct 2025)
-#   - STIG - AlmaLinux 9 vXrY (01 Oct 2025)
+#   - STIG - AlmaLinux 9 v1r4 (01 Oct 2025)
 # Finding ID:
 #   - RHEL: V-258037
 #   - OEL:  V-271700
-#   - Alma: V-NNNNNN
+#   - Alma: V-269465
 # Rule ID:
 #   - RHEL: SV-258037r1014863_rule
 #   - OEL:  SV-271700r1091812_rule
