@@ -44,9 +44,9 @@
 {%- set stig_id = stigIdByVendor[salt.grains.get('os')] %}
 {%- set helperLoc = tpldir ~ '/files' %}
 {%- set skipIt = salt.pillar.get('ash-linux:lookup:skip-stigs', []) %}
-{%- set cfgFile ='/etc/usbguard/usbguard-daemon.conf' %}
+{%- set cfgFile = '/etc/usbguard/usbguard-daemon.conf' %}
 {%- set cfgParm = 'AuditBackend' %}
-{%- set cfgValu =  salt.pillar.get('ash-linux:lookup:usb_guard:audit_backend', 'LinuxAudit') %}
+{%- set cfgValu = salt.pillar.get('ash-linux:lookup:usb_guard:audit_backend', 'LinuxAudit') %}
 
 {{ stig_id }}-description:
   test.show_notification:
@@ -63,37 +63,38 @@ notify_{{ stig_id }}-skipSet:
     - text: |
         Handler for {{ stig_id }} has been selected for skip.
 {%- else %}
-Create USBguard config-file ({{ stig_id }}):
-  file.touch:
-    - name: '{{ cfgFile }}'
-    - makedirs: True
-    - unless:
-      - 'stat {{ cfgFile }}'
-
-Set permission-bits on {{ cfgFile }} ({{ stig_id }}):
+# Establish correct mode and user/group ownership
+# -   Create a null-file if no file already exists
+# -   Ensures correct mode & user/group ownership on file (irrespective of
+#     file's previous existence)
+Ensure {{ cfgFile }} exists with strict permissions ({{ stig_id }}):
   file.managed:
-    - name: '{{ cfgFile }}'
+    - contents: ''
     - group: 'root'
+    - makedirs: True
     - mode: '0600'
+    - name: '{{ cfgFile }}'
     - replace: False
-    - selinux:
-        serange: 's0'
-        serole: 'object_r'
-        setype: 'etc_t'
-        seuser: 'system_u'
     - user: 'root'
-    - watch:
-       - file: 'Create USBguard config-file ({{ stig_id }})'
 
+# Ensurse STIG-prescribed config-directive exists in file
 Enable USBguard audit-logging ({{ stig_id }}):
   file.replace:
-    - name: '{{ cfgFile }}'
     - append_if_not_found: True
+    - name: '{{ cfgFile }}'
     - not_found_content: |
         # Set per rule {{ stig_id }}
         {{ cfgParm }}={{ cfgValu }}
     - pattern: '(^(|\s\s*)){{ cfgParm }}.*$'
     - repl: '{{ cfgParm }}={{ cfgValu }}'
-    - watch:
-       - file: 'Set permission-bits on {{ cfgFile }} ({{ stig_id }})'
+    - require:
+      - file: 'Ensure {{ cfgFile }} exists with strict permissions ({{ stig_id }})'
+
+# Bypasses the broken file.managed SELinux parameter on RHEL 9/10 and ensures
+# that label matches the rule from `matchpathcon`
+Apply SELinux context to {{ cfgFile }} ({{ stig_id }}):
+  selinux.fcontext_policy_applied:
+    - name: '{{ cfgFile }}'
+    - require:
+      - file: 'Enable USBguard audit-logging ({{ stig_id }})'
 {%- endif %}
