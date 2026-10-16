@@ -72,11 +72,6 @@ Ensure the plugin-file is installed with proper permissions ({{ stig_id }}):
     - group: 'root'
     - mode: '0600'
     - replace: False
-    - selinux:
-        serange: 's0'
-        serole: 'object_r'
-        setype: 'auditd_etc_t'
-        seuser: 'system_u'
     - unless:
       - 'test -e {{ cfgFile }}'
     - user: 'root'
@@ -92,8 +87,16 @@ Ensure STIG-setting is present ({{ stig_id }}):
         active = yes
     - pattern: '^(|\s\s*)(active\s*=)(\s*).*$'
     - repl: '\1\2\3yes'
-    - watch:
+    - require:
       - file: 'Ensure the plugin-file is installed with proper permissions ({{ stig_id }})'
+
+# Bypasses the broken file.managed SELinux parameter on RHEL 9/10 and ensures
+# that label matches the rule from `matchpathcon`
+Apply SELinux context to {{ cfgFile }} ({{ stig_id }}):
+  selinux.fcontext_policy_applied:
+    - name: '{{ cfgFile }}'
+    - require:
+      - file: 'Ensure STIG-setting is present ({{ stig_id }})'
 {%- else %}
 Skip Reason ({{ stig_id }}):
   test.show_notification:
