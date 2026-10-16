@@ -1,5 +1,7 @@
 audit
+firewalld
 openssh-server
+policycoreutils
+policycoreutils-python-utils
 rsyslog
 salt-minion
-firewalld
