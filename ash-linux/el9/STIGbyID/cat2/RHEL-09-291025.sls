@@ -69,7 +69,6 @@ notify_{{ stig_id }}-skipSet:
 #     file's previous existence)
 Ensure {{ cfgFile }} exists with strict permissions ({{ stig_id }}):
   file.managed:
-    - contents: ''
     - group: 'root'
     - makedirs: True
     - mode: '0600'
