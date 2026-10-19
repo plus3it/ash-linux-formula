@@ -104,12 +104,15 @@ Disable UDF Filesystem Support - create-file ({{ udfFile }}):
     - mode: '0600'
     - watch_in:
       - service: 'Re-read kernel module-config files (UDF)'
-    - selinux:
-        serange: 's0'
-        serole: 'object_r'
-        setype: 'modules_conf_t'
-        seuser: 'system_u'
     - user: 'root'
+
+# Bypasses the broken file.managed SELinux parameter on RHEL 9/10 and ensures
+# that label matches the rule from `matchpathcon`
+Apply SELinux context to {{ udfFile }} ({{ stig_id }}):
+  selinux.fcontext_policy_applied:
+    - name: '{{ udfFile }}'
+    - require:
+      - file: 'Disable UDF Filesystem Support - create-file ({{ udfFile }})'
   {%- endfor %}
 Re-read kernel module-config files (UDF):
   service.running:
