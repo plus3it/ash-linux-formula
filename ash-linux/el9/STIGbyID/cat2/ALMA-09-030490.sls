@@ -107,12 +107,15 @@ Disable Video/Camera Support - create-file ({{ uvcvideoFile }}):
     - mode: '0600'
     - watch_in:
       - service: 'Re-read kernel module-config files (UVC Video)'
-    - selinux:
-        serange: 's0'
-        serole: 'object_r'
-        setype: 'modules_conf_t'
-        seuser: 'system_u'
     - user: 'root'
+
+# Bypasses the broken file.managed SELinux parameter on RHEL 9/10 and ensures
+# that label matches the rule from `matchpathcon`
+Apply SELinux context to {{ uvcvideoFile }} ({{ stig_id }}):
+  selinux.fcontext_policy_applied:
+    - name: '{{ uvcvideoFile }}'
+    - require:
+      - file: 'Disable Video/Camera Support - create-file ({{ uvcvideoFile }})'
   {%- endfor %}
 Re-read kernel module-config files (UVC Video):
   service.running:
